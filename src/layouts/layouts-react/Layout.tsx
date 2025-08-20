@@ -1,7 +1,6 @@
 import type { ReactNode } from "react"
-import Header from "../../sections/header/Header";
-import NavBar from "../../sections/navBar/NavBar";
-import Footer from "../../sections/footer/Footer";
+import Footer from "../../sections/layout/Footer";
+import Header from "../../sections/layout/Header";
 
 
 interface LayoutDefaultProps {

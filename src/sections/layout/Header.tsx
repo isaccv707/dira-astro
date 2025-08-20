@@ -4,7 +4,7 @@ import logo from "../../assets/images/logo.png";
 import { routes } from "../../routes/routes";
 import { useState } from "react";
 import SideBar from "../../components/sidebar/SideBar";
-import NavBar from "../navBar/NavBar";
+import NavBar from "../layout/NavBar";
 
 const Header = () => {
     const [isOpenSideBar, setisOpenSideBar] = useState(false);
