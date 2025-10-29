@@ -10,6 +10,9 @@ export default defineConfig({
   integrations: [react()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ["framer-motion", "@emotion/react"],
+    }
   }
 });

@@ -1,0 +1,19 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    icon: ImageMetadata;
+}
+
+const { description, icon, title } = Astro.props;
+---
+
+<div
+    class="flex flex-col items-center space-y-3 p-6 bg-white rounded-2xl shadow hover:shadow-xl transition-shadow duration-300"
+>
+    <div class="bg-green-ligth p-3 rounded-full">
+        <img src={icon.src} alt="icon" class="w-8 h-auto invert" />
+    </div>
+    <h3 class="font-semibold text-lg">{title}</h3>
+    <p class="text-grey text-sm">{description}</p>
+</div>

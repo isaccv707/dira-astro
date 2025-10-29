@@ -1,0 +1,24 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { services } from "../../data/services/services";
+import Layout from "../../layouts/Layout.astro";
+import ServiceDetail from "../../pages-react/ServiceDetail";
+
+export const getStaticPaths = (() => {
+    return services.map((service) => {
+        return {
+            params: {
+                id: service.id,
+            },
+            props: {
+                service,
+            },
+        };
+    });
+}) satisfies GetStaticPaths;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+---
+
+<Layout>
+    <!-- <ServiceDetail service={service}  client:only="react"/> -->
+</Layout>

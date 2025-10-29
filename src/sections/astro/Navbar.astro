@@ -1,0 +1,45 @@
+---
+import Dropdown from "../../components/astro/ui/Dropdown.astro";
+import { services } from "../../data/services/services";
+import { routes } from "../../routes/routes";
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="hidden md:flex items-center gap-8">
+  <div class="flex gap-5">
+    {
+      routes.map(({ path, text }) => (
+        <div>
+          <a href={path} class="text-gray-700 hover:text-yellow-primary">
+            {text}
+          </a>
+          {currentPath === path ? (
+            <div
+              transition:name="menu-line"
+              class="border-b-2 border-yellow-primary"
+            />
+          ) : (
+            <div class="border-b-2 border-transparent"/>
+          )}
+        </div>
+      ))
+    }
+  </div>
+  <Dropdown
+    text={"Servicios"}
+    options={[
+      { label: "Analisis Clinicos", href: "/service/analisis-clinicos" },
+      { label: "Salud Empresarial", href: "/service/salud-empresarial" },
+      { label: "Tomas a domicilio", href: "/service/tomas-domicilio" },
+      { label: "Biologia Molecular", href: "/service/biologia-molecular" },
+    ]}
+  />
+  <Dropdown
+    text={"Conócenos"}
+    options={[
+      { label: "¿Quiénes Somos?", href: "/about" },
+      { label: "Contáctanos", href: "/contact" },
+    ]}
+  />
+</nav>
