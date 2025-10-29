@@ -1,0 +1,31 @@
+---
+import ServiceCard from "../../components/astro/cards/ServiceCard.astro";
+import type { Service } from "../../interfaces/service.interface";
+
+interface Props {
+    services: Service[];
+}
+
+const { services } = Astro.props;
+---
+
+<h1 class="text-center text-4xl font-bold text-green-ligth mb-8">
+    Nuestros Servicios
+</h1>
+
+<div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center"
+>
+    {
+        services.map(({ path, textButton, title, id, description, icon }) => (
+            <ServiceCard
+                id={id}
+                icon={icon}
+                path={path}
+                description={description}
+                textButton={textButton}
+                title={title}
+            />
+        ))
+    }
+</div>

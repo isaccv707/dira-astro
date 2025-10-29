@@ -1,0 +1,40 @@
+---
+import Button from '../../react/ui/Button';
+
+
+interface Props {
+    options: { label: string; href: string }[];
+    text: string;
+}
+
+const { options, text } = Astro.props;
+---
+
+<div class="relative inline-block text-left group">
+    <Button
+        client:load
+        text={text}
+        variant="submit"
+        size="md"
+        icon={''}
+    />
+
+    <div
+        class="absolute left-0 mt-2 w-44 bg-white divide-y divide-grey rounded-lg shadow-lg dark:bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+    >
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+            {
+                options.map((opt, index) => (
+                    <li>
+                        <a
+                            href={opt.href}
+                            class="block px-4 py-2 text-grey hover:bg-green-primary dark:hover:bg-green-primary dark:hover:text-white"
+                        >
+                            {opt.label}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</div>

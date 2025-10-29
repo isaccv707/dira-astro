@@ -1,8 +1,20 @@
 ---
+import { services } from "../data/services/services";
 import Layout from "../layouts/Layout.astro";
 import ServicesPage from "../pages-react/Services";
+
+export const getStaticPaths = () => {
+    return services.map((service) => {
+        return {
+            props: {
+                service,
+            },
+        };
+    });
+};
+const { service } = Astro.props;
 ---
 
 <Layout>
-    <ServicesPage />
+    <ServicesPage service={service} />
 </Layout>

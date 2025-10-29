@@ -1,3 +1,7 @@
-export {default as facebook} from '../icons/facebook.png';
-export {default as instagram} from '../icons/instagram.png';
-export {default as whatsapp} from '../icons/whatsapp.png';
+
+export {default as testTubes} from './benefits-icons/test-tube.png';
+export {default as healthIcon} from './health.png';
+export {default as addressIcon} from './benefits-icons/address.png';
+export {default as microscopeIcon} from './microscope.png';
+
+

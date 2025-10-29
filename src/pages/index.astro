@@ -1,8 +1,48 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HomePage from "../pages-react/Home";
+import CarouselHome from "../sections/react/CarouselHome";
+import { benefits } from "../data/benefits/benefits-data";
+import { services } from "../data/services/services";
+import HeroDyra from "../sections/astro/HeroDyra.astro";
+import OurServices from "../sections/astro/OurServices.astro";
+import BenefitCard from "../components/astro/cards/BenefitCard.astro";
 ---
 
 <Layout>
-    <HomePage client:load />
+    <!-- <HomePage client:load /> -->
+    <section class="mb-10">
+        <CarouselHome client:load />
+    </section>
+
+    <section class="px-10">
+        <OurServices services={services} />
+    </section>
+
+    <section>
+        <HeroDyra />
+    </section>
+
+
+    <section
+        class="bg-white dark:bg-green-secondary py-16 shadow-xl shadow-green-secondary"
+    >
+        <div
+            class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 text-center space-y-12"
+        >
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">
+                ¿Por qué elegirnos?
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                {
+                    benefits.map(({ icon, description, title }) => (
+                        <BenefitCard
+                            title={title}
+                            description={description}
+                            icon={icon}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </section>
 </Layout>

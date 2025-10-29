@@ -1,8 +1,8 @@
 ---
-import type { GetStaticPaths } from "astro";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { services } from "../../data/services/services";
 import Layout from "../../layouts/Layout.astro";
-import Service from "../../pages-react/Service";
+import ServiceDetail from "../../pages-react/ServiceDetail";
 
 export const getStaticPaths = (() => {
     return services.map((service) => {
@@ -16,11 +16,9 @@ export const getStaticPaths = (() => {
         };
     });
 }) satisfies GetStaticPaths;
-
-const { id } = Astro.params;
-const { service } = Astro.props;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 ---
 
 <Layout>
-    <Service service={service} client:load />
+    <!-- <ServiceDetail service={service}  client:only="react"/> -->
 </Layout>

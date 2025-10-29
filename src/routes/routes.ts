@@ -1,12 +1,13 @@
 export interface Routes {
     path: string;
     text: string;
+    options?: string[];
 }
 
 
 export const routes: Routes[] = [
     { path: '/', text: 'Inicio' },
-    { path: '/about', text: 'Acerca de Nosotros' },
-    { path: '/services', text: 'Servicios' },
-    { path: '/contact', text: 'Contacto' }
+    { path: '/appointment', text: 'Agendar cita' },
+    { path: '/resultados', text: 'Resultados' },
+    { path: '/blog', text: 'Blog' }
 ]

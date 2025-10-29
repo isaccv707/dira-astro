@@ -1,0 +1,70 @@
+---
+import { routes } from "../../routes/routes";
+import dyraLogo from '../../assets/images/logo.png';
+import { Phone } from "lucide-react";
+import { facebook,instagram,whatsapp } from "../../assets/icons/networks-icons"; 
+import NavLinkButton from "../../components/react/ui/NavLinkButton";
+---
+<footer class="bg-green-primary text-white pt-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-10">
+
+
+        <div>
+          <img src={dyraLogo.src} alt="logo" class="w-28 h-auto mb-4" />
+          <p class="text-sm leading-6">
+            En Dira, ofrecemos servicios de calidad con un enfoque profesional,
+            para garantizar la mejor experiencia a nuestros clientes.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Enlaces</h4>
+          <ul class="space-y-2">
+            {routes.map(({ path, text }, index) => (
+              <li>
+                <NavLinkButton
+                  path={path}
+                  text={text}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Contáctanos</h4>
+          <p class="text-sm mb-2 flex items-center gap-2">
+            <Phone size={16} /> +52 123 456 7890
+          </p>
+          <div class="flex gap-3 mt-4">
+            <a
+              href="#"
+              class="p-2 rounded-full w-12 h-auto"
+              aria-label="Facebook"
+            >
+              <img src={facebook.src} alt="icon-facebook" />
+            </a>
+            <a
+              href="#"
+              class="p-2 rounded-full w-12 h-auto"
+              aria-label="Instagram"
+            >
+              <img src={instagram.src} alt="icon-instagram" />
+            </a>
+            <a
+              href="#"
+              class="p-2 rounded-full w-12 h-auto"
+              aria-label="Instagram"
+            >
+              <img src={whatsapp.src} alt="icon-whatsapp" />
+            </a>
+          </div>
+        </div>
+
+      </div>
+      s
+
+      <div class="mt-10 border-t border-gray-700 text-center py-4 text-sm">
+        © {new Date().getFullYear()} Dira. Todos los derechos reservados.
+      </div>
+    </footer>

@@ -1,6 +1,7 @@
 ---
-import LayoutDefault from "./layouts-react/Layout";
 import "../styles/global.css";
+import Footer from "../sections/astro/Footer.astro";
+import Header from "../sections/astro/Header.astro";
 ---
 
 <!doctype html>
@@ -12,9 +13,9 @@ import "../styles/global.css";
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro Basics</title>
 	</head>
-	<body class="min-h-screen">
-		<LayoutDefault>
-			<slot />
-		</LayoutDefault>
+	<body class="min-h-screen bg-gray-100">
+		<Header />
+		<slot />
+		<Footer />
 	</body>
 </html>

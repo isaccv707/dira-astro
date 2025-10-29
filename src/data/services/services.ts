@@ -1,51 +1,43 @@
-import image from '../../assets/images/image.png';
-import { TestTubes, HeartPlus, House, Microscope, type LucideProps } from 'lucide-react';
+import { Analisys } from '../products/products-analisys-data';
+import type { Service } from '../../interfaces/service.interface';
+import { addressIcon, healthIcon, microscopeIcon, testTubes } from '../../assets/icons';
 
-interface Service {
-    id: string;
-    title: string;
-    image: ImageMetadata;
-    Icon?: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
-    text: string;
-    textButton: string;
-    path: string;
-}
 
 export const services: Service[] = [
     {
         id: 'analisis-clinicos',
         title: 'Analisis Clinicos',
-        Icon: TestTubes,
-        image: image,
-        text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        icon: testTubes,
+        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
         textButton: 'Mas informacion',
         path: 'service',
+        products: Analisys,
     },
     {
         id: 'salud-empresarial',
         title: 'Salud Empresarial',
-        Icon: HeartPlus,
-        image: image,
-        text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        icon: healthIcon,
+        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
         textButton: 'Mas informacion',
-        path: 'service'
+        path: 'service',
+        products: []
     },
     {
         id: 'tomas-domicilio',
         title: 'Tomas a domicilio',
-        Icon: House,
-        image: image,
-        text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        icon: addressIcon,
+        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
         textButton: 'Mas informacion',
-        path: 'service'
+        path: 'service',
+        products: []
     },
     {
         id: 'biologia-molecular',
         title: 'Biologia Molecular',
-        Icon: Microscope,
-        image: image,
-        text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        icon: microscopeIcon,
+        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
         textButton: 'Mas informacion',
-        path: 'service'
+        path: 'service',
+        products: []
     }
 ]

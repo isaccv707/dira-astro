@@ -1,0 +1,37 @@
+---
+import NavLinkButton from "../components/react/ui/NavLinkButton";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <main
+        class="grid min-h-screen place-items-center bg-gradient-to-b from-white to-gray-100"
+    >
+        <div class="text-center max-w-lg">
+            <h1
+                class="text-7xl sm:text-8xl font-extrabold text-green-secondary drop-shadow-md"
+            >
+                404
+            </h1>
+
+            <h2
+                class="mt-6 text-3xl sm:text-4xl font-bold tracking-tight text-grey"
+            >
+                Página no encontrada
+            </h2>
+
+            <p class="mt-4 text-lg sm:text-xl text-gray-600 dark:text-gray-400">
+                Lo sentimos, no pudimos encontrar la página que estás buscando.
+            </p>
+
+            <div class="mt-10 flex justify-center">
+                <NavLinkButton
+                    path="/"
+                    text="Ir al inicio"
+                    variant="primary"
+                    size="md"
+                />
+            </div>
+        </div>
+    </main>
+</Layout>
