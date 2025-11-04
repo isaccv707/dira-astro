@@ -7,7 +7,7 @@ import BranchSelector from '../sections/react/BranchSelector';
 
 <Layout>
     <section class="px-6 sm:px-12 lg:px-20 py-16 bg-gray-50">
-        <div class="text-center mb-12">
+        <!-- <div class="text-center mb-12">
             <img
                 src={logoDyra.src}
                 alt="logo-dyra"
@@ -23,11 +23,11 @@ import BranchSelector from '../sections/react/BranchSelector';
                 Reserva tu cita en minutos, recibe confirmación inmediata y
                 evita largas filas. Tu salud es nuestra prioridad.
             </p>
-        </div>
+        </div> -->
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <div class="bg-white shadow-lg rounded-2xl p-8">
-                <AppointmentForm />
+                <AppointmentForm  client:load/>
             </div>
 
             <div class="bg-white shadow-lg rounded-2xl p-8">

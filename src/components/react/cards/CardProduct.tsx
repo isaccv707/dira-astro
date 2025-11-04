@@ -1,6 +1,5 @@
 import { Calendar } from "lucide-react"; // ícono de calendario
 import NavLinkButton from "../ui/NavLinkButton";
-import type { Analisys } from "../../data/products/products-analisys-data";
 
 const CardProduct = ({
     description,
@@ -10,7 +9,7 @@ const CardProduct = ({
     isRequiredAppointment,
     preparation,
     price,
-}: Analisys) => {
+}:any) => {
     return (
         <div className="max-w-sm w-full bg-white dark:bg-primary border border-gray-200 dark:border-primary rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
 

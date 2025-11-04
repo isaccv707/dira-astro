@@ -1,107 +1,81 @@
 import { useForm, type SubmitHandler } from "react-hook-form"
 import FormProvider from "../components/react/hk-form/FormProvider";
-import RHFTextInput from "../components/react/hk-form/RHFTextInput";
-import RHFSelectInput from "../components/react/hk-form/RHFSelectInput";
-import RHFDateInput from "../components/react/hk-form/RHFDateInput";
-import Button from "../components/react/ui/Button";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useState } from "react";
+import PersonalDataForm from "./react/forms/PersonalDataForm";
+import StepIndicator from "../components/react/ui/StepIndicator";
+import StudiesAndBranchForm from "./react/forms/StudiesAndBranchForm";
+import { AppointmentFormSchema } from "../schemas/appointment-form/AppointmentFormSchema";
+
+interface Option {
+    label: string;
+    value: string;
+}
+
 interface Inputs {
     name: string;
     lastName: string;
-    gender: { label: string, value: string }[];
-    schedule: { label: string, value: string }[];
     phoneNumber: string;
     email: string;
-    date: string
+    gender: string;
+    branch: string;
+    studies: string[];
+    date: string;
 }
+
+
+
 const AppointmentForm = () => {
+    const [step, setStep] = useState(1);
+
     const methods = useForm<Inputs>({
         defaultValues: {
             name: '',
             lastName: '',
             phoneNumber: '',
             email: '',
-            gender: [
-                { label: 'Mujer', value: 'Mujer' },
-                { label: 'Hombre', value: 'Hombre' }
-            ],
-            schedule: [
-                {label: 'Colima', value: 'Colima'},
-                {label: 'Guadalajara', value: 'Guadalajara'},
-            ],
+            gender: '',
+            branch: '',
+            studies: [],
             date: '',
-        }
+        },
+        resolver: yupResolver(AppointmentFormSchema)
     });
-    const { handleSubmit } = methods;
+
+    const { handleSubmit, formState: { errors }, trigger } = methods;
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         console.log(data);
     }
 
+    const nextStep = async () => {
+        if (step === 1) {
+            const isFormValid = await trigger(["name", "lastName", "phoneNumber", "email", "gender"]);
+            if (!isFormValid) return;
+            console.log(step)
+            setStep((prev) => prev + 1);
+            console.log(step);
+        }
+    };
+
+    const previousStep = () => setStep((prev) => prev - 1)
+
+    console.log(errors);
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <div className="bg-green-ligth p-2 rounded-2xl text-center">
                 <h1 className="text-white font-bold text-xl">Agenda tu cita</h1>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
-                <RHFTextInput
-                    id="name"
-                    name="name"
-                    label="Nombre"
-                    placeholder="Ingresa tu nombre"
-                />
-                <RHFTextInput
-                    id="lastname"
-                    name="lastname"
-                    label="Apellido"
-                    placeholder="Ingresa tu apellido"
-                />
-                <RHFTextInput
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    label="Numero"
-                    placeholder="Ingresa tu numero de telefono"
-                />
-                <RHFTextInput
-                    id="email"
-                    name="email"
-                    label="Email"
-                    placeholder="Ingresa tu email"
-                />
-                <RHFSelectInput
-                    id="gender"
-                    label="Genero"
-                    name="gender"
-                    options={[
-                        { label: 'Mujer', value: 'Mujer' },
-                        { label: 'Hombre', value: 'Hombre' }
-                    ]}
-                    placeholder="Ingresa tu genero"
-                />
-                <RHFSelectInput
-                    id="gender"
-                    label="Sucursal"
-                    name="gender"
-                    options={[
-                        { label: 'Mujer', value: 'Mujer' },
-                        { label: 'Hombre', value: 'Hombre' }
-                    ]}
-                    placeholder="Ingresa tu genero"
-                />
 
-                <RHFDateInput
-                    id={'date'}
-                    label="Fecha de cita"
-                    name="date"
-                />
-            </div>
-            <div className="w-full flex justify-start mt-3">
-                <Button
-                    text="Enviar"
-                    type="submit"
-                    variant={"submit"}
-                    size={"md"}
-                />
-            </div>
+            <StepIndicator currentStep={step} steps={["Datos Personales", "Sucursal y estudios"]} />
+
+            {
+                step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
+            }
+            {
+                step === 2 && <StudiesAndBranchForm onBack={previousStep} />
+            }
+
         </FormProvider>
     )
 }
