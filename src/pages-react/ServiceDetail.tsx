@@ -14,16 +14,16 @@ const ServiceDetail = ({ service }: ServiceProps) => {
         <>
             <ServiceHero service={service} />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center">
-                {products?.map(({ description, id, path, title, isRequiredAppointment, preparation, price }) => (
-                    <div className="" key={id}>
+                {products?.map((product) => (
+                    <div className="" key={product.id}>
                         <CardProduct
                             path={'/contact'}
-                            description={description}
-                            id={id}
-                            title={title}
-                            isRequiredAppointment={isRequiredAppointment}
-                            preparation={preparation}
-                            price={price}
+                            description={product.description}
+                            id={product.id}
+                            title={product.title}
+                            isRequiredAppointment={product.isRequiredAppointment}
+                            preparation={product.preparation}
+                            price={product.price}
                         />
                     </div>
                 ))}
