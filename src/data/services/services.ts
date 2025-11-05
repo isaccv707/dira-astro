@@ -8,36 +8,49 @@ export const services: Service[] = [
         id: 'analisis-clinicos',
         title: 'Analisis Clinicos',
         icon: testTubes,
-        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        description: 'Analizamos muestras clínicas con equipos de última generación y protocolos estandarizados para asegurar resultados precisos y confiables.',
         textButton: 'Mas informacion',
         path: 'service',
         products: Analisys,
+        category: 'Laboratorio',
+        benefits: [
+            { icon: '💼', title: 'Profesionalismo', text: 'Contamos con personal altamente capacitado para ofrecerte el mejor servicio.' },
+            { icon: '⚙️', title: 'Tecnología avanzada', text: 'Usamos equipos modernos para garantizar resultados exactos y rápidos.' },
+            { icon: '🤝', title: 'Atención personalizada', text: 'Nos adaptamos a tus necesidades con trato humano y eficiente.' },
+        ],
+        tags: ['analisis', 'muestras', 'laboratorio']
     },
     {
         id: 'salud-empresarial',
         title: 'Salud Empresarial',
         icon: healthIcon,
-        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        description: 'Programas integrales de salud laboral: tamizajes, campañas preventivas y asesoría para mantener tu equipo saludable y productivo.',
         textButton: 'Mas informacion',
         path: 'service',
-        products: []
+        products: [],
+        category: 'Empresa',
+        tags: ['empresa', 'prevencion']
     },
     {
         id: 'tomas-domicilio',
         title: 'Tomas a domicilio',
         icon: addressIcon,
-        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        description: 'Servicio de toma de muestras a domicilio con personal capacitado y turnos programados para tu comodidad.',
         textButton: 'Mas informacion',
         path: 'service',
-        products: []
+        products: [],
+        category: 'Domicilio',
+        tags: ['domicilio', 'comodidad']
     },
     {
         id: 'biologia-molecular',
         title: 'Biologia Molecular',
         icon: microscopeIcon,
-        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+        description: 'Servicios de biología molecular con pruebas de alta sensibilidad y control de calidad para detección confiable.',
         textButton: 'Mas informacion',
         path: 'service',
-        products: []
+        products: [],
+        category: 'Laboratorio',
+        tags: ['molecular', 'PCR']
     }
 ]

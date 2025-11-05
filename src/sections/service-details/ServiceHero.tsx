@@ -48,9 +48,6 @@ const ServiceHero = ({ service }: ServiceProps) => {
                         </motion.h2>
                     ))}
                 </motion.h1>
-                {/* <p className="mt-4 text-black max-w-2xl mx-auto text-base sm:text-lg">
-                    {text}
-                </p> */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-0">

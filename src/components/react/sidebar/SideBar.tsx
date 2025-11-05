@@ -7,13 +7,14 @@ interface SideBarProps {
     isOpenSideBar: boolean
     setisOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>
 }
-const SideBar = ({ routes, isOpenSideBar,setisOpenSideBar }: SideBarProps) => {
+const SideBar = ({ routes, isOpenSideBar, setisOpenSideBar }: SideBarProps) => {
 
     const handleOpenSideBar = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
             setisOpenSideBar(false);
         }
     };
+    
     return (
         <div
             className="fixed inset-0 bg-black bg-opacity-40 z-50 md:hidden flex justify-end"
