@@ -14,6 +14,20 @@ module.exports = {
         white: '#ffffff',
         grey: '#808080'
       },
+      animation: {
+        'slide-in-right': 'slideInRight 0.28s cubic-bezier(.2,.9,.2,1)',
+        'fade-up': 'fadeUp 0.32s ease',
+      },
+      keyframes: {
+        slideInRight: {
+          '0%': { transform: 'translateX(100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        fadeUp: {
+          '0%': { transform: 'translateY(8px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+      },
     }
   },
   plugins: []
