@@ -17,8 +17,10 @@ export const getStaticPaths = (() => {
     });
 }) satisfies GetStaticPaths;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { service } = Astro.props;
 ---
 
 <Layout>
-    <!-- <ServiceDetail service={service}  client:only="react"/> -->
+    <ServiceDetail service={service} client:only="react" />
 </Layout>
