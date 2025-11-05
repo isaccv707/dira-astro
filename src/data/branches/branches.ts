@@ -20,7 +20,7 @@ export const branches: Branches[] = [
         phone: "33-1234-5678",
         schedule: "Lunes a Sábado: 7:00am - 7:00pm",
         mapSrc:
-            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...GUADALAJARA...",
+            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.6954157632513!2d-103.40906052529478!3d20.681967099600417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428ae8af315366f%3A0xefd2f82cd66194d4!2sDe%20Los%20Abetos%20307%2C%20Los%20Pinos%2C%2045120%20Zapopan%2C%20Jal.!5e0!3m2!1ses!2smx!4v1738798410070!5m2!1ses!2smx",
     },
     {
         id: "cdmx",
@@ -31,17 +31,6 @@ export const branches: Branches[] = [
         phone: "55-9876-5432",
         schedule: "Lunes a Domingo: 8:00am - 8:00pm",
         mapSrc:
-            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...CDMX...",
-    },
-    {
-        id: "monterrey",
-        name: "Sucursal Monterrey",
-        value: '',
-        label: '',
-        address: "Av. Constitución 789, Monterrey, NL",
-        phone: "81-1122-3344",
-        schedule: "Lunes a Viernes: 7:00am - 6:00pm",
-        mapSrc:
-            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...MONTERREY...",
+            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.6954157632513!2d-103.40906052529478!3d20.681967099600417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428ae8af315366f%3A0xefd2f82cd66194d4!2sDe%20Los%20Abetos%20307%2C%20Los%20Pinos%2C%2045120%20Zapopan%2C%20Jal.!5e0!3m2!1ses!2smx!4v1738798410070!5m2!1ses!2smx",
     },
 ]

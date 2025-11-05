@@ -6,14 +6,17 @@ import { services } from "../data/services/services";
 import HeroDyra from "../sections/astro/HeroDyra.astro";
 import OurServices from "../sections/astro/OurServices.astro";
 import BenefitCard from "../components/astro/cards/BenefitCard.astro";
+import QuickActions from "../sections/astro/QuickActions.astro";
 ---
 
 <Layout>
     <!-- <HomePage client:load /> -->
-    <section class="mb-10">
+    <section class="">
         <CarouselHome client:load />
     </section>
-
+    <section class="mb-10">
+        <QuickActions />
+    </section>
     <section class="px-10">
         <OurServices services={services} />
     </section>
@@ -21,7 +24,6 @@ import BenefitCard from "../components/astro/cards/BenefitCard.astro";
     <section>
         <HeroDyra />
     </section>
-
 
     <section
         class="bg-white dark:bg-green-secondary py-16 shadow-xl shadow-green-secondary"

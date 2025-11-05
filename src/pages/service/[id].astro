@@ -3,22 +3,57 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { services } from "../../data/services/services";
 import Layout from "../../layouts/Layout.astro";
 import ServiceDetail from "../../pages-react/ServiceDetail";
+import CardProduct from "../../components/react/cards/CardProduct";
+import ScrollToSectionButton from "../../components/react/ui/ScrollToSectionButton";
 
 export const getStaticPaths = (() => {
-    return services.map((service) => {
-        return {
-            params: {
-                id: service.id,
-            },
-            props: {
-                service,
-            },
-        };
-    });
+    return services.map((service) => ({
+        params: { id: service.id },
+        props: { service },
+    }));
 }) satisfies GetStaticPaths;
+
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { service } = Astro.props;
+const { products } = service;
 ---
 
 <Layout>
-    <!-- <ServiceDetail service={service}  client:only="react"/> -->
+    <ServiceDetail service={service} client:load />
+    <ScrollToSectionButton client:load />
+
+    <div id="products-section">
+        <h1
+            class="text-center font-bold text-3xl text-green-secondary mb-10 mt-16"
+        >
+            {service ? `Servicios de ${service.title}` : ``}
+        </h1>
+
+        <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center p-10"
+        >
+            {
+                products && products.length > 0 ? (
+                    products.map((product) => (
+                        <CardProduct
+                            path={"/contact"}
+                            description={product.description}
+                            id={product.id}
+                            title={product.title}
+                            isRequiredAppointment={
+                                product.isRequiredAppointment
+                            }
+                            preparation={product.preparation}
+                            price={product.price}
+                        />
+                    ))
+                ) : (
+                    <h2 class="text-gray-500 text-center col-span-full">
+                        Sin servicios para mostrar
+                    </h2>
+                )
+            }
+        </div>
+    </div>
 </Layout>
