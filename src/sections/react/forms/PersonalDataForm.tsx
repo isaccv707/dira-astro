@@ -3,6 +3,8 @@ import RHFTextInput from '../../../components/react/hk-form/RHFTextInput'
 import RHFSelectInput from '../../../components/react/hk-form/RHFSelectInput'
 import RHFDateInput from '../../../components/react/hk-form/RHFDateInput'
 import Button from '../../../components/react/ui/Button'
+import { useQuoterContext } from '../../../contexts/QuoterContext'
+import { useFormContext } from 'react-hook-form'
 
 
 interface PersonalDataFormProps {
@@ -10,9 +12,35 @@ interface PersonalDataFormProps {
     step: number
 }
 const PersonalDataForm = ({ nextStep }: PersonalDataFormProps) => {
+    const { client, setClient } = useQuoterContext();
+    const { watch } = useFormContext();
+
+
+    const handleNext = () => {
+        const values = {
+            clientType: watch("clientType"),
+            name: watch("name"),
+            lastName: watch("lastName"),
+            phoneNumber: watch("phoneNumber"),
+            email: watch("email")
+        }
+        setClient(values);
+        nextStep();
+    }
+
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+                <RHFSelectInput
+                    id="clientType"
+                    name="clientType"
+                    label="Tipo de cliente"
+                    placeholder='Tipo de cliente'
+                    options={[
+                        { label: 'Particular', value: 'particular' },
+                        { label: 'Empresa', value: 'company' },
+                    ]}
+                />
                 <RHFTextInput
                     id="name"
                     name="name"
@@ -37,16 +65,6 @@ const PersonalDataForm = ({ nextStep }: PersonalDataFormProps) => {
                     label="Email"
                     placeholder="Ingresa tu email"
                 />
-                <RHFSelectInput
-                    id="gender"
-                    label="Genero"
-                    name="gender"
-                    options={[
-                        { label: 'Mujer', value: 'Mujer' },
-                        { label: 'Hombre', value: 'Hombre' }
-                    ]}
-                    placeholder="Ingresa tu genero"
-                />
 
             </div>
             <div className="w-full flex justify-start mt-3">
@@ -55,7 +73,7 @@ const PersonalDataForm = ({ nextStep }: PersonalDataFormProps) => {
                     type="button"
                     variant={"submit"}
                     size={"md"}
-                    onClick={nextStep}
+                    onClick={handleNext}
                 />
             </div>
         </div>

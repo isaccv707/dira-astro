@@ -1,4 +1,4 @@
-import AppointmentForm from "../sections/AppointmentForm";
+import AppointmentForm from "../sections/QuoterForm-section";
 import logo from "../assets/images/logo.png";
 import { CheckCircle2 } from "lucide-react";
 

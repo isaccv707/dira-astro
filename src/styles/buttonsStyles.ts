@@ -9,6 +9,7 @@ export const Buttonstyles = cva(
           "bg-green-ligth text-white font-bold hover:bg-green-ligth cursor-pointer",
         cancel:
           "bg-red-500 text-white font-bold hover:bg-red-600 cursor-pointer",
+        GoBack: 'text-green-primary hover:text-green-secondary font-semibold text-sm cursor-pointer bg-transparent',
       },
       size: {
         sm: "px-2 py-1 text-sm",
