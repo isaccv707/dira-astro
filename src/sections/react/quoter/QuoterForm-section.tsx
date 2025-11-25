@@ -1,43 +1,41 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
-import FormProvider from "../components/react/hk-form/FormProvider";
+import { useForm } from "react-hook-form"
+import FormProvider from "../../../components/react/hk-form/FormProvider";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useState } from "react";
-import PersonalDataForm from "./react/forms/PersonalDataForm";
-import StepIndicator from "../components/react/ui/StepIndicator";
-import SelectStudiesSection from "./SelectStudies-section";
-import { quoterFormSchema } from "../schemas/quoter-form/quoterFormSchema";
+import PersonalDataForm from "../forms/PersonalDataForm";
+import StepIndicator from "../../../components/react/ui/StepIndicator";
+import SelectStudiesSection from "../SelectStudies-section";
+import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
 import * as yup from 'yup';
-import { useQuoterContext } from "../contexts/QuoterContext";
+import { useQuoterContext } from "../../../hooks/useQuoterContext";
 
 type Inputs = yup.InferType<typeof quoterFormSchema>;
 
 const QuoterFormSection = () => {
     const [step, setStep] = useState(1);
-    const { client, setClient, studies, addStudy, removeStudy } = useQuoterContext();
+    const { selectedStudies, addStudy, removeStudy } = useQuoterContext();
 
     const methods = useForm<Inputs>({
         defaultValues: {
-            clientType: '',
+            clientType: 'particular',
             name: '',
             lastName: '',
             phoneNumber: '',
             email: '',
-            studies: [],
+            companyRFC: '',
         },
         resolver: yupResolver(quoterFormSchema) as any
     });
 
     const { handleSubmit, formState: { errors }, trigger } = methods;
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
-        console.log(data);
+    const onSubmit = (data: Inputs) => {
     }
 
     const nextStep = async () => {
         if (step === 1) {
             const isFormValid = await trigger(["name", "lastName", "phoneNumber", "email"]);
             if (!isFormValid) return;
-            console.log(step)
             setStep((prev) => prev + 1);
         }
     };
@@ -53,11 +51,11 @@ const QuoterFormSection = () => {
 
             <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
 
-            {/* {
-                step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
-            } */}
             {
-                step === 1 && <SelectStudiesSection onBack={previousStep} studies={studies} addStudy={addStudy} removeStudy={removeStudy}/>
+                step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
+            }
+            {
+                step === 2 && <SelectStudiesSection onBack={previousStep} studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
             }
 
         </FormProvider>

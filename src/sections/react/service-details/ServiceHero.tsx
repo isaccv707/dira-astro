@@ -1,7 +1,7 @@
-import NavLinkButton from "../../components/react/ui/NavLinkButton";
-import type { ServiceProps } from "../../pages-react/ServiceDetail";
+import NavLinkButton from "../../../components/react/ui/NavLinkButton";
+import type { ServiceProps } from "../../../pages-react/ServiceDetail";
 import { motion } from 'framer-motion';
-import logo from "../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.png";
 
 
 

@@ -6,68 +6,80 @@ import type { Totals } from "../interfaces/quoter.interface";
 
 interface QuoterContextProps {
     client: Client | null;
-    studies: Study[];
+    selectedStudies: Study[];
     totals: Totals;
     setClient: (client: Client) => void;
     addStudy: (study: Study) => void;
     removeStudy: (studyId: string) => void;
     clearStudies: () => void;
-    // calculatedTotal: () => void;
+    updateStudyQuantity: (id: string, quantity: number) => void
 }
 
 
 export const QuoterContext = createContext<QuoterContextProps | undefined>(undefined);
 
-export const useQuoterContext = () => {
-    const context = useContext(QuoterContext);
-    if (!context) {
-        throw new Error("useQuoterContext must be used within a QuoterProvider");
-    }
-    return context;
-};
 
 export const QuoterProvider = ({ children }: { children: ReactNode }) => {
     const [client, setClient] = useState<Client | null>(null);
-    const [studies, SetStudies] = useState<Study[]>([]);
+    const [selectedStudies, setSelectedStudies] = useState<Study[]>([]);
+    const [quantity, setQuantity] = useState(0);
     const [totals, setTotals] = useState<Totals>({
         subtotal: 0,
         tax: 0,
         total: 0
     });
 
-
     const addStudy = (study: Study) => {
-        SetStudies((prev) => {
+        setSelectedStudies((prev) => {
             const exists = prev.find((s) => s.id === study.id)
             if (exists) return prev;
-            return [...prev, study]
+            return [...prev, { ...study, quantity: 1 }]
         })
     }
 
+    const updateStudyQuantity = (id: string, quantity: number) => {
+        setSelectedStudies((prev) =>
+            prev.map((s) =>
+                s.id === id
+                    ? {
+                        ...s,
+                        quantity: quantity < 1 ? 1 : quantity,
+                    }
+                    : s
+            )
+        )
+    }
+
     const removeStudy = (id: string) => {
-        SetStudies(prev => prev.filter((s) => s.id !== id))
+        setSelectedStudies(prev => prev.filter((s) => s.id !== id))
     }
 
     useEffect(() => {
-        const subtotal = studies.reduce((acc, s) => acc + s.price * (s.quantity ?? 1), 0);
-        const tax = subtotal * 0.16
+        const subtotal = selectedStudies.reduce((acc, s) => {
+            const qty = s.quantity ?? 1;
+            return acc + s.price * qty;
+        }, 0);
+
+        const tax = subtotal * 0.16;
         const total = subtotal + tax;
 
-        setTotals({ subtotal, tax, total })
-    }, [studies])
+        setTotals({ subtotal, tax, total });
+    }, [selectedStudies]);
 
 
     const clearStudies = () => {
         setClient(null);
-        SetStudies([])
+        setSelectedStudies([])
         setTotals({ subtotal: 0, tax: 0, total: 0 })
     }
+
     return (
         <QuoterContext.Provider
             value={{
                 client,
-                studies,
+                selectedStudies,
                 totals,
+                updateStudyQuantity,
                 setClient,
                 addStudy,
                 removeStudy,

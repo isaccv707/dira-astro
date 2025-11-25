@@ -1,38 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import AppointmentForm from "../sections/QuoterForm-section";
-import logoDyra from "../assets/images/logo.png";
-import BranchSelector from '../sections/react/BranchSelector';
 ---
 
 <Layout>
-    <section class="px-6 sm:px-12 lg:px-20 py-16 bg-gray-50">
-        <!-- <div class="text-center mb-12">
-            <img
-                src={logoDyra.src}
-                alt="logo-dyra"
-                width={120}
-                class="mx-auto mb-6"
-            />
-            <h2 class="text-3xl sm:text-4xl font-bold text-green-700 mb-4">
-                Agenda tu cita fácilmente
-            </h2>
-            <p
-                class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto"
-            >
-                Reserva tu cita en minutos, recibe confirmación inmediata y
-                evita largas filas. Tu salud es nuestra prioridad.
-            </p>
-        </div> -->
-
+    <!-- <section class="px-6 sm:px-12 lg:px-20 py-16 bg-gray-50">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <div class="bg-white shadow-lg rounded-2xl p-8">
-                <AppointmentForm  client:load/>
+                <QuoterFormSection  client:load/>
             </div>
 
             <div class="bg-white shadow-lg rounded-2xl p-8">
                 <BranchSelector/>
             </div>
         </div>
-    </section>
+    </section> -->
 </Layout>

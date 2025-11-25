@@ -3,15 +3,27 @@ import * as yup from 'yup';
 export const quoterFormSchema = yup.object({
     clientType: yup
         .string()
+        .oneOf(['particular', 'company'], 'Tipo de cliente inválido')
         .required('El tipo de cliente es obligatorio'),
     name: yup
         .string()
         .required('El nombre es obligatorio')
-        .min(2, 'El nombre debe tener al menos 2 caracteres'),
+        .min(3, 'El nombre debe tener al menos 2 caracteres'),
     lastName: yup
         .string()
-        .optional()
-        .min(2, 'El apellido debe tener al menos 2 caracteres'),
+        .when('clientType', {
+            is: 'particular',
+            then: (schema) =>
+                schema.required("El apellido es obligatorio").min(3, 'El apellido debe tener al menos 3 caracteres'),
+            otherwise: (schema) => schema.notRequired(), 
+        }),
+     companyRFC: yup
+        .string()
+        .when('clientType', {
+            is: 'company',
+            then: (schema) => schema.required("El RFC de la empresa es obligatorio").matches(/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/, 'El RFC no es válido'),
+            otherwise: (schema) => schema.notRequired().nullable(), 
+        }),
     phoneNumber: yup
         .string()
         .required('El número de teléfono es obligatorio')

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ContactForm } from "../sections/ContactForm";
+import { ContactForm } from "../sections/react/ContactForm";
 
 const ContactSection = () => {
 

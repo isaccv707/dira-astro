@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import type { Service } from "../interfaces/service.interface";
-import ServiceHero from "../sections/service-details/ServiceHero";
+import ServiceHero from "../sections/react/service-details/ServiceHero";
 import BenefitCard from "../components/react/cards/BenefitCard";
 
 export interface ServiceProps {
@@ -33,8 +33,10 @@ const ServiceDetail = ({ service }: ServiceProps) => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    {benefits.map((benefit, i) => (
-                        <BenefitCard benefit={benefit} />
+                    {benefits.map((benefit, index) => (
+                        <div key={index}>
+                            <BenefitCard benefit={benefit} />
+                        </div>
                     ))}
                 </div>
             </section>
