@@ -1,10 +1,10 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRef, useState } from "react";
-import FormProvider from "../components/react/hk-form/FormProvider";
-import RHFTextInput from "../components/react/hk-form/RHFTextInput";
-import RHFSelectInput from "../components/react/hk-form/RHFSelectInput";
-import RHFTextareaInput from "../components/react/hk-form/RHFTextareaInput";
-import Button from "../components/react/ui/Button";
+import FormProvider from "../../components/react/hk-form/FormProvider";
+import RHFTextInput from "../../components/react/hk-form/RHFTextInput";
+import RHFSelectInput from "../../components/react/hk-form/RHFSelectInput";
+import RHFTextareaInput from "../../components/react/hk-form/RHFTextareaInput";
+import Button from "../../components/react/ui/Button";
 
 interface Inputs {
     name: string;

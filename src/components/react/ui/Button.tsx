@@ -8,18 +8,21 @@ import type { VariantProps } from "class-variance-authority";
 interface ButtonProps extends VariantProps<typeof Buttonstyles> {
   type?: "submit" | "reset" | "button";
   text: string;
-  onClick?: () => void;
+  onClick?: () => void | Promise<void>;
   icon?: React.ReactNode
+  disabled?: boolean
+  isLoading?: boolean
 }
 
-const Button = ({ text, type = "submit", variant, size, icon, onClick }: ButtonProps) => {
+const Button = ({ text, type = "submit", variant, size, icon, onClick, disabled = false, isLoading }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
       className={clsx(Buttonstyles({ variant, size }))}
+      disabled={disabled}
     >
-      {text}
+      {isLoading ? 'Cargando...' : text}
       {icon && icon}
     </button>
   );

@@ -13,7 +13,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
 
         return (
           <div key={index} className="flex items-center">
-            {/* Circulo del paso */}
+            
             <div
               className={`flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-bold transition-all duration-300 ${
                 isCompleted
@@ -26,7 +26,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
               {isCompleted ? "✓" : stepNumber}
             </div>
 
-            {/* Label */}
+            
             <span
               className={`ml-2 text-sm font-medium ${
                 isActive ? "text-green-primary" : "text-gray-500"
@@ -35,7 +35,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
               {label}
             </span>
 
-            {/* Línea de conexión */}
+            
             {index < steps.length - 1 && (
               <div
                 className={`w-10 h-0.5 mx-2 transition-all duration-300 ${

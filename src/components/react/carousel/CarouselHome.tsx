@@ -1,6 +1,6 @@
 import { SwiperSlide } from "swiper/react";
-import { carouselHomeData } from "../../data/carousel-home/carousel-home-data";
-import Carousel from "../../components/react/carousel/Carousel";
+import { carouselHomeData } from "../../../data/carousel-home/carousel-home-data";
+import Carousel from "./Carousel";
 
 const CarouselHome = () => {
     return (
