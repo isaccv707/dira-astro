@@ -7,6 +7,8 @@ import type { Study } from "../../interfaces/study.interface";
 import { IoIosReturnLeft } from "react-icons/io";
 import { motion } from "framer-motion";
 import usePagination from "../../hooks/usePagination";
+import { useQuoterContext } from "../../hooks/useQuoterContext";
+import { useGetAllStudiesQuery } from "../../api/studiesApi/StudyApi";
 
 
 interface SelectStudiesSectionProps {
@@ -17,22 +19,24 @@ interface SelectStudiesSectionProps {
 }
 
 const allStudies: Study[] = [
-  { id: "1", name: "Biometría Hemática", price: 120,},
-  { id: "2", name: "Glucosa en sangre", price: 80,},
-  { id: "3", name: "Prueba de embarazo", price: 100,},
-  { id: "4", name: "Colesterol total", price: 90,},
-  { id: "5", name: "Urea", price: 110,},
-  { id: "6", name: "Biometría Hemática", price: 120,},
-  { id: "7", name: "Glucosa en sangre", price: 80,},
-  { id: "8", name: "Prueba de embarazo", price: 100,},
-  { id: "9", name: "Colesterol total", price: 90,},
-  { id: "10", name: "Urea", price: 110,},
+  { id: "1", name: "Biometría Hemática", price: 120, },
+  { id: "2", name: "Glucosa en sangre", price: 80, },
+  { id: "3", name: "Prueba de embarazo", price: 100, },
+  { id: "4", name: "Colesterol total", price: 90, },
+  { id: "5", name: "Urea", price: 110, },
+  { id: "6", name: "Biometría Hemática", price: 120, },
+  { id: "7", name: "Glucosa en sangre", price: 80, },
+  { id: "8", name: "Prueba de embarazo", price: 100, },
+  { id: "9", name: "Colesterol total", price: 90, },
+  { id: "10", name: "Urea", price: 110, },
 ];
 
 const SelectStudiesSection = ({ onBack, studies, addStudy, removeStudy }: SelectStudiesSectionProps) => {
   const [search, setSearch] = useState("");
 
-  const filteredStudies = allStudies.filter((study) =>
+  const { data = [] } = useGetAllStudiesQuery();
+
+  const filteredStudies = data?.filter((study) =>
     study.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -46,7 +50,7 @@ const SelectStudiesSection = ({ onBack, studies, addStudy, removeStudy }: Select
     setPage,
   } = usePagination({
     totalItems: filteredStudies.length,
-    itemsPerPage: 4,
+    itemsPerPage: 5,
     initialPage: 1,
   });
 
@@ -87,7 +91,7 @@ const SelectStudiesSection = ({ onBack, studies, addStudy, removeStudy }: Select
             const isAdded = studies.some((s) => s.id === study.id);
             return (
               <CardQuoteStudy
-              key={study.id}
+                key={study.id}
                 isAdded={isAdded}
                 handleAddStudy={handleAddStudy}
                 handleDeletStudy={handleDeletStudy}

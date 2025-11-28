@@ -51,11 +51,11 @@ const QuoterFormSection = () => {
 
             <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
 
-            {
+            {/* {
                 step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
-            }
+            } */}
             {
-                step === 2 && <SelectStudiesSection onBack={previousStep} studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
+                step === 1 && <SelectStudiesSection onBack={previousStep} studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
             }
 
         </FormProvider>

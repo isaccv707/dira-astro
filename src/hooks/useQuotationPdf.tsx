@@ -1,5 +1,5 @@
 import type { QuotationPayload } from "../api/interfaces/quotation.interface"
-import { useDownloadQuotationPdfMutation } from "../api/quotationApi/quotationAPi"
+import { useDownloadQuotationPdfMutation } from "../api/quotationApi/quotationAPi";
 import type { Client } from "../interfaces/client.interface"
 import type { Study } from "../interfaces/study.interface"
 import { toast } from "react-toastify";
