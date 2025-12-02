@@ -11,5 +11,10 @@ export const accordionItems: accordionItems[] = [
         id: "studies",
         title: "Estudios seleccionados",
         content: SelectedStudiesAccordion,
-    }
+    },
+    // {
+    //     id: "services",
+    //     title: "Servicios",
+    //     content:SelectedStudiesAccordion,
+    // }
 ]

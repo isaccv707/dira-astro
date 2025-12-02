@@ -1,7 +1,6 @@
 import type { FieldError } from "react-hook-form";
 import Label from "../ui/Label";
 import { ErrorMessage } from "../ui/ErrorMessage";
-import type { ReactNode } from "react";
 
 interface TextInputProps {
     id: string;
@@ -26,37 +25,36 @@ const TextInput = ({
     isError,
     type = "text",
 }: TextInputProps) => {
+    const hasError = Boolean(error || isError);
+
     return (
         <div className="w-full flex flex-col">
-            <Label
-                id={id}
-                label={label}
-            />
-            <div className="relative">
+            <Label id={id} label={label} />
 
-                <input
-                    id={id}
-                    name={name}
-                    type={type}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                    className={`
-          border rounded-md px-4 py-2
-          focus:outline-none focus:ring-2 focus:ring-primary
-          transition
-          ${isError || error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'}
-          placeholder-gray-400
-          disabled:bg-gray-100 disabled:cursor-not-allowed
+            <input
+                id={id}
+                name={name}
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange}
+                className={`
+          mt-1 w-full rounded-md border px-4 py-2 text-sm
+          placeholder:text-gray-400
+          transition focus:outline-none focus:ring-2
+          ${hasError
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:border-green-400 focus:ring-green-400"
+                    }
         `}
-                    aria-invalid={isError || error ? "true" : "false"}
-                    aria-describedby={error ? `${id}-error` : undefined}
-                />
-            </div>
-            {error && (
-                <ErrorMessage
-                    error={error}
-                />
+                aria-invalid={hasError ? "true" : "false"}
+                aria-describedby={hasError ? `${id}-error` : undefined}
+            />
+
+            {hasError && (
+                <div className="mt-1">
+                    <ErrorMessage id={`${id}-error`} error={error} />
+                </div>
             )}
         </div>
     );

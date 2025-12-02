@@ -7,14 +7,14 @@ interface TotalQuoteCardProps {
     selectedStudies: Study[]
 }
 const TotalQuoteCard = ({ totals, selectedStudies }: TotalQuoteCardProps) => {
-
+    const hasStudies = selectedStudies.length > 0;
     return (
         <div className="bg-gray-100 rounded-2xl p-4 shadow-sm">
             <h2 className="text-center font-bold text-green-primary mb-3">
                 Total de la cotizacion
             </h2>
             {
-                selectedStudies.length > 0 ? (
+                hasStudies || !hasStudies ? (
                     <div className="text-sm leading-relaxed">
                         <p className="mb-1">
                             <span className="font-semibold text-green-secondary">Subtotal:</span>{" "}

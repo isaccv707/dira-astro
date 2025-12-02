@@ -8,6 +8,8 @@ import SelectStudiesSection from "../SelectStudies-section";
 import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
 import * as yup from 'yup';
 import { useQuoterContext } from "../../../hooks/useQuoterContext";
+import { IoIosReturnLeft } from "react-icons/io";
+import Button from "../../../components/react/ui/Button";
 
 type Inputs = yup.InferType<typeof quoterFormSchema>;
 
@@ -29,8 +31,7 @@ const QuoterFormSection = () => {
 
     const { handleSubmit, formState: { errors }, trigger } = methods;
 
-    const onSubmit = (data: Inputs) => {
-    }
+    const onSubmit = (data: Inputs) => { };
 
     const nextStep = async () => {
         if (step === 1) {
@@ -41,22 +42,41 @@ const QuoterFormSection = () => {
     };
 
     const previousStep = () => setStep((prev) => prev - 1)
-
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-            <div className="bg-green-ligth p-2 rounded-2xl text-center">
-                <h1 className="text-white font-bold text-xl">Cotiza tus estudios</h1>
-                <p className="font-extralight text-sm text-white">Rellena la informacion necesaria para obtener una cotizacion</p>
+            <div className="rounded-2xl w-full grid">
+                <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">
+                    <h1 className="text-white font-bold text-lg">Cotiza tus estudios</h1>
+                    <small className="text-white text-sm opacity-90">
+                        Rellena la información necesaria para obtener una cotización.
+                    </small>
+                </header>
+
+                <div className="flex items-center gap-4">
+                    <div className="flex-1 flex justify-center">
+                        <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
+                    </div>
+                    {step === 2
+                        ? (
+                            <Button
+                                text="Regresar"
+                                variant={'GoBack'}
+                                size={"sm"}
+                                icon={<IoIosReturnLeft />}
+                                onClick={previousStep}
+                            />
+                        )
+                        : (null)
+                    }
+                </div>
+
+                {
+                    step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
+                }
+                {
+                    step === 2 && <SelectStudiesSection studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
+                }
             </div>
-
-            <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
-
-            {/* {
-                step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
-            } */}
-            {
-                step === 1 && <SelectStudiesSection onBack={previousStep} studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
-            }
 
         </FormProvider>
     )

@@ -13,7 +13,6 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
 
         return (
           <div key={index} className="flex items-center">
-            
             <div
               className={`flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-bold transition-all duration-300 ${
                 isCompleted

@@ -7,7 +7,7 @@ import type { VariantProps } from "class-variance-authority";
 
 interface ButtonProps extends VariantProps<typeof Buttonstyles> {
   type?: "submit" | "reset" | "button";
-  text: string;
+  text?: string;
   onClick?: () => void | Promise<void>;
   icon?: React.ReactNode
   disabled?: boolean

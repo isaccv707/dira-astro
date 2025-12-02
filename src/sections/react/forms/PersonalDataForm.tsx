@@ -30,15 +30,8 @@ const PersonalDataForm = ({ nextStep }: PersonalDataFormProps) => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8 sm:p-10 md:p-12 transition-all">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-green-700">Datos del cliente</h2>
-        <p className="text-gray-500 text-sm mt-1">
-          Ingresa tu información para generar la cotización
-        </p>
-      </div>
+    <div className="mx-auto">
 
-    
       <div className="space-y-5">
         <RHFSelectInput
           id="clientType"
@@ -51,7 +44,7 @@ const PersonalDataForm = ({ nextStep }: PersonalDataFormProps) => {
           ]}
         />
 
-       
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <RHFTextInput
             id="name"
@@ -116,13 +109,13 @@ const PersonalDataForm = ({ nextStep }: PersonalDataFormProps) => {
         </div>
       </div>
 
-     
-      <div className="flex justify-center mt-8">
+
+      <div className="flex justify-center mt-5">
         <Button
           text="Siguiente"
           type="button"
           variant="submit"
-          size="lg"
+          size="md"
           onClick={handleNext}
         />
       </div>

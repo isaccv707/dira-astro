@@ -19,9 +19,8 @@ const QuotationDetailsSection = () => {
   const {
     viewQuotation,
     downloadQuotation,
-    isLoading,
-    hasClient,
-    hasStudies,
+    isDownloading,
+    isViewing
   } = useQuotationPdf({ client, selectedStudies });
 
   const accordionSelectedStudies = accordionItems.map(({ id, title }) => ({
@@ -36,16 +35,14 @@ const QuotationDetailsSection = () => {
     ),
   }));
 
-  const actionsDisabled = isLoading || !hasClient || !hasStudies;
-
   return (
-    <div className="rounded-2xl flex flex-col h-full">
-      <div className="bg-green-secondary rounded-t-2xl p-4 text-center sticky top-0 z-10">
+    <div className="w-full h-full">
+      <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">
         <h1 className="text-white font-bold text-lg">Detalles de tu cotización</h1>
         <small className="text-white text-sm opacity-90">
-          (Aquí encontrarás todos los detalles de tu cotización)
+          Aquí encontrarás todos los detalles de tu cotización
         </small>
-      </div>
+      </header>
 
       <div className="flex-1 overflow-y-auto max-h-[75vh] px-4 py-5 space-y-5 scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-100 rounded-b-2xl">
         <ClientInformationCard client={client} />
@@ -56,22 +53,20 @@ const QuotationDetailsSection = () => {
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
           <Button
-            text={isLoading ? "Generando..." : "Ver cotización"}
+            text={isViewing ? "Generando..." : "Ver cotización"}
             variant="submit"
-            size="md"
+            size="sm"
             type="button"
             onClick={viewQuotation}
-            disabled={actionsDisabled}
-            isLoading={isLoading}
+            isLoading={isViewing}
           />
           <Button
-            text={isLoading ? "Generando..." : "Descargar cotización"}
+            text={isDownloading ? "Generando..." : "Descargar cotización"}
             variant="submit"
-            size="md"
+            size="sm"
             type="button"
             onClick={downloadQuotation}
-            disabled={actionsDisabled}
-            isLoading={isLoading}
+            isLoading={isDownloading}
           />
         </div>
       </div>

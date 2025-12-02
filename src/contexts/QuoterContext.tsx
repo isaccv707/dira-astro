@@ -22,7 +22,6 @@ export const QuoterContext = createContext<QuoterContextProps | undefined>(undef
 export const QuoterProvider = ({ children }: { children: ReactNode }) => {
     const [client, setClient] = useState<Client | null>(null);
     const [selectedStudies, setSelectedStudies] = useState<Study[]>([]);
-    const [quantity, setQuantity] = useState(0);
     const [totals, setTotals] = useState<Totals>({
         subtotal: 0,
         tax: 0,
@@ -55,13 +54,13 @@ export const QuoterProvider = ({ children }: { children: ReactNode }) => {
     }
 
     useEffect(() => {
-        const subtotal = selectedStudies.reduce((acc, s) => {
+        const total = selectedStudies.reduce((acc, s) => {
             const qty = s.quantity ?? 1;
             return acc + s.price * qty;
         }, 0);
 
-        const tax = subtotal * 0.16;
-        const total = subtotal + tax;
+        const tax = total * 0.16;
+        const subtotal = total - tax;
 
         setTotals({ subtotal, tax, total });
     }, [selectedStudies]);

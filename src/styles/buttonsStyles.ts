@@ -1,12 +1,12 @@
 import { cva } from "class-variance-authority";
 
 export const Buttonstyles = cva(
-  "font-bold rounded transition-colors duration-200 inline-flex items-center justify-center gap-2", // 👈 añadí flex + gap
+  "font-bold rounded transition-colors duration-200 inline-flex items-center justify-center gap-2",
   {
     variants: {
       variant: {
         submit:
-          "bg-green-ligth text-white font-bold hover:bg-green-ligth cursor-pointer",
+          "bg-green-ligth text-white font-bold hover:bg-green-ligth cursor-pointer hover:bg-yellow-primary hover:shadow-lg",
         cancel:
           "bg-red-500 text-white font-bold hover:bg-red-600 cursor-pointer",
         GoBack: 'text-green-primary hover:text-green-secondary font-semibold text-sm cursor-pointer bg-transparent',

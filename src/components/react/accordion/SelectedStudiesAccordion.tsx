@@ -1,6 +1,6 @@
-import { MdDelete } from "react-icons/md";
-import type { Study } from "../../../interfaces/study.interface";
 import NumberInput from "../form/NumberInput";
+import type { Study } from "../../../interfaces/study.interface";
+import { MdDelete } from "react-icons/md";
 
 interface SelectedStudiesAccordionProps {
     selectedStudies: Study[]
@@ -22,7 +22,7 @@ const SelectedStudiesAccordion = ({ selectedStudies, removeStudy, updateStudyQua
                             <div className="flex-1 min-w-0">
                                 <p className="text-gray-800 truncate">{study.name}</p>
                                 <p className="font-semibold text-green-primary text-xs sm:text-sm">
-                                    ${study.price.toFixed(2)}
+                                    ${study.price}
                                 </p>
                             </div>
 

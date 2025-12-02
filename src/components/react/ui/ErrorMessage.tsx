@@ -2,12 +2,16 @@ import type { FieldError } from "react-hook-form";
 
 
 interface ErrorProps {
-    error: FieldError;
+    id?: string;
+    error: FieldError | undefined;
 }
-export const ErrorMessage = ({ error }: ErrorProps) => {
+export const ErrorMessage = ({ id, error }: ErrorProps) => {
     return (
-        <div className="bg-red p-1 rounded-md mt-0.5">
-            <p className="text-white font-bold text-sm mt-1 text-center">{error.message}</p>
-        </div>
+       <p
+      id={id}
+      className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-1"
+    >
+      {error?.message}
+    </p>
     )
 }

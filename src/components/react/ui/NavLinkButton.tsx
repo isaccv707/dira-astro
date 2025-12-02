@@ -1,24 +1,8 @@
-import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
+import { type VariantProps } from "class-variance-authority";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
 
-const navLinkButtonStyles = cva(
-    "font-bold rounded transition-colors duration-200",
-    {
-        variants: {
-            variant: {
-                navigation: "text-white font-bold",
-                primary: "bg-green-secondary text-white font-bold text-center hover:bg-green-primary"
-            },
-            size: {
-                sm: "px-2 py-1 text-sm",
-                md: "px-4 py-2 text-base",
-                lg: "px-6 py-3 text-lg",
-            },
-        }
-    }
-)
-
-interface NavLinkButtonProps extends VariantProps<typeof navLinkButtonStyles> {
+interface NavLinkButtonProps extends VariantProps<typeof Buttonstyles> {
     path: string;
     text: string;
     icon?: ImageMetadata;
@@ -27,7 +11,7 @@ interface NavLinkButtonProps extends VariantProps<typeof navLinkButtonStyles> {
 
 const NavLinkButton = ({ path, text, variant, size }: NavLinkButtonProps) => {
     return (
-        <a href={path} className={clsx(navLinkButtonStyles({ variant, size }))}>{text}</a>
+        <a href={path} className={clsx(Buttonstyles({ variant, size }))}>{text}</a>
     )
 }
 

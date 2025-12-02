@@ -2,10 +2,10 @@ import { useState, type ReactNode } from "react";
 import { IoChevronDown } from "react-icons/io5";
 import clsx from "clsx";
 
-interface AccordionItem {
+export interface AccordionItem {
     id: string;
     title: string;
-    content: any;
+    content: React.ReactNode;
 }
 
 interface AccordionProps {
@@ -36,7 +36,7 @@ const Accordion = ({
     };
 
     return (
-        <div className={clsx("w-full divide-y divide-gray-200 border border-gray-200 rounded-xl", className)}>
+        <div className={clsx("w-full divide-y divide-gray-200 rounded-xl", className)}>
             {items.map(({ id, title, content }) => {
                 const isOpen = openItems.includes(id);
 

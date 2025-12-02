@@ -21,7 +21,7 @@ export const quoterFormSchema = yup.object({
         .string()
         .when('clientType', {
             is: 'company',
-            then: (schema) => schema.required("El RFC de la empresa es obligatorio").matches(/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/, 'El RFC no es válido'),
+            then: (schema) => schema.notRequired().nullable(),
             otherwise: (schema) => schema.notRequired().nullable(), 
         }),
     phoneNumber: yup

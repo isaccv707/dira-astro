@@ -10,14 +10,12 @@ interface CardQuoteStudyProps {
 }
 const CardQuoteStudy = ({ handleAddStudy, handleDeletStudy, isAdded, study }: CardQuoteStudyProps) => {
     return (
-        <motion.div
+        <div
             key={study.id}
-            layout
-            whileHover={{ scale: 1.03 }}
             className="border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all p-5 flex flex-col justify-between bg-gradient-to-b from-white to-green-50"
         >
             <div>
-                <h3 className="font-semibold text-gray-800 text-lg mb-1">
+                <h3 className="font-semibold text-gray-800 text-sm mb-1">
                     {study.name}
                 </h3>
                 <p className="text-green-primary font-bold text-sm mb-2">
@@ -31,7 +29,7 @@ const CardQuoteStudy = ({ handleAddStudy, handleDeletStudy, isAdded, study }: Ca
                 handleDeletStudy={handleDeletStudy}
                 study={study}
             />
-        </motion.div>
+        </div>
     )
 }
 

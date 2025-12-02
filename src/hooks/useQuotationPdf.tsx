@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { QuotationPayload } from "../api/interfaces/quotation.interface"
 import { useDownloadQuotationPdfMutation } from "../api/quotationApi/quotationAPi";
 import type { Client } from "../interfaces/client.interface"
@@ -11,11 +12,12 @@ interface useQuotationPdf {
 
 const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
     const [downloadQuotationPdf, { isLoading }] = useDownloadQuotationPdfMutation();
+    const [currentAction, setCurrentAction] = useState<"view" | "download" | null>(null);
     const hasClient = Boolean(client);
     const hasStudies = selectedStudies.length > 0;
 
     const buildPayload = (): QuotationPayload | null => {
-        if (!hasClient) {
+        if (!hasClient || !client) {
             toast.error("Primero llena la información del cliente.");
             return null;
         }
@@ -30,6 +32,7 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
             id: study.id,
             name: study.name,
             price: study.price,
+            quantity: study.quantity
         }));
 
         const payload: QuotationPayload = {
@@ -48,6 +51,7 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
         if (!payload) return;
 
         try {
+            setCurrentAction("download")
             const blob = await downloadQuotationPdf(payload).unwrap();
             const url = window.URL.createObjectURL(blob);
 
@@ -59,9 +63,13 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
             a.remove();
 
             setTimeout(() => window.URL.revokeObjectURL(url), 10000);
+            toast.success('Cotizacion Descargada con exito')
         } catch (error) {
             console.error(error);
             toast.error("Hubo un error al descargar la cotización en PDF.");
+        }
+        finally {
+            setCurrentAction(null)
         }
     };
 
@@ -69,6 +77,7 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
         const payload = buildPayload();
         if (!payload) return;
         try {
+            setCurrentAction("view")
             const blob = await downloadQuotationPdf(payload).unwrap();
             const url = window.URL.createObjectURL(blob);
             window.open(url, "_blank");
@@ -78,15 +87,22 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
         } catch (error) {
             console.error(error);
             alert("Hubo un error al generar la cotización en PDF.");
+        } finally {
+            setCurrentAction(null)
         }
     }
+
+    const isViewing = isLoading && currentAction === 'view';
+    const isDownloading = isLoading && currentAction === 'download';
 
     return {
         downloadQuotation,
         viewQuotation,
         isLoading,
         hasClient,
-        hasStudies
+        hasStudies,
+        isDownloading,
+        isViewing
     }
 }
 

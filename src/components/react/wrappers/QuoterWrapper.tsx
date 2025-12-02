@@ -8,18 +8,21 @@ import 'react-toastify/dist/ReactToastify.css';
 const QuoterWrapper = () => {
     return (
         <ReduxProvider>
-            <ToastContainer />
+            <ToastContainer position="top-right" autoClose={3000} />
             <QuoterProvider>
-                <div
-                    className="w-full h-auto flex justify-center gap-10 p-11 place-items-center"
-                >
-                    <section className="w-8/12 p-10">
-                        <QuoterFormSection />
-                    </section>
-                    <section className="w-4/12 bg-white p-10 rounded-2xl shadow-2xl">
-                        <QuotationDetailsSection />
-                    </section>
-                </div>
+                <section className="w-full bg-gray-50 py-10">
+                    <div className="max-w-7xl mx-auto px-4 lg:px-0">
+                        <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] items-start">
+                            <section className="h-full shadow-xl">
+                                <QuoterFormSection />
+                            </section>
+
+                            <section className="h-full shadow-xl">
+                                <QuotationDetailsSection />
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </QuoterProvider>
         </ReduxProvider>
     )

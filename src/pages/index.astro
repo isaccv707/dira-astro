@@ -2,11 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import CarouselHome from "../components/react/carousel/CarouselHome";
 import { benefits } from "../data/benefits/benefits-data";
-import { services } from "../data/services/services";
 import HeroDyra from "../sections/astro/HeroDyra.astro";
-import OurServices from "../sections/astro/OurServices.astro";
 import BenefitCard from "../components/astro/cards/BenefitCard.astro";
 import QuickActions from "../sections/astro/QuickActions.astro";
+import ModalServiceWrapper from "../components/react/wrappers/ModalServiceWrapper";
 ---
 
 <Layout>
@@ -18,7 +17,7 @@ import QuickActions from "../sections/astro/QuickActions.astro";
         <QuickActions />
     </section>
     <section class="px-10">
-        <OurServices services={services} />
+        <ModalServiceWrapper client:load />
     </section>
 
     <section>
