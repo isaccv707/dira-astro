@@ -1,13 +1,13 @@
 import { DrawerProvider } from "../../../contexts/DrawerContext"
 import { ToastContainer } from "react-toastify";
-import NavDrawer from "../drawer/NavDrawer";
 import ButtonDrawer from "../ui/ButtonDrawer";
+import { routes } from "../../../routes/routes";
 
 const DrawerWrapper = () => {
     return (
         <DrawerProvider>
             <ToastContainer />
-            <ButtonDrawer />
+            <ButtonDrawer keyDrawer="NAVBAR_DRAWER" data={routes} title={'Menu'} />
         </DrawerProvider>
     )
 }

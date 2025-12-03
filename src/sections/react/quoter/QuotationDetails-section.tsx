@@ -4,7 +4,6 @@ import ClientInformationCard from "../../../components/react/cards/ClientInforma
 import TotalQuoteCard from "../../../components/react/cards/TotalQuoteCard";
 import Button from "../../../components/react/ui/Button";
 import SelectedStudiesAccordion from "../../../components/react/accordion/SelectedStudiesAccordion";
-import { accordionItems } from "../../../constants/accordionItems/accordionItems";
 import useQuotationPdf from "../../../hooks/useQuotationPdf";
 
 const QuotationDetailsSection = () => {
@@ -23,17 +22,6 @@ const QuotationDetailsSection = () => {
     isViewing
   } = useQuotationPdf({ client, selectedStudies });
 
-  const accordionSelectedStudies = accordionItems.map(({ id, title }) => ({
-    id,
-    title: `${title}: ${selectedStudies.length}`,
-    content: (
-      <SelectedStudiesAccordion
-        updateStudyQuantity={updateStudyQuantity}
-        selectedStudies={selectedStudies}
-        removeStudy={removeStudy}
-      />
-    ),
-  }));
 
   return (
     <div className="w-full h-full">
@@ -47,7 +35,13 @@ const QuotationDetailsSection = () => {
       <div className="flex-1 overflow-y-auto max-h-[75vh] px-4 py-5 space-y-5 scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-100 rounded-b-2xl">
         <ClientInformationCard client={client} />
 
-        <Accordion items={accordionSelectedStudies} />
+        <Accordion id={'studies'} title={`Estudios Seleccionados: ${selectedStudies.length}`}>
+          <SelectedStudiesAccordion
+            updateStudyQuantity={updateStudyQuantity}
+            selectedStudies={selectedStudies}
+            removeStudy={removeStudy}
+          />
+        </Accordion>
 
         <TotalQuoteCard totals={totals} selectedStudies={selectedStudies} />
 

@@ -18,7 +18,7 @@ const SelectedStudiesAccordion = ({ selectedStudies, removeStudy, updateStudyQua
                             key={study.id}
                             className="py-2 flex items-center justify-between gap-3 text-sm"
                         >
-                            {/* Nombre + precio */}
+                            
                             <div className="flex-1 min-w-0">
                                 <p className="text-gray-800 truncate">{study.name}</p>
                                 <p className="font-semibold text-green-primary text-xs sm:text-sm">
