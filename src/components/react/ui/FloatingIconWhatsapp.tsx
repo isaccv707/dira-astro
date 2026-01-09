@@ -8,7 +8,7 @@ const FloatingIconWhatsapp = () => {
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const url = 'https://wa.me/3318622542';
+    const url = import.meta.env.PUBLIC_URL_WHATSAPP;
     window.open(url)
   }
 

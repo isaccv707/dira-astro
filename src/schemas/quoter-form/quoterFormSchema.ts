@@ -30,7 +30,7 @@ export const quoterFormSchema = yup.object({
         .matches(/^[0-9]{10}$/, 'El número de teléfono debe tener 10 dígitos'),
     email: yup
         .string()
-        .required('El correo electrónico es obligatorio')
+        // .required('El correo electrónico es obligatorio')
         .email('El correo electrónico no es válido'),
     studies: yup
         .array()

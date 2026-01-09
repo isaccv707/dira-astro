@@ -30,7 +30,7 @@ const Accordion = ({
           type="button"
           onClick={toggleItem}
           className={clsx(
-            "flex justify-between items-center w-full px-4 py-3 text-left font-medium text-green-700 hover:bg-green-50 transition-colors duration-200",
+            "flex justify-between items-center w-full px-4 py-3 text-left font-medium text-green-primary hover:bg-green-50 transition-colors duration-200",
             isOpen && "bg-green-100 border-l-4 border-greenPrimary"
           )}
           aria-expanded={isOpen}
@@ -39,7 +39,7 @@ const Accordion = ({
           <span>{title}</span>
           <IoChevronDown
             className={clsx(
-              "text-greenPrimary transform transition-transform duration-200",
+              "transform transition-transform duration-200",
               isOpen && "rotate-180"
             )}
           />

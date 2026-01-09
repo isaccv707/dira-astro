@@ -1,0 +1,24 @@
+---
+import type { GetStaticPaths } from "astro";
+import { posts } from "../../data/blog/posts";
+import Layout from "../../layouts/Layout.astro";
+import Post from "../../sections/astro/Post.astro";
+
+export const getStaticPaths = (() => {
+    return posts.map((post) => {
+        return {
+            params: { slug: post.slug },
+            props: { postTitle: post.title },
+        };
+    });
+}) satisfies GetStaticPaths;
+
+const { slug } = Astro.params;
+const { postTitle } = Astro.props;
+const title = `${postTitle}`;
+const description = `Leé nuestro articulo sobre: ${postTitle}`;
+---
+
+<Layout>
+    <Post slug={slug} />
+</Layout>

@@ -12,9 +12,8 @@ interface NavDrawerProps {
   title: string;
 }
 
-const NavDrawer = ({ data, id, title }: NavDrawerProps) => {
+const NavDrawer = ({ data: routes, id, title }: NavDrawerProps) => {
   const { close } = useDrawerManager();
-
 
   return (
     <Drawer
@@ -24,10 +23,20 @@ const NavDrawer = ({ data, id, title }: NavDrawerProps) => {
     >
 
       <div className="flex h-full flex-col">
-        <nav className="mt-10 flex flex-col gap-6">
-          {data.map(({ path, text }: { path: string; text: string }) => (
-            <NavLinkButton key={path} path={path} text={text} onClick={() => close(id)} variant={'navigation'} />
-          ))}
+        <nav className="mt-10 flex flex-col gap-6 items-stretch text-left">
+          {
+            routes.map(({ path, text }: { path: string; text: string }) => (
+              <NavLinkButton
+                key={path}
+                path={path}
+                text={text}
+                onClick={() => close(id)}
+                variant={'normal'}
+                align={'left'}
+                width={'full'}
+              />
+            ))
+          }
 
           <Accordion id={'services'} title={'Servicios'}>
             <NavigationAccordion routes={servicesRoutes} />
@@ -38,7 +47,7 @@ const NavDrawer = ({ data, id, title }: NavDrawerProps) => {
           </Accordion>
         </nav>
 
-        
+
         <nav className="mt-auto flex gap-4 pt-8">
           <a href="#" aria-label="Facebook">
             <img src={facebook.src} alt="Facebook" className="w-8 h-8" />

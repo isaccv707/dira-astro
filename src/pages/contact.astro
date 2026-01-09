@@ -1,8 +1,156 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ContactPage from "../pages-react/Contact";
+import { ContactForm } from "../sections/react/ContactForm";
 ---
 
 <Layout>
-    <ContactPage />
+    <main class="relative overflow-hidden bg-white text-black">
+        <div
+            class="relative mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 lg:gap-20 lg:px-8 lg:py-24"
+        >
+            <section
+                class="grid items-start gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
+            >
+                <div class="space-y-6 animate-fade-up">
+                    <h1
+                        class="text-balance text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl text-yellow-secondary"
+                    >
+                        Estamos listos para
+                        <span
+                            class="block bg-gradient-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
+                        >
+                            atenderte y resolver tus dudas.
+                        </span>
+                    </h1>
+
+                    <p class="max-w-xl text-sm text-grey sm:text-base">
+                        Ya sea que necesites agendar una cita, resolver una duda
+                        sobre tus resultados o conocer más sobre nuestros
+                        servicios, en
+                        {" "}
+                        <span class="font-semibold text-green-secondary"
+                            >DYRA</span
+                        >
+                        {" "}
+                        estamos para apoyarte con un trato cercano y profesional.
+                    </p>
+
+                    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                        <div
+                            class="rounded-2xl border border-green-prbg-green-primary/40 bg-black/90 p-4 shadow-lg shadow-green-prbg-green-primary/40"
+                        >
+                            <h2
+                                class="text-sm font-semibold text-green-secondary"
+                            >
+                                Horarios de atención
+                            </h2>
+                            <p class="mt-2 text-xs text-grey sm:text-sm">
+                                Lunes a viernes: 7:00 am – 7:00 pm
+                                <br />
+                                Sábados: 7:00 am – 2:00 pm
+                            </p>
+                        </div>
+
+                        <div
+                            class="rounded-2xl border border-yellow-prito-yellow-primary/50 bg-black/90 p-4 shadow-lg shadow-yellow-prito-yellow-primary/40"
+                        >
+                            <h2
+                                class="text-sm font-semibold text-yellow-prito-yellow-primary"
+                            >
+                                Contacto directo
+                            </h2>
+                            <p class="mt-2 text-xs text-grey sm:text-sm">
+                                Teléfono: <span class="text-white font-medium"
+                                    >+52 (33) 0000 0000</span
+                                >
+                                <br />
+                                WhatsApp: <span class="text-white font-medium"
+                                    >+52 (33) 0000 0000</span
+                                >
+                                <br />
+                                Correo: <span class="text-white font-medium"
+                                    >contacto@dyra.com</span
+                                >
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Columna derecha: formulario React */}
+                <div class="animate-fade-up">
+                    <div
+                        class="rounded-3xl border border-white/10 p-5 shadow-2xl shadow-green-prbg-green-primary/40 backdrop-blur"
+                    >
+                        <div class="mb-4">
+                            <p
+                                class="text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
+                            >
+                                Envíanos un mensaje
+                            </p>
+                            <p class="mt-1 text-sm text-grey">
+                                Compártenos tus datos y te contactaremos lo
+                                antes posible.
+                            </p>
+                        </div>
+                        <ContactForm client:load/>
+                    </div>
+                </div>
+            </section>
+
+            <!-- <section
+                class="grid gap-6 rounded-3xl border border-white/10 bg-black/90 p-6 shadow-xl shadow-black/70 sm:grid-cols-3 sm:p-8"
+            >
+                <div class="space-y-1">
+                    <p
+                        class="text-2xl font-extrabold tracking-tight text-yellow-prito-yellow-primary sm:text-3xl"
+                    >
+                        +15
+                    </p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.2em] text-grey"
+                    >
+                        Años de experiencia
+                    </p>
+                    <p class="text-xs text-grey sm:text-sm">
+                        Acompañando a médicos y pacientes con resultados
+                        confiables.
+                    </p>
+                </div>
+
+                <div class="space-y-1">
+                    <p
+                        class="text-2xl font-extrabold tracking-tight text-yellow-prito-yellow-primary sm:text-3xl"
+                    >
+                        Respuesta
+                    </p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.2em] text-grey"
+                    >
+                        Rápida
+                    </p>
+                    <p class="text-xs text-grey sm:text-sm">
+                        Damos seguimiento a tus dudas y solicitudes en el menor
+                        tiempo posible.
+                    </p>
+                </div>
+
+                <div class="space-y-1">
+                    <p
+                        class="text-2xl font-extrabold tracking-tight text-yellow-prito-yellow-primary sm:text-3xl"
+                    >
+                        Confianza
+                    </p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.2em] text-grey"
+                    >
+                        Y cercanía
+                    </p>
+                    <p class="text-xs text-grey sm:text-sm">
+                        Un equipo humano que te escucha y te acompaña en cada
+                        paso.
+                    </p>
+                </div>
+            </section> -->
+        </div>
+    </main>
 </Layout>

@@ -14,22 +14,15 @@ const OurServices = () => {
     };
 
     return (
-        <section className="py-10 sm:py-14 lg:py-16">
-            <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-green-ligth mb-6 sm:mb-8">
-                Nuestros Servicios
-            </h1>
-
-            <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch">
-                {services.map((service) => (
-                    <ServiceCard
-                        key={service.id}
-                        service={service}
-                        handleOpenModal={() => handleOpenModal(service)}
-                    />
-                ))}
-            </div>
-
-        </section>
+        <div className="grid md:flex justify-center gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-3">
+            {services.map((service) => (
+                <ServiceCard
+                    key={service.id}
+                    service={service}
+                    handleOpenModal={() => handleOpenModal(service)}
+                />
+            ))}
+        </div>
     );
 };
 

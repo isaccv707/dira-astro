@@ -6,7 +6,7 @@ import { routes } from "../../routes/routes";
 const currentPath = Astro.url.pathname;
 ---
 
-<nav class="hidden md:flex items-center gap-8">
+<nav class="hidden md:flex items-center gap-6">
   <div class="flex gap-5">
     {
       routes.map(({ path, text }) => (
@@ -32,7 +32,6 @@ const currentPath = Astro.url.pathname;
       { label: "Analisis Clinicos", href: "/service/analisis-clinicos" },
       { label: "Salud Empresarial", href: "/service/salud-empresarial" },
       { label: "Tomas a domicilio", href: "/service/tomas-domicilio" },
-      { label: "Biologia Molecular", href: "/service/biologia-molecular" },
     ]}
   />
   <Dropdown

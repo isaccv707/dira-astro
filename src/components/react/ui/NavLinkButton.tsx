@@ -9,9 +9,9 @@ interface NavLinkButtonProps extends VariantProps<typeof Buttonstyles> {
     onClick?: () => void;
 }
 
-const NavLinkButton = ({ path, text, variant, size }: NavLinkButtonProps) => {
+const NavLinkButton = ({ path, text, variant, size, align, icon, onClick, width }: NavLinkButtonProps) => {
     return (
-        <a href={path} className={clsx(Buttonstyles({ variant, size }))}>{text}</a>
+        <a href={path} className={clsx(Buttonstyles({ variant, size, align, width }))}>{text}</a>
     )
 }
 

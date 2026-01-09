@@ -1,0 +1,113 @@
+---
+import { posts } from "../../data/blog/posts";
+import type { ContentBlock } from "../../interfaces/blog.interface";
+
+interface Props {
+    slug: string;
+}
+
+const { slug } = Astro.props;
+const post = posts.find((post) => post.slug === slug);
+if (!post) return;
+---
+
+<section
+    class="relative w-full bg-gradient-to-b from-green-primary via-gray-50 to-gray-500 rounded-2xl shadow-md border border-gray-200 overflow-hidden"
+>
+    <!-- Encabezado -->
+    <div class="p-6 md:p-10">
+        <div class="flex items-center gap-2 mb-4">
+            <span
+                class="px-3 py-1 text-xs font-medium rounded-full bg-primary text-white"
+            >
+                {post.category}
+            </span>
+            <span class="text-xs text-gray-500">
+                • {post.readingTime} min de lectura
+            </span>
+        </div>
+
+        <h1
+            class="text-2xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"
+        >
+            {post.title}
+        </h1>
+
+        <p class="text-base md:text-lg text-gray-600 mb-6">
+            {post.description}
+        </p>
+
+        <div class="flex items-center gap-3 mb-6">
+            <img
+                src={post.author.avatar}
+                alt={post.author.name}
+                class="w-10 h-10 rounded-full border"
+            />
+            <div>
+                <p class="text-sm font-semibold text-gray-800">
+                    {post.author.name}
+                </p>
+                <p class="text-xs text-gray-500">Publicado el {post.date}</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-10">
+            {
+                post.tags.map((tag) => (
+                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-primary text-white">
+                        #{tag}
+                    </span>
+                ))
+            }
+        </div>
+
+        <article class="prose prose-gray max-w-none">
+            {
+                post.content.map((block: ContentBlock) => {
+                    if (block.type === "paragraph") {
+                        return <p>{block.content}</p>;
+                    }
+                    if (block.type === "subtitle") {
+                        return (
+                            <h2 class="text-xl font-semibold text-gray-800 mt-6">
+                                {block.content}
+                            </h2>
+                        );
+                    }
+                    if (block.type === "list") {
+                        return (
+                            <ul class="list-disc list-inside space-y-2 mt-3">
+                                {block.items?.map((item) => (
+                                    <li>
+                                        <span class="font-medium">
+                                            {item.title}
+                                        </span>
+                                        : {item.text}
+                                    </li>
+                                ))}
+                            </ul>
+                        );
+                    }
+                    if (block.type === "quote") {
+                        return (
+                            <blockquote class="border-l-4 border-primary pl-4 italic text-gray-600 my-4">
+                                {block.content}
+                            </blockquote>
+                        );
+                    }
+                    if (block.type === "image") {
+                        return (
+                            <div class="my-6">
+                                <img
+                                    src={block.src}
+                                    alt={block.alt || ""}
+                                    class="rounded-xl shadow-md"
+                                />
+                            </div>
+                        );
+                    }
+                })
+            }
+        </article>
+    </div>
+</section>

@@ -1,6 +1,6 @@
 import { FiCheckCircle, FiTrash2 } from "react-icons/fi";
-import type { Study } from "../../../contexts/QuoterContext"
 import { useState } from "react";
+import type { Study } from "../../../interfaces/study.interface";
 
 interface ButtonAddStudyProps {
     isAdded: boolean

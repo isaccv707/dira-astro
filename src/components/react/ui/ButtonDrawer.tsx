@@ -1,6 +1,4 @@
 import { Menu } from "lucide-react"
-import type { DrawerPropsType } from "../../../contexts/DrawerContext"
-import type { DRAWERS } from "../drawer/drawers"
 import useDrawerManager from "../../../hooks/useDrawerManager"
 import { routes } from "../../../routes/routes"
 import Button from "./Button"

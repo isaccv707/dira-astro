@@ -72,7 +72,7 @@ export const ContactForm = () => {
     return (
         <FormProvider onSubmit={handleSubmit(onSubmit)} methods={methods}>
             <div className="bg-primary p-2 rounded-2xl text-center">
-                <h1 className="text-white font-bold text-xl">Formulario de contacto</h1>
+                <h1 className="text-green-secondary font-bold text-xl">Formulario de contacto</h1>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
 

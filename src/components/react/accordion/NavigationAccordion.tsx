@@ -11,7 +11,12 @@ const NavigationAccordion = ({ routes}: NavigationAccordionProps) => {
             {
                 routes?.map(({ path, text }, index) => (
                     <li key={index} className="py-2">
-                        <NavLinkButton path={path} text={text} variant={'navigation'} />
+                        <NavLinkButton 
+                        path={path} 
+                        text={text} 
+                        variant={'normal'} 
+                        align={'left'}
+                        />
                     </li>
                 ))
             }

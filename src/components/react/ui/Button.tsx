@@ -14,7 +14,7 @@ interface ButtonProps extends VariantProps<typeof Buttonstyles> {
   isLoading?: boolean
 }
 
-const Button = ({ text, type = "submit", variant, size, icon, onClick, disabled = false, isLoading }: ButtonProps) => {
+const Button = ({ text, type = "submit", variant, size, icon, onClick, disabled = false, isLoading, width, align }: ButtonProps) => {
   return (
     <button
       type={type}

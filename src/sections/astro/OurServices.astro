@@ -1,0 +1,16 @@
+---
+import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import ModalServiceWrapper from "../../components/react/wrappers/ModalServiceWrapper";
+
+
+---
+
+<div class="flex justify-center text-center mb-5">
+    <HeaderBySection
+        textHeader={"Servicios"}
+        title={"Soluciones clínicas para cada necesidad"}
+        paragraph={`Conoce nuestros servicios y estudios disponibles. Te ayudamos con atención clara, procesos confiables y resultados listos cuando los necesitas.`}
+        textColor="green-secondary"
+    />
+</div>
+<ModalServiceWrapper client:load />

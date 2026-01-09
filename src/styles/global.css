@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @config "../../tailwind.config.mjs";
+
+.swiper,
+.swiper-wrapper,
+.swiper-slide {
+    height: 100%;
+}

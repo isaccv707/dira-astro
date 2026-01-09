@@ -19,7 +19,7 @@ const ServiceCard = ({ service, handleOpenModal }: ServiceCardProps) => {
                 className="w-16 h-16 flex items-center justify-center rounded-full mb-4 bg-gradient-to-tr from-green-ligth to-greenSecondary p-2"
             >
                 <img
-                    src={icon.src}
+                    src={icon?.src}
                     alt="icon-dyra"
                     className="w-10 h-auto filter invert/10 transition-transform duration-300 group-hover:scale-110"
                 />
@@ -48,15 +48,13 @@ const ServiceCard = ({ service, handleOpenModal }: ServiceCardProps) => {
             </p>
 
             <div className="mt-6 w-full flex gap-3 items-center justify-center">
-                <Button onClick={handleOpenModal} text="Vista Rápida" variant={"submit"} size={"sm"} />
-                <div className="ml-0">
-                    <NavLinkButton
-                        path={`${path}/${id}`}
-                        variant={"submit"}
-                        size="sm"
-                        text={'Mas Información'}
-                    />
-                </div>
+                <Button onClick={handleOpenModal} text="Vista Rápida" variant={"secondary"} size={"sm"} />
+                <NavLinkButton
+                    path={`${path}/${id}`}
+                    variant={"primary"}
+                    size="sm"
+                    text={'Mas Información'}
+                />
             </div>
         </div>
     )

@@ -9,7 +9,11 @@ export interface Service<T = any> {
     id: string;
     title: string;
     benefits?: Benefits[];
-    icon: ImageMetadata;
+    icon?: ImageMetadata;
+    img?: {
+        image45?: ImageMetadata;
+        image167?: ImageMetadata;
+    };
     path: string;
     description: string;
     products?: T[];

@@ -6,6 +6,8 @@ import ServiceDetail from "../../pages-react/ServiceDetail";
 import CardProduct from "../../components/react/cards/CardProduct";
 import ScrollToSectionButton from "../../components/react/ui/ScrollToSectionButton";
 import StudiesWrapper from "../../components/react/wrappers/StudiesWrapper";
+import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import logo from "../../assets/images/logo.png";
 
 export const getStaticPaths = (() => {
     return services.map((service) => ({
@@ -18,10 +20,35 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { service } = Astro.props;
 const { products } = service;
+const { title, description, img } = service;
 ---
 
 <Layout>
-    <ServiceDetail service={service} client:load />
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div class="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+            <div class="w-full">
+                <div class="max-w-prose">
+                    <HeaderBySection
+                        textHeader="Servicio"
+                        title={title}
+                        paragraph={description}
+                        img={logo}
+                        textColor="yellow-secondary"
+                    />
+                </div>
+            </div>
+            <div class="flex justify-center md:justify-start">
+                <img
+                    src={img?.image167?.src}
+                    alt="Imagen DYRA"
+                    class="w-full max-w-md md:max-w-lg h-auto rounded-xl object-cover"
+                    loading="lazy"
+                    decoding="async"
+                />
+            </div>
+        </div>
+    </div>
+
     <ScrollToSectionButton client:load />
     <StudiesWrapper client:load service={service} />
 </Layout>
