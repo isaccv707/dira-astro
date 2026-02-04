@@ -1,3 +1,8 @@
+export type ServiceKey =
+    | "clinical-analyses"
+    | "business-health"
+    | "home-shots"
+
 
 export interface Benefits {
     icon: string;
@@ -8,6 +13,7 @@ export interface Benefits {
 export interface Service<T = any> {
     id: string;
     title: string;
+    key: ServiceKey;
     benefits?: Benefits[];
     icon?: ImageMetadata;
     img?: {

@@ -1,43 +1,41 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-
-interface usePaginationProps {
-  totalItems: number;
-  itemsPerPage: number;
+interface UsePaginationProps {
+  totalPages: number;
   initialPage?: number;
 }
 
-const usePagination = ({ itemsPerPage, totalItems, initialPage }: usePaginationProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const usePagination = ({ totalPages, initialPage = 1 }: UsePaginationProps) => {
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  useEffect(() => {
+    const safeTotalPages = Math.max(totalPages || 1, 1);
+    setCurrentPage((p) => Math.min(Math.max(p, 1), safeTotalPages));
+  }, [totalPages]);
 
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, totalPages));
+  const nextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, Math.max(totalPages || 1, 1)));
+
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
   const setPage = (page: number) =>
-    setCurrentPage(() => Math.min(Math.max(page, 1), totalPages));
+    setCurrentPage(() => {
+      const safeTotalPages = Math.max(totalPages || 1, 1);
+      return Math.min(Math.max(page, 1), safeTotalPages);
+    });
 
-  const paginationInfo = useMemo(
+  return useMemo(
     () => ({
       currentPage,
-      totalPages,
-      startIndex,
-      endIndex,
-      itemsPerPage,
+      totalPages: Math.max(totalPages || 1, 1),
+      nextPage,
+      prevPage,
+      setPage,
+      setCurrentPage,
     }),
-    [currentPage, totalPages, startIndex, endIndex, itemsPerPage]
+    [currentPage, totalPages]
   );
+};
 
-  return {
-    ...paginationInfo,
-    nextPage,
-    prevPage,
-    setPage,
-    setCurrentPage,
-  };
-}
-
-export default usePagination
+export default usePagination;

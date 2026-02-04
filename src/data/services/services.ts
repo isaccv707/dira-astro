@@ -15,6 +15,7 @@ import {
 export const services: Service[] = [
     {
         id: 'analisis-clinicos',
+        key: 'clinical-analyses',
         title: 'Analisis Clinicos',
         icon: testTubes,
         img: {
@@ -32,8 +33,10 @@ export const services: Service[] = [
         ],
         tags: ['analisis', 'muestras', 'laboratorio']
     },
+
     {
         id: 'salud-empresarial',
+        key: 'business-health',
         title: 'Salud Empresarial',
         icon: healthIcon,
         img: {
@@ -48,6 +51,7 @@ export const services: Service[] = [
     },
     {
         id: 'tomas-domicilio',
+        key: 'home-shots',
         title: 'Tomas a domicilio',
         icon: addressIcon,
         img: {

@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { ContactForm } from "../sections/react/ContactForm";
+import { whatsapp, gmail, facebook } from "../assets/icons/networks-icons";
+import { PhoneCall } from "lucide-react";
 ---
 
 <Layout>
@@ -35,122 +37,62 @@ import { ContactForm } from "../sections/react/ContactForm";
                         estamos para apoyarte con un trato cercano y profesional.
                     </p>
 
-                    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div
-                            class="rounded-2xl border border-green-prbg-green-primary/40 bg-black/90 p-4 shadow-lg shadow-green-prbg-green-primary/40"
+                    <div
+                        class="rounded-2xl border border-green-primary/15 bg-green-primary/5 p-4"
+                    >
+                        <p
+                            class="text-xs font-medium text-green-primary sm:text-sm"
                         >
-                            <h2
-                                class="text-sm font-semibold text-green-secondary"
+                            ¿Necesitas más información?
+                        </p>
+                        <p
+                            class="mt-1 text-xs text-neutral-600 sm:text-sm mb-2"
+                        >
+                            Contactanos por el medio de tu preferencia
+                        </p>
+                        <div
+                            class="flex gap-2 flex-row sm:items-center sm:gap-3"
+                        >
+                            <a
+                                href="https://wa.me/523318622542"
+                                target="_blank"
+                                rel="noopener"
+                                class="inline-flex items-center justify-center hover:opacity-95"
                             >
-                                Horarios de atención
-                            </h2>
-                            <p class="mt-2 text-xs text-grey sm:text-sm">
-                                Lunes a viernes: 7:00 am – 7:00 pm
-                                <br />
-                                Sábados: 7:00 am – 2:00 pm
-                            </p>
-                        </div>
+                                <img
+                                    src={whatsapp.src}
+                                    alt="WhatsApp DYRA"
+                                    class="w-8 h-auto"
+                                />
+                            </a>
 
-                        <div
-                            class="rounded-2xl border border-yellow-prito-yellow-primary/50 bg-black/90 p-4 shadow-lg shadow-yellow-prito-yellow-primary/40"
-                        >
-                            <h2
-                                class="text-sm font-semibold text-yellow-prito-yellow-primary"
+                            <a
+                                href="mailto:contacto@dyra.com"
+                                class="inline-flex items-center justify-center hover:opacity-95"
                             >
-                                Contacto directo
-                            </h2>
-                            <p class="mt-2 text-xs text-grey sm:text-sm">
-                                Teléfono: <span class="text-white font-medium"
-                                    >+52 (33) 0000 0000</span
-                                >
-                                <br />
-                                WhatsApp: <span class="text-white font-medium"
-                                    >+52 (33) 0000 0000</span
-                                >
-                                <br />
-                                Correo: <span class="text-white font-medium"
-                                    >contacto@dyra.com</span
-                                >
-                            </p>
+                                <img
+                                    src={gmail.src}
+                                    alt="Correo DYRA"
+                                    class="w-8 h-auto"
+                                />
+                            </a>
+
+                            <a
+                                href="tel:+523318622542"
+                                class="inline-flex items-center justify-center bg-green-primary rounded p-0.5 hover:opacity-95"
+                                aria-label="Llamar a DYRA"
+                            >
+                                <PhoneCall className="text-white" />
+                            </a>
                         </div>
                     </div>
                 </div>
 
-                {/* Columna derecha: formulario React */}
                 <div class="animate-fade-up">
-                    <div
-                        class="rounded-3xl border border-white/10 p-5 shadow-2xl shadow-green-prbg-green-primary/40 backdrop-blur"
-                    >
-                        <div class="mb-4">
-                            <p
-                                class="text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
-                            >
-                                Envíanos un mensaje
-                            </p>
-                            <p class="mt-1 text-sm text-grey">
-                                Compártenos tus datos y te contactaremos lo
-                                antes posible.
-                            </p>
-                        </div>
-                        <ContactForm client:load/>
+                        <ContactForm client:load />
                     </div>
                 </div>
             </section>
-
-            <!-- <section
-                class="grid gap-6 rounded-3xl border border-white/10 bg-black/90 p-6 shadow-xl shadow-black/70 sm:grid-cols-3 sm:p-8"
-            >
-                <div class="space-y-1">
-                    <p
-                        class="text-2xl font-extrabold tracking-tight text-yellow-prito-yellow-primary sm:text-3xl"
-                    >
-                        +15
-                    </p>
-                    <p
-                        class="text-xs font-semibold uppercase tracking-[0.2em] text-grey"
-                    >
-                        Años de experiencia
-                    </p>
-                    <p class="text-xs text-grey sm:text-sm">
-                        Acompañando a médicos y pacientes con resultados
-                        confiables.
-                    </p>
-                </div>
-
-                <div class="space-y-1">
-                    <p
-                        class="text-2xl font-extrabold tracking-tight text-yellow-prito-yellow-primary sm:text-3xl"
-                    >
-                        Respuesta
-                    </p>
-                    <p
-                        class="text-xs font-semibold uppercase tracking-[0.2em] text-grey"
-                    >
-                        Rápida
-                    </p>
-                    <p class="text-xs text-grey sm:text-sm">
-                        Damos seguimiento a tus dudas y solicitudes en el menor
-                        tiempo posible.
-                    </p>
-                </div>
-
-                <div class="space-y-1">
-                    <p
-                        class="text-2xl font-extrabold tracking-tight text-yellow-prito-yellow-primary sm:text-3xl"
-                    >
-                        Confianza
-                    </p>
-                    <p
-                        class="text-xs font-semibold uppercase tracking-[0.2em] text-grey"
-                    >
-                        Y cercanía
-                    </p>
-                    <p class="text-xs text-grey sm:text-sm">
-                        Un equipo humano que te escucha y te acompaña en cada
-                        paso.
-                    </p>
-                </div>
-            </section> -->
         </div>
     </main>
 </Layout>

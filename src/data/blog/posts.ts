@@ -1,4 +1,5 @@
 import type { Post } from "../../interfaces/blog.interface"
+import { doc1M, doc2M, qfb1M, qfb2H } from "../../assets/images/blog"
 
 export const posts: Post[] = [
     {
@@ -7,7 +8,7 @@ export const posts: Post[] = [
         slug: "que-es-biometria-hematica",
         author: {
             name: "Dra. Fernanda Ruiz",
-            avatar: "/avatars/fernanda-ruiz.jpg",
+            avatar: doc1M,
         },
         description:
             "Una guía clara sobre la biometría hemática: qué mide, cuándo se solicita y cómo interpretar resultados generales.",
@@ -81,7 +82,7 @@ export const posts: Post[] = [
         slug: "ayuno-estudios-de-laboratorio-que-si-y-que-no",
         author: {
             name: "QFB. Mariana López",
-            avatar: "/avatars/mariana-lopez.jpg",
+            avatar: qfb1M,
         },
         description:
             "Evita repetir estudios: te explicamos cuándo se necesita ayuno, cuánto tiempo y qué bebidas o hábitos pueden alterar tus resultados.",
@@ -136,7 +137,7 @@ export const posts: Post[] = [
         slug: "uroanalisis-errores-comunes-recoleccion",
         author: {
             name: "QFB. David Herrera",
-            avatar: "/avatars/david-herrera.jpg",
+            avatar: qfb2H,
         },
         description:
             "Una muestra bien tomada marca la diferencia. Aprende los errores más frecuentes y cómo evitarlos para obtener resultados confiables.",
@@ -195,7 +196,7 @@ export const posts: Post[] = [
         slug: "tsh-t3-t4-entendiendo-estudios-tiroides",
         author: {
             name: "Dra. Andrea Salas",
-            avatar: "/avatars/andrea-salas.jpg",
+            avatar: doc2M,
         },
         description:
             "Qué significa cada prueba de tiroides, para qué se solicita y cómo se interpreta en conjunto de forma general.",
@@ -255,7 +256,7 @@ export const posts: Post[] = [
         slug: "checkup-anual-estudios-frecuentes",
         author: {
             name: "QFB. Mariana López",
-            avatar: "/avatars/mariana-lopez.jpg",
+            avatar: qfb1M,
         },
         description:
             "Una lista práctica de estudios comunes en chequeos preventivos y qué información aportan de forma general.",
@@ -304,15 +305,13 @@ export const posts: Post[] = [
             },
         ],
     },
-
-    // Ejemplo en borrador
     {
         id: "post-006",
         title: "Hemoglobina glucosilada (HbA1c): qué es y cuándo se usa",
         slug: "hemoglobina-glucosilada-hba1c-que-es",
         author: {
             name: "Dra. Fernanda Ruiz",
-            avatar: "/avatars/fernanda-ruiz.jpg",
+            avatar: doc1M,
         },
         description:
             "Explicación sencilla de la HbA1c, su utilidad en el seguimiento de diabetes y consideraciones generales.",

@@ -17,7 +17,15 @@ const Pagination = ({
 }: PaginationProps) => {
   if (totalPages < 1) return null;
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const MAX_VISIBLE = 7;
+  const half = Math.floor(MAX_VISIBLE / 2);
+
+  let start = Math.max(1, currentPage - half);
+  let end = Math.min(totalPages, start + MAX_VISIBLE - 1);
+
+  // reajuste si estamos cerca del final
+  start = Math.max(1, end - MAX_VISIBLE + 1);
+  const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
   return (
     <nav aria-label="Pagination" className="select-none">

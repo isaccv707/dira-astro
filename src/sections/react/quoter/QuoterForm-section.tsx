@@ -60,7 +60,7 @@ const QuoterFormSection = () => {
                         ? (
                             <Button
                                 text="Regresar"
-                                variant={'GoBack'}
+                                variant={'normal'}
                                 size={"sm"}
                                 icon={<IoIosReturnLeft />}
                                 onClick={previousStep}
@@ -70,11 +70,11 @@ const QuoterFormSection = () => {
                     }
                 </div>
 
-                {
+                {/* {
                     step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
-                }
+                } */}
                 {
-                    step === 2 && <SelectStudiesSection studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
+                    step === 1 && <SelectStudiesSection studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
                 }
             </div>
 

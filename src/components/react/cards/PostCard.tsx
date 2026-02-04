@@ -1,9 +1,11 @@
 import React from 'react'
 import NavLinkButton from '../ui/NavLinkButton';
+import type { Author } from '../../../interfaces/blog.interface';
+
 interface PostCardProps {
     id?: string;
     title: string;
-    author: string;
+    author: Author;
     description: string;
     slug: string;
     image?: ImageMetadata;
@@ -14,7 +16,6 @@ const PostCard = ({ author, description, slug, title, id, image, tags }: PostCar
     return (
         <div
             className="w-full bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col"
-        // styles={"height: 100"}
         >
             {
                 image && (
@@ -32,9 +33,22 @@ const PostCard = ({ author, description, slug, title, id, image, tags }: PostCar
                         {title}
                     </h1>
 
-                    <p className="text-sm text-yellow-secondary font-bold">
-                        Autor: <span className="text-gray-400">{author}</span>
-                    </p>
+                    <div className="flex items-center gap-3">
+                        <img
+                            src={author.avatar.src}
+                            alt={author.name}
+                            className="w-11 h-11 rounded-full border border-gray-200 shadow-sm bg-white"
+                            loading="lazy"
+                        />
+                        <div>
+                            <p
+                                className="text-sm text-yellow-secondary font-bold"
+                            >
+                                Autor: <span className="text-gray-400">{author.name}</span>
+                            </p>
+                            <p className="text-xs text-grey">Autor(a)</p>
+                        </div>
+                    </div>
 
                     <p className="text-gray-500 text-base leading-relaxed line-clamp-3">
                         {description}

@@ -1,7 +1,7 @@
 import Modal from "./Modal";
 import useModalManager from "../../../hooks/useModalManager";
 import type { Service } from "../../../interfaces/service.interface";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import whatsappIcon from "../../../assets/icons/networks-icons/whatsapp.png";
 import gmailIcon from "../../../assets/icons/networks-icons/gmail.png";
 
@@ -19,11 +19,6 @@ const ModalService = ({ id, data: service, title }: ModalServiceProps) => {
 
     const [loaded, setLoaded] = useState(false);
 
-    //   const alt = useMemo(
-    //     () => img?.alt ?? `Imagen del servicio: ${title ?? "Servicio"}`,
-    //     [img?.alt, title]
-    //   );
-
     useEffect(() => {
         if (!img?.image45) return;
         setLoaded(false);
@@ -40,13 +35,10 @@ const ModalService = ({ id, data: service, title }: ModalServiceProps) => {
     return (
         <Modal id={id} title={title} onClose={() => close(id)} open>
             <div className="w-full">
-                {/* Contenedor tipo “card” */}
                 <div className="rounded-2xl bg-white/70 backdrop-blur-sm">
                     <div className="flex flex-col gap-5 md:gap-8 md:flex-row">
-                        {/* Imagen */}
                         <div className="md:w-5/12">
                             <figure className="relative overflow-hidden rounded-2xl border border-black/5 shadow-sm">
-                                {/* Skeleton */}
                                 {!loaded && (
                                     <div className="absolute inset-0 animate-pulse bg-black/10" />
                                 )}
@@ -79,10 +71,8 @@ const ModalService = ({ id, data: service, title }: ModalServiceProps) => {
                                     {description}
                                 </p>
 
-                                {/* Separador */}
                                 <div className="h-px w-full bg-black/5" />
 
-                                {/* Bloque “callout” (opcional) */}
                                 <div className="rounded-2xl border border-green-primary/15 bg-green-primary/5 p-4">
                                     <p className="text-xs font-medium text-green-primary sm:text-sm">
                                         ¿Necesitas más información?

@@ -2,53 +2,39 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { services } from "../../data/services/services";
 import Layout from "../../layouts/Layout.astro";
-import ServiceDetail from "../../pages-react/ServiceDetail";
-import CardProduct from "../../components/react/cards/CardProduct";
-import ScrollToSectionButton from "../../components/react/ui/ScrollToSectionButton";
-import StudiesWrapper from "../../components/react/wrappers/StudiesWrapper";
-import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
-import logo from "../../assets/images/logo.png";
+import ServicesWrapper from "../../components/react/wrappers/ServicesWrapper";
+import ServiceHeroSection from "../../sections/astro/service/ServiceHeroSection.astro";
+import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefitsSection.astro";
+import Cat from "../../components/astro/ui/Cat.astro";
 
 export const getStaticPaths = (() => {
-    return services.map((service) => ({
-        params: { id: service.id },
-        props: { service },
-    }));
+  return services.map((service) => ({
+    params: { id: service.id },
+    props: { service },
+  }));
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { service } = Astro.props;
-const { products } = service;
-const { title, description, img } = service;
+const { service } = Astro.props as Props;
 ---
 
 <Layout>
-    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <div class="grid items-center gap-8 md:grid-cols-2 md:gap-12">
-            <div class="w-full">
-                <div class="max-w-prose">
-                    <HeaderBySection
-                        textHeader="Servicio"
-                        title={title}
-                        paragraph={description}
-                        img={logo}
-                        textColor="yellow-secondary"
-                    />
-                </div>
-            </div>
-            <div class="flex justify-center md:justify-start">
-                <img
-                    src={img?.image167?.src}
-                    alt="Imagen DYRA"
-                    class="w-full max-w-md md:max-w-lg h-auto rounded-xl object-cover"
-                    loading="lazy"
-                    decoding="async"
-                />
-            </div>
-        </div>
-    </div>
+  <ServiceHeroSection service={service} />
 
-    <ScrollToSectionButton client:load />
-    <StudiesWrapper client:load service={service} />
+  <section class="w-full">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
+      <ServiceBenefitsSection />
+
+      <div class="mt-10">
+        <ServicesWrapper service={service} client:load />
+      </div>
+
+      <Cat
+        title="¿No sabes cuál estudio necesitas?"
+        paragraph={`Te ayudamos a elegir el estudio ideal según tu caso y te
+                indicamos preparación, tiempos y cómo agendar.`}
+      />
+    </div>
+  </section>
 </Layout>

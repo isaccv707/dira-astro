@@ -10,16 +10,17 @@ const Posts = () => {
               md:grid-cols-2 
               lg:grid-cols-3
               xl:grid-cols-4">
-                {posts.map(({ title, description, author, slug, image, tags }) => (
-                    <PostCard
-                        key={title}
-                        title={title}
-                        description={description}
-                        author={author.name}
-                        slug={slug}
-                        tags={tags}
-                        image={image}
-                    />
+                {posts.map(({ title, description, author, slug, image, tags }, index) => (
+                    <div key={index}>
+                        <PostCard
+                            title={title}
+                            description={description}
+                            author={author}
+                            slug={slug}
+                            tags={tags}
+                            image={image}
+                        />
+                    </div>
                 ))}
             </div>
         </div>

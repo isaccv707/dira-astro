@@ -3,24 +3,27 @@ import NavLinkButton from "../ui/NavLinkButton";
 
 
 
-const CardProduct = ({
+const CardStudy = ({
     description,
     id,
     path,
     title,
-    isRequiredAppointment,
+    isRequiredAppointment = true,
     preparation,
     price,
-}:any) => {
+}: any) => {
     return (
         <div className="max-w-sm w-full bg-white dark:bg-primary border border-gray-200 dark:border-primary rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
 
             {/* Título */}
-            <h5 className="mb-3 text-lg sm:text-xl font-bold tracking-tight text-green-primary">
+            <h5
+                title={title}
+                className="mb-3 w-full min-w-0 overflow-hidden text-lg sm:text-xl font-bold tracking-tight text-green-primary line-clamp-2"
+            >
                 {title}
             </h5>
 
-            {/* Icono de cita si aplica */}
+
             {isRequiredAppointment && (
                 <div className="flex items-center gap-2 mb-4 text-red-600 font-semibold">
                     <Calendar className="w-5 h-5" />
@@ -58,4 +61,4 @@ const CardProduct = ({
     );
 };
 
-export default CardProduct;
+export default CardStudy;

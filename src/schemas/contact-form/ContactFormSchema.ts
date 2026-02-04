@@ -1,10 +1,11 @@
 import * as yup from 'yup';
 
-export const formSchema = yup.object().shape({
+export const contactFormSchema = yup.object().shape({
   name: yup
     .string()
     .required('El nombre es obligatorio')
-    .min(2, 'Debe tener al menos 2 caracteres'),
+    .min(2, 'Debe tener al menos 2 caracteres')
+    .max(50, 'No debe exceder los 50 caracteres'),
 
   email: yup
     .string()
@@ -14,7 +15,7 @@ export const formSchema = yup.object().shape({
   phone: yup
     .string()
     .matches(/^\d+$/, 'Solo se permiten números')
-    .min(8, 'Debe tener al menos 8 dígitos')
+    .matches(/^[0-9]{8,}$/, 'El número debe tener al menos 8 dígitos')
     .required('El teléfono es obligatorio'),
 
   affair: yup

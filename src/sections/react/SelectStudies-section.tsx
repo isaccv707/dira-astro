@@ -1,10 +1,11 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import Pagination from "../../components/react/ui/Pagination";
 import TextInput from "../../components/react/form/TextInput";
 import CardQuoteStudy from "../../components/react/cards/CardQuoteStudy";
 import type { Study } from "../../interfaces/study.interface";
 import usePagination from "../../hooks/usePagination";
 import { useGetAllStudiesQuery } from "../../api/studiesApi/StudyApi";
+import useGetAllStudies from "./service/hooks/useGetAllStudies";
 
 
 interface SelectStudiesSectionProps {
@@ -12,40 +13,46 @@ interface SelectStudiesSectionProps {
   addStudy: (study: Study) => void;
   removeStudy: (studyId: string) => void
 }
+const LIMIT = 5;
 
-const SelectStudiesSection = ({ studies, addStudy, removeStudy }: SelectStudiesSectionProps) => {
+const SelectStudiesSection = ({ addStudy, removeStudy }: SelectStudiesSectionProps) => {
   const [search, setSearch] = useState("");
-
-  const { data = [] } = useGetAllStudiesQuery();
-
-  const filteredStudies = data?.filter((study) =>
-    study.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const [totalPagesForHook, setTotalPagesForHook] = useState(1);
 
   const {
     currentPage,
-    totalPages,
-    startIndex,
-    endIndex,
     nextPage,
     prevPage,
     setPage,
   } = usePagination({
-    totalItems: filteredStudies.length,
-    itemsPerPage: 5,
+    totalPages: totalPagesForHook,
     initialPage: 1,
   });
+
+  const {
+    studies,
+    totalPages,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetAllStudies({
+    page: currentPage,
+    limit: LIMIT,
+  });
+
+  useEffect(() => {
+    setTotalPagesForHook(totalPages || 1);
+  }, [totalPages]);
 
   const handleAddStudy = (study: Study) => addStudy(study);
   const handleDeletStudy = (studyId: string) => removeStudy(studyId)
 
-
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   }
-  const visibleStudies = filteredStudies.slice(startIndex, endIndex);
+
   return (
-    <div className="px-8 flex flex-col h-full">
+    <div className="px-8 flex flex-col h-full p-10">
       <div className="flex justify-between items-center">
         <TextInput
           id="searchStudies"
@@ -59,8 +66,8 @@ const SelectStudiesSection = ({ studies, addStudy, removeStudy }: SelectStudiesS
 
       <div className="mt-6 flex-1">
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
-          {visibleStudies.length > 0 ? (
-            visibleStudies.map((study) => {
+          {studies.length > 0 ? (
+            studies.map((study) => {
               const isAdded = studies.some((s) => s.id === study.id);
               return (
                 <CardQuoteStudy

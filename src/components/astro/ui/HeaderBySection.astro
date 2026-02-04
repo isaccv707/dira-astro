@@ -1,5 +1,15 @@
 ---
+import Button from "../../react/ui/Button";
 import NavLinkButton from "../../react/ui/NavLinkButton";
+
+interface BtnProperties {
+    text: string;
+}
+
+interface navLinkBtnProperties {
+    path: string;
+    text: string;
+}
 
 interface Props {
     textHeader: string;
@@ -7,7 +17,10 @@ interface Props {
     paragraph?: string;
     textColor?: string;
     img?: ImageMetadata;
+    navLinkBtn?: boolean;
+    navLinkBtnProperties?: navLinkBtnProperties;
     btn?: boolean;
+    btnProperties?: BtnProperties | undefined;
 }
 
 const {
@@ -16,7 +29,10 @@ const {
     title,
     textColor = "black",
     img,
+    navLinkBtn = false,
+    navLinkBtnProperties = { path: "/contact", text: "Contactanos" },
     btn = false,
+    btnProperties = { text: "Contactanos" },
 } = Astro.props;
 ---
 
@@ -27,7 +43,7 @@ const {
                 <img
                     src={img?.src}
                     alt="DYRA"
-                    class="h-12 w-12 lg:h-36 lg:w-36 rounded-2xl object-contain p-2"
+                    class="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 lg:h-36 lg:w-36 rounded-2xl object-contain p-2 "
                     loading="lazy"
                 />
             </div>
@@ -51,14 +67,21 @@ const {
             {paragraph}
         </p>
         {
-            btn && (
+            navLinkBtn && (
                 <div class="mt-4">
                     <NavLinkButton
-                        path="about"
-                        text="Conócenos"
+                        path={navLinkBtnProperties.path}
+                        text={navLinkBtnProperties.text}
                         variant={"primary"}
                         align={"left"}
                     />
+                </div>
+            )
+        }
+        {
+            btn && (
+                <div class="mt-4">
+                    <Button text={`${btnProperties.text} disponibles`} />
                 </div>
             )
         }

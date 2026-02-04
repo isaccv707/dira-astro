@@ -6,7 +6,7 @@ export interface Routes {
 
 export const routes: Routes[] = [
     { path: '/', text: 'Inicio' },
-    { path: '/resultados', text: 'Resultados' },
+    // { path: '/', text: 'Resultados' },
     { path: '/blog', text: 'Blog' }
 ]
 
@@ -21,4 +21,9 @@ export const getToKnowRoutes: Routes[] = [
     {path: '/about', text: 'Conócenos'},
     {path: '/contact', text: 'Contáctanos'},
     {path: '/branchs', text: 'Nuestras Sucursales'},
+]
+
+export const routesFooter: Routes[] = [
+    ...routes,
+    ...servicesRoutes,
 ]
