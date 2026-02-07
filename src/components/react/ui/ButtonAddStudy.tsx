@@ -10,7 +10,7 @@ interface ButtonAddStudyProps {
 }
 const ButtonAddStudy = ({ isAdded, handleAddStudy, study, handleDeletStudy }: ButtonAddStudyProps) => {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
-
+    // console.log(handleDeletStudy(study.id));  
     return (
         <button
             type="button"

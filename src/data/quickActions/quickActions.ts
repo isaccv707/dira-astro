@@ -20,4 +20,10 @@ export const quickActions: QuickActions[] = [
         path: "https://wa.me/3318622542",
         bgColor: "bg-green-primary",
     },
+    {
+        Icon: BiDollar,
+        text: "Cotízador",
+        path: "/quoter",
+        bgColor: 'bg-yellow-primary'
+    }
 ];

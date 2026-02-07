@@ -48,7 +48,7 @@ const QuotationDetailsSection = () => {
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
           <Button
             text={isViewing ? "Generando..." : "Ver cotización"}
-            variant="submit"
+            variant="primary"
             size="sm"
             type="button"
             onClick={viewQuotation}
@@ -56,7 +56,7 @@ const QuotationDetailsSection = () => {
           />
           <Button
             text={isDownloading ? "Generando..." : "Descargar cotización"}
-            variant="submit"
+            variant="primary"
             size="sm"
             type="button"
             onClick={downloadQuotation}

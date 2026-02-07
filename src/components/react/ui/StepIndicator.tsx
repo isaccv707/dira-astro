@@ -18,7 +18,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
                 isCompleted
                   ? "bg-green-primary border-green-primary text-white"
                   : isActive
-                  ? "bg-white border-green-primary text-green-primary"
+                  ? "bg-white border-green-secondary text-green-primary"
                   : "bg-gray-200 border-gray-300 text-gray-500"
               }`}
             >

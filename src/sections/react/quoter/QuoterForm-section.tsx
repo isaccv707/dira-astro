@@ -11,11 +11,11 @@ import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import { IoIosReturnLeft } from "react-icons/io";
 import Button from "../../../components/react/ui/Button";
 
+
 type Inputs = yup.InferType<typeof quoterFormSchema>;
 
 const QuoterFormSection = () => {
     const [step, setStep] = useState(1);
-    const { selectedStudies, addStudy, removeStudy } = useQuoterContext();
 
     const methods = useForm<Inputs>({
         defaultValues: {
@@ -29,9 +29,9 @@ const QuoterFormSection = () => {
         resolver: yupResolver(quoterFormSchema) as any
     });
 
-    const { handleSubmit, formState: { errors }, trigger } = methods;
+    const { trigger } = methods;
 
-    const onSubmit = (data: Inputs) => { };
+
 
     const nextStep = async () => {
         if (step === 1) {
@@ -43,42 +43,61 @@ const QuoterFormSection = () => {
 
     const previousStep = () => setStep((prev) => prev - 1)
     return (
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-            <div className="rounded-2xl w-full grid">
-                <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">
-                    <h1 className="text-white font-bold text-lg">Cotiza tus estudios</h1>
-                    <small className="text-white text-sm opacity-90">
-                        Rellena la información necesaria para obtener una cotización.
-                    </small>
-                </header>
+        <div className="rounded-2xl w-full grid">
+            <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">
+                <h1 className="text-white font-bold text-lg">Cotiza tus estudios</h1>
+                <small className="text-white text-sm opacity-90">
+                    Rellena la información necesaria para obtener una cotización.
+                </small>
+            </header>
 
-                <div className="flex items-center gap-4">
-                    <div className="flex-1 flex justify-center">
-                        <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
-                    </div>
-                    {step === 2
-                        ? (
-                            <Button
-                                text="Regresar"
-                                variant={'normal'}
-                                size={"sm"}
-                                icon={<IoIosReturnLeft />}
-                                onClick={previousStep}
-                            />
-                        )
-                        : (null)
-                    }
+            {/* MOBILE */}
+            <div className="sm:hidden px-4">
+                <div className="flex justify-center">
+                    <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
                 </div>
 
-                {/* {
-                    step === 1 && <PersonalDataForm nextStep={nextStep} step={step} />
-                } */}
-                {
-                    step === 1 && <SelectStudiesSection studies={selectedStudies} addStudy={addStudy} removeStudy={removeStudy} />
-                }
+                {step === 2 ? (
+                    <div className="mt-3 flex justify-end pr-1">
+                        <Button
+                            text="Regresar"
+                            variant="primary"
+                            size="sm"
+                            icon={<IoIosReturnLeft />}
+                            onClick={previousStep}
+                        />
+                    </div>
+                ) : null}
             </div>
 
-        </FormProvider>
+            {/* DESKTOP */}
+            <div className="hidden sm:flex relative items-center px-4 sm:px-6 mt-10">
+                <div className="absolute left-1/2 -translate-x-1/2">
+                    <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
+                </div>
+
+                <div className="ml-auto pr-2 sm:pr-4">
+                    {step === 2 ? (
+                        <Button
+                            text="Regresar"
+                            variant="primary"
+                            size="sm"
+                            icon={<IoIosReturnLeft />}
+                            onClick={previousStep}
+                        />
+                    ) : null}
+                </div>
+            </div>
+
+
+
+            {
+                step === 1 && <PersonalDataForm methods={methods} nextStep={nextStep} step={step} />
+            }
+            {
+                step === 2 && <SelectStudiesSection />
+            }
+        </div>
     )
 }
 

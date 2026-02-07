@@ -32,9 +32,9 @@ export const quoterFormSchema = yup.object({
         .string()
         // .required('El correo electrónico es obligatorio')
         .email('El correo electrónico no es válido'),
-    studies: yup
-        .array()
-        .of(yup.string().required("Debe ser un estudio válido"))
-        .min(1, "Debe seleccionar al menos un estudio")
-        .required("Debe seleccionar al menos un estudio"),
+    // studies: yup
+    //     .array()
+    //     .of(yup.string().required("Debe ser un estudio válido"))
+    //     .min(1, "Debe seleccionar al menos un estudio")
+    //     .required("Debe seleccionar al menos un estudio"),
 })

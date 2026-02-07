@@ -6,17 +6,21 @@ import type { Study } from "../../../interfaces/study.interface";
 import SearchServices from "./SearchServices";
 import CardStudy from "../../../components/react/cards/CardStudy";
 import Pagination from "../../../components/react/ui/Pagination";
+import useSearchStudies from "../../../hooks/useSearchStudies";
 
 
 const LIMIT = 10;
 
 const StudiesServices = () => {
-  const [search, setSearch] = useState("");
+
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: totalPagesForHook,
     initialPage: 1,
+  });
+  const { search, handleSearchChange } = useSearchStudies({
+    setPage,
   });
 
   const {
@@ -35,20 +39,6 @@ const StudiesServices = () => {
   useEffect(() => {
     setTotalPagesForHook(totalPages || 1);
   }, [totalPages]);
-
-  const normalize = (v: string) => v.trim().replace(/\s+/g, " ");
-
-  const handleSearchChange = useCallback((value: string) => {
-    const next = normalize(value);
-
-    setSearch((prev) => {
-      const prevNorm = normalize(prev);
-      if (prevNorm === next) return prev;
-      return next;
-    });
-
-    setPage(1);
-  }, [setPage]);
 
   return (
     <div id="services-section">

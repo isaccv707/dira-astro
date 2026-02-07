@@ -8,25 +8,27 @@ import QuickActionsWrapper from "../components/react/wrappers/QuickActionsWrappe
 ---
 
 <Layout>
-    <section class="w-full">
-        <HeroHome />
-    </section>
+    <main>
+        <section class="w-full">
+            <HeroHome />
+        </section>
 
-    <section class="py-10">
-        <QuickActionsWrapper client:load />
-    </section>
+        <section class="py-10">
+            <QuickActionsWrapper client:load />
+        </section>
 
-    <section class="py-10">
-        <OurServices />
-    </section>
+        <section class="py-10">
+            <OurServices />
+        </section>
 
-    <section class="w-full bg-white py-10 sm:py-20">
-        <About />
-    </section>
+        <section class="w-full bg-white py-10 sm:py-20">
+            <About />
+        </section>
 
-    <section
-        class="w-full h-auto flex flex-col justify-center bg-green-secondary py-10"
-    >
-        <Benefits />
-    </section>
+        <section
+            class="w-full h-auto flex flex-col justify-center bg-green-secondary py-10"
+        >
+            <Benefits />
+        </section>
+    </main>
 </Layout>

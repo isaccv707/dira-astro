@@ -1,10 +1,11 @@
 
-export type ClientType = 'particular' | 'company'
+export type ClientType = "particular" | "company" | undefined;
 
 export interface Client {
-    clientType: ClientType;
+    lastName?: string | undefined;
+    companyRFC?: string | undefined;
+    email?: string | undefined;
     name: string;
-    lastName?: string;
+    clientType: NonNullable<"particular" | "company" | undefined>;
     phoneNumber: string;
-    email: string;
 }
