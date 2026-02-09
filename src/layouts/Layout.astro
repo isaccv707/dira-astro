@@ -3,6 +3,13 @@ import "../styles/global.css";
 import Footer from "../sections/astro/Footer.astro";
 import Header from "../sections/astro/Header.astro";
 import FloatingIconWhatsapp from "../components/react/ui/FloatingIconWhatsapp";
+import logo from "../assets/images/logo.png";
+
+interface LayoutProps {
+	title: string;
+	description: string;
+}
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
@@ -10,9 +17,9 @@ import FloatingIconWhatsapp from "../components/react/ui/FloatingIconWhatsapp";
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/png" sizes="32x32" href={logo.src} />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Diagnóstico y Referencia Analítica</title>
 	</head>
 	<body class="min-h-screen bg-gray-100">
 		<Header />

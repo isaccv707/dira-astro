@@ -1,3 +1,8 @@
+export type ServiceKey =
+    | "clinical-analyses"
+    | "business-health"
+    | "home-shots"
+
 
 export interface Benefits {
     icon: string;
@@ -8,14 +13,16 @@ export interface Benefits {
 export interface Service<T = any> {
     id: string;
     title: string;
+    key: ServiceKey;
     benefits?: Benefits[];
-    icon: ImageMetadata;
-    textButton: string;
+    icon?: ImageMetadata;
+    img?: {
+        image45?: ImageMetadata;
+        image167?: ImageMetadata;
+    };
     path: string;
     description: string;
     products?: T[];
-    /** Optional category used for filtering and chips */
     category?: string;
-    /** Optional tags for finer filters */
     tags?: string[];
 }

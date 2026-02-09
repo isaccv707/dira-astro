@@ -31,6 +31,7 @@ const SelectInput = ({
     isError,
     placeholder,
 }: SelectInputProps) => {
+    const hasError = Boolean(error || isError);
     return (
         <div className="w-full max-w-sm mx-auto sm:max-w-md md:max-w-lg">
             <Label
@@ -58,10 +59,12 @@ const SelectInput = ({
                     </option>
                 ))}
             </select>
-            {error && (
-                <ErrorMessage
-                    error={error}
-                />
+            {hasError && (
+                <div className='mt-1'>
+                    <ErrorMessage
+                        error={error}
+                    />
+                </div>
             )}
         </div>
     );

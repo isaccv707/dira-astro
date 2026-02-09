@@ -2,58 +2,39 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { services } from "../../data/services/services";
 import Layout from "../../layouts/Layout.astro";
-import ServiceDetail from "../../pages-react/ServiceDetail";
-import CardProduct from "../../components/react/cards/CardProduct";
-import ScrollToSectionButton from "../../components/react/ui/ScrollToSectionButton";
+import ServicesWrapper from "../../components/react/wrappers/ServicesWrapper";
+import ServiceHeroSection from "../../sections/astro/service/ServiceHeroSection.astro";
+import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefitsSection.astro";
+import Cat from "../../components/astro/ui/Cat.astro";
 
 export const getStaticPaths = (() => {
-    return services.map((service) => ({
-        params: { id: service.id },
-        props: { service },
-    }));
+  return services.map((service) => ({
+    params: { id: service.id },
+    props: { service },
+  }));
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { service } = Astro.props;
-const { products } = service;
+const { service } = Astro.props as Props;
 ---
 
 <Layout>
-    <ServiceDetail service={service} client:load />
-    <ScrollToSectionButton client:load />
+  <ServiceHeroSection service={service} />
 
-    <div id="products-section">
-        <h1
-            class="text-center font-bold text-3xl text-green-secondary mb-10 mt-16"
-        >
-            {service ? `Servicios de ${service.title}` : ``}
-        </h1>
+  <section class="w-full">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
+      <ServiceBenefitsSection />
 
-        <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center p-10"
-        >
-            {
-                products && products.length > 0 ? (
-                    products.map((product) => (
-                        <CardProduct
-                            path={"/contact"}
-                            description={product.description}
-                            id={product.id}
-                            title={product.title}
-                            isRequiredAppointment={
-                                product.isRequiredAppointment
-                            }
-                            preparation={product.preparation}
-                            price={product.price}
-                        />
-                    ))
-                ) : (
-                    <h2 class="text-gray-500 text-center col-span-full">
-                        Sin servicios para mostrar
-                    </h2>
-                )
-            }
-        </div>
+      <div class="mt-10">
+        <ServicesWrapper service={service} client:load />
+      </div>
+
+      <Cat
+        title="¿No sabes cuál estudio necesitas?"
+        paragraph={`Te ayudamos a elegir el estudio ideal según tu caso y te
+                indicamos preparación, tiempos y cómo agendar.`}
+      />
     </div>
+  </section>
 </Layout>

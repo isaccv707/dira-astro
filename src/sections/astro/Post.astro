@@ -1,0 +1,207 @@
+---
+import Tags from "../../components/astro/Tags.astro";
+import { posts } from "../../data/blog/posts";
+import type { ContentBlock } from "../../interfaces/blog.interface";
+
+interface Props {
+    slug: string;
+}
+
+const { slug } = Astro.props;
+const post = posts.find((post) => post.slug === slug);
+if (!post) return;
+---
+
+<article class="w-full">
+    <!-- HERO -->
+    <header
+        class="relative overflow-hidden border border-gray-200 rounded-3xl shadow-md bg-white"
+    >
+        <div class="relative px-5 sm:px-8 md:px-10 py-8 md:py-10">
+            <div class="mx-auto max-w-4xl">
+                <!-- meta -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <span
+                        class="inline-flex items-center gap-2 rounded-full bg-green-ligth text-white px-3 py-1 text-xs font-semibold shadow-sm"
+                    >
+                        {post.category}
+                    </span>
+
+                    <span class="text-xs text-grey font-bold">
+                        • {post.readingTime} min de lectura
+                    </span>
+
+                    <span class="hidden sm:inline text-xs text-grey/70">•</span>
+
+                    <span class="text-xs text-grey font-bold">
+                        Publicado el {post.date}
+                    </span>
+                </div>
+
+                <h1
+                    class="mt-5 text-yellow-secondary text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
+                >
+                    <span
+                        class="block bg-gradient-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
+                    >
+                        {post.title}
+                    </span>
+                </h1>
+
+                <!-- description -->
+                <p
+                    class="mt-4 font-semibold md:text-lg text-green-ligth leading-relaxed max-w-3xl"
+                >
+                    {post.description}
+                </p>
+
+                <!-- author card -->
+                <div
+                    class="mt-6 flex flex-col sm:flex-row sm:items-center gap-4"
+                >
+                    <div class="flex items-center gap-3">
+                        <img
+                            src={post.author.avatar.src}
+                            alt={post.author.name}
+                            class="w-11 h-11 rounded-full border border-gray-200 shadow-sm bg-white"
+                            loading="lazy"
+                        />
+                        <div>
+                            <p
+                                class="text-sm font-semibold text-black leading-tight"
+                            >
+                                {post.author.name}
+                            </p>
+                            <p class="text-xs text-grey">Autor(a)</p>
+                        </div>
+                    </div>
+
+                    <!-- tags -->
+                    <div class="sm:ml-auto flex flex-wrap gap-2">
+                        <Tags
+                            tags={post.tags}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BODY -->
+    <section class="mt-6">
+        <div class="mx-auto max-w-4xl">
+            <div class="rounded-3xl border border-gray-200 bg-white shadow-sm">
+                <div class="px-5 sm:px-8 md:px-10 py-8 md:py-10">
+                    <article
+                        class="prose prose-gray max-w-none
+              prose-headings:tracking-tight
+              prose-h2:text-black prose-h2:font-bold prose-h2:mt-10
+              prose-p:text-grey prose-p:leading-relaxed
+              prose-strong:text-black
+              prose-a:text-green-primary prose-a:no-underline hover:prose-a:underline
+              prose-li:marker:text-green-primary"
+                    >
+                        {
+                            post.content.map((block: ContentBlock) => {
+                                if (block.type === "paragraph") {
+                                    return <p>{block.content}</p>;
+                                }
+
+                                if (block.type === "subtitle") {
+                                    return (
+                                        <h2 class="scroll-mt-24">
+                                            {block.content}
+                                        </h2>
+                                    );
+                                }
+
+                                if (block.type === "list") {
+                                    return (
+                                        <ul class="mt-4 space-y-2">
+                                            {block.items?.map((item) => (
+                                                <li class="pl-1">
+                                                    <span class="font-semibold text-black">
+                                                        {item.title}
+                                                    </span>
+                                                    <span class="text-grey">
+                                                        : {item.text}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    );
+                                }
+
+                                if (block.type === "quote") {
+                                    return (
+                                        <blockquote
+                                            class="
+                        not-prose my-6 rounded-2xl border border-green-primary/15
+                        bg-green-primary/5 px-5 py-4
+                      "
+                                        >
+                                            <div class="flex items-start gap-3">
+                                                <span class="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-green-primary text-white shadow-sm">
+                                                    “
+                                                </span>
+                                                <p class="m-0 text-sm md:text-base text-grey italic leading-relaxed">
+                                                    {block.content}
+                                                </p>
+                                            </div>
+                                        </blockquote>
+                                    );
+                                }
+
+                                if (block.type === "image") {
+                                    return (
+                                        <figure class="not-prose my-8">
+                                            <div class="overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white">
+                                                <img
+                                                    src={block.src}
+                                                    alt={block.alt || ""}
+                                                    class="w-full h-auto object-cover"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                            {block.alt ? (
+                                                <figcaption class="mt-2 text-xs text-grey">
+                                                    {block.alt}
+                                                </figcaption>
+                                            ) : null}
+                                        </figure>
+                                    );
+                                }
+
+                                return null;
+                            })
+                        }
+                    </article>
+
+                    <!-- footer / CTA -->
+                    <div
+                        class="mt-10 rounded-2xl border border-yellow-primary/25 p-5"
+                    >
+                        <p class="text-sm text-grey m-0">
+                            ¿Tienes dudas? Consulta a tu médico para una
+                            interpretación completa y personalizada. En el
+                            laboratorio podemos orientarte sobre preparación y
+                            tiempos de entrega.
+                        </p>
+
+                        <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                            <a
+                                href="/contact"
+                                class="inline-flex items-center justify-center rounded-xl bg-green-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-secondary transition"
+                            >
+                                Contáctanos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- tiny footer spacing -->
+            <div class="h-8"></div>
+        </div>
+    </section>
+</article>

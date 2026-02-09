@@ -1,110 +1,16 @@
 ---
-import ServiceCard from "../../components/astro/cards/ServiceCard.astro";
-import type { Service } from "../../interfaces/service.interface";
+import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import ModalServiceWrapper from "../../components/react/wrappers/ModalServiceWrapper";
 
-interface Props {
-    services: Service[];
-}
 
-const { services } = Astro.props;
 ---
 
-<h1 class="text-center text-4xl font-bold text-green-ligth mb-8">
-    Nuestros Servicios
-</h1>
-
-<!-- Grid de servicios -->
-<div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center">
-    {
-        services.map(({ path, textButton, title, id, description, icon, category }, i) => (
-            <div class="service-item w-full animate-fade-up" data-index={i} data-id={id} style={`animation-delay: ${i * 60}ms`}>
-                <ServiceCard
-                    id={id}
-                    icon={icon}
-                    path={path}
-                    description={description}
-                    textButton={textButton}
-                    title={title}
-                    category={category}
-                />
-            </div>
-        ))
-    }
+<div class="flex justify-center text-center mb-5">
+    <HeaderBySection
+        textHeader={"Servicios"}
+        title={"Soluciones clínicas para cada necesidad"}
+        paragraph={`Conoce nuestros servicios y estudios disponibles. Te ayudamos con atención clara, procesos confiables y resultados listos cuando los necesitas.`}
+        textColor="green-secondary"
+    />
 </div>
-
-<!-- Botón Cargar más -->
-<div class="mt-8 flex justify-center">
-    <button id="load-more" class="px-6 py-2 bg-green-primary text-white rounded-lg hover:brightness-95 transition">
-        Cargar más
-    </button>
-</div>
-
-<!-- Modal Quick View -->
-<div id="service-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
-    <div class="bg-white w-11/12 sm:w-3/4 md:w-1/2 rounded-2xl p-6 relative animate-slide-in-right">
-        <button id="close-modal" class="absolute top-4 right-4 text-gray-600">✕</button>
-        <div id="modal-content">
-            <h3 id="modal-title" class="text-2xl font-bold text-green-primary mb-2"></h3>
-            <p id="modal-desc" class="text-sm text-green-secondary mb-4"></p>
-            <div id="modal-cta" class="mt-4"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Script solo para paginación y modal -->
-<script type="module">
-(function () {
-    const grid = document.getElementById('services-grid');
-    const items = Array.from(grid.querySelectorAll('.service-item'));
-    const loadMoreBtn = document.getElementById('load-more');
-    const modal = document.getElementById('service-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-desc');
-    const modalCta = document.getElementById('modal-cta');
-    const closeModal = document.getElementById('close-modal');
-
-    // Paginación simple
-    let visibleCount = 8;
-    function updateVisibility() {
-        items.forEach((el, idx) => {
-            el.classList.toggle('hidden', idx >= visibleCount);
-        });
-        loadMoreBtn.style.display = visibleCount >= items.length ? 'none' : 'inline-block';
-    }
-
-    updateVisibility();
-
-    loadMoreBtn.addEventListener('click', () => {
-        visibleCount += 8;
-        updateVisibility();
-    });
-
-    // Modal simple
-    function openModalFor(card) {
-        const title = card.querySelector('[data-service-title]')?.textContent || '';
-        const desc = card.querySelector('[data-service-description]')?.textContent || '';
-        const id = card.dataset.id;
-        modalTitle.textContent = title;
-        modalDesc.textContent = desc;
-        modalCta.innerHTML = `<a href="/service/${id}" class="inline-block px-4 py-2 bg-green-primary text-white rounded-lg">Ver detalle</a>`;
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-    }
-
-    function closeModalFn() {
-        modal.classList.add('hidden');
-        modal.style.display = '';
-    }
-
-    grid.addEventListener('click', (e) => {
-        const q = e.target.closest('[data-quickview]');
-        if (!q) return;
-        const card = q.closest('.service-item');
-        if (card) openModalFor(card);
-    });
-
-    closeModal.addEventListener('click', closeModalFn);
-    modal.addEventListener('click', (ev) => { if (ev.target === modal) closeModalFn(); });
-    document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !modal.classList.contains('hidden')) closeModalFn(); });
-})();
-</script>
+<ModalServiceWrapper client:load />

@@ -1,0 +1,28 @@
+---
+import HeaderBySection from "../components/astro/ui/HeaderBySection.astro";
+import Layout from "../layouts/Layout.astro";
+import CarouselBlog from "../sections/react/blog/CarouselBlog";
+import Posts from "../sections/react/blog/Posts";
+import logo from "../assets/images/logo.png";
+---
+
+<Layout>
+    <!-- <section class="mb-16">
+        <CarouselBlog client:load />
+    </section> -->
+    <section class="flex justify-center p-10">
+        <HeaderBySection
+            textHeader="Blog"
+            title="Bienvenido a nuestro Blog — DYRA"
+            paragraph="Consejos, noticias y artículos sobre salud y diagnóstico clínico."
+            textColor="yellow-secondary"
+            img={logo}
+            navLinkBtn={true}
+            btnProperties={{path: '/contact', text: 'Contactanos'}}
+
+        />
+    </section>
+    <section>
+        <Posts client:load />
+    </section>
+</Layout>

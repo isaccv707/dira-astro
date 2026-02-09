@@ -26,6 +26,7 @@ const TextareaInput = ({
     error,
     isError = false,
 }: TextareaInputProps) => {
+    const hasError = Boolean(error || isError);
     return (
         <div className="w-full max-w-lg mx-auto">
             <Label id={id} label={label} />
@@ -47,10 +48,12 @@ const TextareaInput = ({
           resize-vertical
         `}
             />
-            {error && (
-                <ErrorMessage
-                    error={error}
-                />
+            {hasError && (
+                <div className='mt-1'>
+                    <ErrorMessage
+                        error={error}
+                    />
+                </div>
             )}
         </div>
     );

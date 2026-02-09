@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Map from "../../components/react/Map"
+import Map from "../../components/react/ui/Map"
 import { branches } from "../../data/branches/branches";
 import RHFSelectInput from "../../components/react/hk-form/RHFSelectInput";
 import { useForm } from "react-hook-form";

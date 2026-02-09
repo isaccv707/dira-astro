@@ -3,7 +3,7 @@
   "include": [
     ".astro/types.d.ts",
     "**/*"
-, "src/sections/service-details/.tsx"  ],
+, "src/sections/react/service-details/.tsx"  ],
   "exclude": [
     "dist"
   ],
