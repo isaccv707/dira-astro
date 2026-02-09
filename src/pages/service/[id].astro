@@ -1,5 +1,4 @@
 ---
-import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { services } from "../../data/services/services";
 import Layout from "../../layouts/Layout.astro";
 import ServicesWrapper from "../../components/react/wrappers/ServicesWrapper";
@@ -7,19 +6,16 @@ import ServiceHeroSection from "../../sections/astro/service/ServiceHeroSection.
 import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefitsSection.astro";
 import Cat from "../../components/astro/ui/Cat.astro";
 
-export const getStaticPaths = (() => {
-  return services.map((service) => ({
-    params: { id: service.id },
-    props: { service },
-  }));
-}) satisfies GetStaticPaths;
+const {id} = Astro.params;
+const service = services.find((service) => service.id === id);
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { service } = Astro.props as Props;
+if (!service) {
+  return Astro.redirect("/404");
+}
 ---
 
 <Layout>
+
   <ServiceHeroSection service={service} />
 
   <section class="w-full">
