@@ -6,6 +6,6 @@ export interface Client {
     companyRFC?: string | undefined;
     email?: string | undefined;
     name: string;
-    clientType: NonNullable<"particular" | "company" | undefined>;
+    clientType: ClientType;
     phoneNumber: string;
 }

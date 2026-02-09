@@ -6,33 +6,33 @@ interface ClientInformationCardProps {
 const ClientInformationCard = ({ client }: ClientInformationCardProps) => {
     
     return (
-        <div className="bg-gray-100 rounded-2xl p-4 shadow-sm">
-            <h2 className="text-center font-bold text-green-primary mb-3">
+        <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+            <h2 className="text-center  font-extrabold text-green-primary mb-4 pb-2 border-b border-green-secondary/30">
                 Información del cliente
             </h2>
             {client ? (
-                <div className="text-sm leading-relaxed">
-                    <p className="mb-1">
-                        <span className="font-semibold text-green-secondary">Tipo de cliente:</span>{" "}
-                        <span className="text-gray-800">{client?.clientType}</span>
-                    </p>
-                    <p className="mb-1">
-                        <span className="font-semibold text-green-secondary">Nombre:</span>{" "}
-                        <span className="text-gray-800">
+                <div className="space-y-3">
+                    <div className="flex items-start">
+                        <span className="font-bold text-green-secondary w-1/2">Tipo de cliente:</span>{" "}
+                        <span className="text-gray-700 w-1/2">{client?.clientType}</span>
+                    </div>
+                    <div className="flex items-start">
+                        <span className="font-bold text-green-secondary w-1/2">Nombre:</span>{" "}
+                        <span className="text-gray-700 w-1/2">
                             {client?.name} {client?.lastName}
                         </span>
-                    </p>
-                    <p className="mb-1">
-                        <span className="font-semibold text-green-secondary">Teléfono:</span>{" "}
-                        <span className="text-gray-800">{client?.phoneNumber}</span>
-                    </p>
-                    <p>
-                        <span className="font-semibold text-green-secondary">Correo electrónico:</span>{" "}
-                        <span className="text-gray-800">{client?.email}</span>
-                    </p>
+                    </div>
+                    <div className="flex items-start">
+                        <span className="font-bold text-green-secondary w-1/2">Teléfono:</span>{" "}
+                        <span className="text-gray-700 w-1/2">{client?.phoneNumber}</span>
+                    </div>
+                    <div className="flex items-start">
+                        <span className="font-bold text-green-secondary w-1/2">Correo electrónico:</span>{" "}
+                        <span className="text-gray-700 w-1/2">{client?.email}</span>
+                    </div>
                 </div>
             ) : (
-                <p className="text-gray-500 italic text-sm text-center">
+                <p className="text-gray-600 text-base py-4 text-center">
                     No hay informacion de cliente.
                 </p>
             )}

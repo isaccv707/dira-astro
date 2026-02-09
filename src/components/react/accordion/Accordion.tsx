@@ -24,14 +24,14 @@ const Accordion = ({
   };
 
   return (
-    <div className={clsx("w-full divide-y divide-gray-200 rounded-xl", className)}>
-      <div className="bg-white">
+    <div className={clsx("w-full", className)}>
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
         <button
           type="button"
           onClick={toggleItem}
           className={clsx(
-            "flex justify-between items-center w-full px-4 py-3 text-left font-medium text-green-primary hover:bg-green-50 transition-colors duration-200",
-            isOpen && "bg-green-100 border-l-4 border-greenPrimary"
+            "flex justify-between items-center w-full px-6 py-4 text-left font-semibold text-green-primary transition-colors duration-200",
+            isOpen ? "bg-green-100/50 border-l-4 border-green-primary rounded-t-xl" : "hover:bg-green-50"
           )}
           aria-expanded={isOpen}
           aria-controls={id}
@@ -39,8 +39,8 @@ const Accordion = ({
           <span>{title}</span>
           <IoChevronDown
             className={clsx(
-              "transform transition-transform duration-200",
-              isOpen && "rotate-180"
+              "text-lg transform transition-transform duration-200",
+              isOpen ? "rotate-180 text-green-primary" : "text-gray-500"
             )}
           />
         </button>
@@ -48,11 +48,11 @@ const Accordion = ({
         <div
           id={id}
           className={clsx(
-            "px-4 overflow-hidden transition-all duration-300 ease-in-out",
-            isOpen ? "max-h-screen py-3" : "max-h-0 py-0"
+            "overflow-hidden transition-all duration-300 ease-in-out",
+            isOpen ? "max-h-screen px-6 py-4" : "max-h-0 px-6 py-0"
           )}
         >
-          {isOpen && <div className="text-gray-700 text-sm">{children}</div>}
+          {isOpen && <div className="text-gray-800 text-sm pb-2">{children}</div>}
         </div>
       </div>
     </div>

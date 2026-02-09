@@ -19,8 +19,7 @@ const CardQuoteStudy = ({
             className="
         group h-full min-h-[168px]
         rounded-2xl bg-white
-        p-4 sm:p-5
-        ring-1 ring-black/5
+                    p-4 sm:p-5 lg:p-6        ring-1 ring-black/5
         shadow-sm
         transition-all duration-200
         hover:-translate-y-0.5 hover:shadow-md hover:ring-black/10
@@ -31,7 +30,7 @@ const CardQuoteStudy = ({
                 <div className="min-w-0">
                     <h3
                         className="
-              text-sm sm:text-[15px]
+              text-sm sm:text-[15px] md:text-base
               font-semibold text-gray-900
               leading-snug
               line-clamp-2
@@ -42,7 +41,7 @@ const CardQuoteStudy = ({
                         {study.name}
                     </h3>
 
-                    <div className="mt-3 flex items-center justify-between gap-3">
+                    <div className="mt-3 flex items-center justify-center gap-3">
                         <span
                             className="
                 inline-flex items-center
