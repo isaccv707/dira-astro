@@ -1,11 +1,19 @@
-import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRef, useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import FormProvider from "../../components/react/hk-form/FormProvider";
 import RHFTextInput from "../../components/react/hk-form/RHFTextInput";
 import RHFSelectInput from "../../components/react/hk-form/RHFSelectInput";
 import RHFTextareaInput from "../../components/react/hk-form/RHFTextareaInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { contactFormSchema } from "../../schemas/contact-form/ContactFormSchema";
+import { publicKey, serviceId, templateId } from "../../constants/emailJs";
+
+import emailjs from '@emailjs/browser';
+
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 interface Inputs {
     name: string;
@@ -36,16 +44,31 @@ export const ContactForm = () => {
         resolver: yupResolver(contactFormSchema),
     });
 
-    const { handleSubmit, reset, formState: { errors } } = methods;
+    const { handleSubmit, reset } = methods;
 
     const form = useRef<HTMLFormElement>(null);
 
+
+
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        console.log(data);
+        if (form.current) {
+            setIsLoading(true);
+            emailjs.sendForm(serviceId, templateId, form.current, publicKey)
+                .then(() => {
+                    toast.success('Email enviado correctamente');
+                    reset();
+                    setIsLoading(false);
+                })
+                .catch(() => {
+                    toast.error('Error al enviar el email');
+                    setIsLoading(false);
+                })
+            console.log(data);
+        }
     };
 
     return (
-        <FormProvider onSubmit={handleSubmit(onSubmit)} methods={methods}>
+        <FormProvider ref={form} onSubmit={handleSubmit(onSubmit)} methods={methods}>
             <div className="w-full rounded-3xl border border-gray-200 bg-white shadow-sm overflow-hidden">
                 {/* Header */}
                 <div className="bg-primary/10 px-4 py-3 sm:px-6">

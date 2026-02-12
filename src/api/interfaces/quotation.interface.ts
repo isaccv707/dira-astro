@@ -6,10 +6,10 @@ export interface SelectedStudyPayload {
 }
 
 export interface QuotationPayload {
-  clientType: string;
+  clientType: string | undefined;
   name: string;
   lastName?: string;
   phoneNumber: string;
-  email: string;
+  email: string| undefined;
   studies: SelectedStudyPayload[];
 }
