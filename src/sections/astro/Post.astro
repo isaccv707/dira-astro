@@ -1,14 +1,13 @@
 ---
 import Tags from "../../components/astro/Tags.astro";
 import { posts } from "../../data/blog/posts";
-import type { ContentBlock } from "../../interfaces/blog.interface";
+import type { ContentBlock, Post } from "../../interfaces/blog.interface";
 
 interface Props {
-    slug: string;
+    post: Post | undefined;
 }
+const {post} = Astro.props;
 
-const { slug } = Astro.props;
-const post = posts.find((post) => post.slug === slug);
 if (!post) return;
 ---
 
