@@ -41,7 +41,6 @@ export const ContactForm = () => {
     const form = useRef<HTMLFormElement>(null);
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        // aquí tu emailjs
         console.log(data);
     };
 

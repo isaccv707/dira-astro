@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
-import Pagination from "../../components/react/ui/Pagination";
-import TextInput from "../../components/react/form/TextInput";
-import CardQuoteStudy from "../../components/react/cards/CardQuoteStudy";
-import type { Study } from "../../interfaces/study.interface";
-import usePagination from "../../hooks/usePagination";
-import useGetAllStudies from "./service/hooks/useGetAllStudies";
-import { useQuoterContext } from "../../hooks/useQuoterContext";
-import FormProvider from "../../components/react/hk-form/FormProvider";
+import { useEffect, useState } from "react";
+import Pagination from "../../../components/react/ui/Pagination";
+import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
+import type { Study } from "../../../interfaces/study.interface";
+import usePagination from "../../../hooks/usePagination";
+import useGetAllStudies from "../service/hooks/useGetAllStudies";
+import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import { useForm } from "react-hook-form";
-import SearchServices from "./service/SearchServices";
-import useSearchStudies from "../../hooks/useSearchStudies";
+import SearchServices from "../service/SearchServices";
+import useSearchStudies from "../../../hooks/useSearchStudies";
 
 interface Inputs {
   searchStudies: string;
@@ -17,7 +15,7 @@ interface Inputs {
 
 const LIMIT = 4;
 
-const SelectStudiesSection = () => {
+const QuoterSelectStudies = () => {
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
 
   const { addStudy, removeStudy, selectedStudies } = useQuoterContext();
@@ -50,9 +48,7 @@ const SelectStudiesSection = () => {
 
   const handleAddStudy = (study: Study) => addStudy(study);
   const handleDeletStudy = (studyId: string) => removeStudy(studyId);
-
-  const handleSearch = () => { };
-
+  
   return (
     <div className="flex h-full flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -114,4 +110,4 @@ const SelectStudiesSection = () => {
   );
 };
 
-export default SelectStudiesSection;
+export default QuoterSelectStudies;

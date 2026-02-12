@@ -59,8 +59,10 @@ const PostCard = ({ author, description, slug, title, id, image, tags }: PostCar
                             <div>
                                 <p className="text-sm text-yellow-secondary font-bold">Etiquetas:</p>
                                 <div className="flex flex-wrap gap-1 mt-2">
-                                    {tags.map((tag) => (
-                                        <div className='bg-green-ligth rounded-2xl'>
+                                    {tags.map((tag, index) => (
+                                        <div
+                                            key={index}
+                                            className='bg-green-ligth rounded-2xl'>
                                             <span className="px-3 py-1 rounded-full text-xs font-medium text-white shadow-3xl">
                                                 {tag}
                                             </span>

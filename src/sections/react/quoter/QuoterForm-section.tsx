@@ -1,104 +1,158 @@
-import { useForm } from "react-hook-form"
-import FormProvider from "../../../components/react/hk-form/FormProvider";
-import { yupResolver } from "@hookform/resolvers/yup"
-import { useState } from "react";
-import PersonalDataForm from "../forms/PersonalDataForm";
-import StepIndicator from "../../../components/react/ui/StepIndicator";
-import SelectStudiesSection from "../SelectStudies-section";
-import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
-import * as yup from 'yup';
-import { useQuoterContext } from "../../../hooks/useQuoterContext";
-import { IoIosReturnLeft } from "react-icons/io";
+import RHFTextInput from "../../../components/react/hk-form/RHFTextInput";
+import RHFSelectInput from "../../../components/react/hk-form/RHFSelectInput";
 import Button from "../../../components/react/ui/Button";
-
+import { motion, AnimatePresence } from "framer-motion";
+import { useQuoterContext } from "../../../hooks/useQuoterContext";
+import * as yup from "yup";
+import FormProvider from "../../../components/react/hk-form/FormProvider";
+import type { UseFormReturn } from "react-hook-form";
+import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
 
 type Inputs = yup.InferType<typeof quoterFormSchema>;
 
-const QuoterFormSection = () => {
-    const [step, setStep] = useState(1);
-
-    const methods = useForm<Inputs>({
-        defaultValues: {
-            clientType: 'particular',
-            name: '',
-            lastName: '',
-            phoneNumber: '',
-            email: '',
-            companyRFC: '',
-        },
-        resolver: yupResolver(quoterFormSchema) as any
-    });
-
-    const { trigger } = methods;
-
-
-
-    const nextStep = async () => {
-        if (step === 1) {
-            const isFormValid = await trigger(["name", "lastName", "phoneNumber", "email"]);
-            if (!isFormValid) return;
-            setStep((prev) => prev + 1);
-        }
-    };
-
-    const previousStep = () => setStep((prev) => prev - 1)
-    return (
-        <div className="rounded-2xl w-full grid">
-            <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">
-                <h1 className="text-white font-bold text-lg">Cotiza tus estudios</h1>
-                <small className="text-white text-sm opacity-90">
-                    Rellena la información necesaria para obtener una cotización.
-                </small>
-            </header>
-
-            {/* MOBILE */}
-            <div className="sm:hidden px-4">
-                <div className="flex justify-center">
-                    <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
-                </div>
-
-                {step === 2 ? (
-                    <div className="mt-3 flex justify-end pr-1">
-                        <Button
-                            text="Regresar"
-                            variant="primary"
-                            size="sm"
-                            icon={<IoIosReturnLeft />}
-                            onClick={previousStep}
-                        />
-                    </div>
-                ) : null}
-            </div>
-
-            {/* DESKTOP */}
-            <div className="hidden sm:flex relative items-center px-4 sm:px-6 mt-10">
-                <div className="absolute left-1/2 -translate-x-1/2">
-                    <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
-                </div>
-
-                <div className="ml-auto pr-2 sm:pr-4">
-                    {step === 2 ? (
-                        <Button
-                            text="Regresar"
-                            variant="primary"
-                            size="sm"
-                            icon={<IoIosReturnLeft />}
-                            onClick={previousStep}
-                        />
-                    ) : null}
-                </div>
-            </div>
-
-
-
-            {
-                step === 1 && <PersonalDataForm methods={methods} nextStep={nextStep} step={step} />
-            }
-            {
-                step === 2 && <SelectStudiesSection />
-            }
-        </div>
-    )
+interface QuotationFormProps {
+  nextStep: () => Promise<void>;
+  step: number;
+  methods: UseFormReturn<Inputs>;
 }
 
-export default QuoterFormSection
+const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
+  const { setClient } = useQuoterContext();
+  const { watch, handleSubmit } = methods;
+
+  const clientType = watch("clientType");
+
+  const handleNext = () => {
+    const values: Inputs = {
+      clientType: watch("clientType"),
+      name: watch("name"),
+      lastName: watch("lastName"),
+      phoneNumber: watch("phoneNumber"),
+      email: watch("email"),
+      companyRFC: watch("companyRFC"),
+    };
+    setClient(values);
+    nextStep();
+  };
+
+  const onSubmit = (_data: Inputs) => { };
+
+  return (
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <div className="w-full px-4 sm:px-6">
+        <div className="mx-auto w-full max-w-3xl">
+          {/* Card */}
+          <div className=" p-5 sm:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 items-start">
+              {/* Tipo de cliente */}
+              <div className="md:col-span-12">
+                <RHFSelectInput
+                  id="clientType"
+                  name="clientType"
+                  label="Tipo de cliente"
+                  placeholder="Selecciona una opción"
+                  options={[
+                    { label: "Particular", value: "particular" },
+                    { label: "Empresa", value: "company" },
+                  ]}
+                />
+              </div>
+
+              {/* Identidad: Nombre + Apellido/RFC */}
+              <div className="md:col-span-7">
+                <RHFTextInput
+                  id="name"
+                  name="name"
+                  label={clientType === "company" ? "Razón social" : "Nombre"}
+                  placeholder={
+                    clientType === "company"
+                      ? "Ingresa la razón social"
+                      : "Ingresa tu nombre"
+                  }
+                />
+              </div>
+
+              <div className="md:col-span-5">
+                {/* Evita “brinco” al animar cambiando de campo */}
+                <div className="min-h-[92px]">
+                  <AnimatePresence mode="wait">
+                    {clientType === "particular" ? (
+                      <motion.div
+                        key="lastName"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <RHFTextInput
+                          id="lastName"
+                          name="lastName"
+                          label="Apellidos"
+                          placeholder="Ingresa tu apellidos"
+                        />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="companyRFC"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <RHFTextInput
+                          id="companyRFC"
+                          name="companyRFC"
+                          label="RFC de la empresa"
+                          placeholder="Ej. ABC123456XYZ"
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Contacto: Teléfono + Email */}
+              <div className="md:col-span-5">
+                <RHFTextInput
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  label="Teléfono"
+                  placeholder="Ej. 3312345678"
+                />
+              </div>
+
+              <div className="md:col-span-7">
+                <RHFTextInput
+                  id="email"
+                  name="email"
+                  label="Correo electrónico"
+                  placeholder="correo@dominio.com"
+                />
+              </div>
+
+              {/* Botón */}
+              <div className="md:col-span-12 pt-2">
+                <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+                  <Button
+                    text="Siguiente"
+                    type="button"
+                    variant="secondary"
+                    size="lg"
+                    onClick={handleNext}
+                  />
+                </div>
+
+                {/* Tip opcional: microcopy */}
+                <p className="mt-3 text-xs text-black/50">
+                  Usaremos estos datos únicamente para enviarte la cotización.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </FormProvider>
+  );
+};
+
+export default QuotationForm;
