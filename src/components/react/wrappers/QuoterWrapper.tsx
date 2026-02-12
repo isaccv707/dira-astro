@@ -1,7 +1,7 @@
 import { ToastContainer } from "react-toastify"
 import { QuoterProvider } from "../../../contexts/QuoterContext"
-import QuotationDetailsSection from "../../../sections/react/quoter/QuotationDetails-section"
-import QuoterFormSection from "../../../sections/react/quoter/QuoterForm-section"
+import QuoteDetails from "../../../sections/react/quoter/QuoteDetails-section"
+import Quoter from "../../../sections/react/quoter/Quoter-section"
 import ReduxProvider from "../providers/ReduxProvider"
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,14 +16,14 @@ const QuoterWrapper = () => {
                             {/* Form */}
                             <section className="w-full">
                                 <div className="h-full rounded-3xl shadow-xl overflow-hidden">
-                                    <QuoterFormSection />
+                                    <Quoter />
                                 </div>
                             </section>
 
                             {/* Details */}
                             <section className="w-full lg:sticky lg:top-6">
                                 <div className="h-full rounded-3xl shadow-xl overflow-hidden">
-                                    <QuotationDetailsSection />
+                                    <QuoteDetails />
                                 </div>
                             </section>
                         </div>

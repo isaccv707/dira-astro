@@ -1,5 +1,5 @@
 
-import { Analisys } from '../products/products-analisys-data';
+
 import type { Service } from '../../interfaces/service.interface';
 import { addressIcon, healthIcon, testTubes } from '../../assets/icons';
 import {
@@ -24,7 +24,7 @@ export const services: Service[] = [
         },
         description: 'Analizamos muestras clínicas con equipos de última generación y protocolos estandarizados para asegurar resultados precisos y confiables.',
         path: 'service',
-        products: Analisys,
+        products: [],
         category: 'Laboratorio',
         benefits: [
             { icon: '', title: 'Profesionalismo', text: 'Contamos con personal altamente capacitado para ofrecerte el mejor servicio.' },

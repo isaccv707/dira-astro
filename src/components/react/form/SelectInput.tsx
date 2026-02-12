@@ -34,10 +34,12 @@ const SelectInput = ({
     const hasError = Boolean(error || isError);
     return (
         <div className="w-full max-w-sm mx-auto sm:max-w-md md:max-w-lg">
-            <Label
-                id={id}
-                label={label}
-            />
+            <div className='mb-2'>
+                <Label
+                    id={id}
+                    label={label}
+                />
+            </div>
             <select
                 id={id}
                 name={name}

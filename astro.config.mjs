@@ -13,6 +13,7 @@ export default defineConfig({
   }),
   server: {
     host: true,
+    port: process.env.PORT ? parseInt(process.env.PORT) : 4321
   },
   vite: {
     plugins: [tailwindcss()],

@@ -6,7 +6,7 @@ import Carousel from './Carousel'
 const CarouselAbout = () => {
     return (
         <Carousel>
-            {carouselHomeData.map(({ text, img }, index) => (
+            {carouselHomeData.map(({ img }, index) => (
                 <SwiperSlide key={index}>
                     <div className="aspect-16/7 w-full object-cover">
                         <img

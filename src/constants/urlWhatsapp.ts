@@ -1,1 +1,1 @@
-export const url = import.meta.env.PUBLIC_URL_WHATSAPP
+export const urlWhatsapp = import.meta.env.PUBLIC_URL_WHATSAPP

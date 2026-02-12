@@ -6,7 +6,7 @@ import Button from "../../../components/react/ui/Button";
 import SelectedStudiesAccordion from "../../../components/react/accordion/SelectedStudiesAccordion";
 import useQuotationPdf from "../../../hooks/useQuotationPdf";
 
-const QuotationDetailsSection = () => {
+const QuoteDetails = () => {
   const {
     selectedStudies,
     client,
@@ -68,4 +68,4 @@ const QuotationDetailsSection = () => {
   );
 };
 
-export default QuotationDetailsSection;
+export default QuoteDetails;

@@ -1,13 +1,9 @@
 ---
-import { routes, routesFooter } from "../../routes/routes";
+import { routesFooter } from "../../routes/routes";
 import dyraLogo from "../../assets/images/logo.png";
 import { Phone } from "lucide-react";
-import {
-  facebook,
-  instagram,
-  whatsapp,
-} from "../../assets/icons/networks-icons";
 import NavLinkButton from "../../components/react/ui/NavLinkButton";
+import { SOCIAL_NETWORKS } from "../../constants/socialNetworks";
 ---
 
 <footer class="bg-green-primary text-white pt-10">
@@ -17,7 +13,7 @@ import NavLinkButton from "../../components/react/ui/NavLinkButton";
     <div>
       <img src={dyraLogo.src} alt="logo" class="w-28 h-auto mb-4" />
       <p class="text-sm leading-6">
-        En Dira, ofrecemos servicios de calidad con un enfoque profesional, para
+        En Dyra, ofrecemos servicios de calidad con un enfoque profesional, para
         garantizar la mejor experiencia a nuestros clientes.
       </p>
     </div>
@@ -45,23 +41,26 @@ import NavLinkButton from "../../components/react/ui/NavLinkButton";
     <div>
       <h4 class="text-white font-semibold mb-4">Contáctanos</h4>
       <p class="text-sm mb-2 flex items-center gap-2">
-        <Phone size={16} /> +52 123 456 7890
+        <Phone size={16} /> +52 3332559229
       </p>
-      <div class="flex gap-3 mt-4">
-        <a href="#" class="p-2 rounded-full w-12 h-auto" aria-label="Facebook">
-          <img src={facebook.src} alt="icon-facebook" />
-        </a>
-        <a href="#" class="p-2 rounded-full w-12 h-auto" aria-label="Instagram">
-          <img src={instagram.src} alt="icon-instagram" />
-        </a>
-        <a href="#" class="p-2 rounded-full w-12 h-auto" aria-label="Instagram">
-          <img src={whatsapp.src} alt="icon-whatsapp" />
-        </a>
+      
+      <div class="flex mt-4">
+        {
+          SOCIAL_NETWORKS.map(({ href, icon }, index) => (
+            <a
+              href={href}
+              class="p-2 rounded-full w-12 h-auto"
+              aria-label="Facebook"
+            >
+              <img src={icon.src} alt="icon-facebook" />
+            </a>
+          ))
+        }
       </div>
     </div>
   </div>
 
   <div class="mt-10 border-t border-gray-700 text-center py-4 text-sm">
-    © {new Date().getFullYear()} Dira. Todos los derechos reservados.
+    © {new Date().getFullYear()} Dyra. Todos los derechos reservados.
   </div>
 </footer>

@@ -36,11 +36,11 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdf) => {
         }));
 
         const payload: QuotationPayload = {
-            clientType: client.clientType,
+            clientType: client?.clientType,
             name: client.name,
             lastName: client?.lastName,
             phoneNumber: client.phoneNumber,
-            email: client.email,
+            email: client?.email,
             studies: payloadStudies,
         };
         return payload;
