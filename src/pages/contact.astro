@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { ContactForm } from "../sections/react/ContactForm";
+import ContactFormWrapper from "../components/react/wrappers/ContactFormWrapper";
 import { whatsapp, gmail, facebook } from "../assets/icons/networks-icons";
 import { PhoneCall } from "lucide-react";
 ---
@@ -89,8 +89,7 @@ import { PhoneCall } from "lucide-react";
                 </div>
 
                 <div class="animate-fade-up">
-                        <ContactForm client:load />
-                    </div>
+                    <ContactFormWrapper client:load/>
                 </div>
             </section>
         </div>
