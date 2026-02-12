@@ -4,7 +4,10 @@ import { ContactForm } from "../../../sections/react/ContactForm"
 
 const ContactFormWrapper = () => {
     return (
-        <ContactForm />
+        <>
+            <ToastContainer position="top-right" autoClose={3000} />
+            <ContactForm />
+        </>
     )
 }
 
