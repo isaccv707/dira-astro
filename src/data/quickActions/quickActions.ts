@@ -22,7 +22,7 @@ export const quickActions: QuickActions[] = [
     },
     {
         Icon: BiDollar,
-        text: "Cotízador",
+        text: "Cotizador",
         path: "/quoter",
         bgColor: 'bg-yellow-primary'
     }

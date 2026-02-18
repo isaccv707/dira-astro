@@ -41,7 +41,7 @@ export const branches: Branch[] = [
         state: "Colima",
         name: "DYRA Colima",
         location: {
-            address: "Calle. Ignacio Sandoval # 1801, Col. Girasoles, C.P. 28018, Colima, Colima",
+            address: "Calle Ignacio Sandoval # 1801, Col. Girasoles, C.P. 28018, Colima, Colima",
             references: "Dentro del Hospital Colima",
             googleMapsUrl: "https://maps.app.goo.gl/5hT6fTYXALp1MeC16",
             mapSrc: "",
@@ -52,7 +52,7 @@ export const branches: Branch[] = [
             email: "luis.ramirez@dyranalitica.com",
         },
         schedule: [
-            { day: "Abierto 24 Horas", closed: false},
+            { day: "Abierto 24 Horas", closed: false },
         ],
         portals: {
             urlResults: "https://resultados.dyra.com.mx/colima"
@@ -63,7 +63,7 @@ export const branches: Branch[] = [
         state: "Jalisco",
         name: "DYRA Guadalajara",
         location: {
-            address: "Av. Lazaro Cardenas # 2305, Col. Las Torres, C.P. 44920, Guadalajara, Jalisco",
+            address: "Av. Lázaro Cárdenas # 2305, Col. Las Torres, C.P. 44920, Guadalajara, Jalisco",
             mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.1234567890123!2d-103.3918196848472!3d20.676678987057736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428b1234567890%3A0xabcdefabcdefabcd!2sDYRA%20Jalisco!5e0!3m2!1ses-419!2smx!4v1696323456789!5m2!1ses-419!2smx",
             googleMapsUrl: "https://maps.app.goo.gl/GdqmeUpKE21h1knS8"
         },

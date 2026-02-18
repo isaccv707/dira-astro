@@ -29,7 +29,7 @@ const currentPath = Astro.url.pathname;
   <Dropdown
     text={"Servicios"}
     options={[
-      { label: "Analisis Clinicos", href: "/service/analisis-clinicos" },
+      { label: "Análisis Clínicos", href: "/service/analisis-clinicos" },
       { label: "Salud Empresarial", href: "/service/salud-empresarial" },
       { label: "Tomas a domicilio", href: "/service/tomas-domicilio" },
     ]}
@@ -37,14 +37,20 @@ const currentPath = Astro.url.pathname;
   <Dropdown
     text={"Resultados"}
     options={[
-      { label: "Guadalajara", href: "https://s26.cogniti.com.mx/dyraJalisco_consultaweb/Comun/Login.aspx" },
-      { label: "Colima", href: "https://s26.cogniti.com.mx/dira_consultaweb/Comun/Login.aspx" },
+      {
+        label: "Guadalajara",
+        href: "https://s26.cogniti.com.mx/dyraJalisco_consultaweb/Comun/Login.aspx",
+      },
+      {
+        label: "Colima",
+        href: "https://s26.cogniti.com.mx/dira_consultaweb/Comun/Login.aspx",
+      },
     ]}
   />
   <Dropdown
     text={"Conócenos"}
     options={[
-      { label: "¿Quiénes Somos?", href: "/about" },
+      { label: "¿Quiénes somos?", href: "/about" },
       { label: "Contáctanos", href: "/contact" },
       { label: "Sucursales", href: "/branchs" },
     ]}

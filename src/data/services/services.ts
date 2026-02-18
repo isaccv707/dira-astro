@@ -16,7 +16,7 @@ export const services: Service[] = [
     {
         id: 'analisis-clinicos',
         key: 'clinical-analyses',
-        title: 'Analisis Clinicos',
+        title: 'Análisis Clínicos',
         icon: testTubes,
         img: {
             image45: analysis45Image,
@@ -31,7 +31,7 @@ export const services: Service[] = [
             { icon: '', title: 'Tecnología avanzada', text: 'Usamos equipos modernos para garantizar resultados exactos y rápidos.' },
             { icon: '', title: 'Atención personalizada', text: 'Nos adaptamos a tus necesidades con trato humano y eficiente.' },
         ],
-        tags: ['analisis', 'muestras', 'laboratorio']
+        tags: ['análisis', 'muestras', 'laboratorio']
     },
 
     {
@@ -47,7 +47,7 @@ export const services: Service[] = [
         path: 'service',
         products: [],
         category: 'Empresa',
-        tags: ['empresa', 'prevencion']
+        tags: ['empresa', 'prevención']
     },
     {
         id: 'tomas-domicilio',

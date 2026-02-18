@@ -6,7 +6,7 @@ import ServiceHeroSection from "../../sections/astro/service/ServiceHeroSection.
 import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefitsSection.astro";
 import Cat from "../../components/astro/ui/Cat.astro";
 
-const {id} = Astro.params;
+const { id } = Astro.params;
 const service = services.find((service) => service.id === id);
 
 if (!service) {
@@ -15,7 +15,6 @@ if (!service) {
 ---
 
 <Layout>
-
   <ServiceHeroSection service={service} />
 
   <section class="w-full">
@@ -29,7 +28,7 @@ if (!service) {
       <Cat
         title="¿No sabes cuál estudio necesitas?"
         paragraph={`Te ayudamos a elegir el estudio ideal según tu caso y te
-                indicamos preparación, tiempos y cómo agendar.`}
+          indicamos la preparación, los tiempos y cómo agendar.`}
       />
     </div>
   </section>

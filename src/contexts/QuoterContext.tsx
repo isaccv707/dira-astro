@@ -39,7 +39,6 @@ export const QuoterProvider = ({ children }: { children: ReactNode }) => {
             if (exists) return prev;
             return [...prev, { ...study, quantity: 1 }]
         })
-        console.log(setSelectedStudies)
     }
 
     const updateStudyQuantity = (id: string, quantity: number) => {
