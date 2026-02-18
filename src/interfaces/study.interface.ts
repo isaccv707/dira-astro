@@ -4,7 +4,7 @@ export interface Study {
     name: string;
     description?: string;
     deliveryTime: number;
-    preparation?: string | null;
+    preparation?: string;
     sampleType?: string | null;
     price: number;
     quantity?: number;

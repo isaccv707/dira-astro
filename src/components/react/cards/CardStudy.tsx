@@ -1,26 +1,41 @@
 import { Calendar } from "lucide-react"; // ícono de calendario
 import NavLinkButton from "../ui/NavLinkButton";
+import useDrawerManager from "../../../hooks/useDrawerManager";
+import Button from "../ui/Button";
 
-
+interface CardStudyProps {
+    id: string;
+    name: string;
+    description: string;
+    isRequiredAppointment?: boolean;
+    preparation: string;
+    price: number
+}
 
 const CardStudy = ({
     description,
-    id,
-    path,
-    title,
+    name,
     isRequiredAppointment = true,
     preparation,
     price,
-}: any) => {
+}: CardStudyProps) => {
+    const { open } = useDrawerManager();
+
+    const openDrawer = () => {
+        open("STUDIES_DRAWER", {
+            title: "Estudios Seleccionados",
+            data: []
+        })
+    }
     return (
         <div className="max-w-sm w-full bg-white dark:bg-primary border border-gray-200 dark:border-primary rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
 
             {/* Título */}
             <h5
-                title={title}
+                title={name}
                 className="mb-3 w-full min-w-0 overflow-hidden text-lg sm:text-xl font-bold tracking-tight text-green-primary line-clamp-2"
             >
-                {title}
+                {name}
             </h5>
 
 
@@ -50,11 +65,10 @@ const CardStudy = ({
 
             {/* Botón */}
             <div className="mt-auto w-full">
-                <NavLinkButton
-                    path={`/contact`}
-                    text="Agendar cita"
-                    variant="primary"
-                    size="md"
+                <Button
+                    type={"submit"}
+                    text={"Agregar"}
+                    onClick={openDrawer}
                 />
             </div>
         </div>
