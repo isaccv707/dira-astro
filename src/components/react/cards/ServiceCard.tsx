@@ -53,7 +53,7 @@ const ServiceCard = ({ service, handleOpenModal }: ServiceCardProps) => {
                     path={`${path}/${id}`}
                     variant={"primary"}
                     size="sm"
-                    text={'Mas Información'}
+                    text={'Más información'}
                 />
             </div>
         </div>

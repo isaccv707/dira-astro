@@ -35,7 +35,7 @@ const StudiesServices = () => {
     limit: LIMIT,
     search: search,
   });
-
+  
   useEffect(() => {
     setTotalPagesForHook(totalPages || 1);
   }, [totalPages]);
@@ -65,13 +65,14 @@ const StudiesServices = () => {
       >
         {
           studies && studies.length > 0 ? (
-            studies.map((study: Study) => (
+            studies.map(({ id, name, price, description = '', preparation = '' }: Study) => (
               <CardStudy
-                key={study.id}
-                path={"/contact"}
-                id={study.id}
-                title={study.name}
-                price={study.price}
+                key={id}
+                id={id}
+                name={name}
+                price={price}
+                description={description}
+                preparation={preparation}
               />
             ))
           ) : (
