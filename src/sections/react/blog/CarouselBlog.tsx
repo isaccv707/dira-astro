@@ -1,10 +1,12 @@
 import { SwiperSlide } from "swiper/react"
 import Carousel from "../../../components/react/carousel/Carousel"
-import { posts } from "../../../data/blog/posts"
 import NavLinkButton from "../../../components/react/ui/NavLinkButton"
+import type { Post } from "../../../api/interfaces/post.interface"
 
-
-const CarouselBlog = () => {
+interface CarouselBlogProps {
+  posts: Post[]
+}
+const CarouselBlog = ({ posts = [] }: CarouselBlogProps) => {
   return (
     <Carousel>
       {

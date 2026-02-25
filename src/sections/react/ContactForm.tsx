@@ -63,7 +63,6 @@ export const ContactForm = () => {
                     toast.error('Error al enviar el email');
                     setIsLoading(false);
                 })
-            console.log(data);
         }
     };
 
