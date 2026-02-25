@@ -6,7 +6,7 @@ export const fetchPosts = async (
     limit: number = 10,
     category?: string,
 ): Promise<PostResponse | null> => {
-    const url = new URL(`${API_URL}/posts`);
+    const url = new URL(`${API_URL}/api/posts`);
     url.searchParams.append('page', page.toString());
     url.searchParams.append('limit', limit.toString());
     

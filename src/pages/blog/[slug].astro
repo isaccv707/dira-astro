@@ -1,6 +1,6 @@
 ---
 import type { Post as PostType } from "../../api/interfaces/post.interface";
-import { posts } from "../../data/blog/posts";
+
 import Layout from "../../layouts/Layout.astro";
 import Post from "../../sections/astro/Post.astro";
 import { API_URL } from "../../constants/apiUrl";
@@ -9,7 +9,7 @@ const { slug = '' } = Astro.params;
 
 const fetchPost = async (slug: string): Promise<PostType | null> => {
     try {
-        const response = await fetch(`${API_URL}/posts/${slug}`);
+        const response = await fetch(`${API_URL}/api/posts/${slug}`);
         if (!response.ok) {
             if (response.status === 404) return null;
             throw new Error(`HTTP error! status: ${response.status}`);
