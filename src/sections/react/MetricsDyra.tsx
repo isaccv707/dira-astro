@@ -11,7 +11,7 @@ const MetricsDyra = () => {
         {
             label: "Pruebas procesadas al año",
             initial: 0,
-            value: 120,
+            value: '+100k',
             description:
                 "Capacidad operativa con flujos automatizados y trazabilidad completa.",
         },

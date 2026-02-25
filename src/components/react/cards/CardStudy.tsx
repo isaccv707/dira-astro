@@ -64,13 +64,13 @@ const CardStudy = ({
             )}
 
             {/* Botón */}
-            <div className="mt-auto w-full">
+            {/* <div className="mt-auto w-full">
                 <Button
                     type={"submit"}
                     text={"Agregar"}
                     onClick={openDrawer}
                 />
-            </div>
+            </div> */}
         </div>
     );
 };

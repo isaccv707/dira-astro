@@ -1,205 +1,209 @@
 ---
+import type { Post, ContentBlock } from "../../api/interfaces/post.interface";
 import Tags from "../../components/astro/Tags.astro";
-import { posts } from "../../data/blog/posts";
-import type { ContentBlock, Post } from "../../interfaces/blog.interface";
 
 interface Props {
     post: Post | undefined;
 }
-const {post} = Astro.props;
 
+const { post } = Astro.props;
 if (!post) return;
+
+const formattedDate = new Date(post.createdAt).toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+});
 ---
 
-<article class="w-full">
-    <header
-        class="relative overflow-hidden border border-gray-200 rounded-3xl shadow-md bg-white"
-    >
-        <div class="relative px-5 sm:px-8 md:px-10 py-8 md:py-10">
-            <div class="mx-auto max-w-4xl">
-                <!-- meta -->
-                <div class="flex flex-wrap items-center gap-2">
-                    <span
-                        class="inline-flex items-center gap-2 rounded-full bg-green-ligth text-white px-3 py-1 text-xs font-semibold shadow-sm"
-                    >
-                        {post.category}
-                    </span>
+<article class="w-full max-w-5xl mx-auto px-4 py-12 animate-fade-up">
+    <!-- Header Section -->
+    <header class="mb-12">
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+            <span class="px-4 py-1.5 bg-green-ligth/10 text-green-ligth text-xs font-bold uppercase tracking-wider rounded-full border border-green-ligth/20">
+                {post.category}
+            </span>
+            <div class="flex items-center gap-2 text-gray-400 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{post.readingTime} min de lectura</span>
+                <span class="mx-1">•</span>
+                <span>{formattedDate}</span>
+            </div>
+        </div>
 
-                    <span class="text-xs text-grey font-bold">
-                        • {post.readingTime} min de lectura
-                    </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-green-ligth leading-[1.1] mb-8">
+            {post.title}
+        </h1>
 
-                    <span class="hidden sm:inline text-xs text-grey/70">•</span>
+        <p class="text-lg md:text-xl text-gray-600 leading-relaxed font-medium mb-10 border-l-4 border-yellow-secondary pl-6">
+            {post.description}
+        </p>
 
-                    <span class="text-xs text-grey font-bold">
-                        Publicado el {post.date}
-                    </span>
-                </div>
-
-                <h1
-                    class="mt-5 text-yellow-secondary text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
-                >
-                    <span
-                        class="block bg-gradient-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
-                    >
-                        {post.title}
-                    </span>
-                </h1>
-
-                <!-- description -->
-                <p
-                    class="mt-4 font-semibold md:text-lg text-green-ligth leading-relaxed max-w-3xl"
-                >
-                    {post.description}
+        <!-- Author Profile -->
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 w-fit">
+            <div class="relative">
+                <img
+                    src={post.author.avatar || '/favicon.svg'}
+                    alt={post.author.name}
+                    class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-gray-200"
+                    loading="lazy"
+                />
+                <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-secondary border-2 border-white rounded-full"></div>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900 leading-tight">
+                    {post.author.name}
                 </p>
-
-                <!-- author card -->
-                <div
-                    class="mt-6 flex flex-col sm:flex-row sm:items-center gap-4"
-                >
-                    <div class="flex items-center gap-3">
-                        <img
-                            src={post.author.avatar.src}
-                            alt={post.author.name}
-                            class="w-11 h-11 rounded-full border border-gray-200 shadow-sm bg-white"
-                            loading="lazy"
-                        />
-                        <div>
-                            <p
-                                class="text-sm font-semibold text-black leading-tight"
-                            >
-                                {post.author.name}
-                            </p>
-                            <p class="text-xs text-grey">Autor(a)</p>
-                        </div>
-                    </div>
-
-                    <!-- tags -->
-                    <div class="sm:ml-auto flex flex-wrap gap-2">
-                        <Tags
-                            tags={post.tags}
-                        />
-                    </div>
-                </div>
+                <p class="text-xs text-yellow-secondary font-medium uppercase tracking-tighter mt-0.5">
+                    Especialista en Salud
+                </p>
             </div>
         </div>
     </header>
 
-    <!-- BODY -->
-    <section class="mt-6">
-        <div class="mx-auto max-w-4xl">
-            <div class="rounded-3xl border border-gray-200 bg-white shadow-sm">
-                <div class="px-5 sm:px-8 md:px-10 py-8 md:py-10">
-                    <article
-                        class="prose prose-gray max-w-none
-              prose-headings:tracking-tight
-              prose-h2:text-black prose-h2:font-bold prose-h2:mt-10
-              prose-p:text-grey prose-p:leading-relaxed
-              prose-strong:text-black
-              prose-a:text-green-primary prose-a:no-underline hover:prose-a:underline
-              prose-li:marker:text-green-primary"
-                    >
-                        {
-                            post.content.map((block: ContentBlock) => {
-                                if (block.type === "paragraph") {
-                                    return <p>{block.content}</p>;
-                                }
+    <!-- Hero Image -->
+    {post.image && (
+        <div class="relative aspect-[21/9] w-full mb-16 overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-black/5">
+            <img 
+                src={post.image.src} 
+                alt={post.title}
+                class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+    )}
 
-                                if (block.type === "subtitle") {
-                                    return (
-                                        <h2 class="scroll-mt-24">
+    <!-- Content Body -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <main class="lg:col-span-8">
+            <div class="prose prose-lg prose-gray max-w-none
+                prose-headings:text-green-ligth prose-headings:font-black
+                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-8
+                prose-p:text-gray-600 prose-p:leading-8 prose-p:mb-8
+                prose-strong:text-gray-900
+                prose-ul:my-8 prose-li:text-gray-600">
+                
+                {post.contentBlocks?.map((block: ContentBlock) => {
+                    switch (block.type) {
+                        case "PARAGRAPH":
+                            return (
+                                <p class="text-gray-600 leading-relaxed text-lg mb-8 first-letter:text-5xl first-letter:font-black first-letter:text-green-ligth first-letter:mr-3 first-letter:float-left">
+                                    {block.content}
+                                </p>
+                            );
+                        
+                        case "SUBTITLE":
+                            return (
+                                <div class="relative group mt-16 mb-8">
+                                    <h2 class="inline-block relative z-10 text-3xl font-black text-green-ligth m-0">
+                                        {block.content}
+                                    </h2>
+                                    <div class="absolute -bottom-2 left-0 w-24 h-2 bg-yellow-primary/30 group-hover:w-full transition-all duration-500 rounded-full -z-0"></div>
+                                </div>
+                            );
+                        
+                        case "LIST":
+                            const listItems = block.content
+                                ?.split(/(?=\d+\.\s)/)
+                                .map(item => item.trim())
+                                .filter(item => item.length > 0) || [];
+                            return (
+                                <ul class="list-none space-y-6 my-10 pl-0">
+                                    {listItems.map((item) => (
+                                        <li class="flex items-start gap-4 p-4 bg-gray-50/50 rounded-2xl border border-transparent hover:border-green-ligth/10 hover:bg-white transition-all duration-300">
+                                            <div class="mt-1 flex-shrink-0 w-6 h-6 rounded-lg bg-green-ligth/10 flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-green-ligth" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-gray-700 font-medium leading-relaxed">{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            );
+
+                        case "QUOTE":
+                            return (
+                                <div class="relative my-14">
+                                    <div class="absolute -top-6 -left-4 text-8xl text-yellow-primary/20 font-serif select-none">“</div>
+                                    <blockquote class="not-prose relative z-10 px-8 py-4 border-l-4 border-yellow-secondary">
+                                        <p class="text-2xl md:text-3xl font-bold text-gray-800 italic leading-snug tracking-tight">
                                             {block.content}
-                                        </h2>
-                                    );
-                                }
+                                        </p>
+                                    </blockquote>
+                                    <div class="absolute -bottom-6 -right-4 text-8xl text-yellow-primary/20 font-serif select-none rotate-180">“</div>
+                                </div>
+                            );
 
-                                if (block.type === "list") {
-                                    return (
-                                        <ul class="mt-4 space-y-2">
-                                            {block.items?.map((item) => (
-                                                <li class="pl-1">
-                                                    <span class="font-semibold text-black">
-                                                        {item.title}
-                                                    </span>
-                                                    <span class="text-grey">
-                                                        : {item.text}
-                                                    </span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    );
-                                }
-
-                                if (block.type === "quote") {
-                                    return (
-                                        <blockquote
-                                            class="
-                        not-prose my-6 rounded-2xl border border-green-primary/15
-                        bg-green-primary/5 px-5 py-4
-                      "
-                                        >
-                                            <div class="flex items-start gap-3">
-                                                <span class="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-green-primary text-white shadow-sm">
-                                                    “
-                                                </span>
-                                                <p class="m-0 text-sm md:text-base text-grey italic leading-relaxed">
-                                                    {block.content}
-                                                </p>
-                                            </div>
-                                        </blockquote>
-                                    );
-                                }
-
-                                if (block.type === "image") {
-                                    return (
-                                        <figure class="not-prose my-8">
-                                            <div class="overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white">
-                                                <img
-                                                    src={block.src}
-                                                    alt={block.alt || ""}
-                                                    class="w-full h-auto object-cover"
-                                                    loading="lazy"
-                                                />
-                                            </div>
-                                            {block.alt ? (
-                                                <figcaption class="mt-2 text-xs text-grey">
-                                                    {block.alt}
-                                                </figcaption>
-                                            ) : null}
-                                        </figure>
-                                    );
-                                }
-
-                                return null;
-                            })
-                        }
-                    </article>
-
-                    <!-- footer / CTA -->
-                    <div
-                        class="mt-10 rounded-2xl border border-yellow-primary/25 p-5"
-                    >
-                        <p class="text-sm text-grey m-0">
-                            ¿Tienes dudas? Consulta a tu médico para una
-                            interpretación completa y personalizada. En el
-                            laboratorio podemos orientarte sobre preparación y
-                            tiempos de entrega.
-                        </p>
-
-                        <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                            <a
-                                href="/contact"
-                                class="inline-flex items-center justify-center rounded-xl bg-green-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-secondary transition"
-                            >
-                                Contáctanos
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                        case "IMAGE":
+                            return (
+                                <figure class="not-prose my-16 group">
+                                    <div class="relative overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100">
+                                        <img
+                                            src={block.src}
+                                            alt={block.alt || ""}
+                                            class="w-full h-auto transform transition-transform duration-700 group-hover:scale-105"
+                                            loading="lazy"
+                                        />
+                                        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-[2.5rem]"></div>
+                                    </div>
+                                    {block.alt && (
+                                        <figcaption class="mt-6 text-center">
+                                            <span class="inline-block px-4 py-1 bg-gray-100 text-gray-500 text-xs font-bold uppercase tracking-widest rounded-full">
+                                                {block.alt}
+                                            </span>
+                                        </figcaption>
+                                    )}
+                                </figure>
+                            );
+                        
+                        default:
+                            return null;
+                    }
+                })}
             </div>
 
-            <!-- tiny footer spacing -->
-            <div class="h-8"></div>
-        </div>
-    </section>
+            <!-- Tags Section -->
+            <div class="mt-16 pt-8 border-t border-gray-100">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Etiquetas:</span>
+                    <Tags tags={post.tags} />
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar / CTA -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 h-fit">
+            <div class="bg-green-ligth rounded-[2.5rem] p-8 text-white shadow-2xl shadow-green-ligth/30">
+                <h3 class="text-2xl font-black mb-4">¿Necesitas orientación?</h3>
+                <p class="text-white/80 text-sm leading-relaxed mb-8">
+                    Nuestros especialistas están listos para ayudarte con tus dudas sobre preparación, resultados y más.
+                </p>
+                <a
+                    href="/contact"
+                    class="block w-full text-center py-4 bg-white text-green-ligth font-bold rounded-2xl hover:bg-yellow-primary hover:text-white transition-all duration-300 shadow-lg"
+                >
+                    Contactar ahora
+                </a>
+            </div>
+
+            <div class="mt-8 p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100">
+                <p class="text-xs text-gray-400 font-medium leading-relaxed italic">
+                    * La información presentada es de carácter informativo. Consulta siempre a tu médico para una interpretación personalizada de tus estudios.
+                </p>
+            </div>
+        </aside>
+    </div>
 </article>
+
+<style>
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+        animation: fadeUp 0.6s ease-out forwards;
+    }
+</style>
