@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HeaderBySection from "../components/astro/ui/HeaderBySection.astro";
+import Posts from "../sections/react/blog/Posts";
+
+import { fetchPosts } from "../utils/fetch-posts";
+import logoDyra from "../assets/images/logo.png";
+
+const data = await fetchPosts(1, 10);
+const posts = data?.data ?? [];
+---
+
+<Layout>
+    <section class="flex justify-center p-10">
+        <HeaderBySection
+            textHeader="Blog"
+            title="Bienvenido a nuestro Blog — DYRA"
+            paragraph="Consejos, noticias y artículos sobre salud y diagnóstico clínico."
+            textColor="yellow-secondary"
+            img={logoDyra}
+            navLinkBtn={true}
+            btnProperties={{ text: "Contáctanos" }}
+        />
+    </section>
+    <section>
+        <Posts posts={posts} client:load />
+    </section>
+</Layout>
