@@ -5,7 +5,7 @@ export const quotationApi = api.injectEndpoints({
   endpoints: (builder) => ({
     downloadQuotationPdf: builder.mutation<Blob, QuotationPayload>({
       query: (body) => ({
-        url: '/quotations/pdf',
+        url: 'quotations/pdf',
         method: 'POST',
         body,
         responseHandler: async (response) => {

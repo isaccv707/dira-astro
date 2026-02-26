@@ -15,7 +15,7 @@ export const postApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getPosts: builder.query<PostResponse, { page?: number; limit?: number; category?: string }>({
             query: (params) => ({
-                url: '/posts',
+                url: 'posts',
                 method: 'GET',
                 params,
             })

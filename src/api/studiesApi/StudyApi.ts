@@ -21,7 +21,7 @@ export const studiesApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getAllStudies: builder.query<GetAllStudiesResponse, GetAllStudiesParams>({
             query: ({ page = 1, limit = 10, search } = {}) => ({
-                url: '/studies',
+                url: 'studies',
                 method: 'GET',
                 params: { page, limit, ...(search ? { search } : {}) }
             })

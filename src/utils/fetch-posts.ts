@@ -5,11 +5,13 @@ export const fetchPosts = async (
     page: number = 1,
     limit: number = 10,
     category?: string,
-): Promise<PostResponse | null> => {
-    const url = new URL(`${API_URL.replace(/\/$/, '')}/posts`);
+): Promise<PostResponse> => {
+    const base = API_URL.endsWith('/') ? API_URL : `${API_URL}/`;
+    const url = new URL('posts', base);
+
     url.searchParams.append('page', page.toString());
     url.searchParams.append('limit', limit.toString());
-    
+
     if (category) {
         url.searchParams.append('category', category);
     }
@@ -19,7 +21,8 @@ export const fetchPosts = async (
         if (!response.ok) {
             throw new Error(`Error fetching posts: ${response.statusText}`);
         }
-        return response.json();
+        return await response.json();
+        
     } catch (error) {
         console.error('Failed to fetch posts:', error);
         return { data: [], meta: { total: 0, page: 1, lastPage: 1 } };
