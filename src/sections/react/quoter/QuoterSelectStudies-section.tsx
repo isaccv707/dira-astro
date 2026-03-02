@@ -33,7 +33,7 @@ const QuoterSelectStudies = () => {
   const { search, handleSearchChange } = useSearchStudies({
     setPage,
   });
-
+  
   const { studies, totalPages, isLoading, isFetching, isError } = useGetAllStudies({
     page: currentPage,
     limit: LIMIT,

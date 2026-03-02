@@ -1,13 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import HeaderBySection from "../components/astro/ui/HeaderBySection.astro";
-import Posts from "../sections/react/blog/Posts";
+import { PostsWrapper } from "../components/react/wrappers/PostsWrapper";
 
-import { fetchPosts } from "../utils/fetch-posts";
 import logoDyra from "../assets/images/logo.png";
-
-const data = await fetchPosts(1, 10);
-const posts = data?.data ?? [];
 ---
 
 <Layout>
@@ -23,6 +19,6 @@ const posts = data?.data ?? [];
         />
     </section>
     <section>
-        <Posts posts={posts}/>
+        <PostsWrapper client:load/>
     </section>
 </Layout>
