@@ -15,21 +15,25 @@ if (!service) {
 ---
 
 <Layout>
-  <ServiceHeroSection service={service} />
+  <main class="overflow-x-hidden flex flex-col">
+    <ServiceHeroSection service={service} />
 
-  <section class="w-full">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
-      <ServiceBenefitsSection />
+    <section class="w-full">
+      <div class="mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:pb-24">
+        <ServiceBenefitsSection />
 
-      <div class="mt-10">
-        <ServicesWrapper service={service} client:load />
+        <div class="mt-12 md:mt-16 lg:mt-20">
+          <ServicesWrapper service={service} client:load />
+        </div>
+
+        <div class="mt-16 md:mt-24 lg:mt-32">
+          <Cat
+            title="¿No sabes cuál estudio necesitas?"
+            paragraph={`Te ayudamos a elegir el estudio ideal según tu caso y te
+              indicamos la preparación, los tiempos y cómo agendar.`}
+          />
+        </div>
       </div>
-
-      <Cat
-        title="¿No sabes cuál estudio necesitas?"
-        paragraph={`Te ayudamos a elegir el estudio ideal según tu caso y te
-          indicamos la preparación, los tiempos y cómo agendar.`}
-      />
-    </div>
-  </section>
+    </section>
+  </main>
 </Layout>
