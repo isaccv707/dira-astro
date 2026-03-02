@@ -1,13 +1,29 @@
-import type { Post } from "../../../api/interfaces/post.interface"
-import type { PostResponse } from "../../../api/postApi/postApi"
+
+import { useEffect, useState } from "react";
 import PostCard from "../../../components/react/cards/PostCard"
+import Pagination from "../../../components/react/ui/Pagination";
+import usePagination from "../../../hooks/usePagination";
+import { useGetAllPosts } from "./hooks/useGetAllPosts";
 
-export interface PostsProps {
-    posts: Post[]
-}
 
-const Posts = ({ posts = [] }: PostsProps) => {
-    
+const LIMIT = 1;
+const Posts = () => {
+    const [totalPagesForHook, setTotalPagesForHook] = useState(1);
+
+    const { currentPage, nextPage, prevPage, setCurrentPage, setPage } = usePagination({
+        totalPages: totalPagesForHook,
+        initialPage: 1,
+    })
+
+    const { posts, totalPages } = useGetAllPosts({
+        page: currentPage,
+        limit: LIMIT,
+    });
+
+    useEffect(() => {
+        setTotalPagesForHook(totalPages || 1);
+    }, [totalPages]);
+
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="grid gap-6 
@@ -18,10 +34,22 @@ const Posts = ({ posts = [] }: PostsProps) => {
                 {posts.map((post, index) => (
                     <div key={index} className="h-full">
                         <PostCard
-                           post={post}
+                            post={post}
                         />
                     </div>
                 ))}
+            </div>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                />
+                <div className="self-end bg-green-ligth px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
+                    {`${currentPage} / ${totalPages || 1}`}
+                </div>
             </div>
         </div>
     )
