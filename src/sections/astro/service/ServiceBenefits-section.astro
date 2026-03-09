@@ -1,0 +1,25 @@
+---
+import type { Benefits } from "../../../interfaces/service.interface";
+import BenefitCardService from "../../../components/astro/cards/BenefitCardService.astro";
+
+interface Props {
+  benefits: Benefits[];
+}
+
+const { benefits } = Astro.props;
+if (!benefits) return;
+---
+
+<section class="py-12">
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      benefits.map((benefit) => (
+        <BenefitCardService
+          title={benefit.title}
+          description={benefit.description}
+          icon={benefit.icon}
+        />
+      ))
+    }
+  </div>
+</section>

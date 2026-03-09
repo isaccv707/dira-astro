@@ -8,7 +8,7 @@ const OurServices = () => {
 
     const handleOpenModal = (service: Service) => {
         open("MODAL_SERVICE", {
-            title: service.title,
+            title: service.name,
             data: service,
         });
     };

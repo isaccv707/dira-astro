@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-import type { Service } from "../../../interfaces/service.interface"
+import { useEffect, useState } from "react";
 import usePagination from "../../../hooks/usePagination";
 import useGetAllStudies from "./hooks/useGetAllStudies";
 import type { Study } from "../../../interfaces/study.interface";
 import SearchServices from "./SearchServices";
-import CardStudy from "../../../components/react/cards/CardStudy";
 import Pagination from "../../../components/react/ui/Pagination";
 import useSearchStudies from "../../../hooks/useSearchStudies";
+import CardStudy from "../../../components/react/cards/CardStudy";
 
 
 const LIMIT = 12;
@@ -54,8 +53,7 @@ const StudiesServices = () => {
   }, [totalPages]);
 
   return (
-    <div id="services-section" className="relative pb-20">
-      {/* Search & Stats Header */}
+    <div id="services-section" className="pb-20">
       <div className="sticky top-0 z-30 py-6  backdrop-blur-md mb-8 border-b border-gray-50">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="w-full lg:max-w-xl">
@@ -63,14 +61,14 @@ const StudiesServices = () => {
           </div>
 
           <div className="flex items-center gap-4">
-             <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-2xl border border-gray-100">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Vista:</span>
-                <div className="flex gap-1">
-                   <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-green-ligth">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                   </div>
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-2xl border border-gray-100">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Vista:</span>
+              <div className="flex gap-1">
+                <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-green-ligth">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 </div>
-             </div>
+              </div>
+            </div>
 
             <div className="inline-flex items-center gap-3 rounded-2xl bg-green-ligth/5 border border-green-ligth/10 px-5 py-2.5 shadow-sm">
               <div className="relative flex h-2.5 w-2.5">
@@ -85,7 +83,6 @@ const StudiesServices = () => {
         </div>
       </div>
 
-      {/* Main Grid Content */}
       <div className="min-h-[500px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
           {isLoading ? (
@@ -96,18 +93,12 @@ const StudiesServices = () => {
             ))
           ) : studies && studies.length > 0 ? (
             studies.map((study: Study, index: number) => (
-              <div 
-                key={study.id} 
+              <div
+                key={study.id}
                 className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
                 style={{ animationDelay: `${(index % 4) * 100}ms` }}
               >
-                <CardStudy
-                  id={study.id}
-                  name={study.name}
-                  price={study.price}
-                  description={study.description || ''}
-                  preparation={study.preparation || ''}
-                />
+                <CardStudy study={study} />
               </div>
             ))
           ) : (
@@ -121,7 +112,7 @@ const StudiesServices = () => {
               <p className="text-gray-500 mt-3 max-w-sm mx-auto leading-relaxed">
                 Prueba buscando con palabras más generales o revisa si hay algún error de escritura.
               </p>
-              <button 
+              <button
                 onClick={() => handleSearchChange({ target: { value: '' } } as any)}
                 className="mt-8 px-6 py-2 bg-green-ligth text-white font-bold rounded-xl hover:bg-green-primary transition-colors"
               >
@@ -134,7 +125,7 @@ const StudiesServices = () => {
 
       {/* Footer Navigation */}
       {!isLoading && studies && studies.length > 0 && (
-        <div className="mt-20 flex flex-col sm:flex-row items-center justify-between gap-8 p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100">
           <div className="order-2 sm:order-1">
             <Pagination
               nextPage={nextPage}
@@ -146,13 +137,6 @@ const StudiesServices = () => {
           </div>
 
           <div className="order-1 sm:order-2 flex items-center gap-4">
-            <div className="flex -space-x-2">
-               {[1,2,3].map(i => (
-                 <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-400">
-                   {i}
-                 </div>
-               ))}
-            </div>
             <div className="px-5 py-2.5 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Página</span>
               <span className="text-sm font-black text-green-ligth">{currentPage}</span>

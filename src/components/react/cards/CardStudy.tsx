@@ -1,76 +1,105 @@
-import { Calendar } from "lucide-react"; // ícono de calendario
+import { Calendar, Clock, FlaskConical, ShoppingCart, CheckCircle2, CreditCard } from "lucide-react";
 import NavLinkButton from "../ui/NavLinkButton";
 import useDrawerManager from "../../../hooks/useDrawerManager";
 import Button from "../ui/Button";
+import type { Study } from "../../../interfaces/study.interface";
+import { useQuoterContext } from "../../../hooks/useQuoterContext";
 
 interface CardStudyProps {
-    id: string;
-    name: string;
-    description: string;
+    study: Study;
     isRequiredAppointment?: boolean;
-    preparation: string;
-    price: number
 }
 
 const CardStudy = ({
-    description,
-    name,
-    isRequiredAppointment = true,
-    preparation,
-    price,
+    study,
+    isRequiredAppointment = false,
 }: CardStudyProps) => {
+    const { code, deliveryTime, id, name, price, slug, description, preparation, sampleType } = study;
     const { open } = useDrawerManager();
 
-    const openDrawer = () => {
+
+    const handleAddToCart = () => {
         open("STUDIES_DRAWER", {
             title: "Estudios Seleccionados",
             data: []
-        })
-    }
+        });
+    };
+
     return (
-        <div className="max-w-sm w-full bg-white dark:bg-primary border border-gray-200 dark:border-primary rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+        <div className="group relative max-w-sm w-full bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:shadow-green-primary/10 transition-all duration-500 flex flex-col overflow-hidden h-full">
 
-            {/* Título */}
-            <h5
-                title={name}
-                className="mb-3 w-full min-w-0 overflow-hidden text-lg sm:text-xl font-bold tracking-tight text-green-primary line-clamp-2"
-            >
-                {name}
-            </h5>
+            <div className="p-6 pb-0 flex justify-between items-start gap-2">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-green-ligth/10 text-green-ligth border border-green-ligth/20">
+                    ID: {code}
+                </span>
+                {sampleType && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-yellow-secondary/10 text-yellow-secondary border border-yellow-secondary/20">
+                        {sampleType}
+                    </span>
+                )}
+            </div>
 
+            <div className="p-6 flex-grow">
+                <h5
+                    title={name}
+                    className="mb-3 text-xl font-bold text-black leading-tight group-hover:text-green-primary transition-colors duration-300 line-clamp-2"
+                >
+                    {name}
+                </h5>
 
-            {isRequiredAppointment && (
-                <div className="flex items-center gap-2 mb-4 text-red-600 font-semibold">
-                    <Calendar className="w-5 h-5" />
-                    <span>Se requiere agendar cita</span>
+                {isRequiredAppointment && (
+                    <div className="flex items-center gap-2 mb-4 text-red font-bold text-xs uppercase tracking-wide">
+                        <Calendar className="w-4 h-4" />
+                        <span>Requiere cita</span>
+                    </div>
+                )}
+
+                <div className="space-y-4 mb-6">
+                    {description && (
+                        <p className="text-sm text-grey line-clamp-3 leading-relaxed">
+                            {description}
+                        </p>
+                    )}
+
+                    <div className="flex flex-wrap gap-x-5 gap-y-3 pt-4 border-t border-gray-50">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-grey">
+                            <Clock className="w-4 h-4 text-green-secondary" />
+                            <span>Entrega: <span className="text-black">{deliveryTime} hrs</span></span>
+                        </div>
+                        {preparation && (
+                            <div className="flex items-center gap-2 text-xs font-semibold text-grey">
+                                <FlaskConical className="w-4 h-4 text-green-secondary" />
+                                <span className="truncate max-w-[130px]">Prep: <span className="text-black">{preparation}</span></span>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            )}
 
-            {/* Descripción */}
-            <p className="mb-6 text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {description}
-            </p>
+                <div className="flex items-end gap-1 mb-6">
+                    <span className="text-sm font-bold text-grey mb-1">$</span>
+                    <span className="text-3xl font-black text-green-ligth tracking-tight">
+                        {price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                    </span>
+                    <span className="text-xs font-bold text-green-ligth mb-1 ml-1 uppercase">MXN</span>
+                </div>
+            </div>
 
-            {/* Preparación / Precio opcional */}
-            {preparation && (
-                <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold">Preparación:</span> {preparation}
-                </p>
-            )}
-            {price && (
-                <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold">Precio:</span> ${price}
-                </p>
-            )}
-
-            {/* Botón */}
-            {/* <div className="mt-auto w-full">
-                <Button
-                    type={"submit"}
-                    text={"Agregar"}
-                    onClick={openDrawer}
+            <div className="p-6 pt-0 mt-auto grid grid-cols-2 gap-4">
+                <NavLinkButton
+                    path={`/study/${slug}`}
+                    text="Detalles"
+                    variant="ghost"
+                    size="md"
+                    width="full"
                 />
-            </div> */}
+
+                <Button
+                    type="button"
+                    size="md"
+                    width="full"
+                    onClick={handleAddToCart}
+                />
+            </div>
         </div>
     );
 };

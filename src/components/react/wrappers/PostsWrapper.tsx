@@ -6,11 +6,9 @@ import ReduxProvider from "../providers/ReduxProvider"
 
 
 export const PostsWrapper = () => {
-    
-
     return (
         <ReduxProvider>
-            <Posts/>
+            <Posts />
         </ReduxProvider>
     )
 }

@@ -1,0 +1,18 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getOneResource } from "../../utils/getOneResource";
+import type { Study } from "../../interfaces/study.interface";
+import StudyDetail from "../../sections/astro/StudyDetail.astro";
+
+const { slug = "" } = Astro.params;
+
+const study = await getOneResource<Study>("studies", slug as string);
+
+if (!study) {
+    return Astro.redirect("/404");
+}
+---
+
+<Layout>
+    <StudyDetail study={study} />
+</Layout>

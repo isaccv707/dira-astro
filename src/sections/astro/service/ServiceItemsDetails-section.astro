@@ -1,0 +1,23 @@
+---
+import ServicesWrapper from "../../../components/react/wrappers/ServicesWrapper";
+import type { Service } from "../../../interfaces/service.interface";
+
+interface Props {
+    service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<section class="py-10">
+    <h2
+        class="text-xl sm:text-2xl font-extrabold tracking-tight text-yellow-secondary"
+    >
+        {`Servicios de ${service.name} disponibles`}
+    </h2>
+    <p class="mt-1 text-sm sm:text-base text-grey">
+        Explora nuestro catálogo con una gran variedad de servicios y encuentra
+        el ideal para ti.
+    </p>
+</section>
+<ServicesWrapper service={service} client:load />
