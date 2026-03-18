@@ -1,5 +1,5 @@
 import type { PostResponse } from "../../../api/postApi/postApi"
-import Posts from "../../../sections/react/blog/Posts"
+import Posts from "../../../sections/react/blog/Posts-section"
 import ReduxProvider from "../providers/ReduxProvider"
 
 

@@ -16,8 +16,7 @@ const FloatingIconWhatsapp = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 flex flex-col items-end space-y-2 md:z-50">
-
+    <>
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -52,7 +51,7 @@ const FloatingIconWhatsapp = () => {
           </a>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

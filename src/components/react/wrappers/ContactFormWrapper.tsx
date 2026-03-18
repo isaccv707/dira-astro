@@ -1,5 +1,5 @@
 import { ToastContainer } from "react-toastify"
-import { ContactForm } from "../../../sections/react/ContactForm"
+import { ContactForm } from "../../../sections/react/ContactForm-section"
 
 
 const ContactFormWrapper = () => {

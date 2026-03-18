@@ -3,11 +3,11 @@ import image1 from '../../assets/images/home/carousel/2A.jpg';
 import image2 from '../../assets/images/home/carousel/2B.jpg';
 import image3 from '../../assets/images/home/carousel/2C.jpg';
 
-interface CarouselHome {
+interface Carousel {
     img: ImageMetadata
 }
 
-export const carouselHomeData: CarouselHome[] = [
+export const carouselHomeData: Carousel[] = [
     {
         img: image1,
     },

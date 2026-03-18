@@ -1,26 +1,11 @@
 ---
 import AboutCardCarousel from "../components/astro/cards/AboutCardCarousel.astro";
-import NavLinkButton from "../components/react/ui/NavLinkButton";
 import Layout from "../layouts/Layout.astro";
-import MetricsDyra from "../sections/react/MetricsDyra";
-
-const pillars = [
-    {
-        title: "Compromiso con la calidad",
-        description:
-            "Aplicamos estrictos controles internos y externos para asegurar resultados precisos y reproducibles en cada estudio.",
-    },
-    {
-        title: "Cercanía con el paciente",
-        description:
-            "Cuidamos cada detalle: desde la toma de muestra hasta la entrega de resultados, ofreciendo un trato humano y cálido.",
-    },
-    {
-        title: "Soporte a médicos y empresas",
-        description:
-            "Acompañamos la toma de decisiones clínicas y corporativas con reportes claros, oportunos y respaldados por evidencia.",
-    },
-];
+import AboutIdentity from "../sections/astro/about/AboutIdentity-section.astro";
+import CompanyValuesSection from "../sections/astro/about/CompanyValues-section.astro";
+import HeroAboutSection from "../sections/astro/about/HeroAbout-section.astro";
+import MetricsDyra from "../sections/react/MetricsDyra-section";
+import { carouselHomeData } from "../data/carousel/carouselHome-data";
 
 const techHighlights = [
     "Equipos automatizados de última generación.",
@@ -31,187 +16,63 @@ const techHighlights = [
 ---
 
 <Layout>
-    <section class="relative overflow-hidden bg-white text-black">
-        <div
-            class="relative mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 lg:gap-20 lg:px-8 lg:py-24"
+    <div
+        class="relative mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 lg:gap-20 lg:px-8 lg:py-24"
+    >
+        <section
+            class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
         >
-            <div
-                class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
-            >
-                <div class="space-y-6 animate-fade-up">
-                    <p
-                        class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
-                    >
-                        Conócenos
-                        <span class="h-1 w-1 rounded-full bg-green-secondary"
-                        ></span>
-                        DYRA Laboratorio
-                    </p>
+            <HeroAboutSection />
 
-                    <h1
-                        class="text-yellow-secondary text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
-                    >
-                        Un laboratorio clínico
-                        <span
-                            class="block bg-gradient-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
-                        >
-                            confiable, humano y tecnológico.
-                        </span>
-                    </h1>
+            <AboutCardCarousel
+                title={"Laboratorio DYRA"}
+                paragraph={"Diagnóstico y Referencia Analítica"}
+                images={carouselHomeData}
+                items={[
+                    {
+                        icon: "✔",
+                        text: "Resultados con controles de calidad internos y externos",
+                    },
+                    {
+                        icon: "⏱",
+                        text: "Procesos automatizados para tiempos de respuesta óptimos",
+                    },
+                    {
+                        icon: "🌐",
+                        text: "Entrega digital y segura de resultados",
+                    },
+                ]}
+            />
+        </section>
 
-                    <p
-                        class="max-w-xl text-pretty text-sm text-grey sm:text-base"
-                    >
-                        En <span class="font-semibold text-green-secondary"
-                            >Diagnóstico y Referencia Analítica (DYRA)</span
-                        >
-                        {" "}unimos experiencia médica, tecnología de punta y
-                        procesos estandarizados para ofrecer resultados
-                        precisos, oportunos y fáciles de interpretar para
-                        pacientes, médicos y empresas.
-                    </p>
+        <CompanyValuesSection />
 
-                    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div
-                            class="rounded-2xl border border-green-prbg-green-primary/30 bg-green-primary p-4 shadow-lg shadow-green-prbg-green-primary/30"
-                        >
-                            <h2 class="text-lg font-bold text-white">
-                                Nuestra misión
-                            </h2>
-                            <p class="mt-2 text-xs text-white sm:text-sm">
-                                Brindar servicios de laboratorio con altos
-                                estándares de calidad, apoyando el diagnóstico
-                                oportuno y la prevención de enfermedades, con un
-                                enfoque cálido y cercano.
-                            </p>
-                        </div>
+        <MetricsDyra client:visible />
 
-                        <div
-                            class="rounded-2xl border border-yellow-primary/40 bg-green-secondary p-4 shadow-lg shadow-yellow-primary/30"
-                        >
-                            <h2 class="text-lg font-bold text-white">
-                                Nuestra visión
-                            </h2>
-                            <p class="mt-2 text-xs text-white sm:text-sm">
-                                Ser el laboratorio de referencia en la región
-                                por nuestra precisión, innovación tecnológica y
-                                calidad humana en cada contacto con el paciente.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <div
+            class="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-center"
+        >
+            <AboutCardCarousel
+                title={"Laboratorio DYRA"}
+                paragraph={"Diagnóstico y Referencia Analítica"}
+                images={carouselHomeData}
+                items={[
+                    {
+                        icon: "✔",
+                        text: "Resultados con controles de calidad internos y externos",
+                    },
+                    {
+                        icon: "⏱",
+                        text: "Procesos automatizados para tiempos de respuesta óptimos",
+                    },
+                    {
+                        icon: "🌐",
+                        text: "Entrega digital y segura de resultados",
+                    },
+                ]}
+            />
 
-                <AboutCardCarousel />
-            </div>
-
-            {/* Métricas / Stats */}
-            <MetricsDyra client:load />
-
-            {/* Pilares y enfoque tecnológico */}
-            <div
-                class="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
-            >
-                {/* Pilares */}
-                <div class="space-y-6">
-                    <h2
-                        class="text-2xl font-bold tracking-tight text-green-secondary sm:text-3xl"
-                    >
-                        ¿Quiénes somos?
-                    </h2>
-                    <p class="text-sm text-grey sm:text-base">
-                        Somos un laboratorio clínico comprometido con la salud
-                        de nuestros pacientes y con el soporte diagnóstico que
-                        los médicos necesitan. Cada estudio que procesamos está
-                        respaldado por un equipo multidisciplinario y por
-                        tecnología diseñada para reducir errores y aumentar la
-                        precisión.
-                    </p>
-
-                    <div class="grid gap-4 sm:grid-cols-3">
-                        {
-                            pillars.map((pillar) => (
-                                <article class="flex flex-col rounded-2xl border border-white/10 bg-green-secondary p-4 shadow-lg shadow-black/40">
-                                    <h3 class="font-bold text-yellow-primary">
-                                        {pillar.title}
-                                    </h3>
-                                    <p class="mt-2 text-xs text-white sm:text-sm">
-                                        {pillar.description}
-                                    </p>
-                                </article>
-                            ))
-                        }
-                    </div>
-                </div>
-
-                {/* Enfoque tecnológico */}
-                <div
-                    class="rounded-3xl bg-white p-6 sm:p-7 shadow-xl ring-1 ring-black/5"
-                >
-                    <!-- pill -->
-                    <div
-                        class="inline-flex items-center gap-2 rounded-full bg-green-primary/10 px-3 py-1 text-[11px] font-extrabold tracking-[2px] text-green-primary uppercase"
-                    >
-                        <span class="h-2 w-2 rounded-full bg-green-primary"
-                        ></span>
-                        Avance tecnológico
-                    </div>
-
-                    <!-- title -->
-                    <h2
-                        class="mt-4 text-2xl sm:text-3xl font-extrabold tracking-tight text-green-primary"
-                    >
-                        Digitalización y automatización
-                    </h2>
-
-                    <!-- description -->
-                    <p
-                        class="mt-3 text-sm sm:text-base font-medium leading-relaxed text-green-ligth"
-                    >
-                        DYRA integra procesos digitales y automatización para
-                        garantizar trazabilidad y seguridad en cada muestra,
-                        desde la recepción hasta la entrega de resultados.
-                    </p>
-
-                    <!-- badge -->
-                    <div
-                        class="mt-4 inline-flex items-center gap-2 rounded-2xl bg-yellow-primary px-3 py-2"
-                    >
-                        <span class="text-sm font-extrabold text-white"
-                            >+24/7</span
-                        >
-                        <span class="text-xs font-extrabold text-white"
-                            >Trazabilidad</span
-                        >
-                    </div>
-
-                    <!-- list -->
-                    <ul class="mt-6 space-y-3">
-                        {
-                            techHighlights.map((point) => (
-                                <li class="flex items-start gap-3">
-                                    <span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-primary/10 ring-1 ring-green-primary/20">
-                                        <span class="h-2 w-2 rounded-full bg-green-primary" />
-                                    </span>
-                                    <span class="text-sm sm:text-base text-black/80 leading-relaxed">
-                                        {point}
-                                    </span>
-                                </li>
-                            ))
-                        }
-                    </ul>
-
-                    <!-- footer highlight -->
-                    <div
-                        class="mt-7 rounded-2xl border border-green-primary/20 bg-green-primary/5 p-4"
-                    >
-                        <p class="text-sm sm:text-base font-bold text-black/85">
-                            Nuestro objetivo es que cada paciente y cada médico
-                            sienta que está trabajando con un aliado confiable,
-                            moderno y preparado para el futuro.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <AboutIdentity />
         </div>
-    </section>
+    </div>
 </Layout>

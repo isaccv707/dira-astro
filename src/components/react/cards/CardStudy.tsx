@@ -1,9 +1,9 @@
-import { Calendar, Clock, FlaskConical, ShoppingCart, CheckCircle2, CreditCard } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Calendar, Clock, FlaskConical, ShoppingCart, Trash2 } from "lucide-react";
 import NavLinkButton from "../ui/NavLinkButton";
-import useDrawerManager from "../../../hooks/useDrawerManager";
 import Button from "../ui/Button";
 import type { Study } from "../../../interfaces/study.interface";
-import { useQuoterContext } from "../../../hooks/useQuoterContext";
+import { addToCart, getCart, removeFromCart, CART_UPDATED_EVENT } from "../../../utils/cart";
 
 interface CardStudyProps {
     study: Study;
@@ -15,14 +15,29 @@ const CardStudy = ({
     isRequiredAppointment = false,
 }: CardStudyProps) => {
     const { code, deliveryTime, id, name, price, slug, description, preparation, sampleType } = study;
-    const { open } = useDrawerManager();
+    const [isInCart, setIsInCart] = useState(false);
 
+    const checkCartStatus = () => {
+        const cart = getCart();
+        setIsInCart(cart.some(s => s.id === id));
+    };
 
-    const handleAddToCart = () => {
-        open("STUDIES_DRAWER", {
-            title: "Estudios Seleccionados",
-            data: []
-        });
+    useEffect(() => {
+        checkCartStatus();
+        window.addEventListener(CART_UPDATED_EVENT, checkCartStatus);
+        window.addEventListener("storage", checkCartStatus);
+        return () => {
+            window.removeEventListener(CART_UPDATED_EVENT, checkCartStatus);
+            window.removeEventListener("storage", checkCartStatus);
+        };
+    }, [id]);
+
+    const handleAction = () => {
+        if (isInCart) {
+            removeFromCart(id);
+        } else {
+            addToCart(study);
+        }
     };
 
     return (
@@ -97,7 +112,10 @@ const CardStudy = ({
                     type="button"
                     size="md"
                     width="full"
-                    onClick={handleAddToCart}
+                    onClick={handleAction}
+                    variant={isInCart ? "danger" : "primary"}
+                    text={isInCart ? "Eliminar" : "Agregar"}
+                    icon={isInCart ? <Trash2 className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
                 />
             </div>
         </div>

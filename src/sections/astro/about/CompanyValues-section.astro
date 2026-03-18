@@ -1,0 +1,17 @@
+---
+import MissionVisionCard from "../../../components/astro/cards/MissionVisionCard.astro";
+import { companyValues } from "../../../data/about/companyValues-data";
+---
+
+<section class="grid gap-4 sm:grid-cols-3 sm:gap-6">
+    {
+        companyValues.map(({ title, paragraph, bgColor, icon }) => (
+            <MissionVisionCard
+                title={title}
+                paragraph={paragraph}
+                bgColor={bgColor}
+                icon={icon}
+            />
+        ))
+    }
+</section>

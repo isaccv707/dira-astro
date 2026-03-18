@@ -1,5 +1,5 @@
 import { ModalProvider } from "../../../contexts/ModalContext"
-import QuickActions from "../../../sections/react/QuickActions"
+import QuickActions from "../../../sections/react/QuickActions-section"
 
 
 const QuickActionsWrapper = () => {

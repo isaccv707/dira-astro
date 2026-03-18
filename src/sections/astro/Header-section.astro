@@ -1,8 +1,9 @@
 ---
-import Navbar from "./Navbar.astro";
+
 import DrawerWrapper from "../../components/react/wrappers/DrawerWrapper";
 import logoDyra from "../../assets/images/logos/logo.png";
 import { SOCIAL_NETWORKS } from "../../constants/socialNetworks";
+import NavbarSection from "./Navbar-section.astro";
 ---
 
 <header class="bg-white shadow-md px-4 sm:px-8 py-4 sticky top-0 z-50">
@@ -17,7 +18,7 @@ import { SOCIAL_NETWORKS } from "../../constants/socialNetworks";
 
     <div class="flex items-center gap-4">
       <div class="hidden md:block">
-        <Navbar />
+        <NavbarSection />
       </div>
 
       <div class="hidden md:flex items-center gap-4">

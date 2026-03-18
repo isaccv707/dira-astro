@@ -1,14 +1,16 @@
 
 import { ModalProvider } from "../../../contexts/ModalContext"
-import OurServices from "../../../sections/react/OurServices"
-import ButtonModal from "../ui/ButtonModal"
+import OurServicesSection from "../../../sections/react/OurServices-section"
+import ReduxProvider from "../providers/ReduxProvider"
 
 
 const ModalServiceWrapper = () => {
     return (
-        <ModalProvider>
-            <OurServices />
-        </ModalProvider>
+        <ReduxProvider>
+            <ModalProvider>
+                <OurServicesSection />
+            </ModalProvider>
+        </ReduxProvider>
     )
 }
 

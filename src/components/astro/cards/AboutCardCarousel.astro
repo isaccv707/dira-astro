@@ -1,5 +1,17 @@
 ---
 import CarouselAbout from "../../react/carousel/CarouselAbout";
+
+interface Props {
+    title: string;
+    paragraph: string;
+    images: any;
+    items: {
+        icon: string;
+        text: string;
+    }[];
+}
+
+const { title, paragraph, items, images } = Astro.props;
 ---
 
 <div class="relative mx-auto w-full max-w-md">
@@ -11,10 +23,10 @@ import CarouselAbout from "../../react/carousel/CarouselAbout";
                 <p
                     class="text-xs uppercase tracking-[0.2em] font-bold text-green-secondary"
                 >
-                    Laboratorio DYRA
+                    {title}
                 </p>
                 <p class="text-xl font-bold text-green-primary">
-                    Diagnóstico y Referencia Analítica
+                    {paragraph}
                 </p>
             </div>
         </div>
@@ -24,36 +36,18 @@ import CarouselAbout from "../../react/carousel/CarouselAbout";
         </div>
 
         <div class="mt-4 grid gap-3 text-xs text-grey sm:text-sm">
-            <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-2">
-                    <span
-                        class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-green-secondary"
-                    >
-                        ✔
-                    </span>
-                    Resultados con controles de calidad internos y externos
-                </span>
-            </div>
-            <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-2">
-                    <span
-                        class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-primary/10 text-xs text-yellow-primary"
-                    >
-                        ⏱
-                    </span>
-                    Procesos automatizados para tiempos de respuesta óptimos
-                </span>
-            </div>
-            <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-2">
-                    <span
-                        class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-green-secondary"
-                    >
-                        🌐
-                    </span>
-                    Entrega digital y segura de resultados
-                </span>
-            </div>
+            {
+                items.map(({ icon, text }) => (
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="flex items-center gap-2">
+                            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-green-secondary">
+                                {icon}
+                            </span>
+                            {text}
+                        </span>
+                    </div>
+                ))
+            }
         </div>
     </div>
 </div>
