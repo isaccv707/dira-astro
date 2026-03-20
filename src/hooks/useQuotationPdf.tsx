@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { QuotationPayload } from "../api/interfaces/quotation.interface"
-import { useDownloadQuotationPdfMutation } from "../api/quotationApi/quotationAPi";
 import type { Client } from "../interfaces/client.interface"
 import type { Study } from "../interfaces/study.interface"
 import { toast } from "react-toastify";
+import { useDownloadQuotationPdfMutation } from "../api/quotationsApi/quotationAPi";
 
 interface useQuotationPdf {
     client: Client | null

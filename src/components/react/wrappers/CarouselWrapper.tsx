@@ -1,13 +1,12 @@
 import CarouselHome from "../carousel/CarouselHome"
 import ReduxProvider from "../providers/ReduxProvider"
 
-
-const CarouselHomeWrapper = () => {
+const CarouselWrapper = () => {
   return (
     <ReduxProvider>
-      <CarouselHome/>
+      <CarouselHome />
     </ReduxProvider>
   )
 }
 
-export default CarouselHomeWrapper
+export default CarouselWrapper

@@ -1,15 +1,21 @@
-import { SwiperSlide } from "swiper/react";
-import { carouselHomeData } from "../../../data/carousel/carouselHome-data";
+import { useGetActiveBannersQuery } from "../../../api/bannersApi/bannerApi";
+import CarouselSkeleton from "./CarouselSkeleton";
 import Carousel from "./Carousel";
+import { SwiperSlide } from "swiper/react";
 
 const CarouselHome = () => {
+    const { data: banners, isLoading, isError } = useGetActiveBannersQuery('HOME');
+
+    if (isLoading) return <CarouselSkeleton />
+    if (isError) return null
+
     return (
         <Carousel>
-            {carouselHomeData.map(({ img }, index) => (
+            {banners?.map(({ imageUrl }, index) => (
                 <SwiperSlide key={index}>
                     <img
-                        src={img?.src}
-                        alt={img.src}
+                        src={imageUrl}
+                        alt={imageUrl}
                         className="w-full h-auto aspect-16/7 object-cover rounded-2xl"
                         loading="lazy"
                     />

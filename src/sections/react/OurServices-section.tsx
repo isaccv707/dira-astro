@@ -1,4 +1,4 @@
-import { useGetAllServicesQuery } from "../../api/serviceApi/serviceApi";
+import { useGetAllServicesQuery } from "../../api/servicesApi/serviceApi";
 import ServiceCard from "../../components/react/cards/ServiceCard";
 import useModalManager from "../../hooks/useModalManager";
 import type { Service } from "../../interfaces/service.interface";
