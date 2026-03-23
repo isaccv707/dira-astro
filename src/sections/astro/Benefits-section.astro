@@ -4,9 +4,7 @@ import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
 import { benefits } from "../../data/benefits/benefits-data";
 ---
 
-<section
-    class="w-full h-auto flex flex-col justify-center bg-green-secondary py-16 md:py-24 lg:py-32 px-4 sm:px-8 lg:px-12"
->
+<section>
     <div class="flex justify-center text-center mb-5">
         <HeaderBySection
             textHeader={"Beneficios para nuestros clientes"}
@@ -15,19 +13,15 @@ import { benefits } from "../../data/benefits/benefits-data";
         />
     </div>
 
-    <div
-        class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 text-center space-y-12"
-    >
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {
-                benefits.map(({ icon, description, title }) => (
-                    <BenefitCard
-                        title={title}
-                        description={description}
-                        icon={icon}
-                    />
-                ))
-            }
-        </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        {
+            benefits.map(({ icon, description, title }) => (
+                <BenefitCard
+                    title={title}
+                    description={description}
+                    icon={icon}
+                />
+            ))
+        }
     </div>
 </section>

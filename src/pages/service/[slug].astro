@@ -1,12 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import type { Service } from "../../interfaces/service.interface";
+
 import ServiceHeroSection from "../../sections/astro/service/ServiceHero-section.astro";
 import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits-section.astro";
-import Cat from "../../components/astro/ui/Cat.astro";
-import ServicesWrapper from "../../components/react/wrappers/ServicesWrapper";
-import { getOneResource } from "../../utils/getOneResource";
 import ServiceItemsDetailsSection from "../../sections/astro/service/ServiceItemsDetails-section.astro";
+
+import Cat from "../../components/astro/ui/Cat.astro";
+
+import type { Service } from "../../interfaces/service.interface";
+import { getOneResource } from "../../utils/getOneResource";
 
 const { slug } = Astro.params;
 
@@ -19,34 +21,23 @@ if (!service) {
   return Astro.redirect("/404");
 }
 
-const { name, description = "", imageUrl = "", benefits = []} = service;
+const { name, description = "", imageUrl = "", benefits = [] } = service;
 ---
-
 <Layout title={`${name} | DYRA`}>
-  <div class="relative overflow-x-hidden">
-    <ServiceHeroSection
-      name={name}
-      description={description}
-      imageUrl={imageUrl}
-    />
+  <ServiceHeroSection
+    name={name}
+    description={description}
+    imageUrl={imageUrl}
+  />
 
-    <div class="relative w-full">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ServiceBenefitsSection benefits={benefits} />
+  <ServiceBenefitsSection benefits={benefits} />
 
-        <ServiceItemsDetailsSection service={service}/>
+  <ServiceItemsDetailsSection service={service} />
 
-        <section class="py-20 md:py-32">
-          <div class="relative rounded-[3rem] overflow-hidden group">
-            <Cat
-              title="¿No sabes qué estudio necesitas?"
-              paragraph={`Nuestro equipo de expertos te ayudará a elegir el estudio ideal según tu caso clínico, indicándote la preparación necesaria y facilitando tu proceso de agenda.`}
-            />
-          </div>
-        </section>
-      </div>
-    </div>
-  </div>
+  <Cat
+    title="¿No sabes qué estudio necesitas?"
+    paragraph={`Nuestro equipo de expertos te ayudará a elegir el estudio ideal según tu caso clínico, indicándote la preparación necesaria y facilitando tu proceso de agenda.`}
+  />
 </Layout>
 
 <style>

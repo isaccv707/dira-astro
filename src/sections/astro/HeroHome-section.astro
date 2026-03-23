@@ -5,22 +5,18 @@ import logo from "../../assets/images/logos/logo.png";
 ---
 
 <section>
-    <div class="mx-auto w-full max-w-8xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <div
-            class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center"
-        >
-            <div class="text-center md:text-left">
-                <Hero
-                    img={logo}
-                    textHeader={"Resultados confiables • Atención rápida"}
-                    title={"Bienvenido a DYRA"}
-                    paragraph={`Explora nuestros servicios y encuentra lo que necesitas con una experiencia rápida, clara y profesional.`}
-                />
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:gap-12 items-center">
+        <div class="text-center md:text-left">
+            <Hero
+                img={logo}
+                textHeader={"Resultados confiables • Atención rápida"}
+                title={"Bienvenido a DYRA"}
+                paragraph={`Explora nuestros servicios y encuentra lo que necesitas con una experiencia rápida, clara y profesional.`}
+            />
+        </div>
 
-            <div class="w-full">
-                <CarouselHomeWrapper client:load />
-            </div>
+        <div class="w-full">
+            <CarouselHomeWrapper client:load />
         </div>
     </div>
 </section>

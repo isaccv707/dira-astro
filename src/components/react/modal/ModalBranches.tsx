@@ -6,6 +6,7 @@ interface ModalBranchesProps {
   id: string;
   title: string;
   data: Branch[];
+  paragraph?: string;
   openInNewTab?: boolean;
 }
 
@@ -13,6 +14,7 @@ const ModalBranches = ({
   data: branches,
   id,
   title,
+  paragraph = 'Selecciona la sucursal de tu preferencia.',
   openInNewTab = true,
 }: ModalBranchesProps) => {
   const { close } = useModalManager();
@@ -34,7 +36,7 @@ const ModalBranches = ({
     <Modal id={id} title={title} onClose={() => close(id)} open>
       <div className="p-5">
         <p className="text-sm text-gray-600">
-          Selecciona la sucursal donde te realizaste tus estudios para abrir el portal de resultados.
+          {paragraph}
         </p>
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">

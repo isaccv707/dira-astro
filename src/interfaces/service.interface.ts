@@ -31,6 +31,7 @@ export interface Service {
     slug: string
     description?: string
     imageUrl?: string
+    mobileImageUrl?: string
     isActive?: boolean;
     benefits?: Benefits[];
     details?: Details[];

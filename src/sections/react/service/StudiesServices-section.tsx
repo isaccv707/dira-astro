@@ -6,22 +6,10 @@ import SearchServices from "./SearchServices";
 import Pagination from "../../../components/react/ui/Pagination";
 import useSearchStudies from "../../../hooks/useSearchStudies";
 import CardStudy from "../../../components/react/cards/CardStudy";
+import StudyCardSkeleton from "../../../components/react/skeleton/StudyCardSkeleton";
 
 
-const LIMIT = 12;
-
-const StudyCardSkeleton = () => (
-  <div className="w-full bg-white border border-gray-100 rounded-[2rem] p-6 flex flex-col items-center animate-pulse shadow-sm">
-    <div className="w-full h-48 bg-gray-50 rounded-2xl mb-6"></div>
-    <div className="h-6 w-3/4 bg-gray-200 rounded-full mb-4"></div>
-    <div className="h-4 w-1/2 bg-gray-100 rounded-full mb-6"></div>
-    <div className="space-y-3 w-full mb-8">
-      <div className="h-3 w-full bg-gray-50 rounded-full"></div>
-      <div className="h-3 w-5/6 bg-gray-50 rounded-full"></div>
-    </div>
-    <div className="mt-auto w-full h-12 bg-gray-100 rounded-2xl"></div>
-  </div>
-);
+const LIMIT = 8;
 
 const StudiesServices = () => {
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
@@ -53,23 +41,14 @@ const StudiesServices = () => {
   }, [totalPages]);
 
   return (
-    <div id="services-section" className="pb-20">
-      <div className="sticky top-0 z-30 py-6  backdrop-blur-md mb-8 border-b border-gray-50">
+    <div id="services-section">
+      <div className="sticky top-0 z-30  backdrop-blur-md mb-8 border-b border-gray-50">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="w-full lg:max-w-xl">
             <SearchServices onSearchChange={handleSearchChange} />
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-2xl border border-gray-100">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Vista:</span>
-              <div className="flex gap-1">
-                <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-green-ligth">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                </div>
-              </div>
-            </div>
-
             <div className="inline-flex items-center gap-3 rounded-2xl bg-green-ligth/5 border border-green-ligth/10 px-5 py-2.5 shadow-sm">
               <div className="relative flex h-2.5 w-2.5">
                 {isFetching && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-ligth opacity-75"></span>}
