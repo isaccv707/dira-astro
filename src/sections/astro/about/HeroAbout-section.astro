@@ -1,7 +1,9 @@
 ---
-
+import PillarGrid from "../../../components/astro/ui/PillarGrid.astro";
+import { benefitsCompany } from "../../../data/about/aboutIdentity";
 ---
-<div class="space-y-6 animate-fade-up">
+
+<section>
     <p
         class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
     >
@@ -29,4 +31,12 @@
         estandarizados para ofrecer resultados precisos, oportunos y fáciles de
         interpretar para pacientes, médicos y empresas.
     </p>
-</div>
+
+    <div class="mt-4 grid gap-4 sm:grid-cols-3">
+        {
+            benefitsCompany.map(({ title, description }) => (
+                <PillarGrid title={title} description={description} />
+            ))
+        }
+    </div>
+</section>

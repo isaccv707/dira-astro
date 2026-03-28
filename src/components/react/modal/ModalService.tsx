@@ -4,6 +4,7 @@ import type { Service } from "../../../interfaces/service.interface";
 import { useEffect, useState } from "react";
 import whatsappIcon from "../../../assets/icons/networks-icons/whatsapp.png";
 import gmailIcon from "../../../assets/icons/networks-icons/gmail.png";
+import { getCloudinaryUrl, getCloudinarySrcSet } from "../../../utils/cloudinary";
 
 interface ModalServiceProps {
     id: string;
@@ -25,25 +26,27 @@ const ModalService = ({ id, data: service, title }: ModalServiceProps) => {
                 <div className="rounded-2xl bg-white/70 backdrop-blur-sm">
                     <div className="flex flex-col gap-5 md:gap-8 md:flex-row">
                         <div className="md:w-5/12">
-                            <figure className="relative overflow-hidden rounded-2xl border border-black/5 shadow-sm bg-neutral-100">
+                            <figure className="relative overflow-hidden rounded-2xl border border-black/5 shadow-sm bg-neutral-100 aspect-[4/5] md:aspect-auto">
                                 {/* Skeleton Loader */}
                                 {!loaded && (
                                     <div className="absolute inset-0 z-10 animate-pulse bg-neutral-200" />
                                 )}
 
                                 <picture>
-                                    {/* Imagen para Desktop (MD hacia arriba) */}
+                                    {/* Desktop Optimization */}
                                     <source
                                         media="(min-width: 768px)"
-                                        srcSet={imageUrl}
+                                        srcSet={getCloudinarySrcSet(imageUrl || mobileImageUrl, [400, 600, 800])}
                                     />
-                                    {/* Imagen por defecto (Mobile) e implementación de carga */}
+                                    {/* Mobile/Default Optimization */}
                                     <img
-                                        src={mobileImageUrl} // El src base es la versión móvil
+                                        src={getCloudinaryUrl(mobileImageUrl || imageUrl, { width: 400, height: 500 })}
                                         alt={title}
                                         decoding="async"
                                         loading="eager"
                                         fetchPriority="high"
+                                        width={400}
+                                        height={500}
                                         onLoad={() => setLoaded(true)}
                                         className={`
                                                 h-full w-full object-cover transition-opacity duration-500

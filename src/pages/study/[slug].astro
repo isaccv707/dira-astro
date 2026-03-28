@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { getOneResource } from "../../utils/getOneResource";
 import type { Study } from "../../interfaces/study.interface";
-import StudyDetail from "../../sections/astro/StudyDetail.astro";
+import StudyDetailSection from "../../sections/astro/StudyDetail-section.astro";
 
 const { slug = "" } = Astro.params;
 
@@ -14,5 +14,5 @@ if (!study) {
 ---
 
 <Layout>
-    <StudyDetail study={study} />
+    <StudyDetailSection study={study} />
 </Layout>

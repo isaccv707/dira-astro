@@ -1,0 +1,9 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BranchWrapper from "../components/react/wrappers/BranchWrapper";
+import MetricsDyra from "../sections/react/MetricsDyra-section";
+---
+<Layout title="Nuestras Sucursales | DYRA" description="Encuentra tu sucursal de Laboratorio DYRA más cercana. Contamos con múltiples ubicaciones para tu comodidad.">
+  <BranchWrapper client:load />
+  <MetricsDyra client:visible />
+</Layout>

@@ -1,4 +1,4 @@
-import { useGetAllStudiesQuery } from "../../../../api/studiesApi/StudyApi";
+import { useGetAllStudiesQuery } from "../../../../api/studiesApi/studiesApi";
 
 
 interface useGetAllStudiesProps {

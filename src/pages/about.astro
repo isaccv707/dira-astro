@@ -1,78 +1,38 @@
 ---
 import AboutCardCarousel from "../components/astro/cards/AboutCardCarousel.astro";
 import Layout from "../layouts/Layout.astro";
-import AboutIdentity from "../sections/astro/about/AboutIdentity-section.astro";
 import CompanyValuesSection from "../sections/astro/about/CompanyValues-section.astro";
 import HeroAboutSection from "../sections/astro/about/HeroAbout-section.astro";
 import MetricsDyra from "../sections/react/MetricsDyra-section";
 import { carouselHomeData } from "../data/carousel/carouselHome-data";
-
-const techHighlights = [
-    "Equipos automatizados de última generación.",
-    "Integración digital para envío de resultados en línea.",
-    "Trazabilidad completa de la muestra desde la toma hasta el resultado.",
-    "Protocolos estandarizados y validados por especialistas.",
-];
 ---
 
 <Layout>
-    <div
-        class="relative mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 lg:gap-20 lg:px-8 lg:py-24"
-    >
-        <section
-            class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
-        >
-            <HeroAboutSection />
+    <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
+        <HeroAboutSection />
 
-            <AboutCardCarousel
-                title={"Laboratorio DYRA"}
-                paragraph={"Diagnóstico y Referencia Analítica"}
-                images={carouselHomeData}
-                items={[
-                    {
-                        icon: "✔",
-                        text: "Resultados con controles de calidad internos y externos",
-                    },
-                    {
-                        icon: "⏱",
-                        text: "Procesos automatizados para tiempos de respuesta óptimos",
-                    },
-                    {
-                        icon: "🌐",
-                        text: "Entrega digital y segura de resultados",
-                    },
-                ]}
-            />
-        </section>
-
-        <CompanyValuesSection />
-
-        <MetricsDyra client:visible />
-
-        <div
-            class="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-center"
-        >
-            <AboutCardCarousel
-                title={"Laboratorio DYRA"}
-                paragraph={"Diagnóstico y Referencia Analítica"}
-                images={carouselHomeData}
-                items={[
-                    {
-                        icon: "✔",
-                        text: "Resultados con controles de calidad internos y externos",
-                    },
-                    {
-                        icon: "⏱",
-                        text: "Procesos automatizados para tiempos de respuesta óptimos",
-                    },
-                    {
-                        icon: "🌐",
-                        text: "Entrega digital y segura de resultados",
-                    },
-                ]}
-            />
-
-            <AboutIdentity />
-        </div>
+        <AboutCardCarousel
+            title={"Laboratorio DYRA"}
+            paragraph={"Diagnóstico y Referencia Analítica"}
+            images={carouselHomeData}
+            items={[
+                {
+                    icon: "✔",
+                    text: "Resultados con controles de calidad internos y externos",
+                },
+                {
+                    icon: "⏱",
+                    text: "Procesos automatizados para tiempos de respuesta óptimos",
+                },
+                {
+                    icon: "🌐",
+                    text: "Entrega digital y segura de resultados",
+                },
+            ]}
+        />
     </div>
+
+    <CompanyValuesSection />
+
+    <MetricsDyra client:visible />
 </Layout>

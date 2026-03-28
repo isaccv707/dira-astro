@@ -1,21 +1,8 @@
 import type { Study } from "../../interfaces/study.interface";
 import { api } from "../api";
+import type { GetAllStudiesParams, GetAllStudiesResponse } from "../interfaces/study.interface";
 
-type GetAllStudiesParams = {
-    page?: number;
-    limit?: number;
-    search?: string;
-}
 
-interface GetAllStudiesResponse {
-    items: Study[];
-    meta: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-    }
-}
 
 export const studiesApi = api.injectEndpoints({
     endpoints: (builder) => ({

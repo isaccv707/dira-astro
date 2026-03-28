@@ -2,22 +2,25 @@
 import { GiChemicalDrop } from "react-icons/gi";
 import { quickActions } from "../../data/quickActions/quickActions";
 import useModalManager from "../../hooks/useModalManager";
-import { branches } from "../../data/branches/branches";
+import { useGetAllBranchesQuery, useLazyGetAllBranchesQuery } from "../../api/branchesApi/branchesApi";
 
-const QuickActions = () => {
+const QuickActionsSection = () => {
+    const [triggerFetchBranches, { data: branches, isFetching }] = useLazyGetAllBranchesQuery()
 
     const { open } = useModalManager();
 
-    const handleOpanModel = () => {
+    const handleOpanModel = async () => {
+        const response = await triggerFetchBranches().unwrap();
+
         open("MODAL_BRANCHES", {
             title: "Consulta de resultados",
-            data: branches,
+            data: response,
             paragraph: 'Selecciona la sucursal de tu preferencia.'
         })
     }
 
     return (
-        <section className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10">
             {
                 quickActions.map(({ path, bgColor, Icon, text, disabled }, index) => (
                     <a
@@ -45,8 +48,8 @@ const QuickActions = () => {
                 </div>
                 <span className="text-lg text-center">Resultados</span>
             </button>
-        </section>
+        </div>
     )
 }
 
-export default QuickActions
+export default QuickActionsSection
