@@ -1,29 +1,12 @@
 ---
-import type { Post as PostType } from "../../api/interfaces/post.interface";
-
 import Layout from "../../layouts/Layout.astro";
 import Post from "../../sections/astro/Post.astro";
-import { API_URL } from "../../constants/apiUrl";
+import type { Post as PostType } from "../../api/interfaces/post.interface";
+import { getOneResource } from "../../utils/getOneResource";
 
 const { slug = "" } = Astro.params;
 
-const fetchPost = async (slug: string): Promise<PostType | null> => {
-    try {
-        const base = API_URL.endsWith("/") ? API_URL : `${API_URL}/`;
-        const url = new URL(`posts/${slug}`, base);
-        const response = await fetch(url.toString());
-        if (!response.ok) {
-            if (response.status === 404) return null;
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching post details:", error);
-        return null;
-    }
-};
-
-const post = await fetchPost(slug);
+const post = await getOneResource<PostType>("posts", slug as string);
 
 if (!post) {
     return Astro.redirect("/404");

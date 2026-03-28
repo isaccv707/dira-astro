@@ -1,32 +1,23 @@
 import { DrawerProvider } from "../../../contexts/DrawerContext"
-import type { Service } from "../../../interfaces/service.interface"
-import ServiceRenderer from "../../../sections/react/service/ServiceRenderer"
 import ReduxProvider from "../providers/ReduxProvider"
+import type { Service } from "../../../interfaces/service.interface"
+import StudiesServices from "../../../sections/react/service/StudiesServices-section"
 
 interface ServicesWrapperProps {
-    service: Service<any>
+    service: Service
 }
 const ServicesWrapper = ({ service }: ServicesWrapperProps) => {
 
+    const { _count } = service;
+    
     return (
         <ReduxProvider>
             <DrawerProvider>
-                <div
-                    className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
-                >
-                    <div>
-                        <h2
-                            className="text-xl sm:text-2xl font-extrabold tracking-tight text-yellow-secondary"
-                        >
-                            {`Servicios de ${service.title} disponibles`}
-                        </h2>
-                        <p className="mt-1 text-sm sm:text-base text-grey">
-                            Explora nuestro catálogo con una gran variedad de pruebas y
-                            encuentra el estudio ideal para ti.
-                        </p>
-                    </div>
-                </div>
-                <ServiceRenderer service={service} />
+                {
+                    _count && _count.studies > 0 ? (
+                        <StudiesServices/>
+                    ) : null
+                }
             </DrawerProvider>
         </ReduxProvider>
     )

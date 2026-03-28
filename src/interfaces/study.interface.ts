@@ -1,14 +1,15 @@
 export interface Study {
     id: string;
-    code: string;
     name: string;
+    slug: string;
+    code: string;
     description?: string;
+    price: number;
+    sampleType?: string | null;
     deliveryTime: number;
     preparation?: string;
-    sampleType?: string | null;
-    price: number;
-    quantity?: number;
     isActive: boolean;
     createdAt?: string;
     updateAt?: string;
+    quantity?: number;
 }

@@ -5,6 +5,7 @@ import { MODALS } from "../components/react/modal/modals";
 export type ModalPropsType = {
     title: string;
     data: any
+    paragraph?: string;
 }
 
 type ModalType = {

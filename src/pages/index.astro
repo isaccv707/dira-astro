@@ -1,34 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HeroHome from "../sections/astro/HeroHome.astro";
-import OurServices from "../sections/astro/OurServices.astro";
-import About from "../sections/astro/About.astro";
-import Benefits from "../sections/astro/Benefits.astro";
-import QuickActionsWrapper from "../components/react/wrappers/QuickActionsWrapper";
+import BenefitsSection from "../sections/astro/Benefits-section.astro";
+import QuickActionsSection from "../sections/astro/QuickActions-section.astro";
+import AboutSection from "../sections/astro/About-section.astro";
+import OurServicesSection from "../sections/astro/OurServices-section.astro";
+import HeroHomeSection from "../sections/astro/HeroHome-section.astro";
 ---
 
-<Layout>
-    <main class="overflow-x-hidden flex flex-col">
-        <section class="w-full">
-            <HeroHome />
-        </section>
+<Layout 
+    title="Laboratorio DYRA | Diagnóstico y Referencia Analítica"
+    description="Bienvenido a Laboratorio DYRA. Ofrecemos análisis clínicos con tecnología de punta y calidez humana en Guadalajara y Colima."
+>
+    <HeroHomeSection />
 
-        <section class="w-full py-12 md:py-16 lg:py-20 px-4 sm:px-8 lg:px-12">
-            <QuickActionsWrapper client:load />
-        </section>
+    <QuickActionsSection />
 
-        <section class="w-full py-12 md:py-20 lg:py-24 px-4 sm:px-8 lg:px-12">
-            <OurServices />
-        </section>
+    <OurServicesSection />
 
-        <section class="w-full bg-white py-16 md:py-24 lg:py-32 px-4 sm:px-8 lg:px-12">
-            <About />
-        </section>
+    <AboutSection />
 
-        <section
-            class="w-full h-auto flex flex-col justify-center bg-green-secondary py-16 md:py-24 lg:py-32 px-4 sm:px-8 lg:px-12"
-        >
-            <Benefits />
-        </section>
-    </main>
+    <BenefitsSection />
 </Layout>

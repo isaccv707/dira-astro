@@ -1,0 +1,45 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    icon: string;
+}
+
+const { title, description, icon } = Astro.props;
+---
+
+<div
+    class="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/40 p-6 shadow-lg backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:bg-white/60 hover:shadow-xl"
+>
+    <div
+        class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-green-primary/5 blur-2xl transition-all duration-500 group-hover:bg-green-primary/10"
+    >
+    </div>
+
+    <div class="relative flex flex-col gap-4">
+        <div
+            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110"
+        >
+            <img
+                src={icon}
+                alt={title}
+                class="h-7 w-7 object-contain"
+                loading="lazy"
+            />
+        </div>
+
+        <div>
+            <h3 class="text-base font-bold tracking-tight text-green-primary">
+                {title}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-grey/90">
+                {description}
+            </p>
+        </div>
+    </div>
+
+    <div
+        class="absolute bottom-0 left-0 h-1 w-0 bg-green-primary transition-all duration-500 group-hover:w-full"
+    >
+    </div>
+</div>

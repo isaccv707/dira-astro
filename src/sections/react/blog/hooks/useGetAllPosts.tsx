@@ -1,4 +1,4 @@
-import { useGetAllPostsQuery } from "../../../../api/postApi/postApi";
+import { useGetAllPostsQuery } from "../../../../api/postsApi/postApi";
 
 
 interface useGetAllPostsParams {

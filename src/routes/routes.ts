@@ -6,7 +6,6 @@ export interface Routes {
 
 const routes: Routes[] = [
     { path: '/', text: 'Inicio' },
-    { path: '/blog', text: 'Blog' }
 ]
 
 const servicesRoutes: Routes[] = [
@@ -23,7 +22,7 @@ const resultsRoutes: Routes[] = [
 const getToKnowRoutes: Routes[] = [
     { path: '/about', text: 'Conócenos' },
     { path: '/contact', text: 'Contáctanos' },
-    { path: '/branchs', text: 'Nuestras Sucursales' },
+    { path: '/branches', text: 'Nuestras Sucursales' },
 ]
 
 export {

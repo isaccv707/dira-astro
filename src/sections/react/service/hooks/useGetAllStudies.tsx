@@ -1,4 +1,5 @@
-import { useGetAllStudiesQuery } from "../../../../api/studiesApi/StudyApi"
+import { useGetAllStudiesQuery } from "../../../../api/studiesApi/studiesApi";
+
 
 interface useGetAllStudiesProps {
     page: number;
@@ -15,8 +16,8 @@ const useGetAllStudies = ({ limit, page, search }: useGetAllStudiesProps) => {
     const studies = data?.items ?? [];
     const meta = data?.meta;
 
-    const  totalStudies = meta?.total ?? 1
-    
+    const totalStudies = meta?.total ?? 1
+
     return {
         studies,
         meta,

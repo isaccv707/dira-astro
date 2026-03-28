@@ -1,0 +1,33 @@
+---
+import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import logo from "../../assets/images/logos/logo.png";
+import imgAbout from "../../assets/images/home/carousel/2A.jpg";
+---
+
+<section>
+    <div class="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+        <div class="w-full">
+            <div class="max-w-prose">
+                <HeaderBySection
+                    textHeader="Diagnóstico y Referencia Analítica"
+                    title="Acerca de nosotros"
+                    paragraph="En DYRA brindamos servicios de diagnóstico clínico y referencia analítica con un enfoque en precisión, rapidez y atención humana. Contamos con procesos estandarizados y control de calidad para ofrecer resultados confiables que apoyen la toma de decisiones médicas."
+                    img={logo}
+                    textColor="yellow-secondary"
+                    btn={true}
+                />
+            </div>
+        </div>
+        <div class="flex justify-center md:justify-start">
+            <img
+                src={imgAbout.src}
+                alt="Imagen DYRA"
+                class="w-full max-w-md md:max-w-lg h-auto rounded-xl object-cover"
+                loading="lazy"
+                decoding="async"
+                width={512}
+                height={400}
+            />
+        </div>
+    </div>
+</section>

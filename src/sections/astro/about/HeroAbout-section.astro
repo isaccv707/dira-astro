@@ -1,0 +1,42 @@
+---
+import PillarGrid from "../../../components/astro/ui/PillarGrid.astro";
+import { benefitsCompany } from "../../../data/about/aboutIdentity";
+---
+
+<section>
+    <p
+        class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
+    >
+        Conócenos
+        <span class="h-1 w-1 rounded-full bg-green-secondary"></span>
+        DYRA Laboratorio
+    </p>
+
+    <h1
+        class="text-yellow-secondary text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
+    >
+        Un laboratorio clínico
+        <span
+            class="block bg-gradient-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
+        >
+            confiable, humano y tecnológico.
+        </span>
+    </h1>
+
+    <p class="max-w-xl text-pretty text-sm text-grey sm:text-base">
+        En <span class="font-semibold text-green-secondary"
+            >Diagnóstico y Referencia Analítica (DYRA)</span
+        >
+        {" "}unimos experiencia médica, tecnología de punta y procesos
+        estandarizados para ofrecer resultados precisos, oportunos y fáciles de
+        interpretar para pacientes, médicos y empresas.
+    </p>
+
+    <div class="mt-4 grid gap-4 sm:grid-cols-3">
+        {
+            benefitsCompany.map(({ title, description }) => (
+                <PillarGrid title={title} description={description} />
+            ))
+        }
+    </div>
+</section>

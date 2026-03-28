@@ -11,7 +11,7 @@ interface ModalProps {
 }
 
 const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
-  if(!open) return null;
+  if (!open) return null;
 
   useEffect(() => {
     if (!open) return;
@@ -19,12 +19,12 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
     const body = document.body;
     const html = document.documentElement;
 
-   
+
     const prevBodyOverflow = body.style.overflow;
     const prevBodyPaddingRight = body.style.paddingRight;
     const prevHtmlOverflow = html.style.overflow;
 
-    
+
     const scrollbarWidth = window.innerWidth - html.clientWidth;
 
     html.style.overflow = "hidden";
@@ -53,7 +53,7 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
     >
       <div className="w-full max-w-3xl bg-white rounded-2xl">
         <div className="relative bg-neutral-primary-soft shadow-2xl p-6 sm:p-8">
-          <div className="flex items-start justify-between gap-4 pb-4 sm:pb-5">
+          <div className="flex items-start justify-between gap-4">
             <h3
               id={`${id}-title`}
               className="text-xl font-semibold text-green-primary"
@@ -61,7 +61,7 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
               {title}
             </h3>
 
-            <Button onClick={onClose} icon={<X />} variant={"danger"} size={"sm"}/>
+            <Button onClick={onClose} icon={<X />} variant={"danger"} size={"sm"} />
           </div>
 
           <div className="mt-4 max-h-[70vh] overflow-y-auto text-body space-y-4">

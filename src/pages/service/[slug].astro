@@ -1,0 +1,58 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+import ServiceHeroSection from "../../sections/astro/service/ServiceHero-section.astro";
+import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits-section.astro";
+import ServiceItemsDetailsSection from "../../sections/astro/service/ServiceItemsDetails-section.astro";
+
+import Cat from "../../components/astro/ui/Cat.astro";
+
+import type { Service } from "../../interfaces/service.interface";
+import { getOneResource } from "../../utils/getOneResource";
+
+const { slug } = Astro.params;
+
+const service = (await getOneResource<Service>(
+  "services",
+  slug as string,
+)) as Service;
+
+if (!service) {
+  return Astro.redirect("/404");
+}
+
+const { name, description = "", imageUrl = "", benefits = [] } = service;
+---
+<Layout title={`${name} | DYRA`}>
+  <ServiceHeroSection
+    name={name}
+    description={description}
+    imageUrl={imageUrl}
+  />
+
+  <ServiceBenefitsSection benefits={benefits} />
+
+  <ServiceItemsDetailsSection service={service} />
+
+  <Cat
+    title="¿No sabes qué estudio necesitas?"
+    paragraph={`Nuestro equipo de expertos te ayudará a elegir el estudio ideal según tu caso clínico, indicándote la preparación necesaria y facilitando tu proceso de agenda.`}
+  />
+</Layout>
+
+<style>
+  main {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

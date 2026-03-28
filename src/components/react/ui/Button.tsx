@@ -19,7 +19,7 @@ const Button = ({ text, type = "submit", variant, size, icon, onClick, disabled 
     <button
       type={type}
       onClick={onClick}
-      className={clsx(Buttonstyles({ variant, size }))}
+      className={clsx(Buttonstyles({ variant, size, width }))}
       disabled={disabled}
     >
       {isLoading ? 'Cargando...' : text}

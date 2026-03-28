@@ -1,6 +1,7 @@
 import { createContext, useState, type ReactNode, useContext, useEffect } from "react";
 import type { Client } from "../interfaces/client.interface";
 import type { Study } from "../interfaces/study.interface";
+import { getCart, addToCart, removeFromCart, CART_UPDATED_EVENT } from "../utils/cart";
 
 
 interface Totals {
@@ -33,29 +34,36 @@ export const QuoterProvider = ({ children }: { children: ReactNode }) => {
         total: 0
     });
 
+    const syncWithLocalStorage = () => {
+        setSelectedStudies(getCart());
+    };
+
+    useEffect(() => {
+        syncWithLocalStorage();
+        window.addEventListener(CART_UPDATED_EVENT, syncWithLocalStorage);
+        window.addEventListener("storage", syncWithLocalStorage);
+        return () => {
+            window.removeEventListener(CART_UPDATED_EVENT, syncWithLocalStorage);
+            window.removeEventListener("storage", syncWithLocalStorage);
+        };
+    }, []);
+
     const addStudy = (study: Study) => {
-        setSelectedStudies((prev) => {
-            const exists = prev.find((s) => s.id === study.id)
-            if (exists) return prev;
-            return [...prev, { ...study, quantity: 1 }]
-        })
+        addToCart(study);
     }
 
     const updateStudyQuantity = (id: string, quantity: number) => {
-        setSelectedStudies((prev) =>
-            prev.map((s) =>
-                s.id === id
-                    ? {
-                        ...s,
-                        quantity: quantity < 1 ? 1 : quantity,
-                    }
-                    : s
-            )
-        )
+        const cart = getCart();
+        const itemIndex = cart.findIndex((s) => s.id === id);
+        if (itemIndex > -1) {
+            cart[itemIndex].quantity = quantity < 1 ? 1 : quantity;
+            localStorage.setItem("dira_cart_studies", JSON.stringify(cart));
+            window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
+        }
     }
 
     const removeStudy = (id: string) => {
-        setSelectedStudies(prev => prev.filter((s) => s.id !== id))
+        removeFromCart(id);
     }
 
     useEffect(() => {
@@ -73,8 +81,8 @@ export const QuoterProvider = ({ children }: { children: ReactNode }) => {
 
     const clearStudies = () => {
         setClient(null);
-        setSelectedStudies([])
-        setTotals({ subtotal: 0, tax: 0, total: 0 })
+        localStorage.removeItem("dira_cart_studies");
+        window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
     }
 
     return (

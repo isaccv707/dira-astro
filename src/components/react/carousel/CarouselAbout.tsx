@@ -3,6 +3,10 @@ import { SwiperSlide } from 'swiper/react'
 import { carouselHomeData } from '../../../data/carousel/carouselHome-data'
 import Carousel from './Carousel'
 
+interface CarouselAboutProps {
+    
+}
+
 const CarouselAbout = () => {
     return (
         <Carousel>
