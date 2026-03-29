@@ -15,38 +15,56 @@ interface Props {
 	type?: "website" | "article";
 }
 
-const { 
-	title = "Diagnóstico y Referencia Analítica | DYRA", 
+const {
+	title = "Diagnóstico y Referencia Analítica | DYRA",
 	description = "Laboratorio clínico confiable, humano y tecnológico. Ofrecemos análisis clínicos, salud empresarial y tomas a domicilio.",
 	keywords = "laboratorio clínico, análisis de sangre, salud empresarial, diagnóstico médico, DYRA",
 	lang = "es",
 	image = logo.src,
-	type = "website"
+	type = "website",
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://dira.mx");
+const canonicalURL = new URL(
+	Astro.url.pathname,
+	Astro.site || "https://dira.mx",
+);
 const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
 ---
 
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
 	<head>
+		<script
+			is:inline
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-PDD5R312P6"
+		></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+
+			gtag("config", "G-PDD5R312P6");
+		</script>
+
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		
+
 		<!-- SEO Meta Tags -->
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<meta name="keywords" content={keywords} />
 		<link rel="canonical" href={canonicalURL} />
 		<meta name="robots" content="index, follow" />
-		
+
 		<!-- Favicons -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/logo.png" />
 		<link rel="manifest" href="/manifest.webmanifest" />
-		
+
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content={type} />
 		<meta property="og:url" content={Astro.url} />
@@ -67,17 +85,23 @@ const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
 
 		<!-- Performance: Preconnect to external origins if needed -->
 		{/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
-		{/* <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> */}
-		
+		{
+			/* <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> */
+		}
+
 		<!-- Prevent CLS for critical components -->
 		<style is:inline>
 			/* Critical styles to prevent layout shift */
-			header { min-height: 80px; }
+			header {
+				min-height: 80px;
+			}
 		</style>
 	</head>
-	<body class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col">
+	<body
+		class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col"
+	>
 		<Header />
-		
+
 		<main
 			id="main-content"
 			class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-28 focus:outline-none"
@@ -87,12 +111,12 @@ const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
 		</main>
 
 		<Footer />
-		
+
 		<FloatingActionsWrapper client:load />
 
 		<!-- Accessibility: Skip to content for screen readers -->
-		<a 
-			href="#main-content" 
+		<a
+			href="#main-content"
 			class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-yellow-primary focus:text-black focus:rounded-lg focus:font-bold"
 		>
 			Saltar al contenido principal

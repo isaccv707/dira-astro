@@ -35,6 +35,7 @@ const StudiesServices = () => {
     limit: LIMIT,
     search: search,
   });
+  console.log(studies);
 
   useEffect(() => {
     setTotalPagesForHook(totalPages || 1);

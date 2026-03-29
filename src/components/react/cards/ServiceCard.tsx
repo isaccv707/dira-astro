@@ -10,7 +10,7 @@ interface ServiceCardProps {
 }
 
 const ServiceCard = ({ service, handleOpenModal }: ServiceCardProps) => {
-    const { description, id, slug, name, benefits } = service;
+    const { description, id, slug, name, benefits, icon } = service;
     return (
         <div
             className="group max-w-sm w-full bg-white h-auto border border-gray-200 rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
@@ -18,11 +18,11 @@ const ServiceCard = ({ service, handleOpenModal }: ServiceCardProps) => {
             <div
                 className="w-16 h-16 flex items-center justify-center rounded-full mb-4 bg-gradient-to-tr from-green-ligth to-greenSecondary p-2"
             >
-                {/* <img
-                    src={icon?.src}
+                <img
+                    src={icon}
                     alt="icon-dyra"
                     className="w-10 h-auto filter invert/10 transition-transform duration-300 group-hover:scale-110"
-                /> */}
+                />
             </div>
 
             <h5

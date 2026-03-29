@@ -20,10 +20,10 @@ const service = (await getOneResource<Service>(
 if (!service) {
   return Astro.redirect("/404");
 }
-
 const { name, description = "", imageUrl = "", benefits = [] } = service;
+console.log(service);
 ---
-<Layout title={`${name} | DYRA`}>
+<Layout title="Servicios Dyranalitica" description="">
   <ServiceHeroSection
     name={name}
     description={description}

@@ -30,6 +30,7 @@ export interface Service {
     name: string
     slug: string
     description?: string
+    icon?: string;
     imageUrl?: string
     mobileImageUrl?: string
     isActive?: boolean;

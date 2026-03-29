@@ -11,8 +11,7 @@ const routes: Routes[] = [
 const servicesRoutes: Routes[] = [
     { path: '/service/analisis-clinicos', text: 'Análisis Clínicos' },
     { path: '/service/salud-empresarial', text: 'Salud Empresarial' },
-    { path: '/service/tomas-domicilio', text: 'Tomas a Domicilio' },
-    { path: '/service/biologia-molecular', text: 'Biología Molecular' },
+    { path: '/service/tomas-a-domicilio', text: 'Tomas a Domicilio' },
 ]
 const resultsRoutes: Routes[] = [
     { path: 'https://s26.cogniti.com.mx/dyraJalisco_consultaweb/Comun/Login.aspx', text: 'Guadalajara' },

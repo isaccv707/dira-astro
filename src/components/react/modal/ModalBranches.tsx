@@ -20,18 +20,18 @@ const ModalBranches = ({
 }: ModalBranchesProps) => {
   const { close } = useModalManager();
 
-  // const handleOpen = (branch: Branch) => {
-  //   const url = branch.portals?.urlResults;
-  //   if (!url) return;
+  const handleOpen = (branch: Branch) => {
+    const url = branch.urlResults;
+    if (!url) return;
 
-  //   close(id);
+    close(id);
 
-  //   if (openInNewTab) {
-  //     window.open(url, "_blank", "noopener,noreferrer");
-  //     return;
-  //   }
-  //   window.location.href = url;
-  // };
+    if (openInNewTab) {
+      window.open(url, "_blank", "noopener,noreferrer");
+      return;
+    }
+    window.location.href = url;
+  };
 
   return (
     <Modal id={id} title={title} onClose={() => close(id)} open>
@@ -45,7 +45,7 @@ const ModalBranches = ({
             <button
               key={branch.id}
               type="button"
-              // onClick={() => handleOpen(branch)}
+              onClick={() => handleOpen(branch)}
               className="group rounded-2xl border border-gray-200 p-4 text-left shadow-sm transition hover:border-green-500 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <div className="flex items-start justify-between gap-3">
