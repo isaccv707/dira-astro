@@ -3,7 +3,7 @@ import type { QuotationPayload } from "../api/interfaces/quotation.interface"
 import type { Client } from "../interfaces/client.interface"
 import type { Study } from "../interfaces/study.interface"
 import { toast } from "react-toastify";
-import { useDownloadQuotationPdfMutation } from "../api/quotationsApi/quotationAPi";
+import { useDownloadQuotationPdfMutation } from "../api/quotationsApi/quotationApi";
 
 interface useQuotationPdf {
     client: Client | null
