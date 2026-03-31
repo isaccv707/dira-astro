@@ -1,0 +1,60 @@
+import type { Review } from "../../../interfaces/review.interface"
+
+interface ReviewCardProps {
+    review: Review
+}
+
+const ReviewCard = ({ review }: ReviewCardProps) => {
+    if (!review) return null;
+
+    const totalStars = 5;
+    const rating = Math.round(review.rating || 0);
+
+    const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        review.fullName
+    )}&background=86AB27&color=fff&bold=true`;
+
+    const avatarUrl = review.avatarUrl || avatarFallback;
+
+    return (
+        <figure className="flex flex-col h-full max-w-7xl shadow-md p-8 rounded-3xl border border-gray-100 bg-white">
+            
+            <div className="flex items-center space-x-1 mb-4 shrink-0">
+                {[...Array(totalStars)].map((_, index) => (
+                    <svg
+                        key={index}
+                        className={`w-5 h-5 ${index < rating ? "text-yellow-300" : "text-gray-300"}`}
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                    </svg>
+                ))}
+            </div>
+
+            <blockquote className="flex-grow">
+                <p className="text-xl font-semibold text-green-ligth tracking-tight line-clamp-4 italic">
+                    "{review.comment}"
+                </p>
+            </blockquote>
+
+            <figcaption className="flex items-center mt-6 space-x-3 shrink-0 pt-4 border-t border-gray-50">
+                <img
+                    className="w-10 h-10 rounded-full border border-gray-100 object-cover"
+                    src={avatarUrl}
+                    alt={review.fullName}
+                />
+                <div className="flex items-center divide-x divide-gray-200">
+                    <cite className="pe-3 font-medium text-yellow-primary not-italic">
+                        {review.fullName}
+                    </cite>
+                    <cite className="ps-3 text-sm text-green-primary not-italic">
+                        Paciente
+                    </cite>
+                </div>
+            </figcaption>
+        </figure>
+    )
+}
+
+export default ReviewCard

@@ -2,8 +2,9 @@ import { ToastContainer } from "react-toastify"
 import { QuoterProvider } from "../../../contexts/QuoterContext"
 import QuoteDetails from "../../../sections/react/quoter/QuoteDetails-section"
 import Quoter from "../../../sections/react/quoter/Quoter-section"
-import ReduxProvider from "../providers/ReduxProvider"
+
 import 'react-toastify/dist/ReactToastify.css';
+import ReduxProvider from "../../../store/providers/ReduxProvider";
 
 const QuoterWrapper = () => {
     return (

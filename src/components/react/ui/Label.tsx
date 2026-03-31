@@ -7,7 +7,7 @@ const Label = ({ id, label }: LabelProps) => {
   return (
     <label
       htmlFor={id}
-      className="mb-2 font-semibold text-green-ligth"
+      className="font-semibold text-green-ligth"
     >
       {label}
     </label>

@@ -1,7 +1,8 @@
 import { QuoterProvider } from "../../../contexts/QuoterContext"
 import type { Study } from "../../../interfaces/study.interface"
+import ReduxProvider from "../../../store/providers/ReduxProvider"
 import CardStudy from "../cards/CardStudy"
-import ReduxProvider from "../providers/ReduxProvider"
+
 
 interface CardStudyWrapperProps {
     study: Study

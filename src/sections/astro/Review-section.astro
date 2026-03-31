@@ -1,0 +1,17 @@
+---
+import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import ReviewWrapper from "../../components/react/wrappers/ReviewWrapper";
+---
+
+<section>
+    <div class="flex justify-center text-center mb-5">
+        <HeaderBySection
+            title="Lo que nuestros pacientes dicen de nosotros"
+            textHeader="Reseñas de nuestros pacientes"
+            textColor="green-ligth"
+        />
+    </div>
+    <div>
+        <ReviewWrapper client:visible/>
+    </div>
+</section>
