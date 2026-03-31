@@ -1,7 +1,8 @@
 
 import { ModalProvider } from "../../../contexts/ModalContext"
 import OurServicesSection from "../../../sections/react/OurServices-section"
-import ReduxProvider from "../providers/ReduxProvider"
+import ReduxProvider from "../../../store/providers/ReduxProvider"
+
 
 
 const ModalServiceWrapper = () => {

@@ -8,13 +8,15 @@ import 'swiper/swiper-bundle.css';
 interface CarouselProps {
     children: React.ReactNode;
     swipperOptions?: SwiperProps
+    slidesPreview?: number;
 }
 
-const Carousel = ({ children, swipperOptions = {} }: CarouselProps) => {
+const Carousel = ({ children, swipperOptions = {}, slidesPreview = 1 }: CarouselProps) => {
     return (
         <div>
             <Swiper
-                modules={[Pagination, Autoplay]}
+                modules={[Autoplay]}
+                slidesPerView={slidesPreview}
                 direction="horizontal"
                 pagination={{ clickable: true }}
                 loop={true}

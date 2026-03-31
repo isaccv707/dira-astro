@@ -1,5 +1,6 @@
+import ReduxProvider from "../../../store/providers/ReduxProvider"
 import CarouselHome from "../carousel/CarouselHome"
-import ReduxProvider from "../providers/ReduxProvider"
+
 
 const CarouselWrapper = () => {
   return (

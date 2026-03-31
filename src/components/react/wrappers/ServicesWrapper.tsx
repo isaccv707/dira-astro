@@ -1,7 +1,8 @@
 import { DrawerProvider } from "../../../contexts/DrawerContext"
-import ReduxProvider from "../providers/ReduxProvider"
+
 import type { Service } from "../../../interfaces/service.interface"
 import StudiesServices from "../../../sections/react/service/StudiesServices-section"
+import ReduxProvider from "../../../store/providers/ReduxProvider"
 
 interface ServicesWrapperProps {
     service: Service

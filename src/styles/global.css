@@ -4,5 +4,6 @@
 .swiper,
 .swiper-wrapper,
 .swiper-slide {
-    height: 100%;
+    height: auto !important;
+    display: flex;
 }

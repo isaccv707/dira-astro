@@ -5,9 +5,10 @@ import CompanyValuesSection from "../sections/astro/about/CompanyValues-section.
 import HeroAboutSection from "../sections/astro/about/HeroAbout-section.astro";
 import MetricsDyra from "../sections/react/MetricsDyra-section";
 import { carouselHomeData } from "../data/carousel/carouselHome-data";
+import ReviewSection from "../sections/astro/Review-section.astro";
 ---
 
-<Layout>
+<Layout title="" description="">
     <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
         <HeroAboutSection />
 
@@ -35,4 +36,8 @@ import { carouselHomeData } from "../data/carousel/carouselHome-data";
     <CompanyValuesSection />
 
     <MetricsDyra client:visible />
+
+    <div class="mt-14">
+        <ReviewSection />
+    </div>
 </Layout>

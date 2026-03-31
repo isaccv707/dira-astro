@@ -5,9 +5,10 @@ import QuickActionsSection from "../sections/astro/QuickActions-section.astro";
 import AboutSection from "../sections/astro/About-section.astro";
 import OurServicesSection from "../sections/astro/OurServices-section.astro";
 import HeroHomeSection from "../sections/astro/HeroHome-section.astro";
+import ReviewSection from "../sections/astro/Review-section.astro";
 ---
 
-<Layout 
+<Layout
     title="Laboratorio DYRA | Diagnóstico y Referencia Analítica"
     description="Bienvenido a Laboratorio DYRA. Ofrecemos análisis clínicos con tecnología de punta y calidez humana en Guadalajara y Colima."
 >
@@ -20,4 +21,6 @@ import HeroHomeSection from "../sections/astro/HeroHome-section.astro";
     <AboutSection />
 
     <BenefitsSection />
+
+    <ReviewSection client:visible />
 </Layout>

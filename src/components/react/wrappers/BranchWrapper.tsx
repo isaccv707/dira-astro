@@ -1,6 +1,7 @@
 
 import BranchSection from "../../../sections/react/branch/Branch-section"
-import ReduxProvider from "../providers/ReduxProvider"
+import ReduxProvider from "../../../store/providers/ReduxProvider"
+
 
 const BranchWrapper = () => {
     
