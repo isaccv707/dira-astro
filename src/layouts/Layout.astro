@@ -7,119 +7,122 @@ import "../styles/global.css";
 import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
-	title: string;
-	description: string;
-	keywords?: string;
-	lang?: string;
-	image?: string;
-	type?: "website" | "article";
+  title: string;
+  description: string;
+  keywords?: string;
+  lang?: string;
+  image?: string;
+  type?: "website" | "article";
 }
 
 const {
-	title = "Diagnóstico y Referencia Analítica | DYRA",
-	description = "Laboratorio clínico confiable, humano y tecnológico. Ofrecemos análisis clínicos, salud empresarial y tomas a domicilio.",
-	keywords = "laboratorio clínico, análisis de sangre, salud empresarial, diagnóstico médico, DYRA",
-	lang = "es",
-	image = logo.src,
-	type = "website",
+  title = "Diagnóstico y Referencia Analítica | DYRA",
+  description = "Laboratorio clínico confiable, humano y tecnológico. Ofrecemos análisis clínicos, salud empresarial y tomas a domicilio.",
+  keywords = "laboratorio clínico, análisis de sangre, salud empresarial, diagnóstico médico, DYRA",
+  lang = "es",
+  image = logo.src,
+  type = "website",
 } = Astro.props;
 
 const canonicalURL = new URL(
-	Astro.url.pathname,
-	Astro.site || "https://dira.mx",
+  Astro.url.pathname,
+  Astro.site || "https://dira.mx",
 );
 const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
+
+const GA_MEASUREMENT_ID = "AW-17974653170";
 ---
 
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
-	<head>
-		<script
-			is:inline
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=G-PDD5R312P6"
-		></script>
-		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+    ></script>
 
-			gtag("config", "G-PDD5R312P6");
-		</script>
+    <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", GA_MEASUREMENT_ID);
+    </script>
 
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
 
-		<!-- SEO Meta Tags -->
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<meta name="keywords" content={keywords} />
-		<link rel="canonical" href={canonicalURL} />
-		<meta name="robots" content="index, follow" />
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content="index, follow" />
 
-		<!-- Favicons -->
-		<link rel="icon" type="image/png" href={logo.src} />
-		<link rel="apple-touch-icon" href={logo.src} />
-		<link rel="manifest" href="/manifest.webmanifest" />
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href={logo.src} />
+    <link rel="apple-touch-icon" href={logo.src} />
+    <link rel="manifest" href="/manifest.webmanifest" />
 
-		<!-- Open Graph / Facebook -->
-		<meta property="og:type" content={type} />
-		<meta property="og:url" content={Astro.url} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content={absoluteImageUrl} />
-		<meta property="og:site_name" content="Laboratorio DYRA" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={absoluteImageUrl} />
+    <meta property="og:site_name" content="Laboratorio DYRA" />
 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={Astro.url} />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={absoluteImageUrl} />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={absoluteImageUrl} />
 
-		<!-- Sitemap -->
-		<link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
-		<!-- Performance: Preconnect to external origins if needed -->
-		{/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
-		{
-			/* <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> */
-		}
+    <!-- Performance: Preconnect to external origins if needed -->
+    {/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
+    {
+      /* <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> */
+    }
 
-		<!-- Prevent CLS for critical components -->
-		<style is:inline>
-			/* Critical styles to prevent layout shift */
-			header {
-				min-height: 80px;
-			}
-		</style>
-	</head>
-	<body
-		class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col"
-	>
-		<Header />
+    <!-- Prevent CLS for critical components -->
+    <style is:inline>
+      /* Critical styles to prevent layout shift */
+      header {
+        min-height: 80px;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col"
+  >
+    <Header />
 
-		<main
-			id="main-content"
-			class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-28 focus:outline-none"
-			tabindex="-1"
-		>
-			<slot />
-		</main>
+    <main
+      id="main-content"
+      class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-28 focus:outline-none"
+      tabindex="-1"
+    >
+      <slot />
+    </main>
 
-		<Footer />
+    <Footer />
 
-		<FloatingActionsWrapper client:load />
+    <FloatingActionsWrapper client:load />
 
-		<!-- Accessibility: Skip to content for screen readers -->
-		<a
-			href="#main-content"
-			class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-yellow-primary focus:text-black focus:rounded-lg focus:font-bold"
-		>
-			Saltar al contenido principal
-		</a>
-	</body>
+    <!-- Accessibility: Skip to content for screen readers -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-yellow-primary focus:text-black focus:rounded-lg focus:font-bold"
+    >
+      Saltar al contenido principal
+    </a>
+  </body>
 </html>

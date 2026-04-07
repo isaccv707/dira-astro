@@ -2,63 +2,84 @@
 import { Image } from "astro:assets";
 import { getColorConfig } from "../../../utils/cardVariants-values";
 
-interface Props {
-    title: string;
-    paragraph: string;
-    bgColor?: string;
-    icon?: ImageMetadata;
+interface ListCompanyValues {
+  title: string;
+  text?: string;
 }
 
-const { paragraph, title, bgColor = "green-primary", icon } = Astro.props;
+interface Props {
+  title: string;
+  paragraph?: string;
+  bgColor?: string;
+  icon?: ImageMetadata;
+  list?: ListCompanyValues[];
+}
+
+const { paragraph, title, bgColor = "green-primary", icon, list } = Astro.props;
 
 const colorConfig = getColorConfig(bgColor);
 ---
 
 <div
-    class:list={[
-        "group relative overflow-hidden rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 shadow-2xl",
-        colorConfig.container,
-        colorConfig.text,
-    ]}
+  class:list={[
+    "group relative overflow-hidden rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 shadow-2xl",
+    colorConfig.container,
+    colorConfig.text,
+  ]}
 >
-    <div
-        class:list={[
-            "absolute -right-4 -top-4 h-32 w-32 rounded-full blur-3xl transition-colors duration-500",
-            colorConfig.decoration,
-        ]}
-    >
+  <div
+    class:list={[
+      "absolute -right-4 -top-4 h-32 w-32 rounded-full blur-3xl transition-colors duration-500",
+      colorConfig.decoration,
+    ]}
+  >
+  </div>
+
+  <div class="relative flex flex-col gap-8">
+    <div class="flex items-center gap-4">
+      {
+        icon && (
+          <div
+            class:list={[
+              "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl backdrop-blur-md border transition-transform duration-500 group-hover:scale-110",
+              colorConfig.iconContainer,
+            ]}
+          >
+            <Image
+              src={icon}
+              alt={title}
+              class="h-8 w-8 object-contain brightness-0 invert"
+            />
+          </div>
+        )
+      }
+      <h2
+        class="text-xl font-extrabold tracking-tight sm:text-2xl leading-tight"
+      >
+        {title}
+      </h2>
     </div>
 
-    <div class="relative flex flex-col gap-8">
-        <div class="flex items-center gap-4">
-            {
-                icon && (
-                    <div
-                        class:list={[
-                            "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl backdrop-blur-md border transition-transform duration-500 group-hover:scale-110",
-                            colorConfig.iconContainer,
-                        ]}
-                    >
-                        <Image
-                            src={icon}
-                            alt={title}
-                            class="h-8 w-8 object-contain brightness-0 invert"
-                        />
-                    </div>
-                )
-            }
-            <h2
-                class="text-xl font-extrabold tracking-tight sm:text-2xl leading-tight"
-            >
-                {title}
-            </h2>
-        </div>
+    {
+      paragraph && (
         <div class="space-y-4">
-            <p
-                class="leading-relaxed opacity-90 text-balance text-sm sm:text-base"
-            >
-                {paragraph}
-            </p>
+          <p class="leading-relaxed opacity-90 text-balance text-sm sm:text-base">
+            {paragraph}
+          </p>
         </div>
-    </div>
+      )
+    }
+
+    {
+      list &&
+        list.map(({ text, title }) => (
+          <div class="">
+            <p class="leading-relaxed opacity-90 text-balance text-sm sm:text-base">
+              {title}
+            </p>
+            <p class="text-sm">{text}</p>
+          </div>
+        ))
+    }
+  </div>
 </div>
