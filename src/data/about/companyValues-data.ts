@@ -1,35 +1,59 @@
-import { missionIcon, valuesIcon, visionIcon } from '../../assets/icons/companyValues-icons'
+import {
+  missionIcon,
+  valuesIcon,
+  visionIcon,
+} from "../../assets/icons/companyValues-icons";
+
+interface ListCompanyValues {
+  title: string;
+  text?: string;
+}
 
 interface CompanyValues {
-    title: string;
-    paragraph: string;
-    icon?: ImageMetadata;
-    bgColor?: string
+  title: string;
+  paragraph?: string;
+  icon?: ImageMetadata;
+  bgColor?: string;
+  list?: ListCompanyValues[];
 }
 
 export const companyValues: CompanyValues[] = [
-    {
-        title: 'Misión',
-        paragraph: `Brindar servicios de laboratorio con altos estándares de
-                calidad, apoyando el diagnóstico oportuno y la prevención de
-                enfermedades, con un enfoque cálido y cercano.`,
-        bgColor: 'green-primary',
-        icon: missionIcon
-    },
-    {
-        title: 'Visión',
-        paragraph: `Ser el laboratorio de referencia en la región por nuestra
-                precisión, innovación tecnológica y calidad humana en cada
-                contacto con el paciente.`,
-        bgColor: 'green-secondary',
-        icon: visionIcon
-    },
-    {
-        title: 'Valores',
-        paragraph: `Nos regimos por la integridad, la precisión técnica y la confidencialidad. 
-                Nuestro compromiso es la mejora continua y el trato humano, garantizando 
-                resultados confiables para la tranquilidad de nuestros pacientes.`,
-        bgColor: 'yellow-primary',
-        icon: valuesIcon
-    },
-]
+  {
+    title: "Misión",
+    paragraph: `Proveer soluciones de referencia diagnóstica con los más altos estándares de precisión, 
+    integrando tecnología de vanguardia, excelencia analítica y procesos clínicos estandarizados, 
+    para respaldar decisiones médicas oportunas, fortalecer la práctica clínica y generar bienestar 
+    sostenible en pacientes y organizaciones.`,
+    bgColor: "green-primary",
+    icon: missionIcon,
+  },
+  {
+    title: "Visión",
+    paragraph: `Consolidarnos como el laboratorio clínico de referencia en diagnóstico especializado, reconocido por su confiabilidad, innovación continua y excelencia operativa, siendo un socio estratégico en la gestión de la salud y un generador de valor tangible para el sector médico y empresarial.`,
+    bgColor: "green-secondary",
+    icon: visionIcon,
+  },
+  {
+    title: "Valores",
+    bgColor: "yellow-primary",
+    list: [
+      {
+        title: "Precisión y Referencia Diagnóstica",
+        text: "Compromiso absoluto con la exactitud de los resultados, sustentado en procesos analíticos robustos, validación técnica y estándares de calidad superiores.",
+      },
+      {
+        title: "Empatía Proactiva",
+        text: "Entendemos las necesidades clínicas y operativas de nuestros clientes, anticipándonos con soluciones oportunas, cercanas y orientadas al servicio.",
+      },
+      {
+        title: "Transparencia Ética",
+        text: "Actuamos con integridad, claridad y responsabilidad en cada proceso, fortaleciendo la confianza con médicos, pacientes y aliados.",
+      },
+      {
+        title: "Innovación Aplicada",
+        text: "Incorporamos tecnología y mejora continua de manera estratégica para optimizar resultados, ampliar capacidades diagnósticas y generar ventaja competitiva.",
+      },
+    ],
+    icon: valuesIcon,
+  },
+];
