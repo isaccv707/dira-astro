@@ -104,6 +104,7 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col"
   >
     <Header />
+    <!-- <AppProviders client:load Component={BranchSelectorSection} /> -->
 
     <main
       id="main-content"
@@ -116,13 +117,5 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     <Footer />
 
     <FloatingActionsWrapper client:load />
-
-    <!-- Accessibility: Skip to content for screen readers -->
-    <a
-      href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-yellow-primary focus:text-black focus:rounded-lg focus:font-bold"
-    >
-      Saltar al contenido principal
-    </a>
   </body>
 </html>

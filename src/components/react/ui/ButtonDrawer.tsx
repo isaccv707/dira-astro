@@ -1,25 +1,16 @@
-import { Menu } from "lucide-react"
-import useDrawerManager from "../../../hooks/useDrawerManager"
-import { routes } from "../../../routes/routes"
-import Button from "./Button"
+import { Menu } from "lucide-react";
+import { useStore } from "@nanostores/react";
+import Button from "./Button";
+import { isDrawerOpen } from "../../../stores/drawerStore";
 
-interface ButtonDrawerProps {
-    keyDrawer: "NAVBAR_DRAWER";
-    data: any
-    title: string;
-}
-const ButtonDrawer = ({ data = [], keyDrawer, title }: ButtonDrawerProps) => {
-    const { open } = useDrawerManager();
+const ButtonDrawer = () => {
+  const $isDrawerOpen = useStore(isDrawerOpen);
 
-    const handleOpenDrawer = () => {
-        open(keyDrawer, {
-            title: title,
-            data: routes
-        })
-    }
-    return (
-        <Button onClick={handleOpenDrawer} icon={<Menu />} />
-    )
-}
+  const handleDrawer = () => {
+    isDrawerOpen.set(!$isDrawerOpen);
+  };
 
-export default ButtonDrawer
+  return <Button onClick={handleDrawer} icon={<Menu />} />;
+};
+
+export default ButtonDrawer;
