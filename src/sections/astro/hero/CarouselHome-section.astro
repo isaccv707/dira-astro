@@ -1,0 +1,37 @@
+---
+import Carousel from "../../../components/react/carousel/Carousel";
+import {
+  getCloudinarySrcSet,
+  getCloudinaryUrl,
+} from "../../../utils/cloudinary";
+import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
+
+const banners = await fetchActiveBanners("HOME");
+if (!banners || banners.length === 0) return null;
+---
+
+<Carousel client:load slidesPreview={1}>
+  {
+    banners.map(({ imageUrl }, index) => {
+      const isLCP = index === 0;
+
+      return (
+        <div class="relative w-full h-full">
+          <img
+            src={getCloudinaryUrl(imageUrl, { width: 1280, height: 560 })}
+            srcset={getCloudinarySrcSet(imageUrl)}
+            sizes="(max-width: 768px) 100vw, 1280px"
+            alt={`Banner DYRA ${index + 1}`}
+            class="w-full h-auto aspect-[4/5] md:aspect-[16/7] object-cover rounded-2xl"
+            loading={isLCP ? "eager" : "lazy"}
+            fetchpriority={isLCP ? "high" : "auto"}
+            decoding={isLCP ? "sync" : "async"}
+            width="1280"
+            height="560"
+          />
+          <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white/70 via-white/40 to-transparent pointer-events-none rounded-b-2xl" />
+        </div>
+      );
+    })
+  }
+</Carousel>

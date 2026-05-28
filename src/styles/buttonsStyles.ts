@@ -14,16 +14,13 @@ export const Buttonstyles = cva(
       variant: {
         normal: "bg-transparent text-black text-left hover:bg-green-50",
         primary:
-          "bg-green-ligth text-white hover:bg-green-primary active:bg-green-primary/90",
+          "bg-green-light text-white hover:bg-green-primary active:bg-green-primary/90",
         secondary:
           "bg-green-secondary text-white hover:bg-green-primary active:bg-green-primary/90",
-        danger:
-          "bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
-        ghost:
-          "bg-transparent text-green-primary hover:bg-green-primary/10",
+        danger: "bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
+        ghost: "bg-transparent text-green-primary hover:bg-green-primary/10",
         footer: "text-white underline",
-        link:
-          "bg-transparent p-0 h-auto text-green-primary hover:text-green-secondary underline-offset-4 hover:underline",
+        link: "bg-transparent p-0 h-auto text-green-primary hover:text-green-secondary underline-offset-4 hover:underline",
       },
       size: {
         sm: "h-9 px-3 text-sm",
@@ -49,5 +46,5 @@ export const Buttonstyles = cva(
       width: "auto",
       align: "center",
     },
-  }
+  },
 );

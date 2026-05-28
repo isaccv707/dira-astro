@@ -1,0 +1,50 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  id: string;
+  text: string;
+  icon?: string;
+  bgColor?: string;
+  data: any;
+}
+
+const {
+  id,
+  text,
+  icon = "lucide:layers",
+  bgColor = "bg-green-secondary",
+  data,
+} = Astro.props;
+---
+
+<button
+  id={id}
+  data-payload={JSON.stringify(data || [])}
+  class={`flex items-center justify-center gap-4 text-white font-semibold rounded-xl shadow-md 
+          transition-all duration-300 ${bgColor} hover:brightness-110 w-full h-10 p-10 md:w-80 md:h-auto md:p-6 cursor-pointer`}
+>
+  <div
+    class="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 text-2xl"
+  >
+    <Icon name={icon} />
+  </div>
+  <span class="text-lg text-center">{text}</span>
+</button>
+
+<script>
+  import { openModal } from "../../../stores/modalStore";
+
+  const btnOpenBranches = document.getElementById("btn-open-branches");
+
+  btnOpenBranches?.addEventListener("click", () => {
+    const rawBranches = btnOpenBranches.getAttribute("data-payload");
+    const branchesData = rawBranches ? JSON.parse(rawBranches) : [];
+
+    openModal("MODAL_BRANCHES", {
+      title: "Seleccionar Sucursal",
+      data: branchesData,
+      paragraph: "Selecciona la sucursal de tu preferencia.",
+    });
+  });
+</script>

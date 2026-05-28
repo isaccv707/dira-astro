@@ -38,10 +38,10 @@ const ModalSelectBranch = ({
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-base font-bold text-green-ligth group-hover:text-green-700">
+                  <p className="text-base font-bold text-green-light group-hover:text-green-700">
                     {branch.state.name}
                   </p>
-                  <p className="mt-1 text-sm font-semibold text-green-ligth">
+                  <p className="mt-1 text-sm font-semibold text-green-light">
                     {branch.name}
                   </p>
                   <p className="mt-1 text-xs text-gray-500">

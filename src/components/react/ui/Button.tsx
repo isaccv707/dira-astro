@@ -1,20 +1,28 @@
-
 import clsx from "clsx";
 import { Buttonstyles } from "../../../styles/buttonsStyles";
 import type { VariantProps } from "class-variance-authority";
-
-
 
 interface ButtonProps extends VariantProps<typeof Buttonstyles> {
   type?: "submit" | "reset" | "button";
   text?: string;
   onClick?: () => void | Promise<void>;
-  icon?: React.ReactNode
-  disabled?: boolean
-  isLoading?: boolean
+  icon?: React.ReactNode;
+  disabled?: boolean;
+  isLoading?: boolean;
 }
 
-const Button = ({ text, type = "submit", variant, size, icon, onClick, disabled = false, isLoading, width, align }: ButtonProps) => {
+const Button = ({
+  text,
+  type = "submit",
+  variant,
+  size,
+  icon,
+  onClick,
+  disabled = false,
+  isLoading,
+  width,
+  align,
+}: ButtonProps) => {
   return (
     <button
       type={type}
@@ -22,7 +30,7 @@ const Button = ({ text, type = "submit", variant, size, icon, onClick, disabled 
       className={clsx(Buttonstyles({ variant, size, width }))}
       disabled={disabled}
     >
-      {isLoading ? 'Cargando...' : text}
+      {isLoading ? "Cargando..." : text}
       {icon && icon}
     </button>
   );

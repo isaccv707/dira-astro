@@ -43,16 +43,16 @@ const StudiesServices = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="inline-flex items-center gap-3 rounded-2xl bg-green-ligth/5 border border-green-ligth/10 px-5 py-2.5 shadow-sm">
+            <div className="inline-flex items-center gap-3 rounded-2xl bg-green-light/5 border border-green-light/10 px-5 py-2.5 shadow-sm">
               <div className="relative flex h-2.5 w-2.5">
                 {isFetching && (
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-ligth opacity-75"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-light opacity-75"></span>
                 )}
                 <span
-                  className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isFetching ? "bg-green-ligth" : "bg-gray-300"}`}
+                  className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isFetching ? "bg-green-light" : "bg-gray-300"}`}
                 ></span>
               </div>
-              <span className="text-sm font-bold text-green-ligth">
+              <span className="text-sm font-bold text-green-light">
                 {isFetching
                   ? "Sincronizando..."
                   : `${totalStudies || 0} Estudios`}
@@ -112,7 +112,7 @@ const StudiesServices = () => {
                 onClick={() =>
                   handleSearchChange({ target: { value: "" } } as any)
                 }
-                className="mt-8 px-6 py-2 bg-green-ligth text-white font-bold rounded-xl hover:bg-green-primary transition-colors"
+                className="mt-8 px-6 py-2 bg-green-light text-white font-bold rounded-xl hover:bg-green-primary transition-colors"
               >
                 Limpiar búsqueda
               </button>
@@ -139,7 +139,7 @@ const StudiesServices = () => {
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                 Página
               </span>
-              <span className="text-sm font-black text-green-ligth">
+              <span className="text-sm font-black text-green-light">
                 {currentPage}
               </span>
               <span className="text-gray-300">/</span>

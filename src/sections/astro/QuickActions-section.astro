@@ -1,7 +1,31 @@
 ---
-import QuickActionsWrapper from "../../components/react/wrappers/QuickActionsWrapper";
+import ButtonQuickAction from "../../components/astro/buttons/ButtonQuickAction.astro";
+import NavigationQuickActions from "../../components/astro/buttons/NavigationQuickAction.astro";
+import { fetchBranches } from "../../api/branchesApi/branchService";
+import { quickActions } from "../../data/quickActions/quickActions";
+
+export const branches = await fetchBranches();
 ---
 
 <section>
-    <QuickActionsWrapper client:load />
+  <div
+    class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10"
+  >
+    {
+      quickActions.map(({ path, bgColor, icon, text, disabled }) => (
+        <NavigationQuickActions
+          path={path}
+          text={text}
+          bgColor={bgColor}
+          icon={icon}
+        />
+      ))
+    }
+    <ButtonQuickAction
+      id="btn-open-branches"
+      text="Resultados"
+      icon="lucide:test-tube-diagonal"
+      data={branches}
+    />
+  </div>
 </section>

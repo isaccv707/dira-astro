@@ -14,6 +14,8 @@ import {
 import { useStore } from "@nanostores/react";
 import { isDrawerOpen } from "../../../stores/drawerStore";
 import Drawer from "./Drawer";
+import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
+import ButtonNetworkIcons from "../ui/ButtonNetworkIcons";
 
 interface NavDrawerProps {
   id?: string;
@@ -37,7 +39,6 @@ const NavDrawer = () => {
               key={path}
               path={path}
               text={text}
-              // onClick={() => close(id)}
               variant={"normal"}
               align={"left"}
               width={"full"}
@@ -53,18 +54,10 @@ const NavDrawer = () => {
           </Accordion>
         </nav>
 
-        <nav className="mt-auto flex gap-4 pt-8">
-          <a href="#" aria-label="Facebook">
-            <img src={facebook.src} alt="Facebook" className="w-8 h-8" />
-          </a>
-
-          <a href="#" aria-label="Instagram">
-            <img src={instagram.src} alt="Instagram" className="w-8 h-8" />
-          </a>
-
-          <a href="#" aria-label="WhatsApp">
-            <img src={whatsapp.src} alt="WhatsApp" className="w-8 h-8" />
-          </a>
+        <nav className="mb-0 flex gap-4 pt-8">
+          {SOCIAL_NETWORKS.map(({ icon, name, route }) => (
+            <ButtonNetworkIcons icon={icon} name={name} route={route} />
+          ))}
         </nav>
       </div>
     </Drawer>

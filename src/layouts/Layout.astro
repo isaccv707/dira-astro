@@ -5,6 +5,9 @@ import FloatingActionsWrapper from "../components/react/wrappers/FloatingActions
 import logo from "../assets/images/logos/logo_dyra.png";
 import "../styles/global.css";
 import "react-toastify/dist/ReactToastify.css";
+import ModalBranches from "../components/react/modal/ModalBranches";
+import ModalService from "../components/react/modal/ModalService";
+import ModalReviewFrom from "../components/react/modal/ModalReviewFrom";
 
 interface Props {
   title: string;
@@ -117,5 +120,8 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     <Footer />
 
     <FloatingActionsWrapper client:load />
+    <ModalBranches client:load />
+    <ModalService client:load />
+    <ModalReviewFrom client:load />
   </body>
 </html>
