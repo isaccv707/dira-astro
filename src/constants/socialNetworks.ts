@@ -1,5 +1,3 @@
-import { facebook, instagram, whatsapp } from "../assets/icons/networks-icons";
-
 interface SocialNetworks {
   icon: string;
   route: string;
@@ -13,10 +11,15 @@ export const SOCIAL_NETWORKS: SocialNetworks[] = [
     icon: "logos:facebook",
     name: "Facebook",
   },
-  { route: "#", icon: "skill-icons:instagram", name: "Instagram" },
+  // { route: "#", icon: "skill-icons:instagram", name: "Instagram" },
   {
     route: "https://wa.me/3332559229",
-    icon: "logos:whatsapp",
+    icon: "logos:whatsapp-icon",
     name: "WhatsApp",
+  },
+  {
+    route: "mailto:administracion@dyranalitica.com",
+    icon: "logos:google-gmail",
+    name: "Gmail",
   },
 ];

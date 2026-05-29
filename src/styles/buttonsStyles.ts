@@ -2,7 +2,6 @@ import { cva } from "class-variance-authority";
 
 export const Buttonstyles = cva(
   [
-    // Base
     "inline-flex items-center justify-center gap-2 rounded-md font-semibold",
     "transition-colors duration-200",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2",

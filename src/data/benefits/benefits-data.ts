@@ -1,10 +1,3 @@
-import {
-  testTube,
-  microscope,
-  teamWork,
-  address,
-} from "../../assets/icons/benefits-icons";
-
 interface BenefitCardProps {
   icon: string;
   title: string;

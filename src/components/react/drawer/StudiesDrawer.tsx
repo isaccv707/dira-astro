@@ -8,7 +8,7 @@ import {
   removeFromCart,
   CART_UPDATED_EVENT,
 } from "../../../utils/cart";
-import NavLinkButton from "../ui/NavLinkButton";
+import NavLinkButton from "../navigation/NavLinkButton";
 import Button from "../ui/Button";
 import { useCartActions } from "../../../hooks/useCartActions";
 

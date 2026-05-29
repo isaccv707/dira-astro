@@ -16,7 +16,6 @@ const Carousel = ({
   swipperOptions = {},
   slidesPreview = 1,
 }: CarouselProps) => {
-  // Memoize slides to prevent unnecessary re-renders
   const slides = useMemo(() => React.Children.toArray(children), [children]);
 
   if (slides.length === 0) return null;
@@ -43,7 +42,7 @@ const Carousel = ({
         watchSlidesProgress={true}
         observer={true}
         observeParents={true}
-        className="w-full h-full !pb-12" // Space for pagination
+        className="w-full h-full !pb-12"
         {...swipperOptions}
       >
         {slides.map((child, index) => (

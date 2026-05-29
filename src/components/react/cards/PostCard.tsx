@@ -1,5 +1,5 @@
 import React from "react";
-import NavLinkButton from "../ui/NavLinkButton";
+import NavLinkButton from "../navigation/NavLinkButton";
 import type { Post } from "../../../api/interfaces/post.interface";
 
 interface PostCardProps {

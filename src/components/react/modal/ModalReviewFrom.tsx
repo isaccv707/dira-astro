@@ -11,18 +11,19 @@ import {
 import { toast } from "react-toastify";
 import { modalStore, closeModal } from "../../../stores/modalStore";
 import { useStore } from "@nanostores/react";
+import { useState } from "react";
+import { createReview } from "../../../api/reviewsApi/reviewsApi";
 
 interface ModalReviewFromProps {
   id?: string;
   title?: string;
-  data?: any;
 }
 
 const ModalReviewFrom = ({
   id = "MODA_REVIEW_FROM",
   title = "Ingresa una reseña",
-  data,
 }: ModalReviewFromProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { isOpen, view } = useStore(modalStore);
 
   const methods = useForm<ReviewFormValues>({
@@ -36,12 +37,20 @@ const ModalReviewFrom = ({
 
   const { handleSubmit, reset } = methods;
 
-  const onSubmit = async (formData: ReviewFormValues) => {
+  const onSubmit = async ({ fullName, comment, rating }: ReviewFormValues) => {
+    setIsSubmitting(true);
     try {
+      const payload = {
+        fullName,
+        comment,
+        rating,
+      };
+      await createReview(payload);
+      toast.success("Reseña enviada con éxito");
       reset();
       closeModal();
-      toast.success("Reseña enviada con éxito");
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Error al enviar la reseña:", error);
       toast.error("Error al enviar la reseña");
     }
@@ -74,7 +83,8 @@ const ModalReviewFrom = ({
         <div className="mt-3">
           <Button
             type="submit"
-            text="Enviar Reseña"
+            disabled={isSubmitting}
+            text={isSubmitting ? "Enviando..." : "Enviar Reseña"}
             variant={"primary"}
             size={"md"}
             width={"full"}

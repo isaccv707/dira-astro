@@ -1,27 +1,40 @@
-import { useEffect } from "react";
-import useModalManager from "../../hooks/useModalManager";
-import { useGetAllBranchesQuery } from "../../api/branchesApi/branchesApi";
+import { useEffect, useState } from "react";
+import { openModal } from "../../stores/modalStore";
+import { getAllBranches } from "../../api/branchesApi/branchesApi";
+import type { Branch } from "../../interfaces/branch.interface";
 
 export const BranchSelectorSection = () => {
-  const { open } = useModalManager();
-  const { data: branches, isLoading } = useGetAllBranchesQuery();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("BranchSelector Hook ejecutado");
-    console.log("Branches:", branches);
-    console.log("Loading:", isLoading);
+    const checkBranchAndOpenModal = async () => {
+      try {
+        const savedBranch = localStorage.getItem("dyra_branch_id");
 
-    const savedBranch = localStorage.getItem("dyra_branch_id");
-    console.log("Saved Branch:", savedBranch);
+        if (savedBranch) {
+          setIsLoading(false);
+          return;
+        }
 
-    if (!savedBranch && !isLoading && branches) {
-      console.log("Intentando abrir modal...");
-      open("MODAL_SELECT_BRANCH", {
-        title: "Elige la sucursal de tu preferencia",
-        data: branches,
-      });
-    }
-  }, [branches, isLoading, open]); // Asegúrate de incluir 'open'
+        const branchesData = await getAllBranches();
+        console.log(branchesData);
+        if (branchesData && branchesData.length > 0) {
+          openModal("MODAL_SELECT_BRANCH", {
+            title: "Elige la sucursal de tu preferencia",
+            data: branchesData,
+          });
+        }
+      } catch (error) {
+        console.error("Error al cargar las sucursales en el selector:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  return <></>;
+    checkBranchAndOpenModal();
+  }, []);
+
+  return null;
 };
+
+export default BranchSelectorSection;

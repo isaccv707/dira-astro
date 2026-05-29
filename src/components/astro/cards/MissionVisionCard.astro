@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getColorConfig } from "../../../utils/cardVariants-values";
+import { Icon } from "astro-icon/components";
 
 interface ListCompanyValues {
   title: string;
@@ -11,7 +12,7 @@ interface Props {
   title: string;
   paragraph?: string;
   bgColor?: string;
-  icon?: ImageMetadata;
+  icon?: string;
   list?: ListCompanyValues[];
 }
 
@@ -45,10 +46,9 @@ const colorConfig = getColorConfig(bgColor);
               colorConfig.iconContainer,
             ]}
           >
-            <Image
-              src={icon}
-              alt={title}
-              class="h-8 w-8 object-contain brightness-0 invert"
+            <Icon
+              name={icon}
+              class={"h-8 w-8 object-contain brightness-0 invert"}
             />
           </div>
         )

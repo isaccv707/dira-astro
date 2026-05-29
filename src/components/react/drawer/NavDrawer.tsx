@@ -1,6 +1,6 @@
 import Accordion from "../accordion/Accordion";
 import NavigationAccordion from "../accordion/NavigationAccordion";
-import NavLinkButton from "../ui/NavLinkButton";
+import NavLinkButton from "../navigation/NavLinkButton";
 import {
   facebook,
   instagram,

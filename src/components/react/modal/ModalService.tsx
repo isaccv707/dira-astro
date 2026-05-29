@@ -1,14 +1,14 @@
+import { useState } from "react";
 import { useStore } from "@nanostores/react";
 import { modalStore, closeModal } from "../../../stores/modalStore";
 import Modal from "./Modal";
-import type { Service } from "../../../interfaces/service.interface";
-import { useEffect, useState } from "react";
-import whatsappIcon from "../../../assets/icons/networks-icons/whatsapp.png";
-import gmailIcon from "../../../assets/icons/networks-icons/gmail.png";
 import {
   getCloudinaryUrl,
   getCloudinarySrcSet,
 } from "../../../utils/cloudinary";
+import type { Service } from "../../../interfaces/service.interface";
+
+import CTAContact from "../CTA/CTAContact";
 
 const ModalService = () => {
   const { isOpen, view, payload } = useStore(modalStore);
@@ -32,7 +32,7 @@ const ModalService = () => {
         <div className="rounded-2xl bg-white/70 backdrop-blur-sm">
           <div className="flex flex-col gap-5 md:gap-8 md:flex-row">
             <div className="md:w-5/12">
-              <figure className="relative overflow-hidden rounded-2xl border border-black/5 shadow-sm bg-neutral-100 aspect-[4/5] md:aspect-auto">
+              <figure className="relative overflow-hidden rounded-2xl border border-black/5 shadow-sm bg-neutral-100 aspect-4/5 md:aspect-auto">
                 {!loaded && (
                   <div className="absolute inset-0 z-10 animate-pulse bg-neutral-200" />
                 )}
@@ -59,7 +59,7 @@ const ModalService = () => {
                     className={`h-full w-full object-cover transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
                   />
                 </picture>
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent" />
               </figure>
             </div>
 
@@ -68,38 +68,7 @@ const ModalService = () => {
                 <p className="text-sm leading-6 text-neutral-700 sm:text-base sm:leading-7 md:text-[17px] md:leading-7">
                   {description}
                 </p>
-                <div className="h-px w-full bg-black/5" />
-                <div className="rounded-2xl border border-green-primary/15 bg-green-primary/5 p-4">
-                  <p className="text-xs font-medium text-green-primary sm:text-sm">
-                    ¿Necesitas más información?
-                  </p>
-                  <p className="mt-1 text-xs text-neutral-600 sm:text-sm">
-                    Podemos orientarte para elegir el estudio o servicio ideal
-                    según tu necesidad.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                  <a
-                    href="/"
-                    className="inline-flex items-center justify-center transition hover:scale-105 active:scale-95"
-                  >
-                    <img
-                      src={whatsappIcon.src}
-                      alt="WhatsApp DYRA"
-                      className="w-9 h-auto"
-                    />
-                  </a>
-                  <a
-                    href="/"
-                    className="inline-flex items-center justify-center transition hover:scale-105 active:scale-95"
-                  >
-                    <img
-                      src={gmailIcon.src}
-                      alt="Email DYRA"
-                      className="w-9 h-auto"
-                    />
-                  </a>
-                </div>
+                <CTAContact />
                 <p className="text-[11px] text-neutral-500 sm:text-xs">
                   * La disponibilidad puede variar según sucursal.
                 </p>

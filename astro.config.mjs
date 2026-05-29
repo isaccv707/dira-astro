@@ -16,6 +16,7 @@ export default defineConfig({
       include: {
         lucide: ["*"],
         tabler: ["*"],
+        logos: ["*"],
         "simple-icons": ["*"],
       },
     }),
