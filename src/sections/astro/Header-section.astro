@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import logoDyra from "../../assets/images/logos/logo_dyra.png";
 import NavbarSection from "./Navbar-section.astro";
-import ButtonDrawer from "../../components/react/ui/ButtonDrawer";
+import ButtonDrawer from "../../components/react/buttons/ButtonDrawer";
 import NavDrawer from "../../components/react/drawer/NavDrawer";
 ---
 
@@ -23,25 +23,8 @@ import NavDrawer from "../../components/react/drawer/NavDrawer";
         <NavbarSection />
       </div>
 
-      <!-- <div class="hidden md:flex items-center gap-4">
-        {
-          SOCIAL_NETWORKS.map(({ href, icon, name }) => (
-            <a
-              href={href}
-              aria-label={name}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:opacity-80 transition-opacity"
-            >
-              <img src={icon.src} alt={name} class="w-8 h-8" />
-            </a>
-          ))
-        }
-      </div> -->
-
       <div class="md:hidden">
         <ButtonDrawer client:load />
-        <NavDrawer client:load />
       </div>
     </div>
   </div>

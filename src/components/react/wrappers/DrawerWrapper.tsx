@@ -1,6 +1,6 @@
 import { DrawerProvider } from "../../../contexts/DrawerContext";
 import { ToastContainer } from "react-toastify";
-import ButtonDrawer from "../ui/ButtonDrawer";
+import ButtonDrawer from "../buttons/ButtonDrawer";
 import { routes } from "../../../routes/routes";
 
 const DrawerWrapper = () => {

@@ -9,7 +9,7 @@ import {
   CART_UPDATED_EVENT,
 } from "../../../utils/cart";
 import NavLinkButton from "../navigation/NavLinkButton";
-import Button from "../ui/Button";
+import Button from "../buttons/Button";
 import { useCartActions } from "../../../hooks/useCartActions";
 
 interface StudiesDrawerProps {

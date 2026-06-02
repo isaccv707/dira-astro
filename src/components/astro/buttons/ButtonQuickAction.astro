@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import ModalBranches from "../../react/modal/ModalBranches";
 
 interface Props {
   id: string;
@@ -31,6 +32,8 @@ const {
   </div>
   <span class="text-lg text-center">{text}</span>
 </button>
+
+<ModalBranches client:load />
 
 <script>
   import { openModal } from "../../../stores/modalStore";

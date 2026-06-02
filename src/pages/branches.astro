@@ -1,9 +1,38 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BranchWrapper from "../components/react/wrappers/BranchWrapper";
 import MetricsDyra from "../sections/react/MetricsDyra-section";
+import BranchSection from "../sections/react/branch/Branch-section";
 ---
-<Layout title="Nuestras Sucursales | DYRA" description="Encuentra tu sucursal de Laboratorio DYRA más cercana. Contamos con múltiples ubicaciones para tu comodidad.">
-  <BranchWrapper client:load />
-  <MetricsDyra client:visible />
+
+<Layout
+  title="Nuestras Sucursales | DYRA"
+  description="Encuentra tu sucursal de Laboratorio DYRA más cercana. Contamos con múltiples ubicaciones para tu comodidad."
+>
+  <header class="mb-14">
+    <p
+      class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
+    >
+      Ubicaciones
+      <span class="h-1 w-1 rounded-full bg-green-secondary"></span>
+      DYRA Laboratorio
+    </p>
+
+    <h1
+      class="mt-4 text-3xl font-extrabold tracking-tight text-yellow-secondary sm:text-4xl lg:text-5xl"
+    >
+      Nuestras sucursales a
+      <span
+        class="block bg-linear-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
+      >
+        tu alcance en todo momento.
+      </span>
+    </h1>
+
+    <p class="mt-4 max-w-xl text-pretty text-sm text-gray-600 sm:text-base">
+      Contamos con múltiples puntos de atención para tu comodidad. Cada una de
+      nuestras sucursales cumple con los más altos estándares de calidad y
+      tecnología.
+    </p>
+  </header>
+  <BranchSection client:load />
 </Layout>

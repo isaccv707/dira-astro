@@ -3,7 +3,7 @@ import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import useDrawerManager from "../../../hooks/useDrawerManager";
 import type { Study } from "../../../interfaces/study.interface";
 import { ShoppingCart, CheckCircle2, Trash2 } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "./Button";
 
 interface StudyDetailActionsProps {
   study: Study;

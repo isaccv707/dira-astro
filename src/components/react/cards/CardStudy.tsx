@@ -7,7 +7,7 @@ import {
   Trash2,
 } from "lucide-react";
 import NavLinkButton from "../navigation/NavLinkButton";
-import Button from "../ui/Button";
+import Button from "../buttons/Button";
 import type { Study } from "../../../interfaces/study.interface";
 import {
   addToCart,

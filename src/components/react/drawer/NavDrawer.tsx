@@ -15,7 +15,7 @@ import { useStore } from "@nanostores/react";
 import { isDrawerOpen } from "../../../stores/drawerStore";
 import Drawer from "./Drawer";
 import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
-import ButtonNetworkIcons from "../ui/ButtonNetworkIcons";
+import ButtonNetworkIcons from "../buttons/ButtonNetworkIcons";
 
 interface NavDrawerProps {
   id?: string;

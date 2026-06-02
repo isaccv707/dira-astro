@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import Modal from "./Modal";
 import FormProvider from "../hk-form/FormProvider";
 import RHFTextInput from "../hk-form/RHFTextInput";
-import Button from "../ui/Button";
+import Button from "../buttons/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   ReviewSchema,

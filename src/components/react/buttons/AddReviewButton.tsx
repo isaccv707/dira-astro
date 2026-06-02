@@ -1,5 +1,5 @@
 import { openModal } from "../../../stores/modalStore";
-import Button from "../ui/Button";
+import Button from "./Button";
 
 interface AddReviewButtonProps {
   modalId?: string;

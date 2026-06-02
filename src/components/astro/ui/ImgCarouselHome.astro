@@ -19,14 +19,11 @@ const { imageUrl, isLCP, index } = Astro.props;
     srcset={getCloudinarySrcSet(imageUrl)}
     sizes="(max-width: 768px) 100vw, 1280px"
     alt={`Banner DYRA ${index + 1}`}
-    class="w-full h-auto aspect-[4/5] md:aspect-[16/7] object-cover rounded-2xl"
+    class="w-full h-auto aspect-4/5 md:aspect-16/7 object-cover rounded-2xl"
     loading={isLCP ? "eager" : "lazy"}
     fetchpriority={isLCP ? "high" : "auto"}
     decoding={isLCP ? "sync" : "async"}
     width="1280"
     height="560"
   />
-  {
-    /* <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white/70 via-white/40 to-transparent pointer-events-none rounded-b-2xl" /> */
-  }
 </div>
