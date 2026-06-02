@@ -1,5 +1,5 @@
-import ButtonAddStudy from "../buttons/ButtonAddStudy";
 import type { Study } from "../../../interfaces/study.interface";
+import AddStudyButton from "../buttons/AddStudyButton";
 
 interface CardQuoteStudyProps {
   study: Study;
@@ -17,7 +17,7 @@ const CardQuoteStudy = ({
   return (
     <div
       className="
-        group h-full min-h-[168px]
+        group h-full min-h-42
         rounded-2xl bg-white
                     p-4 sm:p-5 lg:p-6        ring-1 ring-black/5
         shadow-sm
@@ -78,7 +78,7 @@ const CardQuoteStudy = ({
 
         <div className="mt-auto">
           <div className="w-full">
-            <ButtonAddStudy
+            <AddStudyButton
               isAdded={isAdded}
               handleAddStudy={handleAddStudy}
               handleDeletStudy={handleDeletStudy}

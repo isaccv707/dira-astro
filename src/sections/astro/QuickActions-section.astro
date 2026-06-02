@@ -1,10 +1,8 @@
 ---
-import ButtonQuickAction from "../../components/astro/buttons/ButtonQuickAction.astro";
 import NavigationQuickActions from "../../components/astro/buttons/NavigationQuickAction.astro";
-import { fetchBranches } from "../../api/branchesApi/branchService";
 import { quickActions } from "../../data/quickActions/quickActions";
-
-export const branches = await fetchBranches();
+import QuickActionButton from "../../components/react/buttons/QuickActionButton";
+import ModalBranches from "../../components/react/modal/ModalBranches";
 ---
 
 <section>
@@ -12,7 +10,7 @@ export const branches = await fetchBranches();
     class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10"
   >
     {
-      quickActions.map(({ path, bgColor, icon, text, disabled }) => (
+      quickActions.map(({ path, bgColor, icon, text }) => (
         <NavigationQuickActions
           path={path}
           text={text}
@@ -21,11 +19,7 @@ export const branches = await fetchBranches();
         />
       ))
     }
-    <ButtonQuickAction
-      id="btn-open-branches"
-      text="Resultados"
-      icon="lucide:test-tube-diagonal"
-      data={branches}
-    />
+
+    <QuickActionButton text="Resultados" client:load />
   </div>
 </section>

@@ -9,12 +9,14 @@ import {
 import type { Service } from "../../../interfaces/service.interface";
 
 import CTAContact from "../CTA/CTAContact";
-
-const ModalService = () => {
+interface ModalServiceProps {
+  id?: string;
+}
+const ModalService = ({ id = "MODAL_SERVICE" }: ModalServiceProps) => {
   const { isOpen, view, payload } = useStore(modalStore);
   const [loaded, setLoaded] = useState(true);
 
-  if (!isOpen || view !== "MODAL_SERVICE" || !payload?.data) return null;
+  if (!isOpen || view !== id || !payload?.data) return null;
 
   const service: Service = payload.data;
   const title = payload.title || service.name;

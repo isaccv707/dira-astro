@@ -17,7 +17,6 @@ export const BranchSelectorSection = () => {
         }
 
         const branchesData = await getAllBranches();
-        console.log(branchesData);
         if (branchesData && branchesData.length > 0) {
           openModal("MODAL_SELECT_BRANCH", {
             title: "Elige la sucursal de tu preferencia",

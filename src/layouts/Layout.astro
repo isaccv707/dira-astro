@@ -6,12 +6,8 @@ import logo from "../assets/images/logos/logo_dyra.png";
 import "../styles/global.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ModalBranches from "../components/react/modal/ModalBranches";
-import ModalService from "../components/react/modal/ModalService";
-import ModalReviewFrom from "../components/react/modal/ModalReviewFrom";
-import { BranchSelectorSection } from "../sections/react/BranchSelector-section";
-import ModalSelectBranch from "../components/react/modal/ModalSelectBranch";
-import NavDrawer from "../components/react/drawer/NavDrawer";
+import ModalManager from "../components/react/modal/ModalManager";
+import BranchSelectorSection from "../sections/react/BranchSelector-section";
 
 interface Props {
   title: string;
@@ -111,7 +107,6 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col"
   >
     <Header />
-    <!-- <AppProviders client:load Component={BranchSelectorSection} /> -->
 
     <main
       id="main-content"
@@ -121,15 +116,9 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
       <slot />
     </main>
     <ToastContainer client:only="react" />
-
-    <Footer />
-
+    <ModalManager client:load />
     <FloatingActionsWrapper client:load />
-    <ModalBranches client:load />
-    <ModalService client:load />
-    <ModalReviewFrom client:load />
-    <BranchSelectorSection client:only="react" />
-    <ModalSelectBranch client:load id="MODAL_SELECT_BRANCH" />
-    <NavDrawer client:load />
+    <BranchSelectorSection client:load />
+    <Footer />
   </body>
 </html>

@@ -6,7 +6,7 @@ import type { Branch } from "../../../interfaces/branch.interface";
 const ModalBranches = () => {
   const { isOpen, payload, view } = useStore(modalStore);
 
-  const { title = "", paragraph, data } = payload || {};
+  const { title = "", paragraph, data = [] } = payload || {};
 
   if (!isOpen || view !== "MODAL_BRANCHES") return null;
 
@@ -18,7 +18,7 @@ const ModalBranches = () => {
 
   return (
     <Modal
-      id={"modal-branches"}
+      id={"MODAl_BRANCHES"}
       title={title}
       onClose={closeModal}
       open={isOpen}

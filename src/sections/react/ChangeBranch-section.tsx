@@ -1,23 +1,15 @@
 import { useEffect, useState } from "react";
-import { useGetAllBranchesQuery } from "../../api/branchesApi/branchesApi";
 import useModalManager from "../../hooks/useModalManager";
 
 const ChangeBranchSection = () => {
   const [branchName, setBranchName] = useState<string>("");
-  const { data: branches } = useGetAllBranchesQuery();
-  const { open } = useModalManager();
 
   useEffect(() => {
     const name = localStorage.getItem("dyra_branch_name");
     if (name) setBranchName(name);
   }, []);
 
-  const handleChange = () => {
-    open("MODAL_SELECT_BRANCH", {
-      title: "",
-      data: branches,
-    });
-  };
+  const handleChange = () => {};
 
   return (
     <button

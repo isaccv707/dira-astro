@@ -19,11 +19,16 @@ const BranchCard = ({ branch }: BranchCardProps) => {
 
   const fullAddress = getFullAddress(branch);
 
-  const handleOpenModal = () => {
-    openModal("MODAL_SELECT_BRANCH", {
-      title: "Elegir sucursal",
-      data: [],
-    });
+  const handleOpenModal = async () => {
+    try {
+      const branches = await getAllBranches();
+      openModal("MODAL_SELECT_BRANCH", {
+        title: "Elige la sucursal de tu preferencia",
+        data: branches,
+      });
+    } catch (error) {
+      console.log("Error al abrir el modal");
+    }
   };
 
   return (

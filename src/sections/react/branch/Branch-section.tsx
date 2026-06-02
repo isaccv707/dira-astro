@@ -9,7 +9,7 @@ import MapCard from "../../../components/react/cards/MapCard";
 const BranchSection = () => {
   const [branchData, setBranchData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const allBranches = getAllBranches();
+
   useEffect(() => {
     const savedBranchId = localStorage.getItem("dyra_branch_id");
     if (savedBranchId) {

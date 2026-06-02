@@ -61,7 +61,7 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
 
             <Button
               onClick={onClose}
-              icon={<X />}
+              icon={"lucide:x"}
               variant={"danger"}
               size={"sm"}
             />
