@@ -1,6 +1,6 @@
 import React from "react";
 import NavLinkButton from "../navigation/NavLinkButton";
-import type { Post } from "../../../api/interfaces/post.interface";
+import type { Post } from "../../../api/postsApi/post.interface";
 
 interface PostCardProps {
   post: Post;
@@ -13,7 +13,7 @@ const PostCard = ({ post }: PostCardProps) => {
     <article className="w-full h-full bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden group">
       {/* Image Container with fixed Aspect Ratio */}
       {image && (
-        <div className="relative aspect-[16/9] overflow-hidden">
+        <div className="relative aspect-video overflow-hidden">
           <img
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             src={image.src}
@@ -32,9 +32,7 @@ const PostCard = ({ post }: PostCardProps) => {
       )}
 
       <div className="p-6 md:p-8 flex flex-col flex-1">
-        {/* Main Content */}
         <div className="flex-1 flex flex-col gap-4">
-          {/* Tags */}
           {tags && tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {tags.map((tag, index) => (

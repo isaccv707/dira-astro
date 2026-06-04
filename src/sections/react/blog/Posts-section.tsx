@@ -4,7 +4,8 @@ import Pagination from "../../../components/react/ui/Pagination";
 import usePagination from "../../../hooks/usePagination";
 import { useGetAllPosts } from "./hooks/useGetAllPosts";
 
-const LIMIT = 1;
+const LIMIT = 5;
+
 const Posts = () => {
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
 
@@ -24,7 +25,7 @@ const Posts = () => {
   }, [totalPages]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container">
       <div
         className="grid gap-6 
               sm:grid-cols-1 

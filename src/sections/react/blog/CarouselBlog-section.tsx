@@ -1,7 +1,7 @@
 import { SwiperSlide } from "swiper/react";
 import Carousel from "../../../components/react/carousel/Carousel";
 import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
-import type { Post } from "../../../api/interfaces/post.interface";
+import type { Post } from "../../../api/postsApi/post.interface";
 
 interface CarouselBlogProps {
   posts: Post[];
