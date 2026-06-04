@@ -1,16 +1,13 @@
-import { Menu } from "lucide-react";
-import { useStore } from "@nanostores/react";
 import Button from "./Button";
-import { isDrawerOpen } from "../../../stores/drawerStore";
+import { openDrawer } from "../../../stores/drawerStore";
 
 const ButtonDrawer = () => {
-  const $isDrawerOpen = useStore(isDrawerOpen);
-
   const handleDrawer = () => {
-    isDrawerOpen.set(!$isDrawerOpen);
+    openDrawer("DRAWER_NAVBAR", {
+      title: "Menu",
+    });
   };
-
-  return <Button onClick={handleDrawer} icon={<Menu />} />;
+  return <Button onClick={handleDrawer} icon={"tabler:menu-2-filled"} />;
 };
 
 export default ButtonDrawer;

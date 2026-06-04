@@ -31,7 +31,9 @@ const Accordion = ({
           onClick={toggleItem}
           className={clsx(
             "flex justify-between items-center w-full px-6 py-4 text-left font-semibold text-green-primary transition-colors duration-200",
-            isOpen ? "bg-green-100/50 border-l-4 border-green-primary rounded-t-xl" : "hover:bg-green-50"
+            isOpen
+              ? "bg-green-100/50 border-l-4 border-green-primary rounded-t-xl"
+              : "hover:bg-green-50",
           )}
           aria-expanded={isOpen}
           aria-controls={id}
@@ -40,7 +42,7 @@ const Accordion = ({
           <IoChevronDown
             className={clsx(
               "text-lg transform transition-transform duration-200",
-              isOpen ? "rotate-180 text-green-primary" : "text-gray-500"
+              isOpen ? "rotate-180 text-green-primary" : "text-gray-500",
             )}
           />
         </button>
@@ -49,10 +51,10 @@ const Accordion = ({
           id={id}
           className={clsx(
             "overflow-hidden transition-all duration-300 ease-in-out",
-            isOpen ? "max-h-screen px-6 py-4" : "max-h-0 px-6 py-0"
+            isOpen ? "max-h-screen px-6 py-4" : "max-h-0 px-6 py-0",
           )}
         >
-          {isOpen && <div className="text-gray-800 text-sm pb-2">{children}</div>}
+          {isOpen && <div className="text-sm pb-2">{children}</div>}
         </div>
       </div>
     </div>

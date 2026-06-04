@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Calendar,
-  Clock,
-  FlaskConical,
-  ShoppingCart,
-  Trash2,
-} from "lucide-react";
+
 import NavLinkButton from "../navigation/NavLinkButton";
 import Button from "../buttons/Button";
 import type { Study } from "../../../interfaces/study.interface";
@@ -30,7 +24,7 @@ const CardStudy = ({
     deliveryTime,
     id,
     name,
-    price,
+    priceInfo,
     slug,
     description,
     preparation,
@@ -74,7 +68,7 @@ const CardStudy = ({
         )}
       </div>
 
-      <div className="p-6 flex-grow">
+      <div className="p-6 grow">
         <h5
           title={name}
           className="mb-3 text-xl font-bold text-black leading-tight group-hover:text-green-primary transition-colors duration-300 line-clamp-2"
@@ -84,7 +78,7 @@ const CardStudy = ({
 
         {isRequiredAppointment && (
           <div className="flex items-center gap-2 mb-4 text-red font-bold text-xs uppercase tracking-wide">
-            <Calendar className="w-4 h-4" />
+            {/* <Calendar className="w-4 h-4" /> */}
             <span>Requiere cita</span>
           </div>
         )}
@@ -98,15 +92,15 @@ const CardStudy = ({
 
           <div className="flex flex-wrap gap-x-5 gap-y-3 pt-4 border-t border-gray-50">
             <div className="flex items-center gap-2 text-xs font-semibold text-grey">
-              <Clock className="w-4 h-4 text-green-secondary" />
+              {/* <Clock className="w-4 h-4 text-green-secondary" /> */}
               <span>
                 Entrega: <span className="text-black">{deliveryTime} hrs</span>
               </span>
             </div>
             {preparation && (
               <div className="flex items-center gap-2 text-xs font-semibold text-grey">
-                <FlaskConical className="w-4 h-4 text-green-secondary" />
-                <span className="truncate max-w-[130px]">
+                {/* <FlaskConical className="w-4 h-4 text-green-secondary" /> */}
+                <span className="truncate max-w-32.5">
                   Prep: <span className="text-black">{preparation}</span>
                 </span>
               </div>
@@ -117,7 +111,7 @@ const CardStudy = ({
         <div className="flex items-end gap-1 mb-6">
           <span className="text-sm font-bold text-grey mb-1">$</span>
           <span className="text-3xl font-black text-green-light tracking-tight">
-            {price.toLocaleString("es-MX", { minimumFractionDigits: 2 })}
+            {priceInfo.price}
           </span>
           <span className="text-xs font-bold text-green-light mb-1 ml-1 uppercase">
             MXN
@@ -141,13 +135,13 @@ const CardStudy = ({
           onClick={handleAction}
           variant={isInCart ? "danger" : "primary"}
           text={isInCart ? "Eliminar" : "Agregar"}
-          icon={
-            isInCart ? (
-              <Trash2 className="w-4 h-4" />
-            ) : (
-              <ShoppingCart className="w-4 h-4" />
-            )
-          }
+          // icon={
+          //   isInCart ? (
+          //     <Trash2 className="w-4 h-4" />
+          //   ) : (
+          //     <ShoppingCart className="w-4 h-4" />
+          //   )
+          // }
         />
       </div>
     </div>

@@ -1,13 +1,14 @@
 ---
 import Footer from "../sections/astro/Footer-section.astro";
 import Header from "../sections/astro/Header-section.astro";
-import FloatingActionsWrapper from "../components/react/wrappers/FloatingActionsWrapper";
 import logo from "../assets/images/logos/logo_dyra.png";
 import "../styles/global.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalManager from "../components/react/modal/ModalManager";
 import BranchSelectorSection from "../sections/react/BranchSelector-section";
+import FloatingActionsSection from "../sections/react/FloatingActions-section";
+import DrawerManager from "../components/react/drawer/DrawerManager";
 
 interface Props {
   title: string;
@@ -116,8 +117,11 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
       <slot />
     </main>
     <ToastContainer client:only="react" />
+    <FloatingActionsSection client:load />
+
     <ModalManager client:load />
-    <FloatingActionsWrapper client:load />
+    <DrawerManager client:load />
+
     <BranchSelectorSection client:load />
     <Footer />
   </body>

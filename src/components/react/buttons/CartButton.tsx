@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
 import { getCart, CART_UPDATED_EVENT } from "../../../utils/cart";
-import useDrawerManager from "../../../hooks/useDrawerManager";
+import { openModal } from "../../../stores/modalStore";
+import { openDrawer } from "../../../stores/drawerStore";
 
 const CartButton = () => {
   const [itemCount, setItemCount] = useState(0);
-  const { open } = useDrawerManager();
 
   const updateCount = () => {
     const cart = getCart();
@@ -31,8 +31,8 @@ const CartButton = () => {
 
   const handleOpenCart = () => {
     const currentCart = getCart();
-    open("STUDIES_DRAWER", {
-      title: "Estudios Seleccionados",
+
+    openDrawer("DRAWER_STUDIES", {
       data: currentCart,
     });
   };

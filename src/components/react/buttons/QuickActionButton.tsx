@@ -20,7 +20,6 @@ const QuickActionButton = ({
     setIsLoading(true);
     try {
       const branches = await getAllBranches();
-      console.log(branches);
       openModal("MODAL_BRANCHES", {
         data: branches,
         title: "Consulta de Resultados",

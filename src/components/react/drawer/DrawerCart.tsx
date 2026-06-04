@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useDrawerManager from "../../../hooks/useDrawerManager";
 import type { Study } from "../../../interfaces/study.interface";
 import Drawer from "./Drawer";
 import SelectedStudiesAccordion from "../accordion/SelectedStudiesAccordion";
@@ -11,17 +10,24 @@ import {
 import NavLinkButton from "../navigation/NavLinkButton";
 import Button from "../buttons/Button";
 import { useCartActions } from "../../../hooks/useCartActions";
+import { useStore } from "@nanostores/react";
+import { closeDrawer, drawerStore } from "../../../stores/drawerStore";
 
-interface StudiesDrawerProps {
-  id: string;
-  data: Study[];
-  title: string;
+interface DrawerStudiesProps {
+  id?: string;
+  data?: Study[];
+  title?: string;
 }
 
-const StudiesDrawer = ({ id, title }: StudiesDrawerProps) => {
-  const { close } = useDrawerManager();
+const DrawerStudies = ({
+  id = "DRAWER_STUDIES",
+  title = "Estudios Seleccionados",
+}: DrawerStudiesProps) => {
   const [cartItems, setCartItems] = useState<Study[]>([]);
   const { scheduleAppointment } = useCartActions();
+  const { isOpen, view } = useStore(drawerStore);
+
+  if (!isOpen || view !== id) return null;
 
   const updateCart = () => {
     setCartItems(getCart());
@@ -52,14 +58,14 @@ const StudiesDrawer = ({ id, title }: StudiesDrawerProps) => {
   };
 
   const total = cartItems.reduce(
-    (acc, item) => acc + item.price * (item.quantity || 1),
+    (acc, item) => acc + item.priceInfo.price * (item.quantity || 1),
     0,
   );
 
   return (
-    <Drawer open={true} onClose={() => close(id)} title={title}>
+    <Drawer id={id} open={isOpen} onClose={closeDrawer} title={title}>
       <div className="flex flex-col h-[calc(100vh-120px)]">
-        <div className="flex-grow overflow-y-auto">
+        <div className="grow overflow-y-auto">
           <SelectedStudiesAccordion
             selectedStudies={cartItems}
             removeStudy={handleRemove}
@@ -83,7 +89,7 @@ const StudiesDrawer = ({ id, title }: StudiesDrawerProps) => {
               text="Generar Cotización"
               variant="primary"
               width="full"
-              onClick={() => close(id)}
+              onClick={closeDrawer}
             />
             <Button
               text="Agendar cita"
@@ -106,4 +112,4 @@ const StudiesDrawer = ({ id, title }: StudiesDrawerProps) => {
   );
 };
 
-export default StudiesDrawer;
+export default DrawerStudies;

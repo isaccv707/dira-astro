@@ -12,7 +12,7 @@ const NavigationAccordion = ({ routes }: NavigationAccordionProps) => {
           <NavLinkButton
             path={path}
             text={text}
-            variant={"normal"}
+            variant={"ghost"}
             align={"left"}
           />
         </li>
