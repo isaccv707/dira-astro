@@ -53,7 +53,7 @@ const CardQuoteStudy = ({
                 whitespace-nowrap
               "
             >
-              ${study.price}
+              ${study.priceInfo.price}
             </span>
 
             <span

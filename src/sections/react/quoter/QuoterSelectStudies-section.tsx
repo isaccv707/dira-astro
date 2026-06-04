@@ -20,12 +20,6 @@ const QuoterSelectStudies = () => {
 
   const { addStudy, removeStudy, selectedStudies } = useQuoterContext();
 
-  const methods = useForm<Inputs>({
-    defaultValues: { searchStudies: "" },
-  });
-
-  const { handleSubmit } = methods;
-
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: totalPagesForHook,
     initialPage: 1,
@@ -34,14 +28,12 @@ const QuoterSelectStudies = () => {
     setPage,
   });
 
-  const { studies, totalPages, isLoading, isFetching, isError } =
+  const { studies, totalPages, isLoading, isFetching, isError, totalStudies } =
     useGetAllStudies({
       page: currentPage,
       limit: LIMIT,
       search,
     });
-
-  const totalStudies = studies.length * totalPages;
 
   useEffect(() => {
     setTotalPagesForHook(totalPages || 1);
@@ -74,9 +66,8 @@ const QuoterSelectStudies = () => {
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
             {studies.length > 0 ? (
-              studies.map((study) => {
+              studies.map((study: Study) => {
                 const isAdded = selectedStudies.some((s) => s.id === study.id);
-
                 return (
                   <CardQuoteStudy
                     key={study.id}
