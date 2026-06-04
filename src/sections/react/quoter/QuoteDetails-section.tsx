@@ -12,7 +12,7 @@ const QuoteDetails = () => {
 
   const { viewQuotation, downloadQuotation, isDownloading, isViewing } =
     useQuotationPdf({ client, selectedStudies });
-
+  console.log(downloadQuotation);
   return (
     <div className="w-full h-full">
       <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">

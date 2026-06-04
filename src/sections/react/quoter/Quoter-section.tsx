@@ -11,7 +11,6 @@ import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema"
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IoIosReturnLeft } from "react-icons/io";
 
 type Inputs = yup.InferType<typeof quoterFormSchema>;
 
@@ -67,7 +66,7 @@ const Quoter = () => {
               text="Regresar"
               variant="primary"
               size="sm"
-              icon={<IoIosReturnLeft />}
+              icon={"tabler:arrow-back"}
               onClick={previousStep}
             />
           </div>
@@ -86,7 +85,7 @@ const Quoter = () => {
               text="Regresar"
               variant="primary"
               size="sm"
-              icon={<IoIosReturnLeft />}
+              icon={"tabler:arrow-back"}
               onClick={previousStep}
             />
           ) : null}
