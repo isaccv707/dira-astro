@@ -1,44 +1,33 @@
-import useModalManager from "../../../hooks/useModalManager";
-import type { Branch } from "../../../interfaces/branch.interface";
+import { useStore } from "@nanostores/react";
+import { closeModal, modalStore } from "../../../stores/modalStore";
 import Modal from "./Modal";
+import type { Branch } from "../../../interfaces/branch.interface";
 
-interface ModalBranchesProps {
-  id: string;
-  title: string;
-  data: Branch[];
-  paragraph?: string;
-  openInNewTab?: boolean;
-}
+const ModalBranches = () => {
+  const { isOpen, payload, view } = useStore(modalStore);
 
-const ModalBranches = ({
-  data: branches,
-  id,
-  title,
-  paragraph = "Selecciona la sucursal de tu preferencia.",
-  openInNewTab = true,
-}: ModalBranchesProps) => {
-  const { close } = useModalManager();
+  const { title = "", paragraph, data = [] } = payload || {};
 
-  const handleOpen = (branch: Branch) => {
-    const url = branch.urlResults;
-    if (!url) return;
+  if (!isOpen || view !== "MODAL_BRANCHES") return null;
 
-    close(id);
-
-    if (openInNewTab) {
-      window.open(url, "_blank", "noopener,noreferrer");
-      return;
-    }
-    window.location.href = url;
+  const handleOpen = (branch: any) => {
+    if (!branch.urlResults) return;
+    closeModal();
+    window.open(branch.urlResults, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <Modal id={id} title={title} onClose={() => close(id)} open>
+    <Modal
+      id={"MODAl_BRANCHES"}
+      title={title}
+      onClose={closeModal}
+      open={isOpen}
+    >
       <div className="p-5">
         <p className="text-sm text-gray-600">{paragraph}</p>
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {branches.slice(0, 2).map((branch) => (
+          {data.slice(0, 2).map((branch: Branch) => (
             <button
               key={branch.id}
               type="button"
@@ -69,7 +58,7 @@ const ModalBranches = ({
                 </span>
               </div>
 
-              <p className="mt-3 text-sm font-bold text-green-ligth">
+              <p className="mt-3 text-sm font-bold text-green-light">
                 Referencia: {`${branch.address.references}`}
               </p>
             </button>

@@ -1,0 +1,26 @@
+---
+import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
+import NavigationButton from "../navigation/NavigationButton.astro";
+---
+
+<div class="rounded-2xl border border-green-primary/15 bg-green-primary/5 p-4">
+  <p class="text-xs font-medium text-green-primary sm:text-sm">
+    ¿Necesitas más información?
+  </p>
+  <p class="mt-1 text-xs text-neutral-600 sm:text-sm mb-2">
+    Contáctanos por el medio de tu preferencia
+  </p>
+  <div class="flex gap-2 flex-row sm:items-center sm:gap-3">
+    {
+      SOCIAL_NETWORKS.map(({ name, route, icon }) => (
+        <NavigationButton
+          href={route}
+          icon={icon}
+          target={name !== "Gmail" ? "_blank" : "_self"}
+          className="inline-flex items-center justify-center transition hover:scale-105 active:scale-95"
+          iconClassName="w-7 h-7"
+        />
+      ))
+    }
+  </div>
+</div>

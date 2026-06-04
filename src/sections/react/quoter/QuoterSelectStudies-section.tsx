@@ -33,14 +33,15 @@ const QuoterSelectStudies = () => {
   const { search, handleSearchChange } = useSearchStudies({
     setPage,
   });
-  
-  const { studies, totalPages, isLoading, isFetching, isError } = useGetAllStudies({
-    page: currentPage,
-    limit: LIMIT,
-    search,
-  });
 
-  const totalStudies = studies.length * totalPages
+  const { studies, totalPages, isLoading, isFetching, isError } =
+    useGetAllStudies({
+      page: currentPage,
+      limit: LIMIT,
+      search,
+    });
+
+  const totalStudies = studies.length * totalPages;
 
   useEffect(() => {
     setTotalPagesForHook(totalPages || 1);
@@ -48,7 +49,7 @@ const QuoterSelectStudies = () => {
 
   const handleAddStudy = (study: Study) => addStudy(study);
   const handleDeletStudy = (studyId: string) => removeStudy(studyId);
-  
+
   return (
     <div className="flex h-full flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -63,7 +64,9 @@ const QuoterSelectStudies = () => {
 
       <div className="mt-5 flex-1">
         {isLoading ? (
-          <div className="py-10 text-center text-black/50">Cargando estudios...</div>
+          <div className="py-10 text-center text-black/50">
+            Cargando estudios...
+          </div>
         ) : isError ? (
           <div className="py-10 text-center text-black/50">
             Ocurrió un error al cargar los estudios.
@@ -102,7 +105,7 @@ const QuoterSelectStudies = () => {
           totalPages={totalPages}
         />
 
-        <div className="self-end bg-green-ligth px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
+        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
           {`${currentPage} / ${totalPages || 1}`}
         </div>
       </div>

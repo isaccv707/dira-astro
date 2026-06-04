@@ -5,10 +5,9 @@ import ServiceHeroSection from "../../sections/astro/service/ServiceHero-section
 import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits-section.astro";
 import ServiceItemsDetailsSection from "../../sections/astro/service/ServiceItemsDetails-section.astro";
 
-import Cat from "../../components/astro/ui/Cat.astro";
-
 import type { Service } from "../../interfaces/service.interface";
 import { getOneResource } from "../../utils/getOneResource";
+import CTAContact from "../../components/astro/CTA/CTAContact.astro";
 
 const { slug } = Astro.params;
 
@@ -34,25 +33,5 @@ const { name, description = "", imageUrl = "", benefits = [] } = service;
 
   <ServiceItemsDetailsSection service={service} />
 
-  <Cat
-    title="¿No sabes qué estudio necesitas?"
-    paragraph={`Nuestro equipo de expertos te ayudará a elegir el estudio ideal según tu caso clínico, indicándote la preparación necesaria y facilitando tu proceso de agenda.`}
-  />
+  <CTAContact />
 </Layout>
-
-<style>
-  main {
-    animation: fadeIn 0.8s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>

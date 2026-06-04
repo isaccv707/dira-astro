@@ -1,0 +1,21 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  href: string;
+  text?: string;
+  icon?: string;
+  className?: string; // 💡 Permite pasar estilos de Tailwind desde fuera
+  target?: "_blank" | "_self" | "_parent" | "_top"; // 💡 Para enlaces externos
+  iconClassName?: string; // 💡 Para controlar el tamaño o color del icono individualmente
+}
+
+const { text, icon, href, className, target, iconClassName } = Astro.props;
+const relAttribute = target === "_blank" ? "noopener noreferrer" : undefined;
+---
+
+<a href={href} class={className} target={target} rel={relAttribute}>
+  {icon && <Icon name={icon} class={iconClassName} />}
+
+  {text && <span class={icon ? "ml-2" : ""}>{text}</span>}
+</a>

@@ -1,21 +1,23 @@
 ---
-import ServicesWrapper from "../../../components/react/wrappers/ServicesWrapper";
 import type { Service } from "../../../interfaces/service.interface";
+import StudiesServices from "../../react/service/StudiesServices-section";
 
 interface Props {
   service: Service;
 }
 
 const { service } = Astro.props;
+const { _count } = service;
 ---
 
 <section>
-  <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-green-ligth">
+  <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-green-light">
     {`Servicios de ${service.name} disponibles`}
   </h2>
   <p class="text-sm sm:text-base text-grey">
     Explora nuestro catálogo con una gran variedad de servicios y encuentra el
     ideal para ti.
   </p>
-  <ServicesWrapper service={service} client:load />
+
+  {(_count?.studies ?? 0) > 0 ? <StudiesServices client:only="react" /> : ""}
 </section>
