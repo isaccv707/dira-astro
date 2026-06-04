@@ -1,7 +1,7 @@
-import { useState } from "react"; // Quitamos useEffect si no se usa
-import { FaWhatsapp } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
+import { useState } from "react";
+
 import { urlWhatsapp } from "../../../constants/urlWhatsapp";
+import { Icon } from "@iconify/react";
 
 const FloatingIconWhatsapp = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,7 @@ const FloatingIconWhatsapp = () => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (urlWhatsapp) {
-      window.open(urlWhatsapp, '_blank', 'noopener,noreferrer');
+      window.open(urlWhatsapp, "_blank", "noopener,noreferrer");
     } else {
       console.error("Error: La URL de WhatsApp no está definida en .env");
     }
@@ -23,10 +23,9 @@ const FloatingIconWhatsapp = () => {
           className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all cursor-pointer"
           aria-label="Abrir chat de Whatsapp"
         >
-          <FaWhatsapp size={24} />
+          <Icon icon={"tabler:brand-whatsapp"} className="w-7 h-auto" />
         </button>
       )}
-
 
       {isOpen && (
         <div className="bg-white p-4 rounded-xl shadow-2xl w-64 animate-fade-in relative border border-gray-100">
@@ -34,7 +33,7 @@ const FloatingIconWhatsapp = () => {
             onClick={() => setIsOpen(false)}
             className="absolute top-2 right-2 text-gray-400 hover:text-red-500 cursor-pointer"
           >
-            <MdCancel size={20} />
+            <Icon icon="lucide:x" className="w-7 h-auto" />
           </button>
 
           <h1 className="text-gray-800 font-semibold">Hola 👋</h1>

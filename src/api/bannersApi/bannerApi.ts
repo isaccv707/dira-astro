@@ -1,16 +1,18 @@
 import type { Banner } from "../../interfaces/banner.interface";
-import { api } from "../api";
 
-export const bannerApi = api.injectEndpoints({
-    endpoints: (builder) => ({
-        getActiveBanners: builder.query<Banner[], string>({
-            query: (placement) => ({
-                url: `banners/active/${placement}`,
-                method: 'GET',
-            }),
-            providesTags: ['Banners'],
-        })
-    })
-})
+const API_URL = import.meta.env.PUBLIC_API_URL;
 
-export const { useGetActiveBannersQuery } = bannerApi
+export const fetchActiveBanners = async (
+  placement: string,
+): Promise<Banner[]> => {
+  try {
+    const response = await fetch(`${API_URL}/banners/active/${placement}`);
+    if (!response.ok) {
+      throw new Error(`Error retrieving banners: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error en fetchActiveBanners:", error);
+    return [];
+  }
+};

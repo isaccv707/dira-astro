@@ -6,8 +6,9 @@ import {
   getToKnowRoutes,
   resultsRoutes,
 } from "../../routes/routes";
-import NavLinkButton from "../../components/react/ui/NavLinkButton";
 import { SOCIAL_NETWORKS } from "../../constants/socialNetworks";
+import NavigationButton from "../../components/astro/navigation/NavigationButton.astro";
+import NavLinkButton from "../../components/react/navigation/NavLinkButton";
 ---
 
 <footer class="bg-green-primary text-white pt-12">
@@ -18,7 +19,7 @@ import { SOCIAL_NETWORKS } from "../../constants/socialNetworks";
       <div
         class="lg:col-span-2 flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left"
       >
-        <img src={dyraLogo.src} alt="logo" class="w-36 h-auto flex-shrink-0" />
+        <img src={dyraLogo.src} alt="logo" class="w-36 h-auto shrink-0" />
         <div class="md:border-l-2 md:border-white/30 md:pl-6">
           <p class="text-sm md:text-base font-bold leading-relaxed max-w-xl">
             En DYRA, ofrecemos servicios de calidad con un enfoque profesional
@@ -31,15 +32,14 @@ import { SOCIAL_NETWORKS } from "../../constants/socialNetworks";
         <h4 class="font-bold uppercase tracking-widest text-xs">Contáctanos</h4>
         <div class="flex gap-4">
           {
-            SOCIAL_NETWORKS.map(({ href, icon }) => (
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hover:scale-110 transition-transform"
-              >
-                <img src={icon.src} alt="social icon" class="w-7 h-7" />
-              </a>
+            SOCIAL_NETWORKS.map(({ name, route, icon }) => (
+              <NavigationButton
+                href={route}
+                icon={icon}
+                target={name !== "Gmail" ? "_blank" : "_self"}
+                className="inline-flex items-center justify-center transition hover:scale-105 active:scale-95"
+                iconClassName="w-7 h-7"
+              />
             ))
           }
         </div>

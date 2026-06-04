@@ -1,7 +1,25 @@
 ---
-import QuickActionsWrapper from "../../components/react/wrappers/QuickActionsWrapper";
+import NavigationQuickActions from "../../components/astro/buttons/NavigationQuickAction.astro";
+import { quickActions } from "../../data/quickActions/quickActions";
+import QuickActionButton from "../../components/react/buttons/QuickActionButton";
+import ModalBranches from "../../components/react/modal/ModalBranches";
 ---
 
 <section>
-    <QuickActionsWrapper client:load />
+  <div
+    class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10"
+  >
+    {
+      quickActions.map(({ path, bgColor, icon, text }) => (
+        <NavigationQuickActions
+          path={path}
+          text={text}
+          bgColor={bgColor}
+          icon={icon}
+        />
+      ))
+    }
+
+    <QuickActionButton text="Resultados" client:load />
+  </div>
 </section>

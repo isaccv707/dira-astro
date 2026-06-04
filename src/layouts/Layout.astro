@@ -1,10 +1,14 @@
 ---
 import Footer from "../sections/astro/Footer-section.astro";
 import Header from "../sections/astro/Header-section.astro";
-import FloatingActionsWrapper from "../components/react/wrappers/FloatingActionsWrapper";
 import logo from "../assets/images/logos/logo_dyra.png";
 import "../styles/global.css";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ModalManager from "../components/react/modal/ModalManager";
+import BranchSelectorSection from "../sections/react/BranchSelector-section";
+import FloatingActionsSection from "../sections/react/FloatingActions-section";
+import DrawerManager from "../components/react/drawer/DrawerManager";
 
 interface Props {
   title: string;
@@ -107,22 +111,18 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
 
     <main
       id="main-content"
-      class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-28 focus:outline-none"
+      class="grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-28 focus:outline-none"
       tabindex="-1"
     >
       <slot />
     </main>
+    <ToastContainer client:only="react" />
+    <FloatingActionsSection client:load />
 
+    <ModalManager client:load />
+    <DrawerManager client:load />
+
+    <BranchSelectorSection client:load />
     <Footer />
-
-    <FloatingActionsWrapper client:load />
-
-    <!-- Accessibility: Skip to content for screen readers -->
-    <a
-      href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-yellow-primary focus:text-black focus:rounded-lg focus:font-bold"
-    >
-      Saltar al contenido principal
-    </a>
   </body>
 </html>

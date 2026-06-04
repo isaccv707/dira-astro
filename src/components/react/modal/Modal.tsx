@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Button from "../ui/Button";
+import Button from "../buttons/Button";
 import { X } from "lucide-react";
 
 interface ModalProps {
@@ -19,11 +19,9 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
     const body = document.body;
     const html = document.documentElement;
 
-
     const prevBodyOverflow = body.style.overflow;
     const prevBodyPaddingRight = body.style.paddingRight;
     const prevHtmlOverflow = html.style.overflow;
-
 
     const scrollbarWidth = window.innerWidth - html.clientWidth;
 
@@ -61,7 +59,12 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
               {title}
             </h3>
 
-            <Button onClick={onClose} icon={<X />} variant={"danger"} size={"sm"} />
+            <Button
+              onClick={onClose}
+              icon={"lucide:x"}
+              variant={"danger"}
+              size={"sm"}
+            />
           </div>
 
           <div className="mt-4 max-h-[70vh] overflow-y-auto text-body space-y-4">

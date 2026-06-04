@@ -1,9 +1,3 @@
-import {
-  missionIcon,
-  valuesIcon,
-  visionIcon,
-} from "../../assets/icons/companyValues-icons";
-
 interface ListCompanyValues {
   title: string;
   text?: string;
@@ -12,7 +6,7 @@ interface ListCompanyValues {
 interface CompanyValues {
   title: string;
   paragraph?: string;
-  icon?: ImageMetadata;
+  icon: string;
   bgColor?: string;
   list?: ListCompanyValues[];
 }
@@ -25,13 +19,13 @@ export const companyValues: CompanyValues[] = [
     para respaldar decisiones médicas oportunas, fortalecer la práctica clínica y generar bienestar 
     sostenible en pacientes y organizaciones.`,
     bgColor: "green-primary",
-    icon: missionIcon,
+    icon: "lucide:rocket",
   },
   {
     title: "Visión",
     paragraph: `Consolidarnos como el laboratorio clínico de referencia en diagnóstico especializado, reconocido por su confiabilidad, innovación continua y excelencia operativa, siendo un socio estratégico en la gestión de la salud y un generador de valor tangible para el sector médico y empresarial.`,
     bgColor: "green-secondary",
-    icon: visionIcon,
+    icon: "lucide:telescope",
   },
   {
     title: "Valores",
@@ -54,6 +48,6 @@ export const companyValues: CompanyValues[] = [
         text: "Incorporamos tecnología y mejora continua de manera estratégica para optimizar resultados, ampliar capacidades diagnósticas y generar ventaja competitiva.",
       },
     ],
-    icon: valuesIcon,
+    icon: "lucide:shield-check",
   },
 ];

@@ -1,9 +1,41 @@
+/* src/styles/global.css */
 @import "tailwindcss";
-@config "../../tailwind.config.mjs";
 
-.swiper,
-.swiper-wrapper,
-.swiper-slide {
-    height: auto !important;
-    display: flex;
+@theme {
+  /* --- PALETA DE COLORES PERSONALIZADA --- */
+  --color-green-primary: #228f04;
+  --color-green-secondary: #6ec225;
+  --color-green-light: #86ab27;
+  --color-yellow-primary: #d3d93b;
+  --color-yellow-secondary: #c4ba18;
+  --color-red-custom: #b03a2e;
+  --color-black-custom: #181818;
+  --color-grey-custom: #808080;
+
+  /* --- ANIMACIONES --- */
+  --animate-slide-in-right: slide-in-right 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+  --animate-fade-up: fade-up 0.32s ease;
+
+  /* --- KEYFRAMES --- */
+  @keyframes slide-in-right {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-up {
+    0% {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }

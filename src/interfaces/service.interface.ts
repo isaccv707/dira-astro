@@ -5,37 +5,35 @@
 
 import type { Study } from "./study.interface";
 
-
-
 export interface Benefits {
-    id: string;
-    title: string;
-    description: string;
-    icon: string;
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
 }
 
 export interface Details {
-    id: string
-    title: string
-    description: string
-    image: string
+  id: string;
+  title: string;
+  description: string;
+  image: string;
 }
 
 export interface Count {
-    studies: number;
+  studies: number;
 }
 
 export interface Service {
-    id?: string
-    name: string
-    slug: string
-    description?: string
-    icon?: string;
-    imageUrl?: string
-    mobileImageUrl?: string
-    isActive?: boolean;
-    benefits?: Benefits[];
-    details?: Details[];
-    _count?: Count
-    studies?: Study[];
+  id?: string;
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string;
+  imageUrl?: string;
+  mobileImageUrl?: string;
+  isActive?: boolean;
+  benefits?: Benefits[];
+  details?: Details[];
+  _count?: Count;
+  studies?: Study[];
 }

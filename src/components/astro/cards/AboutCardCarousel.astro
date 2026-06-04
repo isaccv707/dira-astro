@@ -2,52 +2,52 @@
 import CarouselAbout from "../../react/carousel/CarouselAbout";
 
 interface Props {
-    title: string;
-    paragraph: string;
-    images: any;
-    items: {
-        icon: string;
-        text: string;
-    }[];
+  title: string;
+  paragraph: string;
+  images: any;
+  items: {
+    icon: string;
+    text: string;
+  }[];
 }
 
 const { title, paragraph, items, images } = Astro.props;
 ---
 
 <div class="relative mx-auto w-full">
-    <div
-        class="group relative rounded-3xl shadow-2xl bg-white p-4 shadow-green-prbg-green-primary/30 backdrop-blur"
-    >
-        <div class="flex items-center justify-between gap-4 pb-3">
-            <div>
-                <p
-                    class="text-xs uppercase tracking-[0.2em] font-bold text-green-secondary"
-                >
-                    {title}
-                </p>
-                <p class="text-xl font-bold text-green-primary">
-                    {paragraph}
-                </p>
-            </div>
-        </div>
-
-        <div class="overflow-hidden rounded-2xl">
-            <CarouselAbout client:load />
-        </div>
-
-        <div class="mt-10 grid gap-3 text-xs text-grey sm:text-sm">
-            {
-                items.map(({ icon, text }) => (
-                    <div class="flex items-center justify-between gap-2">
-                        <span class="flex items-center gap-2">
-                            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-green-secondary">
-                                {icon}
-                            </span>
-                            {text}
-                        </span>
-                    </div>
-                ))
-            }
-        </div>
+  <div
+    class="group relative rounded-3xl shadow-2xl bg-white p-4 shadow-green-prbg-green-primary/30 backdrop-blur"
+  >
+    <div class="flex items-center justify-between gap-4 pb-3">
+      <div>
+        <p
+          class="text-xs uppercase tracking-[0.2em] font-bold text-green-secondary"
+        >
+          {title}
+        </p>
+        <p class="text-xl font-bold text-green-primary">
+          {paragraph}
+        </p>
+      </div>
     </div>
+
+    <div class="overflow-hidden rounded-2xl">
+      <CarouselAbout client:load />
+    </div>
+
+    <div class="mt-10 grid gap-3 text-xs text-grey sm:text-sm">
+      {
+        items.map(({ icon, text }) => (
+          <div class="flex items-center justify-between gap-2">
+            <span class="flex items-center gap-2">
+              <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-green-secondary">
+                {icon}
+              </span>
+              {text}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
 </div>

@@ -20,12 +20,6 @@ const QuoterSelectStudies = () => {
 
   const { addStudy, removeStudy, selectedStudies } = useQuoterContext();
 
-  const methods = useForm<Inputs>({
-    defaultValues: { searchStudies: "" },
-  });
-
-  const { handleSubmit } = methods;
-
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: totalPagesForHook,
     initialPage: 1,
@@ -33,14 +27,13 @@ const QuoterSelectStudies = () => {
   const { search, handleSearchChange } = useSearchStudies({
     setPage,
   });
-  
-  const { studies, totalPages, isLoading, isFetching, isError } = useGetAllStudies({
-    page: currentPage,
-    limit: LIMIT,
-    search,
-  });
 
-  const totalStudies = studies.length * totalPages
+  const { studies, totalPages, isLoading, isFetching, isError, totalStudies } =
+    useGetAllStudies({
+      page: currentPage,
+      limit: LIMIT,
+      search,
+    });
 
   useEffect(() => {
     setTotalPagesForHook(totalPages || 1);
@@ -48,7 +41,7 @@ const QuoterSelectStudies = () => {
 
   const handleAddStudy = (study: Study) => addStudy(study);
   const handleDeletStudy = (studyId: string) => removeStudy(studyId);
-  
+
   return (
     <div className="flex h-full flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -63,7 +56,9 @@ const QuoterSelectStudies = () => {
 
       <div className="mt-5 flex-1">
         {isLoading ? (
-          <div className="py-10 text-center text-black/50">Cargando estudios...</div>
+          <div className="py-10 text-center text-black/50">
+            Cargando estudios...
+          </div>
         ) : isError ? (
           <div className="py-10 text-center text-black/50">
             Ocurrió un error al cargar los estudios.
@@ -71,9 +66,8 @@ const QuoterSelectStudies = () => {
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
             {studies.length > 0 ? (
-              studies.map((study) => {
+              studies.map((study: Study) => {
                 const isAdded = selectedStudies.some((s) => s.id === study.id);
-
                 return (
                   <CardQuoteStudy
                     key={study.id}
@@ -102,7 +96,7 @@ const QuoterSelectStudies = () => {
           totalPages={totalPages}
         />
 
-        <div className="self-end bg-green-ligth px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
+        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
           {`${currentPage} / ${totalPages || 1}`}
         </div>
       </div>
