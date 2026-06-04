@@ -4,7 +4,6 @@ import type { Client } from "../interfaces/client.interface";
 import type { Study } from "../interfaces/study.interface";
 import { toast } from "react-toastify";
 import { downloadQuotationPdf } from "../api/quotationsApi/quotationApi";
-// Importamos la función fetch que creamos antes
 
 interface useQuotationPdfProps {
   client: Client | null;
@@ -12,7 +11,6 @@ interface useQuotationPdfProps {
 }
 
 const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
-  // Reemplazamos el hook de Redux por estados locales
   const [isLoading, setIsLoading] = useState(false);
   const [currentAction, setCurrentAction] = useState<
     "view" | "download" | null

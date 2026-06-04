@@ -9,35 +9,35 @@ import ReviewSection from "../sections/astro/Review-section.astro";
 ---
 
 <Layout title="" description="">
-    <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
-        <HeroAboutSection />
+  <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
+    <HeroAboutSection />
 
-        <AboutCardCarousel
-            title={"Laboratorio DYRA"}
-            paragraph={"Diagnóstico y Referencia Analítica"}
-            images={carouselHomeData}
-            items={[
-                {
-                    icon: "✔",
-                    text: "Resultados con controles de calidad internos y externos",
-                },
-                {
-                    icon: "⏱",
-                    text: "Procesos automatizados para tiempos de respuesta óptimos",
-                },
-                {
-                    icon: "🌐",
-                    text: "Entrega digital y segura de resultados",
-                },
-            ]}
-        />
-    </div>
+    <AboutCardCarousel
+      title={"Laboratorio DYRA"}
+      paragraph={"Diagnóstico y Referencia Analítica"}
+      images={carouselHomeData}
+      items={[
+        {
+          icon: "✔",
+          text: "Resultados con controles de calidad internos y externos",
+        },
+        {
+          icon: "⏱",
+          text: "Procesos automatizados para tiempos de respuesta óptimos",
+        },
+        {
+          icon: "🌐",
+          text: "Entrega digital y segura de resultados",
+        },
+      ]}
+    />
+  </div>
 
-    <CompanyValuesSection />
+  <CompanyValuesSection />
 
-    <MetricsDyra client:visible />
+  <MetricsDyra client:visible />
 
-    <div class="mt-14">
-        <ReviewSection />
-    </div>
+  <div class="mt-14">
+    <ReviewSection />
+  </div>
 </Layout>

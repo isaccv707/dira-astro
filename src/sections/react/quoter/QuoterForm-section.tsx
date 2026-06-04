@@ -74,7 +74,7 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
 
               <div className="md:col-span-5">
                 {/* Evita “brinco” al animar cambiando de campo */}
-                <div className="min-h-[92px]">
+                <div className="min-h-23">
                   <AnimatePresence mode="wait">
                     {clientType === "particular" ? (
                       <motion.div
