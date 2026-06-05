@@ -9,6 +9,7 @@ const SelectBranchButton = ({ branch }: SelectBranchButtonProps) => {
   const handleBranchSelection = (branch: Branch) => {
     localStorage.setItem("dyra_branch_id", branch.id);
     localStorage.setItem("dyra_branch_name", branch.name);
+    localStorage.setItem("dyra_price_sheet_id", branch.priceSheetId);
     closeModal();
     window.location.reload();
   };

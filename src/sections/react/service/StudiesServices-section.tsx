@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import usePagination from "../../../hooks/usePagination";
 import useSearchStudies from "../../../hooks/useSearchStudies";
-import useGetAllStudies from "./hooks/useGetAllStudies";
+import useGetPriceSheetStudies from "./hooks/useGetPriceSheetStudies";
 
 import Pagination from "../../../components/react/ui/Pagination";
 import CardStudy from "../../../components/react/cards/CardStudy";
@@ -11,10 +11,16 @@ import SearchServices from "./SearchServices";
 
 import type { Study } from "../../../interfaces/study.interface";
 
-const LIMIT = 8;
+const LIMIT = 12;
 
 const StudiesServices = () => {
   const [dynamicTotalPages, setDynamicTotalPages] = useState(1);
+  const [priceSheetId, setPriceSheetId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = localStorage.getItem("dyra_price_sheet_id");
+    setPriceSheetId(id);
+  }, []);
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: dynamicTotalPages,
@@ -26,12 +32,12 @@ const StudiesServices = () => {
   });
 
   const { studies, totalStudies, totalPages, isLoading, isFetching } =
-    useGetAllStudies({
+    useGetPriceSheetStudies({
       page: currentPage,
       limit: LIMIT,
       search: search,
+      priceSheetId: priceSheetId,
     });
-
   useEffect(() => {
     if (totalPages && totalPages !== dynamicTotalPages) {
       setDynamicTotalPages(totalPages);

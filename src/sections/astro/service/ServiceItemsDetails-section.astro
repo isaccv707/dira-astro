@@ -19,5 +19,5 @@ const { _count } = service;
     ideal para ti.
   </p>
 
-  {(_count?.studies ?? 0) > 0 ? <StudiesServices client:only="react" /> : ""}
+  {(_count?.studies ?? 0) > 0 ? <StudiesServices client:visible /> : ""}
 </section>
