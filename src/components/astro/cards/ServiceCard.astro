@@ -18,7 +18,15 @@ const { description, id, slug, name, benefits, icon } = service;
   <div
     class="w-16 h-16 flex items-center justify-center rounded-full mb-4 bg-linear-to-tr from-green-light to-green-secondary/50 p-2"
   >
-    <Icon name={icon} class={"text-white w-6 h-auto"} />
+    {
+      icon && !icon.startsWith("http") ? (
+        <Icon name={icon} class={"text-white w-6 h-auto"} />
+      ) : icon ? (
+        <img src={icon} alt={name} class="w-6 h-auto object-contain" />
+      ) : (
+        <div class="w-6 h-6 bg-white/20 rounded-full" />
+      )
+    }
   </div>
 
   <h5

@@ -14,7 +14,15 @@ const { description, icon, title } = Astro.props;
   class="flex flex-col items-center space-y-3 p-6 bg-white rounded-2xl shadow hover:shadow-xl transition-shadow duration-300"
 >
   <div class="bg-green-light p-3 rounded-full">
-    <Icon name={icon} class="w-8 h-auto invert" />
+    {
+      icon && !icon.startsWith("http") ? (
+        <Icon name={icon} class="w-8 h-auto invert" />
+      ) : icon ? (
+        <img src={icon} alt={title} class="w-8 h-8 object-contain" />
+      ) : (
+        <div class="w-8 h-8 bg-white/20 rounded-full" />
+      )
+    }
   </div>
   <h3 class="font-semibold text-lg text-yellow-secondary">{title}</h3>
   <p class="text-gray-400 text-sm font-bold">{description}</p>

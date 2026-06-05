@@ -46,10 +46,14 @@ const colorConfig = getColorConfig(bgColor);
               colorConfig.iconContainer,
             ]}
           >
-            <Icon
-              name={icon}
-              class={"h-8 w-8 object-contain brightness-0 invert"}
-            />
+            {icon.startsWith("http") ? (
+              <img src={icon} alt={title} class="h-8 w-8 object-contain" />
+            ) : (
+              <Icon
+                name={icon}
+                class={"h-8 w-8 object-contain brightness-0 invert"}
+              />
+            )}
           </div>
         )
       }

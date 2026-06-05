@@ -18,7 +18,11 @@ const { text, path, icon, bgColor } = Astro.props;
   {
     icon && (
       <div class="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 text-2xl">
-        <Icon name={icon} />
+        {icon.startsWith("http") ? (
+          <img src={icon} alt={text} class="w-6 h-auto object-contain" />
+        ) : (
+          <Icon name={icon} />
+        )}
       </div>
     )
   }
