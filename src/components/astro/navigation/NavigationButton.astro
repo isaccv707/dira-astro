@@ -15,7 +15,14 @@ const relAttribute = target === "_blank" ? "noopener noreferrer" : undefined;
 ---
 
 <a href={href} class={className} target={target} rel={relAttribute}>
-  {icon && <Icon name={icon} class={iconClassName} />}
+  {
+    icon &&
+      (icon.startsWith("http") ? (
+        <img src={icon} alt={text || ""} class={iconClassName} />
+      ) : (
+        <Icon name={icon} class={iconClassName} />
+      ))
+  }
 
   {text && <span class={icon ? "ml-2" : ""}>{text}</span>}
 </a>
