@@ -31,7 +31,6 @@ export const useGetAllPosts = ({
         setError(null);
 
         const response = await fetchGetAllPosts({ page, limit, search });
-        console.log(response);
         const normalizedResponse = Array.isArray(response)
           ? response[0]
           : response;
