@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { openModal } from "../../stores/modalStore";
 import { getAllBranches } from "../../api/branchesApi/branchesApi";
-import type { Branch } from "../../interfaces/branch.interface";
 
 export const BranchSelectorSection = () => {
   const [isLoading, setIsLoading] = useState(true);

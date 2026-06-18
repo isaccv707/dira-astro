@@ -3,7 +3,7 @@ import Pagination from "../../../components/react/ui/Pagination";
 import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
 import type { Study } from "../../../interfaces/study.interface";
 import usePagination from "../../../hooks/usePagination";
-import useGetAllStudies from "../service/hooks/useGetAllStudies";
+import useGetAllStudies from "../../../hooks/useGetAllStudies";
 import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import { useForm } from "react-hook-form";
 import SearchServices from "../service/SearchServices";

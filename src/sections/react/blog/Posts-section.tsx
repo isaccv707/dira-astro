@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PostCard from "../../../components/react/cards/PostCard";
 import Pagination from "../../../components/react/ui/Pagination";
 import usePagination from "../../../hooks/usePagination";
-import { useGetAllPosts } from "./hooks/useGetAllPosts";
+import { useGetAllPosts } from "../../../hooks/useGetAllPosts";
 
 const LIMIT = 5;
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAllStudies } from "../../../../api/studiesApi/studiesApi";
+import { getAllStudies } from "../api/studiesApi/studiesApi";
 
 interface useGetAllStudiesProps {
   page: number;
