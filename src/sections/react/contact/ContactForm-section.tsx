@@ -1,17 +1,18 @@
 import { useRef, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import FormProvider from "../../components/react/hk-form/FormProvider";
-import RHFTextInput from "../../components/react/hk-form/RHFTextInput";
-import RHFSelectInput from "../../components/react/hk-form/RHFSelectInput";
-import RHFTextareaInput from "../../components/react/hk-form/RHFTextareaInput";
+
 import { yupResolver } from "@hookform/resolvers/yup";
-import { contactFormSchema } from "../../schemas/contact-form/ContactFormSchema";
-import { publicKey, serviceId, templateId } from "../../constants/emailJs";
 
 import emailjs from "@emailjs/browser";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { contactFormSchema } from "../../../schemas/contact-form/ContactFormSchema";
+import { publicKey, serviceId, templateId } from "../../../constants/emailJs";
+import FormProvider from "../../../components/react/hk-form/FormProvider";
+import RHFTextInput from "../../../components/react/hk-form/RHFTextInput";
+import RHFSelectInput from "../../../components/react/hk-form/RHFSelectInput";
+import RHFTextareaInput from "../../../components/react/hk-form/RHFTextareaInput";
 
 interface Inputs {
   name: string;
@@ -124,7 +125,6 @@ export const ContactForm = () => {
           <div className="sm:col-span-2">
             <button
               type="submit"
-              disabled={isLoading}
               className="
                 w-full h-11 rounded-xl
                 bg-green-light text-white font-semibold

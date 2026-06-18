@@ -2,7 +2,7 @@ import { API_URL } from "../../constants/apiUrl";
 import type {
   GetAllStudiesParams,
   GetAllStudiesResponse,
-} from "../interfaces/study.interface";
+} from "./study.interface";
 
 export const getAllStudies = async ({
   page = 1,

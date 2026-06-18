@@ -1,0 +1,43 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  ctaLink: string;
+  defaultCtaText: string;
+}
+
+const { ctaLink, defaultCtaText } = Astro.props;
+---
+
+<section class="relative overflow-hidden rounded-[2.5rem] shadow-2xl bg-gradient-to-r from-green-primary via-green-secondary to-green-light py-12 px-8 md:px-16 text-white text-center md:text-left">
+  {/* Ambient blur effects */}
+  <div class="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-yellow-primary/25 blur-3xl"></div>
+  <div class="absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-white/10 blur-3xl"></div>
+  
+  <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+    <div class="space-y-3 max-w-2xl">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[10px] font-black uppercase tracking-wider backdrop-blur-md">
+        <span class="h-2 w-2 rounded-full bg-yellow-primary animate-pulse"></span>
+        Respuesta Inmediata
+      </span>
+      <h3 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight">
+        ¿Listo para programar tu servicio?
+      </h3>
+      <p class="text-white/90 text-sm sm:text-base leading-relaxed">
+        Haz clic a continuación y comunícate directamente con nuestros especialistas de laboratorio para agendar o resolver cualquier duda.
+      </p>
+    </div>
+
+    <div class="shrink-0 flex justify-center md:justify-end">
+      <a
+        href={ctaLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-base font-black text-green-primary shadow-xl hover:-translate-y-1 hover:bg-yellow-primary hover:text-green-primary transition-all duration-300 cursor-pointer active:scale-95 hover:scale-102"
+      >
+        <Icon name="lucide:phone-call" class="h-5 w-5 animate-bounce" />
+        {defaultCtaText}
+      </a>
+    </div>
+  </div>
+</section>

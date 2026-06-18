@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { QuotationPayload } from "../api/interfaces/quotation.interface";
+import type { QuotationPayload } from "../api/quotationsApi/quotation.interface";
 import type { Client } from "../interfaces/client.interface";
 import type { Study } from "../interfaces/study.interface";
 import { toast } from "react-toastify";

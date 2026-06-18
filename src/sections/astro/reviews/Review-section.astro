@@ -1,12 +1,11 @@
 ---
-import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
-import ReviewCardSkeleton from "../../components/astro/skeletons/ReviewCardSkeleton.astro";
-import ReviewCard from "../../components/astro/cards/ReviewCard.astro";
-import Carousel from "../../components/react/carousel/Carousel";
-import AddReviewButton from "../../components/react/buttons/AddReviewButton";
-import { getAllReviews } from "../../api/reviewsApi/reviewsApi";
-import type { ReviewResponse } from "../../api/reviewsApi/review.interface";
-import ModalReviewFrom from "../../components/react/modal/ModalReviewFrom";
+import type { ReviewResponse } from "../../../api/reviewsApi/review.interface";
+import { getAllReviews } from "../../../api/reviewsApi/reviewsApi";
+import ReviewCard from "../../../components/astro/cards/ReviewCard.astro";
+import ReviewCardSkeleton from "../../../components/astro/skeletons/ReviewCardSkeleton.astro";
+import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
+import AddReviewButton from "../../../components/react/buttons/AddReviewButton";
+import Carousel from "../../../components/react/carousel/Carousel";
 
 let reviews: ReviewResponse[] = [];
 let isError = false;

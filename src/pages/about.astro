@@ -1,16 +1,17 @@
 ---
 import AboutCardCarousel from "../components/astro/cards/AboutCardCarousel.astro";
 import Layout from "../layouts/Layout.astro";
-import CompanyValuesSection from "../sections/astro/about/CompanyValues-section.astro";
-import HeroAboutSection from "../sections/astro/about/HeroAbout-section.astro";
-import MetricsDyra from "../sections/react/MetricsDyra-section";
+
 import { carouselHomeData } from "../data/carousel/carouselHome-data";
-import ReviewSection from "../sections/astro/Review-section.astro";
+import HeroAbout from "../sections/astro/hero/HeroAbout.astro";
+import CompanyValues from "../sections/astro/about/CompanyValues.astro";
+import MetricsDyra from "../sections/react/common/MetricsDyra-section";
+import ReviewSection from "../sections/astro/reviews/Review-section.astro";
 ---
 
 <Layout title="" description="">
   <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
-    <HeroAboutSection />
+    <HeroAbout />
 
     <AboutCardCarousel
       title={"Laboratorio DYRA"}
@@ -33,7 +34,7 @@ import ReviewSection from "../sections/astro/Review-section.astro";
     />
   </div>
 
-  <CompanyValuesSection />
+  <CompanyValues />
 
   <MetricsDyra client:visible />
 

@@ -1,7 +1,7 @@
 ---
-import Carousel from "../../../components/react/carousel/Carousel";
 import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
 import ImgCarouselHome from "../../../components/astro/ui/ImgCarouselHome.astro";
+import Carousel from "../../../components/react/carousel/Carousel";
 
 const banners = await fetchActiveBanners("HOME");
 if (!banners || banners.length === 0) return null;

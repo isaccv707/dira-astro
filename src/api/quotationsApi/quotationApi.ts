@@ -1,5 +1,5 @@
 import { API_URL } from "../../constants/apiUrl";
-import type { QuotationPayload } from "../interfaces/quotation.interface";
+import type { QuotationPayload } from "./quotation.interface";
 
 export const downloadQuotationPdf = async (
   body: QuotationPayload,
