@@ -42,7 +42,7 @@ const ModalService = ({ id = "MODAL_SERVICE" }: ModalServiceProps) => {
                   <source
                     media="(min-width: 768px)"
                     srcSet={getCloudinarySrcSet(
-                      imageUrl || mobileImageUrl,
+                      mobileImageUrl || imageUrl,
                       [400, 600, 800],
                     )}
                   />

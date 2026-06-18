@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { getPriceSheet } from "../../../../api/priceSheetApi/priceSheetApi";
-import type { Study } from "../../../../interfaces/study.interface";
+import { getPriceSheet } from "../api/priceSheetApi/priceSheetApi";
+import type { Study } from "../interfaces/study.interface";
 
 interface useGetPriceSheetStudiesProps {
   page: number;
@@ -60,7 +60,7 @@ const useGetPriceSheetStudies = ({
               price: Number(item.price),
               showPrice: item.showPrice,
             },
-          })
+          }),
         );
 
         setState({

@@ -1,20 +1,15 @@
 ---
 import { Image } from "astro:assets";
 import logoDyra from "../../assets/images/logos/logo_dyra.png";
-import NavbarSection from "./Navbar-section.astro";
+
 import ButtonDrawer from "../../components/react/buttons/ButtonDrawer";
+import NavbarSection from "./layout/Navbar-section.astro";
 ---
 
 <header class="bg-white shadow-md px-4 sm:px-8 py-4 sticky top-0 z-50">
   <div class="max-w-7xl mx-auto flex justify-between items-center">
     <a href="/" class="flex items-center gap-3">
-      <Image
-        src={logoDyra}
-        width={64}
-        height={64}
-        alt="Icono descriptivo"
-        format="webp"
-      />
+      <img src={logoDyra.src} alt="Logo DYRA" width="64" height="64" />
     </a>
 
     <div class="flex items-center gap-4">
