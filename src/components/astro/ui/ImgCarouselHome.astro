@@ -6,42 +6,59 @@ import {
 
 interface Props {
   imageUrl: string;
+  mobileImageUrl: string;
   isLCP: boolean;
   index: number;
 }
 
-const { imageUrl, isLCP, index } = Astro.props;
+const { imageUrl, isLCP, index, mobileImageUrl } = Astro.props;
 
-// Mobile portrait widths (4:5) — small screens, single column
-const mobileSrcset = getCloudinarySrcSet(imageUrl, [320, 480, 640, 768], { w: 4, h: 5 });
+// Mobile (4:5 → 800×1000)
+const mobileSrcset = getCloudinarySrcSet(mobileImageUrl, [400, 600, 800], {
+  w: 4,
+  h: 5,
+});
+const mobileFallback = getCloudinaryUrl(mobileImageUrl, {
+  width: 800,
+  height: 1000,
+});
 
-// Desktop landscape widths (16:7) — right column, ~50 vw
-const desktopSrcset = getCloudinarySrcSet(imageUrl, [768, 1024, 1280, 1536], { w: 16, h: 7 });
+// Desktop (2:1 → 2000×1000)
+const desktopSrcset = getCloudinarySrcSet(imageUrl, [800, 1200, 1600, 2000], {
+  w: 2,
+  h: 1,
+});
+const desktopFallback = getCloudinaryUrl(imageUrl, {
+  width: 2000,
+  height: 1000,
+});
 ---
 
 <div class="relative w-full h-full">
-  <picture>
-    <!-- Portrait crop for mobile (<768 px) -->
-    <source
-      media="(max-width: 767px)"
-      srcset={mobileSrcset}
-      sizes="100vw"
-    />
-    <!-- Landscape crop for tablet and desktop (≥768 px) -->
-    <source
-      media="(min-width: 768px)"
-      srcset={desktopSrcset}
-      sizes="50vw"
-    />
-    <img
-      src={getCloudinaryUrl(imageUrl, { width: 1280, height: 560 })}
-      alt={`Banner DYRA ${index + 1}`}
-      class="w-full h-auto aspect-4/5 md:aspect-16/7 object-cover rounded-2xl"
-      loading={isLCP ? "eager" : "lazy"}
-      fetchpriority={isLCP ? "high" : "auto"}
-      decoding={isLCP ? "sync" : "async"}
-      width="1280"
-      height="560"
-    />
-  </picture>
+  <!-- Mobile portrait 4:5 — oculto en ≥md -->
+  <img
+    src={mobileFallback}
+    srcset={mobileSrcset || undefined}
+    sizes="100vw"
+    alt={`Banner DYRA ${index + 1}`}
+    class="block md:hidden w-full aspect-4/5 object-cover rounded-2xl"
+    loading={isLCP ? "eager" : "lazy"}
+    fetchpriority={isLCP ? "high" : "auto"}
+    decoding={isLCP ? "sync" : "async"}
+    width="800"
+    height="1000"
+  />
+  <!-- Desktop landscape 2:1 — oculto en <md -->
+  <img
+    src={desktopFallback}
+    srcset={desktopSrcset || undefined}
+    sizes="50vw"
+    alt={`Banner DYRA ${index + 1}`}
+    class="hidden md:block w-full aspect-2/1 object-cover rounded-2xl"
+    loading={isLCP ? "eager" : "lazy"}
+    fetchpriority={isLCP ? "high" : "auto"}
+    decoding={isLCP ? "sync" : "async"}
+    width="2000"
+    height="1000"
+  />
 </div>
