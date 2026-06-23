@@ -47,14 +47,19 @@ export const getCloudinaryUrl = (
 
 /**
  * Generates a responsive srcset for Cloudinary images.
+ * Pass `ratio` to request a specific aspect crop at every width (e.g. { w: 4, h: 5 } for portrait mobile).
  */
 export const getCloudinarySrcSet = (
   url: string | undefined,
-  widths: number[] = [320, 640, 768, 1024, 1280, 1536]
+  widths: number[] = [320, 640, 768, 1024, 1280, 1536],
+  ratio?: { w: number; h: number }
 ): string => {
   if (!url || !url.includes('cloudinary.com')) return '';
-  
+
   return widths
-    .map(w => `${getCloudinaryUrl(url, { width: w })} ${w}w`)
+    .map(w => {
+      const height = ratio ? Math.round(w * ratio.h / ratio.w) : undefined;
+      return `${getCloudinaryUrl(url, { width: w, height })} ${w}w`;
+    })
     .join(', ');
 };

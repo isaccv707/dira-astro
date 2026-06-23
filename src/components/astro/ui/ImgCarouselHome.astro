@@ -11,19 +11,37 @@ interface Props {
 }
 
 const { imageUrl, isLCP, index } = Astro.props;
+
+// Mobile portrait widths (4:5) — small screens, single column
+const mobileSrcset = getCloudinarySrcSet(imageUrl, [320, 480, 640, 768], { w: 4, h: 5 });
+
+// Desktop landscape widths (16:7) — right column, ~50 vw
+const desktopSrcset = getCloudinarySrcSet(imageUrl, [768, 1024, 1280, 1536], { w: 16, h: 7 });
 ---
 
 <div class="relative w-full h-full">
-  <img
-    src={getCloudinaryUrl(imageUrl, { width: 1280, height: 560 })}
-    srcset={getCloudinarySrcSet(imageUrl)}
-    sizes="(max-width: 768px) 100vw, 1280px"
-    alt={`Banner DYRA ${index + 1}`}
-    class="w-full h-auto aspect-4/5 md:aspect-16/7 object-cover rounded-2xl"
-    loading={isLCP ? "eager" : "lazy"}
-    fetchpriority={isLCP ? "high" : "auto"}
-    decoding={isLCP ? "sync" : "async"}
-    width="1280"
-    height="560"
-  />
+  <picture>
+    <!-- Portrait crop for mobile (<768 px) -->
+    <source
+      media="(max-width: 767px)"
+      srcset={mobileSrcset}
+      sizes="100vw"
+    />
+    <!-- Landscape crop for tablet and desktop (≥768 px) -->
+    <source
+      media="(min-width: 768px)"
+      srcset={desktopSrcset}
+      sizes="50vw"
+    />
+    <img
+      src={getCloudinaryUrl(imageUrl, { width: 1280, height: 560 })}
+      alt={`Banner DYRA ${index + 1}`}
+      class="w-full h-auto aspect-4/5 md:aspect-16/7 object-cover rounded-2xl"
+      loading={isLCP ? "eager" : "lazy"}
+      fetchpriority={isLCP ? "high" : "auto"}
+      decoding={isLCP ? "sync" : "async"}
+      width="1280"
+      height="560"
+    />
+  </picture>
 </div>
