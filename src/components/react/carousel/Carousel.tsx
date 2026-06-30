@@ -42,11 +42,11 @@ const Carousel = ({
         watchSlidesProgress={true}
         observer={true}
         observeParents={true}
-        className="w-full h-full !pb-12"
+        className="w-full h-full pb-12!"
         {...swipperOptions}
       >
         {slides.map((child, index) => (
-          <SwiperSlide key={`slide-${index}`} className="!h-auto">
+          <SwiperSlide key={`slide-${index}`} className="h-auto!">
             {child}
           </SwiperSlide>
         ))}

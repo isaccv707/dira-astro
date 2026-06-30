@@ -5,6 +5,7 @@ interface useGetAllStudiesProps {
   page: number;
   limit: number;
   search?: string;
+  branchId?: string;
 }
 
 interface StudiesState {
@@ -15,7 +16,8 @@ interface StudiesState {
   error: any;
 }
 
-const useGetAllStudies = ({ limit, page, search }: useGetAllStudiesProps) => {
+const useGetAllStudies = ({ limit, page, search, branchId }: useGetAllStudiesProps) => {
+  const resolvedBranchId = branchId ?? (typeof window !== "undefined" ? (localStorage.getItem("dyra_branch_id") ?? undefined) : undefined);
   const [state, setState] = useState<StudiesState>({
     data: null,
     isLoading: true,
@@ -28,7 +30,7 @@ const useGetAllStudies = ({ limit, page, search }: useGetAllStudiesProps) => {
     setState((prev) => ({ ...prev, isFetching: true, isError: false }));
 
     try {
-      const response = await getAllStudies({ page, limit, search });
+      const response = await getAllStudies({ page, limit, search, branchId: resolvedBranchId });
 
       setState((prev) => ({
         ...prev,
@@ -45,7 +47,7 @@ const useGetAllStudies = ({ limit, page, search }: useGetAllStudiesProps) => {
         error: err,
       }));
     }
-  }, [page, limit, search]);
+  }, [page, limit, search, resolvedBranchId]);
 
   useEffect(() => {
     fetchStudies();

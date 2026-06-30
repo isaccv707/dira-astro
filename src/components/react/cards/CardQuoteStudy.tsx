@@ -14,78 +14,83 @@ const CardQuoteStudy = ({
   isAdded,
   study,
 }: CardQuoteStudyProps) => {
+  const hasPrice = study.priceInfo?.showPrice === true;
+
   return (
     <div
-      className="
-        group h-full min-h-42
-        rounded-2xl bg-white
-                    p-4 sm:p-5 lg:p-6        ring-1 ring-black/5
-        shadow-sm
-        transition-all duration-200
-        hover:-translate-y-0.5 hover:shadow-md hover:ring-black/10
-        focus-within:ring-black/15
-      "
+      className={`
+        relative flex flex-col h-full rounded-2xl bg-white
+        border-l-4 ring-1 ring-black/5 shadow-sm
+        transition-all duration-200 overflow-hidden
+        ${hasPrice
+          ? "border-l-green-light hover:-translate-y-0.5 hover:shadow-md hover:ring-green-light/30"
+          : "border-l-gray-200"
+        }
+      `}
     >
-      <div className="flex flex-col h-full">
-        <div className="min-w-0">
-          <h3
-            className="
-              text-sm sm:text-[15px] md:text-base
-              font-semibold text-gray-900
-              leading-snug
-              line-clamp-2
-              group-hover:text-gray-900
-            "
-            title={study.name}
-          >
-            {study.name}
-          </h3>
+      {/* Body */}
+      <div className="flex flex-col flex-1 p-4 sm:p-5 gap-3">
 
-          <div className="mt-3 flex items-center justify-center gap-3">
-            <span
-              className="
-                inline-flex items-center
-                rounded-full
-                bg-green-secondary/15
-                px-3 py-1
-                text-sm font-bold
-                text-green-primary
-                whitespace-nowrap
-              "
-            >
-              ${study.priceInfo.price}
-            </span>
+        {/* Name */}
+        <h3
+          className={`text-sm sm:text-[15px] font-semibold leading-snug line-clamp-2 min-h-10 ${
+            hasPrice ? "text-gray-900" : "text-gray-400"
+          }`}
+          title={study.name}
+        >
+          {study.name}
+        </h3>
 
-            <span
-              className={`
-                inline-flex items-center gap-2
-                text-xs font-semibold
-                ${isAdded ? "text-green-primary" : "text-black/50"}
-              `}
-            >
-              <span
-                className={`
-                  h-2 w-2 rounded-full
-                  ${isAdded ? "bg-green-primary" : "bg-black/20"}
-                `}
-              />
-              {isAdded ? "Agregado" : "Disponible"}
+        {/* Price zone — fixed min-height so all cards align */}
+        <div className="min-h-12 flex items-center">
+          {hasPrice ? (
+            <div className="flex items-baseline gap-1">
+              <span className="text-xs font-bold text-gray-400">$</span>
+              <span className="text-2xl font-black text-green-light tracking-tight">
+                {study.priceInfo.price.toLocaleString("es-MX", {
+                  minimumFractionDigits: 2,
+                })}
+              </span>
+              <span className="text-[10px] font-bold text-green-light/60 uppercase tracking-widest ml-0.5">
+                MXN
+              </span>
+            </div>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-gray-100 px-3 py-1.5 text-[11px] font-semibold text-gray-400 leading-tight max-w-full">
+              <span className="h-1.5 w-1.5 rounded-full bg-gray-300 shrink-0" />
+              <span className="truncate">
+                {study.priceInfo?.message ?? "Consulte en sucursal"}
+              </span>
             </span>
-          </div>
+          )}
         </div>
 
-        <div className="my-4 h-px w-full bg-black/5" />
-
-        <div className="mt-auto">
-          <div className="w-full">
-            <AddStudyButton
-              isAdded={isAdded}
-              handleAddStudy={handleAddStudy}
-              handleDeletStudy={handleDeletStudy}
-              study={study}
-            />
-          </div>
+        {/* Status badge */}
+        <div className="flex items-center gap-1.5">
+          <span
+            className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+              isAdded && hasPrice ? "bg-green-light" : "bg-gray-200"
+            }`}
+          />
+          <span className={`text-[11px] font-semibold ${
+            isAdded && hasPrice ? "text-green-light" : "text-gray-400"
+          }`}>
+            {isAdded && hasPrice ? "Agregado a cotización" : "Disponible"}
+          </span>
         </div>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px w-full bg-black/5 mx-0" />
+
+      {/* Action */}
+      <div className={`p-4 sm:p-5 pt-3 ${!hasPrice ? "pointer-events-none opacity-40" : ""}`}>
+        <AddStudyButton
+          isAdded={isAdded}
+          handleAddStudy={handleAddStudy}
+          handleDeletStudy={handleDeletStudy}
+          study={study}
+        />
       </div>
     </div>
   );

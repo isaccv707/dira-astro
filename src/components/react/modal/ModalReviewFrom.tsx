@@ -40,10 +40,12 @@ const ModalReviewFrom = ({
   const onSubmit = async ({ fullName, comment, rating }: ReviewFormValues) => {
     setIsSubmitting(true);
     try {
+      const branchId = localStorage.getItem("dyra_branch_id") ?? "";
       const payload = {
         fullName,
         comment,
         rating,
+        branchId,
       };
       await createReview(payload);
       toast.success("Reseña enviada con éxito");

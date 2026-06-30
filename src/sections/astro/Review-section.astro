@@ -8,12 +8,15 @@ import { getAllReviews } from "../../api/reviewsApi/reviewsApi";
 import type { ReviewResponse } from "../../api/reviewsApi/review.interface";
 import ModalReviewFrom from "../../components/react/modal/ModalReviewFrom";
 
+const branchId = Astro.cookies.get("dyra_branch_id")?.value;
+
 let reviews: ReviewResponse[] = [];
 let isError = false;
 let isLoading = true;
 
 try {
-  reviews = await getAllReviews();
+  const result = await getAllReviews(branchId);
+  reviews = result.data;
   isLoading = false;
 } catch (error) {
   isError = true;

@@ -133,7 +133,7 @@ const CardStudy = ({
 
         {/* Price Section */}
         <div className="mb-6">
-          {priceInfo.showPrice ? (
+          {priceInfo?.showPrice ? (
             <div className="flex items-baseline gap-1">
               <span className="text-sm font-black text-grey">$</span>
               <span className="text-4xl font-black text-green-light tracking-tighter">
@@ -148,7 +148,7 @@ const CardStudy = ({
           ) : (
             <div className="py-2 px-4 rounded-2xl bg-gray-50 border border-gray-100 w-fit">
               <span className="text-[10px] font-black text-green-light uppercase tracking-widest">
-                Precio en sucursal
+                {priceInfo?.message ?? "Consulte en sucursal"}
               </span>
             </div>
           )}

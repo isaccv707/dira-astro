@@ -15,12 +15,9 @@ const LIMIT = 12;
 
 const StudiesServices = () => {
   const [dynamicTotalPages, setDynamicTotalPages] = useState(1);
-  const [priceSheetId, setPriceSheetId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const id = localStorage.getItem("dyra_price_sheet_id");
-    setPriceSheetId(id);
-  }, []);
+  const [branchId] = useState<string | null>(() =>
+    typeof window !== "undefined" ? localStorage.getItem("dyra_branch_id") : null
+  );
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: dynamicTotalPages,
@@ -36,8 +33,9 @@ const StudiesServices = () => {
       page: currentPage,
       limit: LIMIT,
       search: search,
-      priceSheetId: priceSheetId,
+      branchId: branchId,
     });
+
   useEffect(() => {
     if (totalPages && totalPages !== dynamicTotalPages) {
       setDynamicTotalPages(totalPages);

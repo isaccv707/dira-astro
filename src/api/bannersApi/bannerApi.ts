@@ -4,9 +4,12 @@ const API_URL = import.meta.env.PUBLIC_API_URL;
 
 export const fetchActiveBanners = async (
   placement: string,
+  branchId?: string,
 ): Promise<Banner[]> => {
   try {
-    const response = await fetch(`${API_URL}/banners/active/${placement}`);
+    const url = new URL(`${API_URL}/banners/active/${placement}`);
+    if (branchId) url.searchParams.set("branchId", branchId);
+    const response = await fetch(url.toString());
     if (!response.ok) {
       throw new Error(`Error retrieving banners: ${response.statusText}`);
     }

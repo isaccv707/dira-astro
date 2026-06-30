@@ -7,7 +7,8 @@ import {
 import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
 import ImgCarouselHome from "../../../components/astro/ui/ImgCarouselHome.astro";
 
-const banners = await fetchActiveBanners("HOME");
+const branchId = Astro.cookies.get("dyra_branch_id")?.value;
+const banners = await fetchActiveBanners("HOME", branchId);
 if (!banners || banners.length === 0) return null;
 ---
 

@@ -8,16 +8,15 @@ export const getAllStudies = async ({
   page = 1,
   limit = 10,
   search,
+  branchId,
 }: GetAllStudiesParams = {}): Promise<GetAllStudiesResponse> => {
-  // 1. Inicializamos los parámetros base
   const queryParams = new URLSearchParams({
     page: page.toString(),
     limit: limit.toString(),
   });
 
-  if (search) {
-    queryParams.append("search", search);
-  }
+  if (search) queryParams.append("search", search);
+  if (branchId) queryParams.append("branchId", branchId);
 
   const url = `${API_URL}/studies?${queryParams.toString()}`;
 

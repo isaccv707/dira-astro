@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
+import { MapPin } from "lucide-react";
 import Pagination from "../../../components/react/ui/Pagination";
 import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
 import type { Study } from "../../../interfaces/study.interface";
 import usePagination from "../../../hooks/usePagination";
-import useGetAllStudies from "../service/hooks/useGetAllStudies";
+import useGetPriceSheetStudies from "../service/hooks/useGetPriceSheetStudies";
 import { useQuoterContext } from "../../../hooks/useQuoterContext";
-import { useForm } from "react-hook-form";
 import SearchServices from "../service/SearchServices";
 import useSearchStudies from "../../../hooks/useSearchStudies";
-
-interface Inputs {
-  searchStudies: string;
-}
+import { openModal } from "../../../stores/modalStore";
+import { getAllBranches } from "../../../api/branchesApi/branchesApi";
 
 const LIMIT = 4;
 
 const QuoterSelectStudies = () => {
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
+  const [branchId] = useState<string | null>(() =>
+    typeof window !== "undefined" ? localStorage.getItem("dyra_branch_id") : null
+  );
 
   const { addStudy, removeStudy, selectedStudies } = useQuoterContext();
 
@@ -24,15 +25,14 @@ const QuoterSelectStudies = () => {
     totalPages: totalPagesForHook,
     initialPage: 1,
   });
-  const { search, handleSearchChange } = useSearchStudies({
-    setPage,
-  });
+  const { search, handleSearchChange } = useSearchStudies({ setPage });
 
   const { studies, totalPages, isLoading, isFetching, isError, totalStudies } =
-    useGetAllStudies({
+    useGetPriceSheetStudies({
       page: currentPage,
       limit: LIMIT,
       search,
+      branchId,
     });
 
   useEffect(() => {
@@ -41,6 +41,40 @@ const QuoterSelectStudies = () => {
 
   const handleAddStudy = (study: Study) => addStudy(study);
   const handleDeletStudy = (studyId: string) => removeStudy(studyId);
+
+  const handleOpenBranchSelector = async () => {
+    const branches = await getAllBranches();
+    openModal("MODAL_SELECT_BRANCH", {
+      title: "Elige la sucursal de tu preferencia",
+      data: branches,
+    });
+  };
+
+  if (!branchId) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center px-6 py-16 text-center">
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-green-light/10">
+          <MapPin className="h-9 w-9 text-green-light" strokeWidth={1.5} />
+        </div>
+
+        <h3 className="text-lg font-bold text-gray-900">
+          Selecciona una sucursal para cotizar
+        </h3>
+        <p className="mt-2 max-w-xs text-sm leading-relaxed text-gray-500">
+          Los precios varían por sucursal. Elige la tuya para ver tarifas y
+          agregar estudios a tu cotización.
+        </p>
+
+        <button
+          onClick={handleOpenBranchSelector}
+          className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-green-light px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-green-primary focus:outline-none focus:ring-2 focus:ring-green-light focus:ring-offset-2"
+        >
+          <MapPin className="h-4 w-4" />
+          Elegir sucursal
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
