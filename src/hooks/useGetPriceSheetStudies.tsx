@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAllStudies } from "../../../../api/studiesApi/studiesApi";
-import type { Study } from "../../../../interfaces/study.interface";
+import { getAllStudies } from "../api/studiesApi/studiesApi";
+import type { Study } from "../interfaces/study.interface";
 
 interface Props {
   page: number;

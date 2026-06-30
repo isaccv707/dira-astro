@@ -14,7 +14,6 @@ const { name, description, imageUrl } = Astro.props;
 
 <section class="w-full">
   <div class="mx-auto max-w-7xl">
-
     <div class="grid items-center gap-10 lg:grid-cols-2">
       <HeaderBySection
         img={logo}
@@ -27,9 +26,9 @@ const { name, description, imageUrl } = Astro.props;
       />
 
       <div
-        class="relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/5 bg-gradient-to-b from-green-primary/10 to-yellow-primary/10"
+        class="relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/5 bg-linear-to-b from-green-primary/10 to-yellow-primary/10"
       >
-        <div class="aspect-[16/7] sm:aspect-[16/7] lg:aspect-[16/7]">
+        <div class="aspect-16/7 sm:aspect-16/7 lg:aspect-16/7">
           <img
             src={imageUrl}
             alt={name}
@@ -39,8 +38,6 @@ const { name, description, imageUrl } = Astro.props;
           />
         </div>
       </div>
-
     </div>
-    
   </div>
 </section>

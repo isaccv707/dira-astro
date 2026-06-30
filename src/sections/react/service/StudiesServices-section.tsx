@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import usePagination from "../../../hooks/usePagination";
 import useSearchStudies from "../../../hooks/useSearchStudies";
-import useGetPriceSheetStudies from "./hooks/useGetPriceSheetStudies";
+import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
 
 import Pagination from "../../../components/react/ui/Pagination";
 import CardStudy from "../../../components/react/cards/CardStudy";

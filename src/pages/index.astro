@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BenefitsSection from "../sections/astro/Benefits-section.astro";
 import QuickActionsSection from "../sections/astro/QuickActions-section.astro";
-import AboutSection from "../sections/astro/About-section.astro";
-import OurServicesSection from "../sections/astro/OurServices-section.astro";
-import ReviewSection from "../sections/astro/Review-section.astro";
+
+import AboutSection from "../sections/astro/about/About-section.astro";
+import BenefitsSection from "../sections/astro/about/Benefits-section.astro";
 import HeroHomeSection from "../sections/astro/hero/HeroHome-section.astro";
+import ReviewSection from "../sections/astro/reviews/Review-section.astro";
+import OurServicesSection from "../sections/astro/service/OurServices-section.astro";
+import MetricsDyra from "../sections/react/common/MetricsDyra-section";
 ---
 
 <Layout
@@ -21,6 +23,10 @@ import HeroHomeSection from "../sections/astro/hero/HeroHome-section.astro";
   <AboutSection />
 
   <BenefitsSection />
+
+  <section class="mb-24">
+    <MetricsDyra client:visible />
+  </section>
 
   <ReviewSection />
 </Layout>

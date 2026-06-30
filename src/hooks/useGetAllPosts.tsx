@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import type {
   Post,
   PostResponse,
-} from "../../../../api/postsApi/post.interface";
-import { fetchGetAllPosts } from "../../../../api/postsApi/postApi";
+} from "../api/postsApi/post.interface";
+import { fetchGetAllPosts } from "../api/postsApi/postApi";
 // Importamos tu función fetch recién creada
 
 interface useGetAllPostsParams {

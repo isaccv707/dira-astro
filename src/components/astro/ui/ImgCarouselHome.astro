@@ -1,64 +1,54 @@
 ---
 import {
-  getCloudinarySrcSet,
   getCloudinaryUrl,
 } from "../../../utils/cloudinary";
 
 interface Props {
   imageUrl: string;
-  mobileImageUrl: string;
+  mobileImageUrl?: string;
   isLCP: boolean;
   index: number;
 }
 
-const { imageUrl, isLCP, index, mobileImageUrl } = Astro.props;
+const { imageUrl, mobileImageUrl, isLCP, index } = Astro.props;
 
-// Mobile (4:5 → 800×1000)
-const mobileSrcset = getCloudinarySrcSet(mobileImageUrl, [400, 600, 800], {
-  w: 4,
-  h: 5,
-});
-const mobileFallback = getCloudinaryUrl(mobileImageUrl, {
-  width: 800,
-  height: 1000,
-});
+const mobileDims = { width: 800, height: 1000 };
+const tabletDims = { width: 1400, height: 700 };
+const desktopDims = { width: 2000, height: 1000 };
 
-// Desktop (2:1 → 2000×1000)
-const desktopSrcset = getCloudinarySrcSet(imageUrl, [800, 1200, 1600, 2000], {
-  w: 2,
-  h: 1,
-});
-const desktopFallback = getCloudinaryUrl(imageUrl, {
-  width: 2000,
-  height: 1000,
-});
+const mobileSrc = mobileImageUrl || imageUrl;
+
+const finalMobileUrl = getCloudinaryUrl(mobileSrc, mobileDims);
+const finalTabletUrl = getCloudinaryUrl(imageUrl, tabletDims);
+const finalDesktopUrl = getCloudinaryUrl(imageUrl, desktopDims);
 ---
 
-<div class="relative w-full h-full">
-  <!-- Mobile portrait 4:5 — oculto en ≥md -->
-  <img
-    src={mobileFallback}
-    srcset={mobileSrcset || undefined}
-    sizes="100vw"
-    alt={`Banner DYRA ${index + 1}`}
-    class="block md:hidden w-full aspect-4/5 object-cover rounded-2xl"
-    loading={isLCP ? "eager" : "lazy"}
-    fetchpriority={isLCP ? "high" : "auto"}
-    decoding={isLCP ? "sync" : "async"}
-    width="800"
-    height="1000"
-  />
-  <!-- Desktop landscape 2:1 — oculto en <md -->
-  <img
-    src={desktopFallback}
-    srcset={desktopSrcset || undefined}
-    sizes="50vw"
-    alt={`Banner DYRA ${index + 1}`}
-    class="hidden md:block w-full aspect-2/1 object-cover rounded-2xl"
-    loading={isLCP ? "eager" : "lazy"}
-    fetchpriority={isLCP ? "high" : "auto"}
-    decoding={isLCP ? "sync" : "async"}
-    width="2000"
-    height="1000"
-  />
+<div class="relative w-full h-full overflow-hidden">
+  <picture>
+    <!-- Desktop: 2:1 ratio (2000x1000px) -->
+    <source
+      media="(min-width: 1280px)"
+      srcset={finalDesktopUrl}
+      width={desktopDims.width}
+      height={desktopDims.height}
+    />
+    <!-- Tablet: 2:1 ratio (1400x700px) -->
+    <source
+      media="(min-width: 768px)"
+      srcset={finalTabletUrl}
+      width={tabletDims.width}
+      height={tabletDims.height}
+    />
+    <!-- Mobile: 4:5 ratio (800x1000px) -->
+    <img
+      src={finalMobileUrl}
+      alt={`Banner Informativo DYRA - ${index + 1}`}
+      class="w-full h-auto aspect-[4/5] md:aspect-[2/1] object-cover rounded-[1.8rem] transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+      loading={isLCP ? "eager" : "lazy"}
+      fetchpriority={isLCP ? "high" : "auto"}
+      decoding={isLCP ? "sync" : "async"}
+      width={mobileDims.width}
+      height={mobileDims.height}
+    />
+  </picture>
 </div>

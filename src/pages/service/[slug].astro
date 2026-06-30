@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 
 import ServiceHeroSection from "../../sections/astro/service/ServiceHero-section.astro";
 import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits-section.astro";
-import ServiceItemsDetailsSection from "../../sections/astro/service/ServiceItemsDetails-section.astro";
+import Services from "../../sections/astro/service/Services.astro";
 
 import type { Service } from "../../interfaces/service.interface";
 import { getOneResource } from "../../utils/getOneResource";
@@ -31,7 +31,7 @@ const { name, description = "", imageUrl = "", benefits = [] } = service;
 
   <ServiceBenefitsSection benefits={benefits} />
 
-  <ServiceItemsDetailsSection service={service} />
+  <Services service={service} />
 
   <CTAContact />
 </Layout>

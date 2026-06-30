@@ -4,7 +4,7 @@ import Pagination from "../../../components/react/ui/Pagination";
 import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
 import type { Study } from "../../../interfaces/study.interface";
 import usePagination from "../../../hooks/usePagination";
-import useGetPriceSheetStudies from "../service/hooks/useGetPriceSheetStudies";
+import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
 import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import SearchServices from "../service/SearchServices";
 import useSearchStudies from "../../../hooks/useSearchStudies";

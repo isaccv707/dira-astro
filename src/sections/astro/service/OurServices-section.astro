@@ -1,9 +1,9 @@
 ---
-import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
-import ServiceCardSkeleton from "../../components/astro/skeletons/ServiceCardSkeleton.astro";
-import ServiceCard from "../../components/astro/cards/ServiceCard.astro";
-import { getAllService } from "../../api/servicesApi/serviceApi";
-import type { Service } from "../../interfaces/service.interface";
+import { getAllService } from "../../../api/servicesApi/serviceApi";
+import ServiceCard from "../../../components/astro/cards/ServiceCard.astro";
+import ServiceCardSkeleton from "../../../components/astro/skeletons/ServiceCardSkeleton.astro";
+import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
+import type { Service } from "../../../interfaces/service.interface";
 
 const branchId = Astro.cookies.get("dyra_branch_id")?.value;
 

@@ -1,5 +1,5 @@
-import Counter from "../../components/react/ui/Counter";
-import { METRICSDYRA } from "../../data/about/metricsDyra-data";
+import Counter from "../../../components/react/ui/Counter";
+import { METRICSDYRA } from "../../../data/about/metricsDyra-data";
 
 const MetricsDyra = () => {
   return (
