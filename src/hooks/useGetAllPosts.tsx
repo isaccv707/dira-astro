@@ -10,13 +10,16 @@ interface useGetAllPostsParams {
   page?: number;
   limit?: number;
   search?: string;
+  branchId?: string;
 }
 
 export const useGetAllPosts = ({
   limit = 10,
   page = 1,
   search,
+  branchId,
 }: useGetAllPostsParams) => {
+  const resolvedBranchId = branchId ?? (typeof window !== "undefined" ? (localStorage.getItem("dyra_branch_id") ?? undefined) : undefined);
   // 1. Estados locales para suplir lo que hacía RTK Query
   const [posts, setPosts] = useState<Post[]>([]);
   const [meta, setMeta] = useState<PostResponse["meta"] | undefined>(undefined);
@@ -30,7 +33,7 @@ export const useGetAllPosts = ({
         setIsLoading(true);
         setError(null);
 
-        const response = await fetchGetAllPosts({ page, limit, search });
+        const response = await fetchGetAllPosts({ page, limit, search, branchId: resolvedBranchId });
         const normalizedResponse = Array.isArray(response)
           ? response[0]
           : response;
@@ -49,7 +52,7 @@ export const useGetAllPosts = ({
     };
 
     getPosts();
-  }, [page, limit, search]);
+  }, [page, limit, search, resolvedBranchId]);
 
   return {
     posts,

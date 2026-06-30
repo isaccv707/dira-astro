@@ -1,9 +1,11 @@
 import { API_URL } from "../../constants/apiUrl";
 import type { Service } from "../../interfaces/service.interface";
 
-export const getAllService = async (): Promise<Service[]> => {
+export const getAllService = async (branchId?: string): Promise<Service[]> => {
   try {
-    const response = await fetch(`${API_URL}/services`, {
+    const url = new URL(`${API_URL}/services`);
+    if (branchId) url.searchParams.set("branchId", branchId);
+    const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         "Content-type": "application/json",

@@ -12,17 +12,10 @@ interface Props {
 
 const { imageUrl, mobileImageUrl, isLCP, index } = Astro.props;
 
-/**
- * Responsive dimensions defined by the user:
- * - Mobile: 4:5 ratio (800x1000px)
- * - Tablet: 2:1 ratio (1400x700px)
- * - Desktop: 2:1 ratio (2000x1000px)
- */
 const mobileDims = { width: 800, height: 1000 };
 const tabletDims = { width: 1400, height: 700 };
 const desktopDims = { width: 2000, height: 1000 };
 
-// Fallback to imageUrl if mobileImageUrl is not provided by backend
 const mobileSrc = mobileImageUrl || imageUrl;
 
 const finalMobileUrl = getCloudinaryUrl(mobileSrc, mobileDims);

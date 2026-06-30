@@ -4,6 +4,7 @@ export type GetAllStudiesParams = {
     page?: number;
     limit?: number;
     search?: string;
+    branchId?: string;
 }
 
 export interface GetAllStudiesResponse {

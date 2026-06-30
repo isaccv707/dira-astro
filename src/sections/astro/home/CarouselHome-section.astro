@@ -3,7 +3,8 @@ import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
 import ImgCarouselHome from "../../../components/astro/ui/ImgCarouselHome.astro";
 import Carousel from "../../../components/react/carousel/Carousel";
 
-const banners = await fetchActiveBanners("HOME");
+const branchId = Astro.cookies.get("dyra_branch_id")?.value;
+const banners = await fetchActiveBanners("HOME", branchId);
 if (!banners || banners.length === 0) return null;
 ---
 

@@ -1,38 +1,211 @@
 ---
-import Hero from "../../../components/astro/ui/Hero.astro";
+import { Icon } from "astro-icon/components";
 import logo from "../../../assets/images/logos/logo.png";
+import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
 import CarouselHomeSection from "../home/CarouselHome-section.astro";
+
+const stats = [
+  { value: "+15", label: "Años de exp.", accent: "text-green-primary" },
+  { value: "2", label: "Ciudades", accent: "text-green-primary" },
+  { value: "500+", label: "Estudios", accent: "text-yellow-secondary" },
+];
+
+const features = [
+  {
+    icon: "tabler:microscope",
+    label: "Análisis Clínicos",
+    desc: "Alta precisión",
+    path: "/service/analisis-clinicos",
+  },
+  {
+    icon: "tabler:building-community",
+    label: "Salud Empresarial",
+    desc: "A tu medida",
+    path: "/service/salud-empresarial",
+  },
+  {
+    icon: "tabler:home-check",
+    label: "Tomas a Domicilio",
+    desc: "En tu hogar",
+    path: "/service/tomas-a-domicilio",
+  },
+];
 ---
 
-<section class="relative flex items-center overflow-hidden">
-  <div
-    class="container relative z-10 mx-auto max-w-7xl px-6 lg:px-8 pt-6 pb-12 md:pt-10 md:pb-16"
-  >
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<section class="relative overflow-hidden bg-white py-12">
+  <!-- Lab grid backdrop — precise, no blobs -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+    <div
+      class="absolute inset-0"
+      style="background-image: linear-gradient(rgba(34,143,4,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(34,143,4,0.045) 1px, transparent 1px); background-size: 48px 48px;"
+    >
+    </div>
+    <!-- Radial vignette fades grid toward edges -->
+    <div
+      class="absolute inset-0"
+      style="background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 35%, white 100%);"
+    >
+    </div>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
+      <!-- ===== LEFT: Hero content ===== -->
       <div
-        class="lg:col-span-6 xl:col-span-5 text-center lg:text-left space-y-6"
+        class="flex flex-col items-center text-center lg:items-start lg:text-left"
       >
+        <!-- Category label — small tracked caps, evoking lab signage -->
         <div
-          class="relative group transition-all duration-700 hover:translate-x-1"
+          class="mb-5 flex items-center justify-center gap-2 lg:justify-start"
         >
-          <Hero
-            img={logo}
-            textHeader={"Resultados confiables • Atención rápida"}
-            title={"Precisión que inspira confianza."}
-            paragraph={`En DYRA combinamos excelencia clínica y calidez humana para ofrecerte diagnósticos precisos cuando más los necesitas.`}
+          <div class="h-px w-8 bg-green-primary/50"></div>
+          <span
+            class="text-[10px] font-bold tracking-[0.2em] uppercase text-green-primary"
+          >
+            Laboratorio Clínico Certificado
+          </span>
+          <div class="h-px w-8 bg-green-primary/50"></div>
+        </div>
+
+        <!-- Logo + live status badge -->
+        <div class="mb-6 flex items-center gap-3">
+          <img
+            src={logo.src}
+            alt="DYRA – Diagnóstico y Referencia Analítica"
+            class="h-12 w-12 rounded-xl object-contain shadow-sm ring-1 ring-green-primary/20"
+            loading="eager"
+            width={48}
+            height={48}
           />
-        </div>x
+          <div
+            class="inline-flex items-center gap-2 rounded-full border border-green-primary/20 bg-green-primary/8 px-3 py-1 text-[11px] font-semibold text-green-primary"
+          >
+            <span
+              class="h-1.5 w-1.5 animate-pulse rounded-full bg-green-primary"
+            ></span>
+            Resultados confiables · Atención rápida
+          </div>
+        </div>
+
+        <!-- Main heading -->
+        <h1
+          class="mb-5 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-5xl xl:text-6xl"
+        >
+          <span class="text-green-light">Tu salud,</span><br />
+          <span class="text-green-primary">analizada</span><br />
+          <span class="text-yellow-secondary">con precisión.</span>
+        </h1>
+
+        <!-- Description -->
+        <p
+          class="mb-8 max-w-md text-base leading-relaxed text-grey-custom sm:text-lg"
+        >
+          Tecnología de vanguardia con atención humana. Resultados confiables
+          para ti y tu empresa en Jalisco y Colima.
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="mb-10 flex flex-wrap justify-center gap-3 lg:justify-start">
+          <NavLinkButton
+            path="/service/analisis-clinicos"
+            text="Ver servicios"
+            variant="primary"
+            size="lg"
+            width="auto"
+          />
+          <NavLinkButton
+            path="/quoter"
+            text="Cotizar estudios"
+            variant="ghost"
+            size="lg"
+            width="auto"
+          />
+        </div>
+
+        <!-- Stats — unified readout panel, like a lab instrument display -->
+        <div
+          class="flex w-full max-w-xs divide-x divide-green-primary/12 overflow-hidden rounded-xl border border-green-primary/12 bg-white shadow-sm sm:max-w-sm lg:max-w-none"
+        >
+          {
+            stats.map(({ value, label, accent }) => (
+              <div class="flex flex-1 flex-col items-center px-4 py-3">
+                <span class={`text-xl font-black leading-none ${accent}`}>
+                  {value}
+                </span>
+                <span class="mt-1 text-[10px] font-semibold uppercase tracking-wide text-grey-custom">
+                  {label}
+                </span>
+              </div>
+            ))
+          }
+        </div>
       </div>
 
-      <div class="lg:col-span-6 xl:col-span-7 relative">
-        <div class="relative group">
+      <!-- ===== RIGHT: Carousel with lab targeting frame ===== -->
+      <div class="flex flex-col gap-5">
+        <!-- Carousel — signature element: calibration bracket corners -->
+        <div class="relative">
+          <!-- Outer dashed measurement ring -->
           <div
-            class="relative bg-white p-2 md:p-4 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-white/40 backdrop-blur-sm transition-all duration-500 group-hover:shadow-[0_48px_80px_-20px_rgba(0,0,0,0.15)] group-hover:-translate-y-2"
+            class="pointer-events-none absolute -inset-3 rounded-2xl border border-dashed border-green-primary/18"
           >
-            <div class="overflow-hidden rounded-[1.8rem]">
-              <CarouselHomeSection />
-            </div>
           </div>
+
+          <!-- Targeting brackets at carousel corners — the lab reticle signature -->
+          <div
+            class="pointer-events-none absolute -left-1 -top-1 h-5 w-5 rounded-tl-sm border-l-2 border-t-2 border-green-primary/60"
+          >
+          </div>
+          <div
+            class="pointer-events-none absolute -right-1 -top-1 h-5 w-5 rounded-tr-sm border-r-2 border-t-2 border-green-primary/60"
+          >
+          </div>
+          <div
+            class="pointer-events-none absolute -bottom-1 -left-1 h-5 w-5 rounded-bl-sm border-b-2 border-l-2 border-green-primary/60"
+          >
+          </div>
+          <div
+            class="pointer-events-none absolute -bottom-1 -right-1 h-5 w-5 rounded-br-sm border-b-2 border-r-2 border-green-primary/60"
+          >
+          </div>
+
+          <!-- Floating identification badge -->
+          <div
+            class="pointer-events-none absolute -top-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-green-primary/15 bg-white px-3 py-1 shadow-sm"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
+            <span
+              class="text-[9px] font-bold uppercase tracking-[0.12em] text-green-primary/70"
+              >DYRA Lab</span
+            >
+          </div>
+
+          <!-- Carousel -->
+          <div class="overflow-hidden rounded-xl shadow-xl ring-1 ring-black/5">
+            <CarouselHomeSection />
+          </div>
+        </div>
+
+        <!-- Service navigation pills -->
+        <div class="grid grid-cols-3 gap-2">
+          {
+            features.map(({ icon, label, desc, path }) => (
+              <a
+                href={path}
+                class="group flex flex-col items-center gap-2 rounded-xl border border-green-primary/10 bg-white p-3 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-primary/25 hover:shadow-md"
+              >
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-green-primary/10 transition-colors duration-200 group-hover:bg-green-primary/20">
+                  <Icon name={icon} class="h-5 w-5 text-green-primary" />
+                </div>
+                <span class="text-[11px] font-bold leading-tight text-black-custom">
+                  {label}
+                </span>
+                <span class="text-[9px] leading-tight text-grey-custom">
+                  {desc}
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
     </div>

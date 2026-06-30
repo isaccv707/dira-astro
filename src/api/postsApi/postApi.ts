@@ -5,19 +5,21 @@ interface FetchPostsParams {
   page?: number;
   limit?: number;
   search?: string;
+  branchId?: string;
 }
 
 export const fetchGetAllPosts = async ({
   page,
   limit,
   search,
+  branchId,
 }: FetchPostsParams = {}): Promise<PostResponse[]> => {
-  // 1. Construimos la URL base para los posts
   const url = new URL(`${API_URL}/posts`);
 
   if (page) url.searchParams.append("page", page.toString());
   if (limit) url.searchParams.append("limit", limit.toString());
   if (search) url.searchParams.append("search", search);
+  if (branchId) url.searchParams.append("branchId", branchId);
 
   try {
     const response = await fetch(url.toString(), {

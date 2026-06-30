@@ -10,6 +10,7 @@ const SelectBranchButton = ({ branch }: SelectBranchButtonProps) => {
     localStorage.setItem("dyra_branch_id", branch.id);
     localStorage.setItem("dyra_branch_name", branch.name);
     localStorage.setItem("dyra_price_sheet_id", branch.priceSheetId);
+    document.cookie = `dyra_branch_id=${branch.id};path=/;max-age=31536000;SameSite=Lax`;
     closeModal();
     window.location.reload();
   };
