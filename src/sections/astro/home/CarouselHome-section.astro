@@ -4,7 +4,13 @@ import ImgCarouselHome from "../../../components/astro/ui/ImgCarouselHome.astro"
 import Carousel from "../../../components/react/carousel/Carousel";
 
 const branchId = Astro.cookies.get("dyra_branch_id")?.value;
-const banners = await fetchActiveBanners("HOME", branchId);
+
+let banners: Awaited<ReturnType<typeof fetchActiveBanners>> = [];
+try {
+  banners = await fetchActiveBanners("HOME", branchId);
+} catch (error) {
+  console.error("Error al obtener los banners:", error);
+}
 if (!banners || banners.length === 0) return null;
 ---
 

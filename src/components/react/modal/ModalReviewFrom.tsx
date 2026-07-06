@@ -13,6 +13,7 @@ import { modalStore, closeModal } from "../../../stores/modalStore";
 import { useStore } from "@nanostores/react";
 import { useState } from "react";
 import { createReview } from "../../../api/reviewsApi/reviewsApi";
+import { getStoredBranchId } from "../../../stores/branchStore";
 
 interface ModalReviewFromProps {
   id?: string;
@@ -40,7 +41,7 @@ const ModalReviewFrom = ({
   const onSubmit = async ({ fullName, comment, rating }: ReviewFormValues) => {
     setIsSubmitting(true);
     try {
-      const branchId = localStorage.getItem("dyra_branch_id") ?? "";
+      const branchId = getStoredBranchId() ?? "";
       const payload = {
         fullName,
         comment,

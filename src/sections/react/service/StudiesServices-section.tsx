@@ -10,14 +10,13 @@ import StudyCardSkeleton from "../../../components/react/skeleton/StudyCardSkele
 import SearchServices from "./SearchServices";
 
 import type { Study } from "../../../interfaces/study.interface";
+import { getStoredBranchId } from "../../../stores/branchStore";
 
 const LIMIT = 12;
 
 const StudiesServices = () => {
   const [dynamicTotalPages, setDynamicTotalPages] = useState(1);
-  const [branchId] = useState<string | null>(() =>
-    typeof window !== "undefined" ? localStorage.getItem("dyra_branch_id") : null
-  );
+  const [branchId] = useState<string | null>(() => getStoredBranchId());
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: dynamicTotalPages,

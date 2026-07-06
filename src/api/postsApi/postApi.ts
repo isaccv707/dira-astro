@@ -1,4 +1,4 @@
-import { API_URL } from "../../constants/apiUrl";
+import { apiGet } from "../apiGet";
 import type { PostResponse } from "./post.interface";
 
 interface FetchPostsParams {
@@ -13,32 +13,13 @@ export const fetchGetAllPosts = async ({
   limit,
   search,
   branchId,
-}: FetchPostsParams = {}): Promise<PostResponse[]> => {
-  const url = new URL(`${API_URL}/posts`);
-
-  if (page) url.searchParams.append("page", page.toString());
-  if (limit) url.searchParams.append("limit", limit.toString());
-  if (search) url.searchParams.append("search", search);
-  if (branchId) url.searchParams.append("branchId", branchId);
-
-  try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      throw new Error(
-        errorData?.message || "Error al obtener las publicaciones",
-      );
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error en fetchGetAllPosts:", error);
-    throw error;
-  }
+}: FetchPostsParams = {}): Promise<PostResponse> => {
+  const data = await apiGet<PostResponse>("/posts", {
+    page,
+    limit,
+    search,
+    branchId,
+    status: "PUBLISHED",
+  });
+  return data ?? { data: [], meta: { total: 0, page: 1, lastPage: 1, limit: limit ?? 10, totalPages: 1 } };
 };

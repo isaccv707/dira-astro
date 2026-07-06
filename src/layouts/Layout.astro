@@ -5,7 +5,7 @@ import "../styles/global.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalManager from "../components/react/modal/ModalManager";
-import BranchSelectorSection from "../sections/react/BranchSelector-section";
+import BranchSelectorManager from "../components/react/branch/BranchSelectorManager";
 import FloatingActionsSection from "../sections/react/FloatingActions-section";
 import DrawerManager from "../components/react/drawer/DrawerManager";
 import FooterSection from "../sections/astro/layout/Footer-section.astro";
@@ -30,7 +30,7 @@ const {
 
 const canonicalURL = new URL(
   Astro.url.pathname,
-  Astro.site || "https://dira.mx",
+  Astro.site || "https://dyranalitica.com",
 );
 const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
 
@@ -122,7 +122,7 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     <ModalManager client:load />
     <DrawerManager client:load />
 
-    <BranchSelectorSection client:load />
+    <BranchSelectorManager client:load />
     <FooterSection />
   </body>
 </html>

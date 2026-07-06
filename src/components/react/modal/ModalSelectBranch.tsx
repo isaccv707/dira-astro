@@ -23,7 +23,7 @@ const ModalSelectBranch = ({
       <div className="p-5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {branches.map((branch) => (
-            <SelectBranchButton branch={branch} />
+            <SelectBranchButton key={branch.id} branch={branch} />
           ))}
         </div>
       </div>
