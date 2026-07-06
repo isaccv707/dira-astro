@@ -30,3 +30,9 @@ export interface Branch {
   address: Address;
   state: State;
 }
+
+export interface SelectedBranch {
+  id: string;
+  name: string;
+  priceSheetId: string;
+}

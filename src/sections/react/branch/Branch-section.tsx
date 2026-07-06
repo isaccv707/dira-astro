@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
-import {
-  getAllBranches,
-  getOneBranch,
-} from "../../../api/branchesApi/branchesApi";
+import { getOneBranch } from "../../../api/branchesApi/branchesApi";
 import BranchCard from "../../../components/react/cards/BranchCard";
 import MapCard from "../../../components/react/cards/MapCard";
+import { getStoredBranchId } from "../../../stores/branchStore";
 
 const BranchSection = () => {
   const [branchData, setBranchData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const savedBranchId = localStorage.getItem("dyra_branch_id");
+    const savedBranchId = getStoredBranchId();
     if (savedBranchId) {
       getOneBranch(savedBranchId)
         .then((data) => {

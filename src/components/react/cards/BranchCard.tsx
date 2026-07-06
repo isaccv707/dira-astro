@@ -2,8 +2,7 @@ import type { Branch } from "../../../interfaces/branch.interface";
 import { getFullAddress } from "../../../utils/maps.utils";
 import NavLinkButton from "../navigation/NavLinkButton";
 import Button from "../buttons/Button";
-import { openModal } from "../../../stores/modalStore";
-import { getAllBranches } from "../../../api/branchesApi/branchesApi";
+import { openBranchSelectorModal } from "../../../stores/branchStore";
 
 interface BranchCardProps {
   branch: Branch;
@@ -21,11 +20,7 @@ const BranchCard = ({ branch }: BranchCardProps) => {
 
   const handleOpenModal = async () => {
     try {
-      const branches = await getAllBranches();
-      openModal("MODAL_SELECT_BRANCH", {
-        title: "Elige la sucursal de tu preferencia",
-        data: branches,
-      });
+      await openBranchSelectorModal();
     } catch (error) {
       console.log("Error al abrir el modal");
     }

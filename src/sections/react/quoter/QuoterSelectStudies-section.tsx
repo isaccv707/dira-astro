@@ -8,16 +8,16 @@ import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
 import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import SearchServices from "../service/SearchServices";
 import useSearchStudies from "../../../hooks/useSearchStudies";
-import { openModal } from "../../../stores/modalStore";
-import { getAllBranches } from "../../../api/branchesApi/branchesApi";
+import {
+  getStoredBranchId,
+  openBranchSelectorModal,
+} from "../../../stores/branchStore";
 
 const LIMIT = 4;
 
 const QuoterSelectStudies = () => {
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
-  const [branchId] = useState<string | null>(() =>
-    typeof window !== "undefined" ? localStorage.getItem("dyra_branch_id") : null
-  );
+  const [branchId] = useState<string | null>(() => getStoredBranchId());
 
   const { addStudy, removeStudy, selectedStudies } = useQuoterContext();
 
@@ -43,11 +43,7 @@ const QuoterSelectStudies = () => {
   const handleDeletStudy = (studyId: string) => removeStudy(studyId);
 
   const handleOpenBranchSelector = async () => {
-    const branches = await getAllBranches();
-    openModal("MODAL_SELECT_BRANCH", {
-      title: "Elige la sucursal de tu preferencia",
-      data: branches,
-    });
+    await openBranchSelectorModal();
   };
 
   if (!branchId) {

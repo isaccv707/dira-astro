@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { getAllStudies } from "../api/studiesApi/studiesApi";
+import { getStoredBranchId } from "../stores/branchStore";
 
 interface useGetAllStudiesProps {
   page: number;
@@ -17,7 +18,7 @@ interface StudiesState {
 }
 
 const useGetAllStudies = ({ limit, page, search, branchId }: useGetAllStudiesProps) => {
-  const resolvedBranchId = branchId ?? (typeof window !== "undefined" ? (localStorage.getItem("dyra_branch_id") ?? undefined) : undefined);
+  const resolvedBranchId = branchId ?? (getStoredBranchId() ?? undefined);
   const [state, setState] = useState<StudiesState>({
     data: null,
     isLoading: true,

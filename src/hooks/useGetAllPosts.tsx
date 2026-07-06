@@ -4,6 +4,7 @@ import type {
   PostResponse,
 } from "../api/postsApi/post.interface";
 import { fetchGetAllPosts } from "../api/postsApi/postApi";
+import { getStoredBranchId } from "../stores/branchStore";
 // Importamos tu función fetch recién creada
 
 interface useGetAllPostsParams {
@@ -19,7 +20,7 @@ export const useGetAllPosts = ({
   search,
   branchId,
 }: useGetAllPostsParams) => {
-  const resolvedBranchId = branchId ?? (typeof window !== "undefined" ? (localStorage.getItem("dyra_branch_id") ?? undefined) : undefined);
+  const resolvedBranchId = branchId ?? (getStoredBranchId() ?? undefined);
   // 1. Estados locales para suplir lo que hacía RTK Query
   const [posts, setPosts] = useState<Post[]>([]);
   const [meta, setMeta] = useState<PostResponse["meta"] | undefined>(undefined);
