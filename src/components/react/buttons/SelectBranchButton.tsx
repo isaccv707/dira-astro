@@ -12,7 +12,6 @@ const SelectBranchButton = ({ branch }: SelectBranchButtonProps) => {
     setSelectedBranch({
       id: branch.id,
       name: branch.name,
-      priceSheetId: branch.priceSheetId,
     });
     closeModal();
     window.location.reload();

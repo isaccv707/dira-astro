@@ -35,11 +35,8 @@ export const useGetAllPosts = ({
         setError(null);
 
         const response = await fetchGetAllPosts({ page, limit, search, branchId: resolvedBranchId });
-        const normalizedResponse = Array.isArray(response)
-          ? response[0]
-          : response;
-        setPosts(normalizedResponse?.data ?? []);
-        setMeta(normalizedResponse?.meta);
+        setPosts(response.data);
+        setMeta(response.meta);
       } catch (err) {
         console.error("Error en useGetAllPosts hook:", err);
         setError(

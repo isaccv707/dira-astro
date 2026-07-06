@@ -40,7 +40,7 @@ All API calls are plain `fetch` functions (no Redux/RTK Query). They live in `sr
 src/api/
   bannersApi/   studiesApi/   servicesApi/
   postsApi/     reviewsApi/   branchesApi/
-  quotationsApi/ priceSheetApi/
+  quotationsApi/
 ```
 
 Base URL comes from `import.meta.env.PUBLIC_API_URL` (falls back to `http://localhost:3000/api`), centralised in `src/constants/apiUrl.ts`.

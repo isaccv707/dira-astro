@@ -5,7 +5,6 @@ import { openModal } from "./modalStore";
 
 const BRANCH_ID_KEY = "dyra_branch_id";
 const BRANCH_NAME_KEY = "dyra_branch_name";
-const PRICE_SHEET_ID_KEY = "dyra_price_sheet_id";
 
 const getInitialBranch = (): SelectedBranch | null => {
   if (typeof window === "undefined") return null;
@@ -14,7 +13,6 @@ const getInitialBranch = (): SelectedBranch | null => {
   return {
     id,
     name: localStorage.getItem(BRANCH_NAME_KEY) ?? "",
-    priceSheetId: localStorage.getItem(PRICE_SHEET_ID_KEY) ?? "",
   };
 };
 
@@ -26,7 +24,6 @@ export const branchStore = atom<SelectedBranch | null>(getInitialBranch());
 export const setSelectedBranch = (branch: SelectedBranch) => {
   localStorage.setItem(BRANCH_ID_KEY, branch.id);
   localStorage.setItem(BRANCH_NAME_KEY, branch.name);
-  localStorage.setItem(PRICE_SHEET_ID_KEY, branch.priceSheetId);
   document.cookie = `${BRANCH_ID_KEY}=${branch.id};path=/;max-age=31536000;SameSite=Lax`;
   branchStore.set(branch);
 };

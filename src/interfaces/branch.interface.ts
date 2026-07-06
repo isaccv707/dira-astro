@@ -24,7 +24,6 @@ export interface Branch {
   mapUrl: string;
   stateId: string;
   addressId: number;
-  priceSheetId: string;
   createdAt: Date;
   updatedAt: Date;
   address: Address;
@@ -34,5 +33,4 @@ export interface Branch {
 export interface SelectedBranch {
   id: string;
   name: string;
-  priceSheetId: string;
 }
