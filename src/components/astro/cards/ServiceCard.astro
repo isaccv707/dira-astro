@@ -76,7 +76,6 @@ const { description, id, slug, name, benefits, icon } = service;
     if (rawData) {
       const serviceData = JSON.parse(rawData);
 
-      // Enviamos la información exacta al Nano Store global
       openModal("MODAL_SERVICE", {
         title: serviceData.name,
         data: serviceData,

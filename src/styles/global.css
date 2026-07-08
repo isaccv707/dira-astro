@@ -12,6 +12,18 @@
   --color-black-custom: #181818;
   --color-grey-custom: #808080;
 
+  /* ✨ NUEVOS TOKENS SEMÁNTICOS PARA S TRUCTURA (Evita que Claude invente) ✨ */
+  --color-ui-dark: #111827; /* Para h1, h2, h3 esenciales (zinc-900) */
+  --color-ui-body: #4b5563; /* Para párrafos y descripciones (zinc-600) */
+  --color-ui-muted: #9ca3af; /* Para textos secundarios o fechas */
+  --color-ui-bg: #f9fafb; /* Fondo grisáceo limpio para la app */
+  --color-ui-border: #e5e7eb; /* Bordes consistentes de tablas/cards */
+
+  /* --- RADIOS DE BORDE CLÍNICOS --- */
+  --radius-clinical-sm: 8px;
+  --radius-clinical-md: 12px;
+  --radius-clinical-lg: 16px;
+
   /* --- ANIMACIONES --- */
   --animate-slide-in-right: slide-in-right 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
   --animate-fade-up: fade-up 0.32s ease;

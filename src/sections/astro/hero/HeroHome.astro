@@ -1,8 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Icon as ReactIcon } from "@iconify/react";
 import logo from "../../../assets/images/logos/logo.png";
 import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
-import CarouselHomeSection from "../home/CarouselHome-section.astro";
+import CarouselHome from "../home/CarouselHome.astro";
 
 // Staggered entrance — each element reveals in sequence like a system
 // booting up. Paired with the `motion-safe:animate-fade-up` class, which
@@ -128,9 +129,9 @@ const features = [
             className="group"
           >
             Ver servicios
-            <Icon
-              name="tabler:arrow-right"
-              class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
+            <ReactIcon
+              icon="tabler:arrow-right"
+              className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
             />
           </NavLinkButton>
           <NavLinkButton
@@ -206,7 +207,7 @@ const features = [
 
           <!-- Carousel -->
           <div class="overflow-hidden rounded-xl shadow-xl ring-1 ring-black/5">
-            <CarouselHomeSection />
+            <CarouselHome />
           </div>
         </div>
 

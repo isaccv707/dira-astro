@@ -1,7 +1,6 @@
 ---
 import type { Service } from "../../../interfaces/service.interface";
 import ServiceStudiesCatalog from "../../react/service/ServiceStudiesCatalog";
-import ServicesAvailable from "./ServicesAvailable.astro";
 
 interface Props {
   service: Service;
@@ -36,7 +35,7 @@ const hasStudies = (_count?.studies ?? 0) > 0;
         <ServiceStudiesCatalog client:visible />
       </div>
     ) : (
-      <ServicesAvailable service={service} />
+      <h1>Detalles de servicio</h1>
     )
   }
 </section>

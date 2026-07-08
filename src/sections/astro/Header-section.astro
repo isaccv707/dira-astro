@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import logoDyra from "../../assets/images/logos/logo_dyra.png";
 
 import ButtonDrawer from "../../components/react/buttons/ButtonDrawer";
-import NavbarSection from "./layout/Navbar-section.astro";
+import Navbar from "./layout/Navbar.astro";
 ---
 
 <header class="bg-white shadow-md px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-50">
@@ -14,7 +14,7 @@ import NavbarSection from "./layout/Navbar-section.astro";
 
     <div class="flex items-center gap-4">
       <div class="hidden md:block">
-        <NavbarSection />
+        <Navbar />
       </div>
 
       <div class="md:hidden">

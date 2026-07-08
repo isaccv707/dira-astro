@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import HeaderBySection from "../components/astro/ui/HeaderBySection.astro";
 
 import logoDyra from "../assets/images/logos/logo.png";
-import Posts from "../sections/astro/blog/Posts.astro";
+import Posts from "../sections/react/blog/Posts";
 ---
 
 <Layout title="" description="">
@@ -17,5 +17,5 @@ import Posts from "../sections/astro/blog/Posts.astro";
       btnProperties={{ text: "Contáctanos" }}
     />
   </section>
-  <Posts />
+  <Posts client:load />
 </Layout>

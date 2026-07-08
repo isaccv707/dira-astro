@@ -1,31 +1,31 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import QuickActionsSection from "../sections/astro/QuickActions-section.astro";
-import AboutSection from "../sections/astro/about/About-section.astro";
-import BenefitsSection from "../sections/astro/about/Benefits-section.astro";
-import HeroHomeSection from "../sections/astro/hero/HeroHome-section.astro";
-import ReviewSection from "../sections/astro/reviews/Review-section.astro";
-import OurServicesSection from "../sections/astro/service/OurServices-section.astro";
-import MetricsDyra from "../sections/react/common/MetricsDyra-section";
+import QuickActions from "../sections/astro/QuickActions.astro";
+import About from "../sections/astro/about/About.astro";
+import Benefits from "../sections/astro/about/Benefits.astro";
+import HeroHome from "../sections/astro/hero/HeroHome.astro";
+import Review from "../sections/astro/review/Review.astro";
+import OurServices from "../sections/astro/service/OurServices.astro";
+import MetricsDyra from "../sections/react/common/MetricsDyra";
 ---
 
 <Layout
   title="Laboratorio DYRA | Diagnóstico y Referencia Analítica"
   description="Bienvenido a Laboratorio DYRA. Ofrecemos análisis clínicos con tecnología de punta y calidez humana en Guadalajara y Colima."
 >
-  <HeroHomeSection />
+  <HeroHome />
 
-  <QuickActionsSection />
+  <QuickActions />
 
-  <OurServicesSection />
+  <OurServices />
 
-  <AboutSection />
+  <About />
 
-  <BenefitsSection />
+  <Benefits />
 
   <section class="mb-24">
     <MetricsDyra client:visible />
   </section>
 
-  <ReviewSection />
+  <Review />
 </Layout>

@@ -1,7 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import { QuoterProvider } from "../../../contexts/QuoterContext";
-import QuoteDetails from "../../../sections/react/quoter/QuoteDetails-section";
-import Quoter from "../../../sections/react/quoter/Quoter-section";
+import QuoteDetails from "../../../sections/react/quoter/QuoteDetails";
+import Quoter from "../../../sections/react/quoter/Quoter";
 
 import "react-toastify/dist/ReactToastify.css";
 

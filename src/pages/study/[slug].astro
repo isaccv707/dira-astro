@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { getOneResource } from "../../utils/getOneResource";
 import type { Study } from "../../interfaces/study.interface";
-import StudyDetailSection from "../../sections/astro/StudyDetail-section.astro";
+import StudyDetail from "../../sections/astro/StudyDetail.astro";
 
 const { slug = "" } = Astro.params;
 
@@ -17,10 +17,8 @@ const { name, description = "" } = study;
 
 <Layout
   title={`${name} | Laboratorio DYRA`}
-  description={
-    description ||
-    `Conoce todo sobre el estudio ${name}: preparación, tipo de muestra y tiempo de entrega en Laboratorio DYRA.`
-  }
+  description={description ||
+    `Conoce todo sobre el estudio ${name}: preparación, tipo de muestra y tiempo de entrega en Laboratorio DYRA.`}
 >
-  <StudyDetailSection study={study} />
+  <StudyDetail study={study} />
 </Layout>
