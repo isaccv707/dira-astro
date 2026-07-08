@@ -6,8 +6,8 @@ import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro"
 export const prerender = true;
 ---
 
-<section class="">
-  <div class="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+<section>
+  <div class="grid items-center gap-10 md:grid-cols-2 md:gap-12">
     <div class="w-full">
       <div class="max-w-prose">
         <HeaderBySection
@@ -20,16 +20,30 @@ export const prerender = true;
         />
       </div>
     </div>
-    <div class="flex justify-center md:justify-start">
+
+    <div
+      class="relative flex justify-center motion-safe:animate-fade-up md:justify-start"
+      style="animation-delay:120ms; animation-fill-mode:backwards;"
+    >
       <img
         src={imgAbout.src}
         alt="Imagen DYRA"
-        class="w-full max-w-md md:max-w-lg h-auto rounded-xl object-cover"
+        class="w-full max-w-md md:max-w-lg h-auto rounded-3xl object-cover shadow-lg ring-1 ring-black/5"
         loading="lazy"
         decoding="async"
         width={512}
         height={400}
       />
+
+      <!-- Floating certification badge — echoes the Hero's instrument-badge language -->
+      <div
+        class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md"
+      >
+        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
+        <span class="text-[11px] font-bold uppercase tracking-widest text-green-primary">
+          Laboratorio certificado
+        </span>
+      </div>
     </div>
   </div>
 </section>

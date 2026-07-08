@@ -1,0 +1,42 @@
+---
+import type { Service } from "../../../interfaces/service.interface";
+import ServiceStudiesCatalog from "../../react/service/ServiceStudiesCatalog";
+import ServicesAvailable from "./ServicesAvailable.astro";
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const { _count } = service;
+const hasStudies = (_count?.studies ?? 0) > 0;
+---
+
+<section id="servicio-detalle" class="scroll-mt-24">
+  {
+    hasStudies ? (
+      <div class="space-y-8">
+        <div
+          class="motion-safe:animate-fade-up"
+          style="animation-fill-mode:backwards;"
+        >
+          <div class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary">
+            <span class="h-1.5 w-1.5 rounded-full bg-green-primary" />
+            Catálogo de estudios
+          </div>
+          <h2 class="mt-3 text-2xl font-black tracking-tight text-green-light sm:text-3xl">
+            {`Estudios de ${service.name} disponibles`}
+          </h2>
+          <p class="mt-2 max-w-xl text-sm leading-relaxed text-grey-custom sm:text-base">
+            Explora nuestro catálogo con una gran variedad de estudios y
+            encuentra el ideal para ti.
+          </p>
+        </div>
+
+        <ServiceStudiesCatalog client:visible />
+      </div>
+    ) : (
+      <ServicesAvailable service={service} />
+    )
+  }
+</section>

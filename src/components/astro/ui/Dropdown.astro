@@ -13,9 +13,9 @@ const { options, text } = Astro.props;
   <Button client:load text={text} variant="primary" size="sm" />
 
   <div
-    class="absolute left-0 mt-2 w-44 bg-white divide-y divide-grey rounded-lg shadow-lg dark:bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+    class="absolute left-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
   >
-    <ul class="py-2 text-sm text-green-700 dark:text-gray-200">
+    <ul class="py-2 text-sm text-green-primary dark:text-gray-200">
       {
         options.map((opt, index) => (
           <li>

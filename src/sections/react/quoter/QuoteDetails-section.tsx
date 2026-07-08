@@ -23,7 +23,7 @@ const QuoteDetails = () => {
         </small>
       </header>
 
-      <div className="flex-1 overflow-y-auto max-h-[75vh] px-4 py-5 space-y-5 scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-100 rounded-b-2xl">
+      <div className="flex-1 overflow-y-auto max-h-[75vh] px-4 py-5 space-y-5 scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-gray-100 rounded-b-2xl">
         <ClientInformationCard client={client} />
 
         <Accordion

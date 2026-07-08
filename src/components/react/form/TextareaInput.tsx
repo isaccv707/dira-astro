@@ -42,9 +42,9 @@ const TextareaInput = ({
                 aria-describedby={isError ? `${id}-error` : undefined}
                 className={`
           mt-1 block w-full rounded-md border px-3 py-2 text-gray-700
-          shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
+          shadow-sm focus:outline-none focus:ring-2 focus:ring-green-primary focus:border-green-primary
           transition-colors duration-200 ease-in-out
-          ${isError ? 'border-red-500' : 'border-gray-300'}
+          ${isError ? 'border-red-custom' : 'border-gray-300'}
           resize-vertical
         `}
             />

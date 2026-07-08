@@ -20,13 +20,13 @@ const avatarUrl = review.avatarUrl || avatarFallback;
 ---
 
 <figure
-  class="flex flex-col h-full max-w-7xl shadow-md p-8 rounded-3xl border border-gray-100 bg-white"
+  class="flex flex-col h-full max-w-7xl shadow-sm p-8 rounded-3xl border border-gray-100 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
   <div class="flex items-center space-x-1 mb-4 shrink-0">
     {
       [...Array(totalStars)].map((_, index) => (
         <svg
-          class={`w-5 h-5 ${index < rating ? "text-yellow-300" : "text-gray-300"}`}
+          class={`w-5 h-5 ${index < rating ? "text-yellow-primary" : "text-gray-200"}`}
           fill="currentColor"
           viewBox="0 0 24 24"
         >

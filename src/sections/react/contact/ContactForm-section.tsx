@@ -13,6 +13,7 @@ import FormProvider from "../../../components/react/hk-form/FormProvider";
 import RHFTextInput from "../../../components/react/hk-form/RHFTextInput";
 import RHFSelectInput from "../../../components/react/hk-form/RHFSelectInput";
 import RHFTextareaInput from "../../../components/react/hk-form/RHFTextareaInput";
+import Button from "../../../components/react/buttons/Button";
 
 interface Inputs {
   name: string;
@@ -123,19 +124,15 @@ export const ContactForm = () => {
           </div>
 
           <div className="sm:col-span-2">
-            <button
+            <Button
               type="submit"
-              className="
-                w-full h-11 rounded-xl
-                bg-green-light text-white font-semibold
-                hover:bg-green-primary active:bg-green-primary/90
-                transition
-                disabled:opacity-60 disabled:cursor-not-allowed
-                shadow-sm
-              "
-            >
-              {isLoading ? "Enviando..." : "Enviar"}
-            </button>
+              variant="primary"
+              size="lg"
+              width="full"
+              text="Enviar"
+              isLoading={isLoading}
+              disabled={isLoading}
+            />
           </div>
         </div>
       </div>

@@ -22,13 +22,13 @@ const DateInput = ({ id, label, name, onChange, value, error, isError }: DateInp
                 value={value || ""}
                 onChange={onChange}
                 className={`px-3 py-2 rounded-lg border outline-none transition
-          ${isError ? "border-red-500 focus:ring-2 focus:ring-red-400" : "border-gray-300 focus:ring-2 focus:ring-blue-400"}
+          ${isError ? "border-red-custom focus:ring-2 focus:ring-red-custom/40" : "border-gray-300 focus:ring-2 focus:ring-green-primary/40"}
         `}
             />
 
             {/* Mensaje de error */}
             {isError && error && (
-                <span className="text-sm text-red-500">{error.message}</span>
+                <span className="text-sm text-red-custom">{error.message}</span>
             )}
         </div>
     );

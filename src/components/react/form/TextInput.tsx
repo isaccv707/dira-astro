@@ -43,8 +43,8 @@ const TextInput = ({
           placeholder:text-gray-400
           transition focus:outline-none focus:ring-2
           ${hasError
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:border-green-400 focus:ring-green-400"
+                        ? "border-red-custom focus:ring-red-custom"
+                        : "border-gray-300 focus:border-green-primary focus:ring-green-primary"
                     }
         `}
                 aria-invalid={hasError ? "true" : "false"}

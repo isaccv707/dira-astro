@@ -9,22 +9,20 @@ const QuoterWrapper = () => {
   return (
     <QuoterProvider>
       <section className="w-full py-6 sm:py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)] items-start">
-            {/* Form */}
-            <section className="w-full">
-              <div className="h-full rounded-3xl shadow-xl overflow-hidden">
-                <Quoter />
-              </div>
-            </section>
+        <div className="grid gap-6 lg:gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)] items-start">
+          {/* Form */}
+          <section className="w-full">
+            <div className="h-full rounded-3xl shadow-xl overflow-hidden">
+              <Quoter />
+            </div>
+          </section>
 
-            {/* Details */}
-            <section className="w-full lg:sticky lg:top-6">
-              <div className="h-full rounded-3xl shadow-xl overflow-hidden">
-                <QuoteDetails />
-              </div>
-            </section>
-          </div>
+          {/* Details */}
+          <section className="w-full lg:sticky lg:top-6">
+            <div className="h-full rounded-3xl shadow-xl overflow-hidden">
+              <QuoteDetails />
+            </div>
+          </section>
         </div>
       </section>
     </QuoterProvider>

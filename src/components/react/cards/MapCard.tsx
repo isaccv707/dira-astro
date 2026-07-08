@@ -30,8 +30,8 @@ const MapCard = ({ branch }: MapCardProps) => {
             )}
           </div>
 
-          <div className="mt-5 grid gap-4 rounded-2xl bg-linear-to-br from-green-50 to-white p-5 ring-1 ring-green-100 shadow-sm">
-            <p className="text-xs font-extrabold uppercase tracking-widest text-green-800">
+          <div className="mt-5 grid gap-4 rounded-2xl bg-linear-to-br from-green-primary/5 to-white p-5 ring-1 ring-green-primary/10 shadow-sm">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-green-primary">
               Información de Contacto
             </p>
             <div className="grid gap-3 text-sm">

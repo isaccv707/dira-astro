@@ -83,14 +83,14 @@ const CardStudy = ({
         {/* Title */}
         <h5
           title={name}
-          className="mb-3 text-xl font-extrabold text-black leading-tight group-hover:text-green-primary transition-colors duration-300 line-clamp-2 min-h-[3.5rem]"
+          className="mb-3 text-xl font-extrabold text-black leading-tight group-hover:text-green-primary transition-colors duration-300 line-clamp-2 min-h-14"
         >
           {name}
         </h5>
 
         {/* Requirements */}
         {isRequiredAppointment && (
-          <div className="flex items-center gap-2 mb-4 text-red font-bold text-[10px] uppercase tracking-wider bg-red/5 w-fit px-3 py-1 rounded-lg">
+          <div className="flex items-center gap-2 mb-4 text-red-custom font-bold text-[10px] uppercase tracking-wider bg-red-custom/5 w-fit px-3 py-1 rounded-lg">
             <Calendar className="w-3 h-3" />
             <span>Requiere cita</span>
           </div>
@@ -99,14 +99,14 @@ const CardStudy = ({
         {/* Description */}
         <div className="mb-6 grow">
           {description && (
-            <p className="text-sm text-grey line-clamp-3 leading-relaxed mb-4">
+            <p className="text-sm text-grey-custom line-clamp-3 leading-relaxed mb-4">
               {description}
             </p>
           )}
 
           {/* Meta Info */}
           <div className="flex flex-col gap-3 py-4 border-y border-gray-50/80">
-            <div className="flex items-center gap-3 text-xs font-bold text-grey">
+            <div className="flex items-center gap-3 text-xs font-bold text-grey-custom">
               <div className="p-1.5 rounded-lg bg-green-light/5 text-green-light">
                 <Clock className="w-4 h-4" />
               </div>
@@ -118,7 +118,7 @@ const CardStudy = ({
               </span>
             </div>
             {preparation && (
-              <div className="flex items-center gap-3 text-xs font-bold text-grey">
+              <div className="flex items-center gap-3 text-xs font-bold text-grey-custom">
                 <div className="p-1.5 rounded-lg bg-green-light/5 text-green-light">
                   <FlaskConical className="w-4 h-4" />
                 </div>
@@ -135,7 +135,7 @@ const CardStudy = ({
         <div className="mb-6">
           {priceInfo?.showPrice ? (
             <div className="flex items-baseline gap-1">
-              <span className="text-sm font-black text-grey">$</span>
+              <span className="text-sm font-black text-grey-custom">$</span>
               <span className="text-4xl font-black text-green-light tracking-tighter">
                 {priceInfo.price.toLocaleString("es-MX", {
                   minimumFractionDigits: 2,

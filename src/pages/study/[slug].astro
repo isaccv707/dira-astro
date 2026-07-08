@@ -9,10 +9,18 @@ const { slug = "" } = Astro.params;
 const study = await getOneResource<Study>("studies", slug as string);
 
 if (!study) {
-    return Astro.redirect("/404");
+  return Astro.redirect("/404");
 }
+
+const { name, description = "" } = study;
 ---
 
-<Layout>
-    <StudyDetailSection study={study} />
+<Layout
+  title={`${name} | Laboratorio DYRA`}
+  description={
+    description ||
+    `Conoce todo sobre el estudio ${name}: preparación, tipo de muestra y tiempo de entrega en Laboratorio DYRA.`
+  }
+>
+  <StudyDetailSection study={study} />
 </Layout>
