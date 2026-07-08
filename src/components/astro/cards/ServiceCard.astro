@@ -13,25 +13,17 @@ const { description, id, slug, name, benefits, icon } = service;
 ---
 
 <div
-  class="group service-card w-full h-auto border border-gray-100 rounded-2xl shadow-sm p-6 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white"
+  class="group service-card w-full h-auto border border-ui-border rounded-clinical-md shadow-xs p-6 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-sm bg-white"
   data-payload={JSON.stringify(service)}
 >
   <div
     class="w-16 h-16 flex items-center justify-center rounded-full mb-4 bg-linear-to-tr from-green-light to-green-secondary/50 p-2 transition-transform duration-300 group-hover:scale-105"
   >
-    {
-      icon && !icon.startsWith("http") ? (
-        <Icon name={icon} class={"text-white w-6 h-auto"} />
-      ) : icon ? (
-        <img src={icon} alt={name} class="w-6 h-auto object-contain" />
-      ) : (
-        <div class="w-6 h-6 bg-white/20 rounded-full" />
-      )
-    }
+    {icon && <Icon name={icon} class={"text-white w-6 h-auto"} />}
   </div>
 
   <h5
-    class="mb-1 text-lg font-bold tracking-tight text-green-primary"
+    class="mb-1 text-lg font-black tracking-tight text-green-light"
     data-service-title
   >
     {name}

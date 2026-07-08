@@ -18,8 +18,8 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
   study;
 ---
 
-<section class="min-h-screen bg-gray-50 pb-20">
-  <div class="bg-white pt-10 pb-16 border-b border-gray-100">
+<section class="min-h-screen bg-ui-bg pb-20">
+  <div class="bg-white pt-10 pb-16 border-b border-ui-border">
     <HeaderBySection
       textHeader="Detalle del Estudio"
       title={name}
@@ -34,11 +34,11 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
       <div class="lg:col-span-2 space-y-8">
         <!-- Description Section -->
         <div
-          class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100"
+          class="bg-white p-8 rounded-clinical-lg shadow-xs border border-ui-border"
         >
           <div class="flex items-center gap-3 mb-6">
             <div
-              class="p-3 bg-green-secondary/10 rounded-2xl text-green-secondary"
+              class="p-3 bg-green-secondary/10 rounded-clinical-md text-green-secondary"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -58,11 +58,11 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                   d="M16 17H8"></path></svg
               >
             </div>
-            <h2 class="text-xl font-bold text-black">
+            <h2 class="text-xl font-black tracking-tight text-green-light">
               Descripción del Estudio
             </h2>
           </div>
-          <p class="text-grey leading-relaxed">
+          <p class="text-grey-custom leading-relaxed">
             {
               description ||
                 "Este estudio clínico proporciona información valiosa para el diagnóstico y seguimiento de diversos padecimientos. Realizado bajo los más altos estándares de calidad."
@@ -74,11 +74,11 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Preparation -->
           <div
-            class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100"
+            class="bg-white p-8 rounded-clinical-lg shadow-xs border border-ui-border"
           >
             <div class="flex items-center gap-3 mb-6">
               <div
-                class="p-3 bg-yellow-primary/10 rounded-2xl text-yellow-secondary"
+                class="p-3 bg-yellow-primary/10 rounded-clinical-md text-yellow-secondary"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -96,9 +96,11 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                   ></path></svg
                 >
               </div>
-              <h2 class="text-lg font-bold text-black">Preparación</h2>
+              <h2 class="text-lg font-black tracking-tight text-green-light">
+                Preparación
+              </h2>
             </div>
-            <p class="text-sm text-grey leading-relaxed">
+            <p class="text-sm text-grey-custom leading-relaxed">
               {
                 preparation ||
                   "No requiere preparación especial para este estudio."
@@ -108,11 +110,13 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 
           <!-- Details Stats -->
           <div
-            class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between"
+            class="bg-white p-8 rounded-clinical-lg shadow-xs border border-ui-border flex flex-col justify-between"
           >
             <div class="space-y-6">
               <div class="flex items-center gap-4">
-                <div class="p-2 bg-green-light/10 rounded-xl text-green-light">
+                <div
+                  class="p-2 bg-green-light/10 rounded-clinical-sm text-green-light"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -133,11 +137,11 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                 </div>
                 <div>
                   <p
-                    class="text-[10px] font-bold uppercase tracking-wider text-grey"
+                    class="text-[10px] font-bold uppercase tracking-wider text-grey-custom"
                   >
                     Tipo de Muestra
                   </p>
-                  <p class="text-sm font-bold text-black">
+                  <p class="text-sm font-bold text-green-light">
                     {sampleType || "No especificado"}
                   </p>
                 </div>
@@ -145,7 +149,7 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 
               <div class="flex items-center gap-4">
                 <div
-                  class="p-2 bg-green-secondary/10 rounded-xl text-green-secondary"
+                  class="p-2 bg-green-secondary/10 rounded-clinical-sm text-green-secondary"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -164,11 +168,11 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                 </div>
                 <div>
                   <p
-                    class="text-[10px] font-bold uppercase tracking-wider text-grey"
+                    class="text-[10px] font-bold uppercase tracking-wider text-grey-custom"
                   >
                     Tiempo de Entrega
                   </p>
-                  <p class="text-sm font-bold text-black">
+                  <p class="text-sm font-bold text-green-light">
                     {deliveryTime} horas
                   </p>
                 </div>
@@ -179,13 +183,13 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 
         <!-- Bottom CTA -->
         <div
-          class="p-8 rounded-[2.5rem] bg-linear-to-r from-green-primary to-green-secondary text-white overflow-hidden relative group"
+          class="p-8 rounded-clinical-lg bg-linear-to-r from-green-primary to-green-secondary text-white overflow-hidden relative"
         >
           <div
-            class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6"
+            class="flex flex-col md:flex-row items-center justify-between gap-6"
           >
             <div class="text-center md:text-left">
-              <h3 class="text-2xl font-bold mb-2 text-white">
+              <h3 class="text-2xl font-black mb-2 text-white">
                 ¿Buscas otros estudios?
               </h3>
               <p class="text-white/80 max-w-md">
@@ -199,11 +203,6 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
               size="lg"
               text="Explorar Catálogo"
             />
-          </div>
-          <!-- Decorative Circle -->
-          <div
-            class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all"
-          >
           </div>
         </div>
       </div>

@@ -12,14 +12,14 @@ const QuoterWrapper = () => {
         <div className="grid gap-6 lg:gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)] items-start">
           {/* Form */}
           <section className="w-full">
-            <div className="h-full rounded-3xl shadow-xl overflow-hidden">
+            <div className="h-full rounded-clinical-lg shadow-xl overflow-hidden">
               <Quoter />
             </div>
           </section>
 
           {/* Details */}
           <section className="w-full lg:sticky lg:top-6">
-            <div className="h-full rounded-3xl shadow-xl overflow-hidden">
+            <div className="h-full rounded-clinical-lg shadow-xl overflow-hidden">
               <QuoteDetails />
             </div>
           </section>

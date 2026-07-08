@@ -27,7 +27,7 @@ const BranchCard = ({ branch }: BranchCardProps) => {
   };
 
   return (
-    <article className="branch-card group relative overflow-hidden rounded-3xl border transition-all duration-300 p-6 shadow-sm border-gray-100 bg-white hover:-translate-y-1 hover:shadow-lg">
+    <article className="branch-card group relative overflow-hidden rounded-clinical-lg border transition-all duration-300 p-6 shadow-xs border-ui-border bg-white hover:-translate-y-1 hover:shadow-sm">
       <div className="relative">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
@@ -36,14 +36,14 @@ const BranchCard = ({ branch }: BranchCardProps) => {
                 {name}
               </span>
             </div>
-            <h3 className="mt-3 text-xl font-extrabold text-yellow-primary leading-tight">
+            <h3 className="mt-3 text-xl font-black tracking-tight text-green-light leading-tight">
               {name}
             </h3>
-            <p className="mt-2 text-sm font-medium text-green-light leading-relaxed">
+            <p className="mt-2 text-sm font-medium text-grey-custom leading-relaxed">
               {fullAddress}
             </p>
             {references && (
-              <div className="mt-2 flex items-start gap-1.5 text-xs text-gray-500 bg-green-secondary/10 p-2 rounded-xl border border-gray-100/50">
+              <div className="mt-2 flex items-start gap-1.5 text-xs text-grey-custom bg-green-secondary/10 p-2 rounded-clinical-sm border border-ui-border/50">
                 <span className="font-bold text-green-primary">Ref:</span>
                 <span className="font-bold text-green-secondary">
                   {references}

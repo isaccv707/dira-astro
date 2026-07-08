@@ -46,8 +46,8 @@ const Quoter = () => {
 
   const previousStep = () => setStep((prev) => prev - 1);
   return (
-    <div className="rounded-2xl w-full grid">
-      <header className="bg-green-primary rounded-t-2xl p-4 text-center sticky top-0 z-10">
+    <div className="rounded-clinical-lg w-full grid">
+      <header className="bg-green-primary rounded-t-clinical-lg p-4 text-center sticky top-0 z-10">
         <h1 className="text-white font-bold text-lg">Cotiza tus estudios</h1>
         <small className="text-white text-sm opacity-90">
           Rellena la información necesaria para obtener una cotización.

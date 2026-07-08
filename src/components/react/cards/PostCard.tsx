@@ -10,7 +10,7 @@ const PostCard = ({ post }: PostCardProps) => {
   const { image, title, author, description, tags, slug } = post;
 
   return (
-    <article className="w-full h-full bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden group">
+    <article className="w-full h-full bg-white border border-ui-border rounded-clinical-md shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col overflow-hidden group">
       {/* Image Container with fixed Aspect Ratio */}
       {image && (
         <div className="relative aspect-video overflow-hidden">
@@ -38,7 +38,7 @@ const PostCard = ({ post }: PostCardProps) => {
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2.5 py-1 bg-green-light/5 text-green-light text-[10px] uppercase tracking-wider font-bold rounded-lg border border-green-light/10"
+                  className="px-2.5 py-1 bg-green-light/8 text-green-light text-[10px] uppercase tracking-wider font-bold rounded-lg border border-green-light/15"
                 >
                   #{tag}
                 </span>
@@ -46,23 +46,23 @@ const PostCard = ({ post }: PostCardProps) => {
             </div>
           )}
 
-          <h2 className="text-xl md:text-2xl font-bold text-green-light leading-tight line-clamp-2 group-hover:text-green-primary transition-colors duration-300">
+          <h2 className="text-xl md:text-2xl font-black tracking-tight text-green-light leading-tight line-clamp-2 group-hover:text-green-primary transition-colors duration-300">
             {title}
           </h2>
 
-          <p className="text-gray-500 text-sm md:text-base leading-relaxed line-clamp-3">
+          <p className="text-grey-custom text-sm md:text-base leading-relaxed line-clamp-3">
             {description}
           </p>
         </div>
 
         {/* Card Footer - Pushed to bottom with mt-auto */}
-        <div className="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between gap-4">
+        <div className="mt-8 pt-6 border-t border-ui-border flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="relative">
               <img
                 src={author.avatar || "/favicon.svg"}
                 alt={author.name}
-                className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-gray-100 bg-gray-50"
+                className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-ui-border bg-ui-bg"
                 loading="lazy"
               />
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-secondary border-2 border-white rounded-full shadow-sm"></div>
@@ -71,7 +71,7 @@ const PostCard = ({ post }: PostCardProps) => {
               <p className="text-xs font-bold text-yellow-secondary leading-none">
                 {author.name}
               </p>
-              <p className="text-[10px] text-gray-400 uppercase tracking-tighter mt-1">
+              <p className="text-[10px] text-grey-custom/70 uppercase tracking-tighter mt-1">
                 Autor(a)
               </p>
             </div>

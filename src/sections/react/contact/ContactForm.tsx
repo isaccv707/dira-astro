@@ -71,16 +71,16 @@ export const ContactForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       methods={methods}
     >
-      <div className="w-full rounded-3xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      <div className="w-full rounded-clinical-md border border-ui-border bg-white shadow-xs overflow-hidden">
         {/* Header */}
-        <div className="bg-primary/10 px-4 py-3 sm:px-6">
-          <p className="text-xs font-semibold tracking-[2px] uppercase text-green-secondary">
+        <div className="bg-green-primary/8 px-4 py-3 sm:px-6">
+          <p className="text-xs font-semibold tracking-wide uppercase text-green-primary">
             Envíanos un mensaje
           </p>
-          <h1 className="mt-1 text-lg sm:text-xl font-extrabold text-green-secondary">
+          <h1 className="mt-1 text-lg sm:text-xl font-black tracking-tight text-green-light">
             Formulario de contacto
           </h1>
-          <p className="mt-1 text-sm text-grey">
+          <p className="mt-1 text-sm text-grey-custom">
             Compártenos tus datos y te contactaremos lo antes posible.
           </p>
         </div>

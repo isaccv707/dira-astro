@@ -44,21 +44,21 @@ const StudiesServices = () => {
 
   return (
     <div id="services-section">
-      <div className="sticky top-0 z-30 backdrop-blur-md mb-8 border-b border-gray-50">
+      <div className="sticky top-0 z-30 backdrop-blur-md mb-8 border-b border-ui-border">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="w-full lg:max-w-xl">
             <SearchServices onSearchChange={handleSearchChange} />
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="inline-flex items-center gap-3 rounded-2xl bg-green-light/5 border border-green-light/10 px-5 py-2.5 shadow-sm">
+            <div className="inline-flex items-center gap-3 rounded-full bg-green-light/8 border border-green-light/15 px-5 py-2.5 shadow-xs">
               <div className="relative flex h-2.5 w-2.5">
                 {isFetching && (
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-light opacity-75"></span>
                 )}
                 <span
                   className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                    isFetching ? "bg-green-light" : "bg-gray-300"
+                    isFetching ? "bg-green-light" : "bg-ui-border"
                   }`}
                 ></span>
               </div>
@@ -76,7 +76,10 @@ const StudiesServices = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
           {isLoading ? (
             Array.from({ length: LIMIT }).map((_, index) => (
-              <div key={`skeleton-${index}`} className="animate-fade-up">
+              <div
+                key={`skeleton-${index}`}
+                className="motion-safe:animate-fade-up"
+              >
                 <StudyCardSkeleton />
               </div>
             ))
@@ -85,7 +88,7 @@ const StudiesServices = () => {
               return (
                 <div
                   key={study.id || `study-${index}`}
-                  className="animate-fade-up"
+                  className="motion-safe:animate-fade-up"
                   style={{ animationDelay: `${(index % 4) * 100}ms` }}
                 >
                   <CardStudy study={study} />
@@ -93,10 +96,10 @@ const StudiesServices = () => {
               );
             })
           ) : (
-            <div className="col-span-full py-32 flex flex-col items-center justify-center text-center bg-gray-50/50 rounded-[3rem] border-2 border-dashed border-gray-200">
-              <div className="bg-white p-6 rounded-full shadow-xl shadow-gray-200/50 mb-6">
+            <div className="col-span-full py-32 flex flex-col items-center justify-center text-center bg-ui-bg/50 rounded-clinical-lg border-2 border-dashed border-ui-border">
+              <div className="bg-white p-6 rounded-full shadow-sm shadow-ui-border/50 mb-6">
                 <svg
-                  className="w-16 h-16 text-gray-200"
+                  className="w-16 h-16 text-ui-border"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -109,10 +112,10 @@ const StudiesServices = () => {
                   />
                 </svg>
               </div>
-              <h2 className="text-2xl font-black text-gray-800">
+              <h2 className="text-2xl font-black tracking-tight text-green-light">
                 No encontramos resultados
               </h2>
-              <p className="text-gray-500 mt-3 max-w-sm mx-auto leading-relaxed">
+              <p className="text-grey-custom mt-3 max-w-sm mx-auto leading-relaxed">
                 Prueba buscando con palabras más generales o revisa si hay algún
                 error de escritura.
               </p>
@@ -129,7 +132,7 @@ const StudiesServices = () => {
       </div>
 
       {!isLoading && studies && studies.length > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 p-8 bg-ui-bg/50 rounded-clinical-lg border border-ui-border">
           <div className="order-2 sm:order-1">
             <Pagination
               nextPage={nextPage}
@@ -141,15 +144,15 @@ const StudiesServices = () => {
           </div>
 
           <div className="order-1 sm:order-2 flex items-center gap-4">
-            <div className="px-5 py-2.5 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <div className="px-5 py-2.5 bg-white rounded-clinical-md shadow-xs border border-ui-border flex items-center gap-3">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-grey-custom">
                 Página
               </span>
               <span className="text-sm font-black text-green-light">
                 {currentPage}
               </span>
-              <span className="text-gray-300">/</span>
-              <span className="text-sm font-black text-gray-400">
+              <span className="text-grey-custom/50">/</span>
+              <span className="text-sm font-black text-grey-custom">
                 {dynamicTotalPages}
               </span>
             </div>

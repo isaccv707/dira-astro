@@ -31,7 +31,7 @@ const BranchSection = () => {
   }
 
   return (
-    <section className="">
+    <section>
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-6">
           <BranchCard branch={branchData} />

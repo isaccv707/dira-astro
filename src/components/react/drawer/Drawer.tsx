@@ -59,8 +59,10 @@ const Drawer = ({
           overflow-y-auto
         `}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b">
-          <h2 className="text-lg font-semibold text-green-primary">{title}</h2>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ui-border">
+          <h2 className="text-lg font-black tracking-tight text-green-light">
+            {title}
+          </h2>
           <Button
             onClick={onClose}
             icon="lucide:x"

@@ -10,7 +10,7 @@ const currentPath = Astro.url.pathname;
     {
       routes.map(({ path, text }) => (
         <div>
-          <a href={path} class="text-gray-700 hover:text-yellow-primary">
+          <a href={path} class="text-green-light hover:text-yellow-primary">
             {text}
           </a>
           {currentPath === path ? (

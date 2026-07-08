@@ -73,9 +73,9 @@ const DrawerStudies = ({
           />
         </div>
 
-        <div className="mt-auto border-t pt-4 space-y-4 bg-white">
+        <div className="mt-auto border-t border-ui-border pt-4 space-y-4 bg-white">
           <div className="flex justify-between items-center px-2">
-            <span className="text-gray-600 font-semibold uppercase text-sm tracking-wider">
+            <span className="text-grey-custom font-semibold uppercase text-sm tracking-wider">
               Total
             </span>
             <span className="text-xl font-black text-green-light">

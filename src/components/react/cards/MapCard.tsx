@@ -13,9 +13,9 @@ const MapCard = ({ branch }: MapCardProps) => {
 
   return (
     <aside className="w-full">
-      <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm ring-1 ring-black/5">
+      <div className="overflow-hidden rounded-clinical-lg border border-ui-border bg-white shadow-xs ring-1 ring-black/5">
         <div className="p-4">
-          <div className="overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-gray-200 shadow-inner">
+          <div className="overflow-hidden rounded-clinical-md bg-ui-bg ring-1 ring-ui-border shadow-inner">
             {mapUrl ? (
               <iframe
                 className="h-100 w-full"
@@ -30,7 +30,7 @@ const MapCard = ({ branch }: MapCardProps) => {
             )}
           </div>
 
-          <div className="mt-5 grid gap-4 rounded-2xl bg-linear-to-br from-green-primary/5 to-white p-5 ring-1 ring-green-primary/10 shadow-sm">
+          <div className="mt-5 grid gap-4 rounded-clinical-md bg-linear-to-br from-green-primary/5 to-white p-5 ring-1 ring-green-primary/10 shadow-xs">
             <p className="text-xs font-extrabold uppercase tracking-widest text-green-primary">
               Información de Contacto
             </p>
@@ -56,7 +56,7 @@ const MapCard = ({ branch }: MapCardProps) => {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2 px-2 text-gray-400">
+      <div className="mt-4 flex items-center gap-2 px-2 text-grey-custom/70">
         <Icon icon={"lucide:info"} />
         <p className="text-[10px] font-medium leading-tight">
           La visualización del mapa depende de la disponibilidad de Google Maps.

@@ -19,7 +19,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
                   ? "bg-green-primary border-green-primary text-white"
                   : isActive
                   ? "bg-white border-green-secondary text-green-primary"
-                  : "bg-gray-200 border-gray-300 text-gray-500"
+                  : "bg-ui-bg border-ui-border text-grey-custom"
               }`}
             >
               {isCompleted ? "✓" : stepNumber}
@@ -28,7 +28,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
             
             <span
               className={`ml-2 text-sm font-medium ${
-                isActive ? "text-green-primary" : "text-gray-500"
+                isActive ? "text-green-primary" : "text-grey-custom"
               }`}
             >
               {label}
@@ -38,7 +38,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
             {index < steps.length - 1 && (
               <div
                 className={`w-10 h-0.5 mx-2 transition-all duration-300 ${
-                  isCompleted ? "bg-green-primary" : "bg-gray-300"
+                  isCompleted ? "bg-green-primary" : "bg-ui-border"
                 }`}
               ></div>
             )}

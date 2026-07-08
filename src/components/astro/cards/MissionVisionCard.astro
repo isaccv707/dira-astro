@@ -23,26 +23,18 @@ const colorConfig = getColorConfig(bgColor);
 
 <div
   class:list={[
-    "group relative overflow-hidden rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 shadow-2xl",
+    "group relative overflow-hidden rounded-clinical-lg p-8 transition-all duration-500 hover:-translate-y-2 shadow-sm",
     colorConfig.container,
     colorConfig.text,
   ]}
 >
-  <div
-    class:list={[
-      "absolute -right-4 -top-4 h-32 w-32 rounded-full blur-3xl transition-colors duration-500",
-      colorConfig.decoration,
-    ]}
-  >
-  </div>
-
   <div class="relative flex flex-col gap-8">
     <div class="flex items-center gap-4">
       {
         icon && (
           <div
             class:list={[
-              "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl backdrop-blur-md border transition-transform duration-500 group-hover:scale-110",
+              "flex h-14 w-14 shrink-0 items-center justify-center rounded-clinical-sm backdrop-blur-md border transition-transform duration-500 group-hover:scale-110",
               colorConfig.iconContainer,
             ]}
           >
@@ -58,7 +50,7 @@ const colorConfig = getColorConfig(bgColor);
         )
       }
       <h2
-        class="text-xl font-extrabold tracking-tight sm:text-2xl leading-tight"
+        class="text-xl font-black tracking-tight sm:text-2xl leading-tight"
       >
         {title}
       </h2>

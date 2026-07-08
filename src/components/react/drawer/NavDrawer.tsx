@@ -48,7 +48,7 @@ export const NavDrawer = ({
           </Accordion>
         </nav>
 
-        <div className="mt-auto pt-10 flex flex-col gap-4 border-t border-gray-100 dark:border-gray-800">
+        <div className="mt-auto pt-10 flex flex-col gap-4 border-t border-ui-border">
           {/* Redes Sociales */}
           <nav className="flex gap-4 items-center">
             {SOCIAL_NETWORKS.map(({ icon, name, route }) => (
@@ -65,7 +65,7 @@ export const NavDrawer = ({
           </nav>
 
           {/* Texto de Copyright */}
-          <p className="text-xs text-gray-400 dark:text-gray-500 font-medium tracking-wide">
+          <p className="text-xs text-grey-custom/70 font-medium tracking-wide">
             © {new Date().getFullYear()} dyranalitica. Todos los derechos
             reservados.
           </p>

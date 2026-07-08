@@ -23,13 +23,14 @@ export const Buttonstyles = cva(
           "rounded-md bg-green-secondary text-white hover:bg-green-primary active:bg-green-primary/90",
         danger:
           "rounded-md bg-red-custom text-white hover:bg-red-custom/90 active:bg-red-custom/80",
-        ghost: "rounded-md bg-transparent text-green-primary hover:bg-green-primary/10",
+        ghost:
+          "rounded-md bg-transparent text-green-primary hover:bg-green-primary/10",
         footer: "text-white underline",
         link: "bg-transparent p-0 h-auto text-green-primary hover:text-green-secondary underline-offset-4 hover:underline",
         outline:
-          "rounded-xl border border-gray-200 bg-white text-green-primary hover:bg-gray-50",
-        neutral: "rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300",
-        text: "bg-transparent p-0 h-auto text-grey-custom hover:text-black-custom",
+          "rounded-xl border border-ui-border bg-white text-green-primary hover:bg-ui-bg",
+        neutral: "rounded-md bg-ui-bg text-grey-custom hover:bg-ui-border",
+        text: "bg-transparent p-0 h-auto text-grey-custom hover:text-green-light",
         cta: "rounded-2xl bg-white font-black text-green-primary shadow-xl hover:-translate-y-1 hover:scale-105 active:scale-95 hover:bg-yellow-primary",
         // Sin color de hover propio a propósito: cada consumidor define su
         // propio matiz (rojo para eliminar, gris para cerrar, etc.) vía
@@ -39,7 +40,7 @@ export const Buttonstyles = cva(
         // Sin padding propio a propósito, por la misma razón que "icon":
         // algunos consumidores (tarjetas con el padding en un div interno)
         // necesitan p-0 en el elemento raíz, y compite con un p-* fijo aquí.
-        tile: "rounded-2xl border border-gray-100 bg-white text-left shadow-sm hover:-translate-y-1 hover:shadow-lg",
+        tile: "rounded-2xl border border-ui-border bg-white text-left shadow-sm hover:-translate-y-1 hover:shadow-lg",
       },
       size: {
         // Sin alto/padding propio — para variantes que ya definen su

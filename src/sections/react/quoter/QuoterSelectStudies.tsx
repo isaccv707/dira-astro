@@ -50,14 +50,14 @@ const QuoterSelectStudies = () => {
   if (!branchId) {
     return (
       <div className="flex h-full flex-col items-center justify-center px-6 py-16 text-center">
-        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-green-light/10">
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-clinical-lg bg-green-light/10">
           <MapPin className="h-9 w-9 text-green-light" strokeWidth={1.5} />
         </div>
 
-        <h3 className="text-lg font-bold text-gray-900">
+        <h3 className="text-lg font-black tracking-tight text-green-light">
           Selecciona una sucursal para cotizar
         </h3>
-        <p className="mt-2 max-w-xs text-sm leading-relaxed text-gray-500">
+        <p className="mt-2 max-w-xs text-sm leading-relaxed text-grey-custom">
           Los precios varían por sucursal. Elige la tuya para ver tarifas y
           agregar estudios a tu cotización.
         </p>
@@ -83,18 +83,18 @@ const QuoterSelectStudies = () => {
           <SearchServices onSearchChange={handleSearchChange} />
         </div>
 
-        <div className="text-sm text-black/60 sm:text-right">
+        <div className="text-sm text-grey-custom sm:text-right">
           {isFetching ? "Buscando..." : `${totalStudies} disponibles`}
         </div>
       </div>
 
       <div className="mt-5 flex-1">
         {isLoading ? (
-          <div className="py-10 text-center text-black/50">
+          <div className="py-10 text-center text-grey-custom">
             Cargando estudios...
           </div>
         ) : isError ? (
-          <div className="py-10 text-center text-black/50">
+          <div className="py-10 text-center text-grey-custom">
             Ocurrió un error al cargar los estudios.
           </div>
         ) : (
@@ -113,7 +113,7 @@ const QuoterSelectStudies = () => {
                 );
               })
             ) : (
-              <p className="col-span-1 text-center text-gray-500 sm:col-span-2 lg:col-span-3 xl:col-span-4">
+              <p className="col-span-1 text-center text-grey-custom sm:col-span-2 lg:col-span-3 xl:col-span-4">
                 No se encontraron estudios.
               </p>
             )}
@@ -130,7 +130,7 @@ const QuoterSelectStudies = () => {
           totalPages={totalPages}
         />
 
-        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
+        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-clinical-sm sm:self-auto">
           {`${currentPage} / ${totalPages || 1}`}
         </div>
       </div>

@@ -16,7 +16,7 @@ const { title, paragraph, items, images } = Astro.props;
 
 <div class="relative mx-auto w-full">
   <div
-    class="group relative rounded-3xl shadow-2xl bg-white p-4 shadow-green-prbg-green-primary/30 backdrop-blur"
+    class="group relative rounded-clinical-lg shadow-xl bg-white p-4 shadow-green-primary/10 backdrop-blur"
   >
     <div class="flex items-center justify-between gap-4 pb-3">
       <div>
@@ -31,11 +31,11 @@ const { title, paragraph, items, images } = Astro.props;
       </div>
     </div>
 
-    <div class="overflow-hidden rounded-2xl">
+    <div class="overflow-hidden rounded-clinical-md">
       <CarouselAbout client:load />
     </div>
 
-    <div class="mt-10 grid gap-3 text-xs text-grey sm:text-sm">
+    <div class="mt-10 grid gap-3 text-xs text-grey-custom sm:text-sm">
       {
         items.map(({ icon, text }) => (
           <div class="flex items-center justify-between gap-2">
