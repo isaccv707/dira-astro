@@ -45,8 +45,8 @@ const SelectInput = ({
                 name={name}
                 value={value}
                 onChange={onChange}
-                className={`block w-full px-4 py-2 text-gray-700 bg-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
-          ${isError ? 'border-red-500' : 'border-gray-300'}
+                className={`block w-full px-4 py-2 text-gray-700 bg-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-primary focus:border-green-primary
+          ${isError ? 'border-red-custom' : 'border-gray-300'}
           transition-colors duration-200 ease-in-out`}
                 aria-invalid={isError ? "true" : "false"}
                 aria-describedby={isError ? `${id}-error` : undefined}

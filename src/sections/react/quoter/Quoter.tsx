@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import QuotationForm from "./QuoterForm-section";
-import QuoterSelectStudies from "./QuoterSelectStudies-section";
+import QuotationForm from "./QuoterForm";
+import QuoterSelectStudies from "./QuoterSelectStudies";
 
 import StepIndicator from "../../../components/react/ui/StepIndicator";
 import Button from "../../../components/react/buttons/Button";

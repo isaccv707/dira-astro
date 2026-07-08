@@ -6,9 +6,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalManager from "../components/react/modal/ModalManager";
 import BranchSelectorManager from "../components/react/branch/BranchSelectorManager";
-import FloatingActionsSection from "../sections/react/FloatingActions-section";
+import FloatingActionsSection from "../sections/react/FloatingActions";
 import DrawerManager from "../components/react/drawer/DrawerManager";
-import FooterSection from "../sections/astro/layout/Footer-section.astro";
+import Footer from "../sections/astro/layout/Footer.astro";
 
 interface Props {
   title: string;
@@ -111,7 +111,7 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
 
     <main
       id="main-content"
-      class="grow w-full max-w-7xl mx-auto py-8 md:py-12 space-y-28 focus:outline-none"
+      class="grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-28 focus:outline-none"
       tabindex="-1"
     >
       <slot />
@@ -123,6 +123,6 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     <DrawerManager client:load />
 
     <BranchSelectorManager client:load />
-    <FooterSection />
+    <Footer />
   </body>
 </html>

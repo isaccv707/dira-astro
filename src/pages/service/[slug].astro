@@ -1,9 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 
-import ServiceHeroSection from "../../sections/astro/service/ServiceHero-section.astro";
-import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits-section.astro";
-import Services from "../../sections/astro/service/Services.astro";
+import ServiceHeroSection from "../../sections/astro/service/ServiceHero.astro";
+import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits.astro";
+import ServicesSection from "../../sections/astro/service/Services.astro";
 
 import type { Service } from "../../interfaces/service.interface";
 import { getOneResource } from "../../utils/getOneResource";
@@ -22,7 +22,11 @@ if (!service) {
 const { name, description = "", imageUrl = "", benefits = [] } = service;
 ---
 
-<Layout title="Servicios Dyranalitica" description="">
+<Layout
+  title={`${name} | Laboratorio DYRA`}
+  description={description ||
+    `Conoce nuestro servicio de ${name}: información, beneficios y estudios disponibles en Laboratorio DYRA.`}
+>
   <ServiceHeroSection
     name={name}
     description={description}
@@ -31,7 +35,7 @@ const { name, description = "", imageUrl = "", benefits = [] } = service;
 
   <ServiceBenefitsSection benefits={benefits} />
 
-  <Services service={service} />
+  <ServicesSection service={service} />
 
   <CTAContact />
 </Layout>

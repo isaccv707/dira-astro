@@ -1,6 +1,7 @@
 import { FiCheckCircle, FiTrash2 } from "react-icons/fi";
 import { useState } from "react";
 import type { Study } from "../../../interfaces/study.interface";
+import Button from "./Button";
 
 interface AddStudyButtonProps {
   isAdded: boolean;
@@ -16,8 +17,10 @@ const AddStudyButton = ({
 }: AddStudyButtonProps) => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
+  const isHovered = hoveredId === study.id;
+
   return (
-    <button
+    <Button
       type="button"
       onClick={
         !isAdded
@@ -26,31 +29,26 @@ const AddStudyButton = ({
       }
       onMouseEnter={() => setHoveredId(study.id)}
       onMouseLeave={() => setHoveredId(null)}
-      className={`mt-3 w-full py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer
-                     ${
-                       isAdded
-                         ? hoveredId === study.id
-                           ? "bg-red-600 text-white hover:bg-red-700"
-                           : "bg-gray-200 text-gray-600"
-                         : "bg-green-600 hover:bg-green-700 text-white"
-                     }`}
+      variant={isAdded ? (isHovered ? "danger" : "neutral") : "primary"}
+      width="full"
+      className="mt-3"
     >
       {isAdded ? (
-        hoveredId === study.id ? (
+        isHovered ? (
           <>
             <FiTrash2 />
             Eliminar
           </>
         ) : (
           <>
-            <FiCheckCircle className="text-green-600" />
+            <FiCheckCircle className="text-green-primary" />
             Agregado
           </>
         )
       ) : (
         "Agregar"
       )}
-    </button>
+    </Button>
   );
 };
 

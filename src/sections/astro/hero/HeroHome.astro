@@ -1,8 +1,15 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Icon as ReactIcon } from "@iconify/react";
 import logo from "../../../assets/images/logos/logo.png";
 import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
-import CarouselHomeSection from "../home/CarouselHome-section.astro";
+import CarouselHome from "../home/CarouselHome.astro";
+
+// Staggered entrance — each element reveals in sequence like a system
+// booting up. Paired with the `motion-safe:animate-fade-up` class, which
+// keeps this off entirely under prefers-reduced-motion.
+const reveal = (delayMs: number) =>
+  `animation-delay:${delayMs}ms; animation-fill-mode:backwards;`;
 
 const stats = [
   { value: "+15", label: "Años de exp.", accent: "text-green-primary" },
@@ -32,7 +39,7 @@ const features = [
 ];
 ---
 
-<section class="relative overflow-hidden bg-white py-12">
+<section class="relative overflow-hidden py-12">
   <!-- Lab grid backdrop — precise, no blobs -->
   <div aria-hidden="true" class="pointer-events-none absolute inset-0">
     <div
@@ -40,15 +47,15 @@ const features = [
       style="background-image: linear-gradient(rgba(34,143,4,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(34,143,4,0.045) 1px, transparent 1px); background-size: 48px 48px;"
     >
     </div>
-    <!-- Radial vignette fades grid toward edges -->
+    <!-- Radial vignette fades grid toward page background at edges -->
     <div
       class="absolute inset-0"
-      style="background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 35%, white 100%);"
+      style="background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 35%, var(--color-gray-100) 100%);"
     >
     </div>
   </div>
 
-  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="relative">
     <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
       <!-- ===== LEFT: Hero content ===== -->
       <div
@@ -56,7 +63,8 @@ const features = [
       >
         <!-- Category label — small tracked caps, evoking lab signage -->
         <div
-          class="mb-5 flex items-center justify-center gap-2 lg:justify-start"
+          class="mb-5 flex items-center justify-center gap-2 motion-safe:animate-fade-up lg:justify-start"
+          style={reveal(0)}
         >
           <div class="h-px w-8 bg-green-primary/50"></div>
           <span
@@ -68,7 +76,10 @@ const features = [
         </div>
 
         <!-- Logo + live status badge -->
-        <div class="mb-6 flex items-center gap-3">
+        <div
+          class="mb-6 flex items-center gap-3 motion-safe:animate-fade-up"
+          style={reveal(80)}
+        >
           <img
             src={logo.src}
             alt="DYRA – Diagnóstico y Referencia Analítica"
@@ -89,7 +100,8 @@ const features = [
 
         <!-- Main heading -->
         <h1
-          class="mb-5 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-5xl xl:text-6xl"
+          class="mb-5 text-4xl font-black leading-[1.05] tracking-tight motion-safe:animate-fade-up sm:text-5xl lg:text-5xl xl:text-6xl"
+          style={reveal(140)}
         >
           <span class="text-green-light">Tu salud,</span><br />
           <span class="text-green-primary">analizada</span><br />
@@ -98,21 +110,30 @@ const features = [
 
         <!-- Description -->
         <p
-          class="mb-8 max-w-md text-base leading-relaxed text-grey-custom sm:text-lg"
+          class="mb-8 max-w-md text-base leading-relaxed text-grey-custom motion-safe:animate-fade-up sm:text-lg"
+          style={reveal(220)}
         >
           Tecnología de vanguardia con atención humana. Resultados confiables
           para ti y tu empresa en Jalisco y Colima.
         </p>
 
         <!-- CTA buttons -->
-        <div class="mb-10 flex flex-wrap justify-center gap-3 lg:justify-start">
+        <div
+          class="mb-10 flex flex-wrap justify-center gap-3 motion-safe:animate-fade-up lg:justify-start"
+          style={reveal(300)}
+        >
           <NavLinkButton
             path="/service/analisis-clinicos"
-            text="Ver servicios"
             variant="primary"
             size="lg"
-            width="auto"
-          />
+            className="group"
+          >
+            Ver servicios
+            <ReactIcon
+              icon="tabler:arrow-right"
+              className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
+            />
+          </NavLinkButton>
           <NavLinkButton
             path="/quoter"
             text="Cotizar estudios"
@@ -124,7 +145,8 @@ const features = [
 
         <!-- Stats — unified readout panel, like a lab instrument display -->
         <div
-          class="flex w-full max-w-xs divide-x divide-green-primary/12 overflow-hidden rounded-xl border border-green-primary/12 bg-white shadow-sm sm:max-w-sm lg:max-w-none"
+          class="flex w-full max-w-xs divide-x divide-green-primary/12 overflow-hidden rounded-xl border border-green-primary/12 bg-white shadow-sm motion-safe:animate-fade-up sm:max-w-sm lg:max-w-none"
+          style={reveal(380)}
         >
           {
             stats.map(({ value, label, accent }) => (
@@ -142,7 +164,10 @@ const features = [
       </div>
 
       <!-- ===== RIGHT: Carousel with lab targeting frame ===== -->
-      <div class="flex flex-col gap-5">
+      <div
+        class="flex flex-col gap-5 motion-safe:animate-fade-up"
+        style={reveal(160)}
+      >
         <!-- Carousel — signature element: calibration bracket corners -->
         <div class="relative">
           <!-- Outer dashed measurement ring -->
@@ -182,7 +207,7 @@ const features = [
 
           <!-- Carousel -->
           <div class="overflow-hidden rounded-xl shadow-xl ring-1 ring-black/5">
-            <CarouselHomeSection />
+            <CarouselHome />
           </div>
         </div>
 
@@ -192,7 +217,7 @@ const features = [
             features.map(({ icon, label, desc, path }) => (
               <a
                 href={path}
-                class="group flex flex-col items-center gap-2 rounded-xl border border-green-primary/10 bg-white p-3 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-primary/25 hover:shadow-md"
+                class="group flex flex-col items-center gap-2 rounded-xl border border-green-primary/10 bg-white p-3 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-primary/25 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary/40 focus-visible:ring-offset-2"
               >
                 <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-green-primary/10 transition-colors duration-200 group-hover:bg-green-primary/20">
                   <Icon name={icon} class="h-5 w-5 text-green-primary" />

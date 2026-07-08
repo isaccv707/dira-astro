@@ -23,6 +23,28 @@ Astro v5 runs in **SSR mode** with the Node standalone adapter. The pattern is: 
 - React components (`src/components/react/`, `src/sections/react/`) handle interactivity and are mounted with `client:load` or `client:visible`.
 - `src/layouts/Layout.astro` is the base shell. It renders Header, Footer, and mounts `ModalManager`, `DrawerManager`, `BranchSelectorSection`, `FloatingActionsSection`, and `ToastContainer` globally.
 
+## UI & Design System Rules
+
+To maintain strict visual consistency across the entire site, adhere to these guidelines:
+
+### 1. Color Semantics
+
+- **Headings (H1, H2, H3):** Always use `text-ui-dark` combined with `font-black tracking-tight`.
+- **Paragraphs:** Always use `text-ui-body leading-relaxed`.
+- **Accents:** Use `text-green-primary` or `bg-green-primary`. For badges, use `bg-green-primary/8 text-green-primary border border-green-primary/15`.
+
+### 2. Layout & Containers
+
+- **Cards / Sections:** Standard layouts must use `bg-white border border-ui-border rounded-clinical-md shadow-xs p-6`.
+- **Spacings:** Do not use arbitrary tailwind spacing (`mt-[13px]`). Use standard scale (`space-y-4`, `space-y-8`, `gap-6`, `p-8`).
+- **Section Headers:** Use a consistent wrapper:
+  ```astro
+  <div class="motion-safe:animate-fade-up">
+    <h2 class="text-2xl font-black tracking-tight text-ui-dark sm:text-3xl">Title</h2>
+    <p class="mt-2 text-sm text-ui-body sm:text-base">Description</p>
+  </div>
+  ```
+
 ### State management
 
 Global UI state uses **nanostores** (not Redux):
@@ -72,7 +94,6 @@ Tailwind CSS v4 via `@tailwindcss/vite` — no `tailwind.config` file; configura
 ### Icons and animations
 
 - Icons: `astro-icon` with `lucide`, `tabler`, and `logos` icon sets (used in Astro files via `<Icon name="..." />`), plus `@iconify/react` and `lucide-react` in React components.
-- Animations: `framer-motion` for complex transitions; `motion` for simpler ones.
 
 ### Environment variables
 

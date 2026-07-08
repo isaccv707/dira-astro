@@ -1,0 +1,58 @@
+---
+import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
+import logo from "../../../assets/images/logos/logo.png";
+
+interface Props {
+  name: string;
+  description: string;
+  imageUrl: string;
+}
+
+const { name, description, imageUrl } = Astro.props;
+---
+
+<section class="w-full">
+  <div class="grid items-center gap-10 lg:grid-cols-2">
+    <HeaderBySection
+      img={logo}
+      textHeader={"Servicio"}
+      title={name}
+      paragraph={description}
+      textColor={"yellow-secondary"}
+      btn={true}
+      btnProperties={{ text: `Ver ${name}`, path: "#servicio-detalle" }}
+    />
+
+    <div
+      class="relative motion-safe:animate-fade-up"
+      style="animation-delay:120ms; animation-fill-mode:backwards;"
+    >
+      <div
+        class="relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/5 bg-linear-to-b from-green-primary/10 to-yellow-primary/10"
+      >
+        <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7">
+          <img
+            src={imageUrl}
+            alt={name}
+            class="h-full w-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+          />
+        </div>
+      </div>
+
+      <!-- Floating badge — echoes the Hero/About instrument-badge language -->
+      <div
+        class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md"
+      >
+        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
+        <span
+          class="text-[11px] font-bold uppercase tracking-widest text-green-primary"
+        >
+          Atención especializada
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

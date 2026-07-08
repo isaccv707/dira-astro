@@ -1,14 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { SOCIAL_NETWORKS } from "../constants/socialNetworks";
-import NavigationButton from "../components/astro/navigation/NavigationButton.astro";
+
 import CTAContact from "../components/astro/CTA/CTAContact.astro";
-import { ContactForm } from "../sections/react/contact/ContactForm-section";
+import { ContactForm } from "../sections/react/contact/ContactForm";
 ---
 
 <Layout title="" description="">
   <section>
-    <div class="relative mx-auto flex max-w-7xl flex-col gap-16 lg:gap-20">
+    <div class="relative flex flex-col gap-16 lg:gap-20">
       <section
         class="grid items-start gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
       >

@@ -24,7 +24,7 @@ try {
 ---
 
 <section>
-  <div class="flex justify-center text-center mb-5">
+  <div class="flex justify-center text-center">
     <HeaderBySection
       title="Lo que nuestros pacientes dicen de nosotros"
       textHeader="Reseñas de nuestros pacientes"
@@ -34,7 +34,7 @@ try {
   <div>
     {
       isError ? (
-        <p class="text-center text-red-500">
+        <p class="text-center text-red-custom">
           No se pudieron cargar las reseñas.
         </p>
       ) : isLoading ? (

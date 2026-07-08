@@ -9,7 +9,6 @@ import {
 import { closeDrawer, drawerStore } from "../../../stores/drawerStore";
 import Drawer from "./Drawer";
 import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
-import ButtonNetworkIcons from "../buttons/ButtonNetworkIcons";
 import { useStore } from "@nanostores/react";
 
 interface NavDrawerProps {
@@ -53,11 +52,14 @@ export const NavDrawer = ({
           {/* Redes Sociales */}
           <nav className="flex gap-4 items-center">
             {SOCIAL_NETWORKS.map(({ icon, name, route }) => (
-              <ButtonNetworkIcons
+              <NavLinkButton
                 key={name}
+                path={route}
                 icon={icon}
-                name={name}
-                route={route}
+                iconClassName="w-7 h-7"
+                variant="icon"
+                size="icon"
+                ariaLabel={name}
               />
             ))}
           </nav>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
+import Button from "../../../components/react/buttons/Button";
 import Pagination from "../../../components/react/ui/Pagination";
 import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
 import type { Study } from "../../../interfaces/study.interface";
@@ -61,13 +62,16 @@ const QuoterSelectStudies = () => {
           agregar estudios a tu cotización.
         </p>
 
-        <button
+        <Button
+          type="button"
           onClick={handleOpenBranchSelector}
-          className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-green-light px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-green-primary focus:outline-none focus:ring-2 focus:ring-green-light focus:ring-offset-2"
+          variant="primary"
+          size="lg"
+          className="mt-8"
         >
           <MapPin className="h-4 w-4" />
           Elegir sucursal
-        </button>
+        </Button>
       </div>
     );
   }

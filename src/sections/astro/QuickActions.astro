@@ -2,24 +2,28 @@
 import NavigationQuickActions from "../../components/astro/buttons/NavigationQuickAction.astro";
 import { quickActions } from "../../data/quickActions/quickActions";
 import QuickActionButton from "../../components/react/buttons/QuickActionButton";
-import ModalBranches from "../../components/react/modal/ModalBranches";
 ---
 
 <section>
   <div
-    class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10"
+    class="flex flex-col items-center justify-center gap-4 md:flex-row md:gap-6"
   >
     {
-      quickActions.map(({ path, bgColor, icon, text }) => (
+      quickActions.map(({ path, accent, icon, text, description }) => (
         <NavigationQuickActions
           path={path}
           text={text}
-          bgColor={bgColor}
+          description={description}
+          accent={accent}
           icon={icon}
         />
       ))
     }
 
-    <QuickActionButton text="Resultados" client:load />
+    <QuickActionButton
+      text="Resultados"
+      description="Consulta tus estudios en línea"
+      client:load
+    />
   </div>
 </section>

@@ -4,6 +4,7 @@ import usePagination from "../../../hooks/usePagination";
 import useSearchStudies from "../../../hooks/useSearchStudies";
 import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
 
+import Button from "../../../components/react/buttons/Button";
 import Pagination from "../../../components/react/ui/Pagination";
 import CardStudy from "../../../components/react/cards/CardStudy";
 import StudyCardSkeleton from "../../../components/react/skeleton/StudyCardSkeleton";
@@ -115,12 +116,13 @@ const StudiesServices = () => {
                 Prueba buscando con palabras más generales o revisa si hay algún
                 error de escritura.
               </p>
-              <button
+              <Button
+                type="button"
                 onClick={() => handleSearchChange("")}
-                className="mt-8 px-6 py-2 bg-green-light text-white font-bold rounded-xl hover:bg-green-primary transition-colors"
-              >
-                Limpiar búsqueda
-              </button>
+                variant="primary"
+                text="Limpiar búsqueda"
+                className="mt-8"
+              />
             </div>
           )}
         </div>

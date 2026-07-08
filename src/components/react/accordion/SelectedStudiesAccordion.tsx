@@ -1,6 +1,7 @@
 import NumberInput from "../form/NumberInput";
 import type { Study } from "../../../interfaces/study.interface";
 import { MdDelete } from "react-icons/md";
+import Button from "../buttons/Button";
 
 interface SelectedStudiesAccordionProps {
   selectedStudies: Study[];
@@ -44,13 +45,16 @@ const SelectedStudiesAccordion = ({
                 />
               </div>
 
-              <button
+              <Button
                 type="button"
-                className="text-red-500 cursor-pointer p-1 rounded-full hover:bg-red-50"
+                variant="icon"
+                size="icon"
+                className="text-red-custom hover:bg-red-custom/10"
+                ariaLabel="Eliminar estudio"
                 onClick={() => removeStudy(study.id)}
               >
                 <MdDelete />
-              </button>
+              </Button>
             </div>
           </li>
         ))

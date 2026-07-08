@@ -1,6 +1,8 @@
 ---
 import type { Study } from "../../interfaces/study.interface";
 import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import NavLinkButton from "../../components/react/navigation/NavLinkButton";
+import { Buttonstyles } from "../../styles/buttonsStyles";
 
 interface Props {
   study: Study | null;
@@ -17,20 +19,16 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 ---
 
 <section class="min-h-screen bg-gray-50 pb-20">
-  <div
-    class="bg-white pt-10 pb-16 px-4 sm:px-8 md:px-16 border-b border-gray-100"
-  >
-    <div class="max-w-7xl mx-auto">
-      <HeaderBySection
-        textHeader="Detalle del Estudio"
-        title={name}
-        paragraph={`Código: ${code}`}
-        textColor="black"
-      />
-    </div>
+  <div class="bg-white pt-10 pb-16 border-b border-gray-100">
+    <HeaderBySection
+      textHeader="Detalle del Estudio"
+      title={name}
+      paragraph={`Código: ${code}`}
+      textColor="black"
+    />
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-8 md:px-16 mt-12">
+  <div class="mt-12">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
       <!-- Left Column: Info -->
       <div class="lg:col-span-2 space-y-8">
@@ -181,7 +179,7 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 
         <!-- Bottom CTA -->
         <div
-          class="p-8 rounded-[2.5rem] bg-gradient-to-r from-green-primary to-green-secondary text-white overflow-hidden relative group"
+          class="p-8 rounded-[2.5rem] bg-linear-to-r from-green-primary to-green-secondary text-white overflow-hidden relative group"
         >
           <div
             class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6"
@@ -195,12 +193,12 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                 salud.
               </p>
             </div>
-            <a
-              href="/quoter"
-              class="px-8 py-3 bg-white text-green-primary rounded-full font-bold hover:shadow-lg transition-all transform hover:scale-105"
-            >
-              Explorar Catálogo
-            </a>
+            <NavLinkButton
+              path="/quoter"
+              variant="cta"
+              size="lg"
+              text="Explorar Catálogo"
+            />
           </div>
           <!-- Decorative Circle -->
           <div
@@ -213,12 +211,13 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
       <!-- Right Column: Action Card -->
       <div class="lg:col-span-1">
         <div class="sticky top-24">
-          <!-- <StudyDetailActions study={study} client:load /> -->
-
           <div class="mt-8 flex justify-center">
             <button
               onclick="history.back()"
-              class="flex items-center gap-2 text-grey font-semibold hover:text-black transition-colors"
+              class:list={[
+                "cursor-pointer",
+                Buttonstyles({ variant: "text", size: "none" }),
+              ]}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

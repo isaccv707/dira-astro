@@ -7,10 +7,16 @@ interface ButtonProps extends VariantProps<typeof Buttonstyles> {
   type?: "submit" | "reset" | "button";
   text?: string;
   onClick?: () => void | Promise<void>;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   icon?: string;
   disabled?: boolean;
   isLoading?: boolean;
   iconClassName?: string;
+  className?: string;
+  children?: React.ReactNode;
+  ariaLabel?: string;
+  ariaCurrent?: React.AriaAttributes["aria-current"];
 }
 
 const Button = ({
@@ -20,21 +26,35 @@ const Button = ({
   size,
   icon,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
   disabled = false,
   isLoading,
   width,
   align,
   iconClassName = "w-6 h-6",
+  className,
+  children,
+  ariaLabel,
+  ariaCurrent,
 }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={clsx(Buttonstyles({ variant, size, width, align }))}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={clsx(Buttonstyles({ variant, size, width, align }), className)}
       disabled={disabled}
+      aria-label={ariaLabel}
+      aria-current={ariaCurrent}
     >
-      {icon && <Icon icon={icon} className={iconClassName} />}
-      {isLoading ? "Cargando..." : text}
+      {children ?? (
+        <>
+          {icon && <Icon icon={icon} className={iconClassName} />}
+          {isLoading ? "Cargando..." : text}
+        </>
+      )}
     </button>
   );
 };

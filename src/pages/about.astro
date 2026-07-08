@@ -5,8 +5,8 @@ import Layout from "../layouts/Layout.astro";
 import { carouselHomeData } from "../data/carousel/carouselHome-data";
 import HeroAbout from "../sections/astro/hero/HeroAbout.astro";
 import CompanyValues from "../sections/astro/about/CompanyValues.astro";
-import MetricsDyra from "../sections/react/common/MetricsDyra-section";
-import ReviewSection from "../sections/astro/reviews/Review-section.astro";
+import MetricsDyra from "../sections/react/common/MetricsDyra";
+import Review from "../sections/astro/review/Review.astro";
 ---
 
 <Layout title="" description="">
@@ -39,6 +39,6 @@ import ReviewSection from "../sections/astro/reviews/Review-section.astro";
   <MetricsDyra client:visible />
 
   <div class="mt-14">
-    <ReviewSection />
+    <Review />
   </div>
 </Layout>

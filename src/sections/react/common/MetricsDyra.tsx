@@ -7,9 +7,9 @@ const MetricsDyra = () => {
       {METRICSDYRA.map((item, index) => (
         <div
           key={`${item.label}-${index}`}
-          className="space-y-2 border-green-primary sm:border-l sm:first:border-none sm:pl-6 first:pl-0"
+          className="space-y-2 border-white/20 sm:border-l sm:first:border-none sm:pl-6 first:pl-0"
         >
-          <p className="text-3xl font-extrabold tracking-tight text-green-primary sm:text-4xl">
+          <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             <Counter value={item.value} suffix={item.suffix} />
           </p>
           <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-yellow-primary">
