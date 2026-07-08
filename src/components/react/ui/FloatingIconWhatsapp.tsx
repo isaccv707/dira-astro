@@ -32,19 +32,19 @@ const FloatingIconWhatsapp = () => {
       )}
 
       {isOpen && (
-        <div className="bg-white p-4 rounded-xl shadow-2xl w-64 animate-fade-in relative border border-gray-100">
+        <div className="bg-white p-4 rounded-clinical-md shadow-2xl w-64 motion-safe:animate-fade-up relative border border-ui-border">
           <Button
             type="button"
             onClick={() => setIsOpen(false)}
             variant="icon"
             size="icon"
-            className="absolute top-2 right-2 text-gray-400 hover:text-red-custom"
+            className="absolute top-2 right-2 text-grey-custom hover:text-red-custom"
             icon="lucide:x"
             iconClassName="w-7 h-auto"
           />
 
-          <h1 className="text-gray-800 font-semibold">Hola 👋</h1>
-          <p className="text-gray-600 text-sm mb-3">
+          <h1 className="text-green-light font-semibold">Hola 👋</h1>
+          <p className="text-grey-custom text-sm mb-3">
             ¿Necesitas ayuda? Escríbenos por WhatsApp y te responderemos rápido.
           </p>
 

@@ -3,11 +3,11 @@ import NavLinkButton from "../navigation/NavLinkButton";
 
 const CTAContact = () => {
   return (
-    <div className="rounded-2xl border border-green-primary/15 bg-green-primary/5 p-4">
+    <div className="rounded-clinical-md border border-green-primary/15 bg-green-primary/5 p-4">
       <p className="text-xs font-medium text-green-primary sm:text-sm">
         ¿Necesitas más información?
       </p>
-      <p className="mt-1 text-xs text-neutral-600 sm:text-sm mb-2">
+      <p className="mt-1 text-xs text-grey-custom sm:text-sm mb-2">
         Contáctanos por el medio de tu preferencia
       </p>
       <div className="flex gap-2 flex-row sm:items-center sm:gap-3">

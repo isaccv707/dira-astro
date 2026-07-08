@@ -47,7 +47,7 @@ const QuickActionButton = ({ text, description }: QuickActionButtonProps) => {
       </div>
 
       <div className="min-w-0">
-        <span className="block text-base font-bold text-black-custom">
+        <span className="block text-base font-bold text-green-light">
           {text}
         </span>
         {description && (

@@ -14,7 +14,7 @@ const SelectedStudiesAccordion = ({
   updateStudyQuantity,
 }: SelectedStudiesAccordionProps) => {
   return (
-    <ul className="divide-y divide-gray-200">
+    <ul className="divide-y divide-ui-border">
       {selectedStudies.length > 0 ? (
         selectedStudies.map((study) => (
           <li
@@ -22,7 +22,7 @@ const SelectedStudiesAccordion = ({
             className="py-2 flex items-center justify-between gap-3 text-sm"
           >
             <div className="flex-1 min-w-0">
-              <p className="text-gray-800 truncate">{study.name}</p>
+              <p className="text-green-light truncate">{study.name}</p>
               <p className="font-semibold text-green-primary text-xs sm:text-sm">
                 ${study.priceInfo.price}
               </p>
@@ -59,7 +59,7 @@ const SelectedStudiesAccordion = ({
           </li>
         ))
       ) : (
-        <p className="text-gray-500 italic text-sm">
+        <p className="text-grey-custom italic text-sm">
           No has seleccionado estudios todavía.
         </p>
       )}

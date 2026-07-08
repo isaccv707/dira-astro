@@ -47,7 +47,7 @@ const Posts = () => {
           nextPage={nextPage}
           prevPage={prevPage}
         />
-        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-2xl sm:self-auto">
+        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-clinical-sm sm:self-auto">
           {`${currentPage} / ${totalPages || 1}`}
         </div>
       </div>

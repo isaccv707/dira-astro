@@ -42,7 +42,7 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
       <div className="w-full px-4 sm:px-6">
         <div className="mx-auto w-full max-w-3xl">
           {/* Card */}
-          <div className=" p-5 sm:p-8">
+          <div className="p-5 sm:p-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 items-start">
               {/* Tipo de cliente */}
               <div className="md:col-span-12">
@@ -143,7 +143,7 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
                 </div>
 
                 {/* Tip opcional: microcopy */}
-                <p className="mt-3 text-xs text-black/50">
+                <p className="mt-3 text-xs text-grey-custom">
                   Usaremos estos datos únicamente para enviarte la cotización.
                 </p>
               </div>

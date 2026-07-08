@@ -20,13 +20,13 @@ const avatarUrl = review.avatarUrl || avatarFallback;
 ---
 
 <figure
-  class="flex flex-col h-full max-w-7xl shadow-sm p-8 rounded-3xl border border-gray-100 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+  class="flex flex-col h-full max-w-7xl shadow-xs p-8 rounded-clinical-lg border border-ui-border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
 >
   <div class="flex items-center space-x-1 mb-4 shrink-0">
     {
       [...Array(totalStars)].map((_, index) => (
         <svg
-          class={`w-5 h-5 ${index < rating ? "text-yellow-primary" : "text-gray-200"}`}
+          class={`w-5 h-5 ${index < rating ? "text-yellow-primary" : "text-ui-border"}`}
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -36,7 +36,7 @@ const avatarUrl = review.avatarUrl || avatarFallback;
     }
   </div>
 
-  <blockquote class="flex-grow">
+  <blockquote class="grow">
     <p
       class="text-xl font-semibold text-green-light tracking-tight line-clamp-4 italic"
     >
@@ -45,14 +45,14 @@ const avatarUrl = review.avatarUrl || avatarFallback;
   </blockquote>
 
   <figcaption
-    class="flex items-center mt-6 space-x-3 shrink-0 pt-4 border-t border-gray-50"
+    class="flex items-center mt-6 space-x-3 shrink-0 pt-4 border-t border-ui-border"
   >
     <img
-      class="w-10 h-10 rounded-full border border-gray-100 object-cover"
+      class="w-10 h-10 rounded-full border border-ui-border object-cover"
       src={avatarUrl}
       alt={review.fullName}
     />
-    <div class="flex items-center divide-x divide-gray-200">
+    <div class="flex items-center divide-x divide-ui-border">
       <cite class="pe-3 font-medium text-yellow-primary not-italic">
         {review.fullName}
       </cite>

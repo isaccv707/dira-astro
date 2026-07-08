@@ -39,12 +39,12 @@ const TextInput = ({
                 value={value}
                 onChange={onChange}
                 className={`
-          mt-1 w-full rounded-md border px-4 py-2 text-sm
-          placeholder:text-gray-400
+          mt-1 w-full rounded-clinical-sm border px-4 py-2 text-sm
+          placeholder:text-grey-custom
           transition focus:outline-none focus:ring-2
           ${hasError
                         ? "border-red-custom focus:ring-red-custom"
-                        : "border-gray-300 focus:border-green-primary focus:ring-green-primary"
+                        : "border-ui-border focus:border-green-primary focus:ring-green-primary"
                     }
         `}
                 aria-invalid={hasError ? "true" : "false"}

@@ -1,8 +1,7 @@
 import type { Branch } from "../../../interfaces/branch.interface";
 import { getFullAddress } from "../../../utils/maps.utils";
 import NavLinkButton from "../navigation/NavLinkButton";
-import Button from "../buttons/Button";
-import { openBranchSelectorModal } from "../../../stores/branchStore";
+import ContactItem from "../ui/ContactItem";
 
 interface BranchCardProps {
   branch: Branch;
@@ -12,38 +11,33 @@ const BranchCard = ({ branch }: BranchCardProps) => {
   if (!branch) return null;
   const {
     name,
+    phone,
+    email,
+    state,
     address: { references },
     urlResults,
   } = branch;
 
   const fullAddress = getFullAddress(branch);
 
-  const handleOpenModal = async () => {
-    try {
-      await openBranchSelectorModal();
-    } catch (error) {
-      console.log("Error al abrir el modal");
-    }
-  };
-
   return (
-    <article className="branch-card group relative overflow-hidden rounded-3xl border transition-all duration-300 p-6 shadow-sm border-gray-100 bg-white hover:-translate-y-1 hover:shadow-lg">
+    <article className="branch-card group relative overflow-hidden rounded-clinical-lg border transition-all duration-300 p-6 shadow-xs border-ui-border bg-white hover:-translate-y-1 hover:shadow-sm">
       <div className="relative">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <div className="flex items-center gap-2">
+            {state?.name && (
               <span className="inline-flex items-center rounded-full bg-green-secondary/10 px-3 py-1 text-xs font-bold text-green-secondary ring-1 ring-green-secondary/20">
-                {name}
+                {state.name}
               </span>
-            </div>
-            <h3 className="mt-3 text-xl font-extrabold text-yellow-primary leading-tight">
+            )}
+            <h3 className="mt-3 text-xl font-black tracking-tight text-green-light leading-tight">
               {name}
             </h3>
-            <p className="mt-2 text-sm font-medium text-green-light leading-relaxed">
+            <p className="mt-2 text-sm font-medium text-grey-custom leading-relaxed">
               {fullAddress}
             </p>
             {references && (
-              <div className="mt-2 flex items-start gap-1.5 text-xs text-gray-500 bg-green-secondary/10 p-2 rounded-xl border border-gray-100/50">
+              <div className="mt-2 flex items-start gap-1.5 text-xs text-grey-custom bg-green-secondary/10 p-2 rounded-clinical-sm border border-ui-border/50">
                 <span className="font-bold text-green-primary">Ref:</span>
                 <span className="font-bold text-green-secondary">
                   {references}
@@ -53,17 +47,28 @@ const BranchCard = ({ branch }: BranchCardProps) => {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="mt-6 space-y-3 border-t border-ui-border pt-6 text-sm">
+          <ContactItem icon="lucide:phone-call" value={phone} label={"Tel"} />
+          <ContactItem
+            icon="tabler:brand-whatsapp"
+            value={phone}
+            label={"WhatsApp"}
+          />
+          <ContactItem
+            icon="lucide:mail"
+            value={email}
+            label={"Email"}
+            isEmail
+          />
+        </div>
+
+        <div className="mt-6">
           <NavLinkButton
             path={urlResults}
             target="_blank"
             text="Consulta Resultados"
             icon="lucide:test-tube-diagonal"
-          />
-          <Button
-            text="Cambiar de sucursal"
-            icon="lucide:store"
-            onClick={handleOpenModal}
+            width="full"
           />
         </div>
       </div>

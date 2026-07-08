@@ -20,7 +20,7 @@ interface Props {
 // content scanner can only see literal class names, so an interpolated one
 // only works by accident (if that exact string happens to appear elsewhere).
 const TITLE_COLORS = {
-  black: "text-black-custom",
+  black: "text-green-light",
   "green-light": "text-green-light",
   "green-primary": "text-green-primary",
   "yellow-secondary": "text-yellow-secondary",
@@ -47,7 +47,7 @@ const {
         <img
           src={img?.src}
           alt="DYRA"
-          class="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 lg:h-36 lg:w-36 rounded-2xl object-contain p-2 "
+          class="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 lg:h-36 lg:w-36 rounded-clinical-md object-contain p-2"
           loading="eager"
           width={144}
           height={144}
@@ -56,7 +56,9 @@ const {
     )
   }
   <div class="min-w-0">
-    <div class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary">
+    <div
+      class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary"
+    >
       <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
       {textHeader}
     </div>
@@ -67,7 +69,9 @@ const {
       {title}
     </h1>
 
-    <p class="mt-2 max-w-xl text-base leading-relaxed text-grey-custom lg:text-sm">
+    <p
+      class="mt-2 max-w-xl text-base leading-relaxed text-grey-custom lg:text-sm"
+    >
       {paragraph}
     </p>
     {

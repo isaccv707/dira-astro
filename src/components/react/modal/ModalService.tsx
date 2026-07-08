@@ -31,12 +31,12 @@ const ModalService = ({ id = "MODAL_SERVICE" }: ModalServiceProps) => {
       key={service.id}
     >
       <div className="w-full">
-        <div className="rounded-2xl bg-white/70 backdrop-blur-sm">
+        <div className="rounded-clinical-md bg-white">
           <div className="flex flex-col gap-5 md:gap-8 md:flex-row">
             <div className="md:w-5/12">
-              <figure className="relative overflow-hidden rounded-2xl border border-black/5 shadow-sm bg-neutral-100 aspect-4/5 md:aspect-auto">
+              <figure className="relative overflow-hidden rounded-clinical-md border border-ui-border shadow-xs bg-ui-bg aspect-4/5 md:aspect-auto">
                 {!loaded && (
-                  <div className="absolute inset-0 z-10 animate-pulse bg-neutral-200" />
+                  <div className="absolute inset-0 z-10 animate-pulse bg-ui-border" />
                 )}
                 <picture>
                   <source
@@ -67,11 +67,11 @@ const ModalService = ({ id = "MODAL_SERVICE" }: ModalServiceProps) => {
 
             <div className="md:w-7/12">
               <div className="flex flex-col gap-4">
-                <p className="text-sm leading-6 text-neutral-700 sm:text-base sm:leading-7 md:text-[17px] md:leading-7">
+                <p className="text-sm leading-6 text-grey-custom sm:text-base sm:leading-7 md:text-lg md:leading-7">
                   {description}
                 </p>
                 <CTAContact />
-                <p className="text-[11px] text-neutral-500 sm:text-xs">
+                <p className="text-xs text-grey-custom/70">
                   * La disponibilidad puede variar según sucursal.
                 </p>
               </div>

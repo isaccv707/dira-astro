@@ -21,11 +21,11 @@ const BranchOptionCard = ({
     <button
       type="button"
       onClick={() => onSelect(branch)}
-      className="group relative flex w-full items-stretch overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-secondary hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2"
+      className="group relative flex w-full items-stretch overflow-hidden rounded-clinical-md border border-ui-border bg-white text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-green-secondary hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2"
     >
       <span
         aria-hidden="true"
-        className="w-1 shrink-0 bg-gradient-to-b from-green-secondary to-green-primary opacity-70 transition-opacity duration-200 group-hover:opacity-100"
+        className="w-1 shrink-0 bg-linear-to-b from-green-secondary to-green-primary opacity-70 transition-opacity duration-200 group-hover:opacity-100"
       />
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
@@ -55,7 +55,7 @@ const BranchOptionCard = ({
           )}
         </div>
 
-        <p className="text-base font-bold leading-snug text-black-custom">
+        <p className="text-base font-bold leading-snug text-green-light">
           {branch.name}
         </p>
 
