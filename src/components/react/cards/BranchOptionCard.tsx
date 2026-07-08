@@ -25,7 +25,7 @@ const BranchOptionCard = ({
     >
       <span
         aria-hidden="true"
-        className="w-1 shrink-0 bg-gradient-to-b from-green-secondary to-green-primary opacity-70 transition-opacity duration-200 group-hover:opacity-100"
+        className="w-1 shrink-0 bg-linear-to-b from-green-secondary to-green-primary opacity-70 transition-opacity duration-200 group-hover:opacity-100"
       />
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">

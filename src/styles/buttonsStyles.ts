@@ -70,7 +70,10 @@ export const Buttonstyles = cva(
     defaultVariants: {
       variant: "primary",
       size: "md",
-      width: "auto",
+      // No default `width` — letting it default to "auto" would inject
+      // `w-auto` even when `size` already sets a fixed width (icon, fab),
+      // and the two compete unpredictably in the generated CSS. Only emit
+      // a width class when a consumer explicitly asks for one.
       align: "center",
     },
   },

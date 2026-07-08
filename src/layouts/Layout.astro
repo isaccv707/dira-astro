@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalManager from "../components/react/modal/ModalManager";
 import BranchSelectorManager from "../components/react/branch/BranchSelectorManager";
-import FloatingActionsSection from "../sections/react/FloatingActions";
+import FloatingActions from "../sections/react/FloatingActions";
 import DrawerManager from "../components/react/drawer/DrawerManager";
 import Footer from "../sections/astro/layout/Footer.astro";
 
@@ -117,7 +117,7 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
       <slot />
     </main>
     <ToastContainer client:only="react" />
-    <FloatingActionsSection client:load />
+    <FloatingActions client:load />
 
     <ModalManager client:load />
     <DrawerManager client:load />

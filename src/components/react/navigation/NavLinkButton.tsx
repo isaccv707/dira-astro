@@ -7,7 +7,7 @@ interface NavLinkButtonProps extends VariantProps<typeof Buttonstyles> {
   path: string;
   text?: string;
   icon?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   target?: "_blank" | "_self" | "_parent" | "_top";
   className?: string;
   iconClassName?: string;

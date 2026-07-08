@@ -1,8 +1,9 @@
 import { Icon } from "@iconify/react";
+import { CheckCircle2, Clock, ClipboardList } from "lucide-react";
 import type { Branch } from "../../../interfaces/branch.interface";
-import ContactItem from "../ui/ContactItem";
 import MapNotFound from "./MapNotFound";
 import { getBranchMapEmbedUrl } from "../../../utils/maps.utils";
+import { formatSchedule } from "../../../utils/schedule.utils";
 
 interface MapCardProps {
   branch: Branch;
@@ -10,47 +11,78 @@ interface MapCardProps {
 
 const MapCard = ({ branch }: MapCardProps) => {
   const mapUrl = getBranchMapEmbedUrl(branch);
+  const scheduleText = formatSchedule(branch.schedules);
+  const services = branch.services ?? [];
 
   return (
     <aside className="w-full">
       <div className="overflow-hidden rounded-clinical-lg border border-ui-border bg-white shadow-xs ring-1 ring-black/5">
-        <div className="p-4">
-          <div className="overflow-hidden rounded-clinical-md bg-ui-bg ring-1 ring-ui-border shadow-inner">
-            {mapUrl ? (
-              <iframe
-                className="h-100 w-full"
-                src={mapUrl}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-                title={`Mapa ${branch.name}`}
-              />
-            ) : (
-              <MapNotFound branch={branch} />
-            )}
+        {/* Map — full-bleed, no inset */}
+        <div className="bg-ui-bg">
+          {mapUrl ? (
+            <iframe
+              className="h-100 w-full"
+              src={mapUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              title={`Mapa ${branch.name}`}
+            />
+          ) : (
+            <MapNotFound branch={branch} />
+          )}
+        </div>
+
+        {/* Current-selection confirmation */}
+        <div className="flex items-center gap-2 border-t border-ui-border px-5 py-4 text-sm text-green-primary">
+          <CheckCircle2 className="h-4 w-4 shrink-0" strokeWidth={2} />
+          <span>
+            Actualmente esta es la sucursal que seleccionaste para realizar
+            tus estudios
+          </span>
+        </div>
+
+        {/* Facts: schedule, services */}
+        <div className="grid grid-cols-1 gap-6 border-t border-ui-border px-5 py-5 sm:grid-cols-2">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-primary/10 text-green-primary">
+              <Clock className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-grey-custom">
+                Horarios
+              </p>
+              <p className="mt-1 text-sm text-green-light">
+                {scheduleText || "Consulta directamente en sucursal"}
+              </p>
+            </div>
           </div>
 
-          <div className="mt-5 grid gap-4 rounded-clinical-md bg-linear-to-br from-green-primary/5 to-white p-5 ring-1 ring-green-primary/10 shadow-xs">
-            <p className="text-xs font-extrabold uppercase tracking-widest text-green-primary">
-              Información de Contacto
-            </p>
-            <div className="grid gap-3 text-sm">
-              <ContactItem
-                icon="lucide:phone-call"
-                value={branch.phone}
-                label={"Tel"}
-              />
-              <ContactItem
-                icon="tabler:brand-whatsapp"
-                value={branch.phone}
-                label={"WhatsApp"}
-              />
-              <ContactItem
-                icon="lucide:mail"
-                value={branch.email}
-                label={"Email"}
-                isEmail
-              />
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-primary/10 text-green-primary">
+              <ClipboardList className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-grey-custom">
+                Servicios
+              </p>
+              <p className="mt-1 flex flex-wrap gap-x-1 text-sm text-green-light">
+                {services.length > 0
+                  ? services.map((service, index) => (
+                      <span key={service.id}>
+                        <a
+                          href={`/service/${service.slug}`}
+                          className="hover:underline"
+                        >
+                          {service.name}
+                        </a>
+                        {index < services.length - 1 && (
+                          <span className="text-grey-custom"> | </span>
+                        )}
+                      </span>
+                    ))
+                  : "Consulta nuestro catálogo completo"}
+              </p>
             </div>
           </div>
         </div>
