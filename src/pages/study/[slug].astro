@@ -5,8 +5,9 @@ import type { Study } from "../../interfaces/study.interface";
 import StudyDetail from "../../sections/astro/StudyDetail.astro";
 
 const { slug = "" } = Astro.params;
+const branchId = Astro.cookies.get("dyra_branch_id")?.value;
 
-const study = await getOneResource<Study>("studies", slug as string);
+const study = await getOneResource<Study>("studies", slug as string, { branchId });
 
 if (!study) {
   return Astro.redirect("/404");
