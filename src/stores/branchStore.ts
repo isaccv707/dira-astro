@@ -16,9 +16,6 @@ const getInitialBranch = (): SelectedBranch | null => {
   };
 };
 
-// No cross-tab sync via "storage" events: selecting a branch always triggers
-// a full reload (see SelectBranchButton), so no mounted component ever needs
-// to react to a change happening in another tab.
 export const branchStore = atom<SelectedBranch | null>(getInitialBranch());
 
 export const setSelectedBranch = (branch: SelectedBranch) => {
@@ -31,6 +28,21 @@ export const setSelectedBranch = (branch: SelectedBranch) => {
 export const getStoredBranchId = (): string | null => {
   if (typeof window === "undefined") return null;
   return localStorage.getItem(BRANCH_ID_KEY);
+};
+
+let serverBranchIdResolver: (() => string | undefined) | null = null;
+
+export const setServerBranchIdResolver = (
+  resolver: () => string | undefined,
+) => {
+  serverBranchIdResolver = resolver;
+};
+
+export const resolveBranchId = (): string | undefined => {
+  if (typeof window !== "undefined") {
+    return getStoredBranchId() ?? undefined;
+  }
+  return serverBranchIdResolver?.() ?? undefined;
 };
 
 export const openBranchSelectorModal = async () => {

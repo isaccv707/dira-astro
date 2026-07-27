@@ -7,27 +7,34 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { image, title, author, description, tags, slug } = post;
+  const { image, title, author, description, tags, slug, category } = post;
+
+  // The API returns `image` as a plain URL string, not the `ImageMetadata`
+  // object the shared Post interface declares — handle both shapes safely.
+  const rawImage = image as unknown as string | ImageMetadata | undefined;
+  const imageSrc = typeof rawImage === "string" ? rawImage : rawImage?.src;
 
   return (
     <article className="w-full h-full bg-white border border-ui-border rounded-clinical-md shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col overflow-hidden group">
       {/* Image Container with fixed Aspect Ratio */}
-      {image && (
+      {imageSrc && (
         <div className="relative aspect-video overflow-hidden">
           <img
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            src={image.src}
+            src={imageSrc}
             alt={title}
             loading="lazy"
           />
           <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-300" />
 
-          {/* Optional Category Tag */}
-          <div className="absolute top-4 left-4">
-            <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-green-light text-[10px] uppercase tracking-widest font-bold rounded-full shadow-sm">
-              Blog
-            </span>
-          </div>
+          {/* Category Tag */}
+          {category && (
+            <div className="absolute top-4 left-4">
+              <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-green-primary text-[10px] uppercase tracking-widest font-bold rounded-full shadow-sm">
+                {category}
+              </span>
+            </div>
+          )}
         </div>
       )}
 
@@ -38,7 +45,7 @@ const PostCard = ({ post }: PostCardProps) => {
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2.5 py-1 bg-green-light/8 text-green-light text-[10px] uppercase tracking-wider font-bold rounded-lg border border-green-light/15"
+                  className="px-2.5 py-1 bg-green-primary/8 text-green-primary text-[10px] uppercase tracking-wider font-bold rounded-clinical-sm border border-green-primary/15"
                 >
                   #{tag}
                 </span>
@@ -68,7 +75,7 @@ const PostCard = ({ post }: PostCardProps) => {
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-secondary border-2 border-white rounded-full shadow-sm"></div>
             </div>
             <div className="flex flex-col">
-              <p className="text-xs font-bold text-yellow-secondary leading-none">
+              <p className="text-xs font-bold text-green-light leading-none">
                 {author.name}
               </p>
               <p className="text-[10px] text-grey-custom/70 uppercase tracking-tighter mt-1">

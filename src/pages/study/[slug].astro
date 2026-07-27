@@ -1,19 +1,35 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getOneResource } from "../../utils/getOneResource";
+import { getAllStudies } from "../../api/studiesApi/studiesApi";
+import { resolveBranchId } from "../../stores/branchStore";
 import type { Study } from "../../interfaces/study.interface";
 import StudyDetail from "../../sections/astro/StudyDetail.astro";
 
-const { slug = "" } = Astro.params;
-const branchId = Astro.cookies.get("dyra_branch_id")?.value;
+const RECOMMENDED_STUDIES_COUNT = 4;
 
-const study = await getOneResource<Study>("studies", slug as string, { branchId });
+const { slug = "" } = Astro.params;
+const branchId = resolveBranchId();
+
+const study = await getOneResource<Study>("studies", slug as string, {
+  branchId,
+});
 
 if (!study) {
   return Astro.redirect("/404");
 }
 
 const { name, description = "" } = study;
+
+const { data: otherStudies } = await getAllStudies({
+  limit: 20,
+  branchId,
+});
+
+const recommendedStudies = otherStudies
+  .filter((item) => item.id !== study.id)
+  .sort(() => Math.random() - 0.5)
+  .slice(0, RECOMMENDED_STUDIES_COUNT);
 ---
 
 <Layout
@@ -21,5 +37,5 @@ const { name, description = "" } = study;
   description={description ||
     `Conoce todo sobre el estudio ${name}: preparación, tipo de muestra y tiempo de entrega en Laboratorio DYRA.`}
 >
-  <StudyDetail study={study} />
+  <StudyDetail study={study} recommendedStudies={recommendedStudies} />
 </Layout>

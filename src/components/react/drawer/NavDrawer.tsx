@@ -1,22 +1,20 @@
 import Accordion from "../accordion/Accordion";
 import NavigationAccordion from "../accordion/NavigationAccordion";
 import NavLinkButton from "../navigation/NavLinkButton";
-import {
-  getToKnowRoutes,
-  routes,
-  servicesRoutes,
-} from "../../../routes/routes";
+import { getToKnowRoutes, routes, type Routes } from "../../../routes/routes";
 import { closeDrawer, drawerStore } from "../../../stores/drawerStore";
 import Drawer from "./Drawer";
 import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
 import { useStore } from "@nanostores/react";
 
 interface NavDrawerProps {
+  services: Routes[];
   id?: string;
   title?: string;
 }
 
 export const NavDrawer = ({
+  services,
   id = "DRAWER_NAVBAR",
   title = "Menu",
 }: NavDrawerProps) => {
@@ -40,7 +38,7 @@ export const NavDrawer = ({
           ))}
 
           <Accordion id={"services"} title={"Servicios"}>
-            <NavigationAccordion routes={servicesRoutes} />
+            <NavigationAccordion routes={services} />
           </Accordion>
 
           <Accordion id={"our"} title={"Conócenos"}>

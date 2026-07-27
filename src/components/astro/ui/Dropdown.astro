@@ -2,11 +2,11 @@
 import Button from "../../react/buttons/Button";
 
 interface Props {
-  options: { label: string; href: string }[];
+  routes: { label: string; href: string }[];
   text: string;
 }
 
-const { options, text } = Astro.props;
+const { routes, text } = Astro.props;
 ---
 
 <div class="relative inline-block text-left group">
@@ -17,7 +17,7 @@ const { options, text } = Astro.props;
   >
     <ul class="py-2 text-sm text-green-primary">
       {
-        options.map((opt, index) => (
+        routes.map((opt, index) => (
           <li>
             <a
               href={opt.href}

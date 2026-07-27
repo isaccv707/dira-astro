@@ -1,6 +1,10 @@
 import { Icon } from "@iconify/react";
 import { openModal } from "../../../stores/modalStore";
-import { getAllBranches } from "../../../api/branchesApi/branchesApi";
+import {
+  getAllBranches,
+  getActiveBranchResultsUrl,
+} from "../../../api/branchesApi/branchesApi";
+import { getStoredBranchId } from "../../../stores/branchStore";
 import { useState } from "react";
 import Button from "./Button";
 
@@ -11,9 +15,19 @@ interface QuickActionButtonProps {
 
 const QuickActionButton = ({ text, description }: QuickActionButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const handleOpenModal = async () => {
+  const handleClick = async () => {
     setIsLoading(true);
     try {
+      const activeBranchId = getStoredBranchId();
+      const resultsUrl = await getActiveBranchResultsUrl(
+        activeBranchId ?? undefined,
+      );
+
+      if (resultsUrl) {
+        window.open(resultsUrl, "_blank", "noopener,noreferrer");
+        return;
+      }
+
       const branches = await getAllBranches();
       openModal("MODAL_BRANCHES", {
         data: branches,
@@ -31,7 +45,7 @@ const QuickActionButton = ({ text, description }: QuickActionButtonProps) => {
   return (
     <Button
       type="button"
-      onClick={handleOpenModal}
+      onClick={handleClick}
       disabled={isLoading}
       variant="tile"
       size="none"

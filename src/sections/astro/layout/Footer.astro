@@ -2,13 +2,16 @@
 import NavigationButton from "../../../components/astro/navigation/NavigationButton.astro";
 import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
 import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
-import {
-  getToKnowRoutes,
-  resultsRoutes,
-  routes,
-  servicesRoutes,
-} from "../../../routes/routes";
+import { getToKnowRoutes, routes, type Routes } from "../../../routes/routes";
+import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
+import { getActiveBranchResultsUrl } from "../../../api/branchesApi/branchesApi";
 import dyraLogo from "../../../assets/images/logos/logo.png";
+
+const servicesRoutes = await getServicesNavRoutes();
+const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
+const resultsRoutes: Routes[] = [
+  { path: resultsUrl, text: "Consultar resultados" },
+];
 ---
 
 <footer class="bg-green-primary text-white pt-12">

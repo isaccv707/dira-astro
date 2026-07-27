@@ -3,11 +3,9 @@ import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
 import ImgCarouselHome from "../../../components/react/ui/ImgCarouselHome";
 import Carousel from "../../../components/react/carousel/Carousel";
 
-const branchId = Astro.cookies.get("dyra_branch_id")?.value;
-
 let banners: Awaited<ReturnType<typeof fetchActiveBanners>> = [];
 try {
-  banners = await fetchActiveBanners("HOME", branchId);
+  banners = await fetchActiveBanners("HOME");
 } catch (error) {
   console.error("Error al obtener los banners:", error);
 }

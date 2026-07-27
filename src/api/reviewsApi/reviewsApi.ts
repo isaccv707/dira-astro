@@ -1,10 +1,40 @@
 import { apiGet } from "../apiGet";
 import { API_URL } from "../../constants/apiUrl";
 import type { ReviewResponse, ReviewPayload, ReviewPaginatedResponse } from "./review.interface";
+import { resolveBranchId } from "../../stores/branchStore";
+import { createTtlCache } from "../../utils/ttlCache";
+
+const reviewsCache = createTtlCache<ReviewPaginatedResponse>();
 
 export const getAllReviews = async (branchId?: string): Promise<ReviewPaginatedResponse> => {
-  const data = await apiGet<ReviewPaginatedResponse>("/reviews/approved", { branchId });
-  return data ?? { data: [], total: 0, page: 1, limit: 10, totalPages: 1 };
+  const resolvedBranchId = branchId ?? resolveBranchId();
+  const emptyResponse: ReviewPaginatedResponse = {
+    data: [],
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  };
+  const cacheKey = resolvedBranchId ?? "__no_branch__";
+
+  const cached = reviewsCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const data = await apiGet<ReviewPaginatedResponse>("/reviews/approved", {
+      branchId: resolvedBranchId,
+    });
+    const result = data ?? emptyResponse;
+    reviewsCache.set(cacheKey, result);
+    return result;
+  } catch (error) {
+    const stale = reviewsCache.getStale(cacheKey);
+    if (stale) {
+      console.error("Error fetching reviews, serving stale cache:", error);
+      return stale;
+    }
+    throw error;
+  }
 };
 
 export const createReview = async (

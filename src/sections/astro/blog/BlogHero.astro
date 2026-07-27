@@ -1,0 +1,85 @@
+---
+import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
+import Carousel from "../../../components/react/carousel/Carousel";
+import logo from "../../../assets/images/logos/logo.png";
+import { fetchGetAllPosts } from "../../../api/postsApi/postApi";
+import type { Post } from "../../../api/postsApi/post.interface";
+
+interface Slide {
+  image: string;
+  title: string;
+}
+
+let slides: Slide[] = [];
+try {
+  const { data } = await fetchGetAllPosts({ limit: 5 });
+  slides = data.reduce<Slide[]>((acc, post: Post) => {
+    const rawImage = post.image as unknown as string | ImageMetadata | undefined;
+    const image = typeof rawImage === "string" ? rawImage : rawImage?.src;
+    if (image) acc.push({ image, title: post.title });
+    return acc;
+  }, []);
+} catch (error) {
+  console.error("[BlogHero] Error fetching carousel posts:", error);
+}
+---
+
+<section class="w-full">
+  <div class="grid items-center gap-10 lg:grid-cols-2">
+    <HeaderBySection
+      img={logo}
+      textHeader={"Blog"}
+      title={"Bienvenido a nuestro Blog — DYRA"}
+      paragraph={"Consejos, noticias y artículos sobre salud y diagnóstico clínico."}
+      textColor={"yellow-secondary"}
+      btn={true}
+      btnProperties={{ text: "Ver artículos", path: "#articulos" }}
+    />
+
+    <div
+      class="relative motion-safe:animate-fade-up"
+      style="animation-delay:120ms; animation-fill-mode:backwards;"
+    >
+      <div
+        class="relative overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5 bg-linear-to-b from-green-primary/10 to-yellow-primary/10"
+      >
+        {
+          slides.length > 0 ? (
+            <Carousel client:load slidesPreview={1}>
+              {slides.map(({ image, title }) => (
+                <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7 w-full">
+                  <img
+                    src={image}
+                    alt={title}
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </Carousel>
+          ) : (
+            <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7 w-full flex items-center justify-center">
+              <img
+                src={logo.src}
+                alt="Blog DYRA"
+                class="h-24 w-24 object-contain opacity-40"
+              />
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Floating badge — echoes the Hero/Service instrument-badge language -->
+      <div
+        class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md"
+      >
+        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
+        <span
+          class="text-[11px] font-bold uppercase tracking-widest text-green-primary"
+        >
+          Artículos destacados
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

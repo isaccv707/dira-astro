@@ -5,14 +5,12 @@ import ServiceCardSkeleton from "../../../components/astro/skeletons/ServiceCard
 import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
 import type { Service } from "../../../interfaces/service.interface";
 
-const branchId = Astro.cookies.get("dyra_branch_id")?.value;
-
 let services: any = [];
 let isError = false;
 let isLoading = true;
 
 try {
-  services = await getAllService(branchId);
+  services = await getAllService();
   isLoading = false;
 } catch (error) {
   isError = true;
