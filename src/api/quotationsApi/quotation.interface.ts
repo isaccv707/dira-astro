@@ -1,8 +1,8 @@
 export interface SelectedStudyPayload {
-  id: string;
+  id?: string;
   name: string;
   price: number;
-  quantity?: number;
+  quantity: number;
 }
 
 export interface QuotationPayload {
@@ -10,6 +10,7 @@ export interface QuotationPayload {
   name: string;
   lastName?: string;
   phoneNumber: string;
-  email: string| undefined;
+  email: string | undefined;
   studies: SelectedStudyPayload[];
+  branchId: string;
 }

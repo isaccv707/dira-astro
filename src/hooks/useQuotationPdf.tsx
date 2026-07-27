@@ -3,7 +3,8 @@ import type { QuotationPayload } from "../api/quotationsApi/quotation.interface"
 import type { Client } from "../interfaces/client.interface";
 import type { Study } from "../interfaces/study.interface";
 import { toast } from "react-toastify";
-import { downloadQuotationPdf } from "../api/quotationsApi/quotationApi";
+import { generateQuotationPdf } from "../api/quotationsApi/quotationApi";
+import { resolveBranchId } from "../stores/branchStore";
 
 interface useQuotationPdfProps {
   client: Client | null;
@@ -30,11 +31,17 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
       return null;
     }
 
+    const branchId = resolveBranchId();
+    if (!branchId) {
+      toast.error("Selecciona una sucursal antes de continuar.");
+      return null;
+    }
+
     const payloadStudies = selectedStudies.map((study) => ({
       id: study.id,
       name: study.name,
       price: study.priceInfo.price,
-      quantity: study.quantity,
+      quantity: study.quantity ?? 1,
     }));
 
     return {
@@ -44,6 +51,7 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
       phoneNumber: client.phoneNumber,
       email: client?.email,
       studies: payloadStudies,
+      branchId,
     };
   };
 
@@ -55,12 +63,15 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
       setIsLoading(true);
       setCurrentAction(action);
 
-      // Llamada directa a fetch
-      const blob = await downloadQuotationPdf(payload);
+      const blob = await generateQuotationPdf(payload);
       return blob;
     } catch (error) {
       console.error(error);
-      toast.error("Hubo un error al generar la cotización en PDF.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Hubo un error al generar la cotización en PDF.";
+      toast.error(message);
       return null;
     } finally {
       setIsLoading(false);

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import type { Study } from "../../../interfaces/study.interface";
 import {
-  addToCart,
-  removeFromCart,
-  getCart,
-  CART_UPDATED_EVENT,
-} from "../../../utils/cart";
+  addQuoterStudy,
+  removeQuoterStudy,
+  getQuoterStudies,
+  QUOTER_UPDATED_EVENT,
+} from "../../../utils/quoterStudies";
 import Button from "../buttons/Button";
 import NavLinkButton from "../navigation/NavLinkButton";
 
@@ -16,26 +16,26 @@ interface StudyActionCardProps {
 
 const StudyActionCard = ({ study }: StudyActionCardProps) => {
   const { id, priceInfo } = study;
-  const [isInCart, setIsInCart] = useState(false);
+  const [isInQuote, setIsInQuote] = useState(false);
 
   useEffect(() => {
-    const checkCartStatus = () =>
-      setIsInCart(getCart().some((s) => s.id === id));
+    const checkQuoteStatus = () =>
+      setIsInQuote(getQuoterStudies().some((s) => s.id === id));
 
-    checkCartStatus();
-    window.addEventListener(CART_UPDATED_EVENT, checkCartStatus);
-    window.addEventListener("storage", checkCartStatus);
+    checkQuoteStatus();
+    window.addEventListener(QUOTER_UPDATED_EVENT, checkQuoteStatus);
+    window.addEventListener("storage", checkQuoteStatus);
     return () => {
-      window.removeEventListener(CART_UPDATED_EVENT, checkCartStatus);
-      window.removeEventListener("storage", checkCartStatus);
+      window.removeEventListener(QUOTER_UPDATED_EVENT, checkQuoteStatus);
+      window.removeEventListener("storage", checkQuoteStatus);
     };
   }, [id]);
 
   const handleAction = () => {
-    if (isInCart) {
-      removeFromCart(id);
+    if (isInQuote) {
+      removeQuoterStudy(id);
     } else {
-      addToCart(study);
+      addQuoterStudy(study);
     }
   };
 
@@ -69,14 +69,14 @@ const StudyActionCard = ({ study }: StudyActionCardProps) => {
         <Button
           type="button"
           onClick={handleAction}
-          variant={isInCart ? "danger" : "primary"}
+          variant={isInQuote ? "danger" : "primary"}
           width="full"
           size="lg"
-          text={isInCart ? "Quitar del cotizador" : "Agregar al cotizador"}
-          icon={isInCart ? "lucide:trash-2" : "lucide:shopping-cart"}
+          text={isInQuote ? "Quitar del cotizador" : "Agregar al cotizador"}
+          icon={isInQuote ? "lucide:trash-2" : "lucide:shopping-cart"}
         />
 
-        {isInCart && (
+        {isInQuote && (
           <NavLinkButton
             path="/quoter"
             variant="ghost"

@@ -6,13 +6,19 @@ import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
 import type { Study } from "../../../interfaces/study.interface";
 import usePagination from "../../../hooks/usePagination";
 import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
-import { useQuoterContext } from "../../../hooks/useQuoterContext";
 import SearchServices from "../service/SearchServices";
 import useSearchStudies from "../../../hooks/useSearchStudies";
 import {
   getStoredBranchId,
   openBranchSelectorModal,
 } from "../../../stores/branchStore";
+import { useStore } from "@nanostores/react";
+import {
+  addStudy,
+  removeStudy,
+  selectedStudiesStore,
+  ensureQuoterStudiesSynced,
+} from "../../../stores/quoterStore";
 
 const LIMIT = 4;
 
@@ -20,7 +26,11 @@ const QuoterSelectStudies = () => {
   const [totalPagesForHook, setTotalPagesForHook] = useState(1);
   const [branchId] = useState<string | null>(() => getStoredBranchId());
 
-  const { addStudy, removeStudy, selectedStudies } = useQuoterContext();
+  const selectedStudies = useStore(selectedStudiesStore);
+
+  useEffect(() => {
+    ensureQuoterStudiesSynced();
+  }, []);
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages: totalPagesForHook,

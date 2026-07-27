@@ -6,7 +6,17 @@ export const CART_UPDATED_EVENT = "dira_cart_updated";
 export const getCart = (): Study[] => {
     if (typeof window === "undefined") return [];
     const stored = localStorage.getItem(CART_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+
+    try {
+        const parsed = JSON.parse(stored);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(
+            (s): s is Study => Boolean(s?.id && s?.priceInfo),
+        );
+    } catch {
+        return [];
+    }
 };
 
 export const addToCart = (study: Study) => {
