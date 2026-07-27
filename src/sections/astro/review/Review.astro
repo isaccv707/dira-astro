@@ -7,14 +7,12 @@ import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro"
 import AddReviewButton from "../../../components/react/buttons/AddReviewButton";
 import Carousel from "../../../components/react/carousel/Carousel";
 
-const branchId = Astro.cookies.get("dyra_branch_id")?.value;
-
 let reviews: ReviewResponse[] = [];
 let isError = false;
 let isLoading = true;
 
 try {
-  const result = await getAllReviews(branchId);
+  const result = await getAllReviews();
   reviews = result.data;
   isLoading = false;
 } catch (error) {

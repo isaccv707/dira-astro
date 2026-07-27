@@ -1,8 +1,13 @@
 ---
 import Dropdown from "../../../components/astro/ui/Dropdown.astro";
-import { routes } from "../../../routes/routes";
+import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
+import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
+import { getActiveBranchResultsUrl } from "../../../api/branchesApi/branchesApi";
+import { getToKnowRoutes, routes } from "../../../routes/routes";
 
 const currentPath = Astro.url.pathname;
+const servicesRoutes = await getServicesNavRoutes();
+const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
 ---
 
 <nav class="hidden md:flex items-center gap-6">
@@ -27,31 +32,23 @@ const currentPath = Astro.url.pathname;
   </div>
   <Dropdown
     text={"Servicios"}
-    options={[
-      { label: "Análisis Clínicos", href: "/service/analisis-clinicos" },
-      { label: "Salud Empresarial", href: "/service/salud-empresarial" },
-      { label: "Tomas a domicilio", href: "/service/tomas-a-domicilio" },
-    ]}
+    routes={servicesRoutes.map(({ path, text }) => ({
+      label: text,
+      href: path,
+    }))}
   />
-  <Dropdown
+  <NavLinkButton
+    path={resultsUrl}
     text={"Resultados"}
-    options={[
-      {
-        label: "Guadalajara",
-        href: "https://s26.cogniti.com.mx/dyraJalisco_consultaweb/Comun/Login.aspx",
-      },
-      {
-        label: "Colima",
-        href: "https://s26.cogniti.com.mx/dira_consultaweb/Comun/Login.aspx",
-      },
-    ]}
+    variant="primary"
+    size="sm"
+    target={resultsUrl.startsWith("http") ? "_blank" : "_self"}
   />
   <Dropdown
     text={"Conócenos"}
-    options={[
-      { label: "¿Quiénes somos?", href: "/about" },
-      { label: "Contáctanos", href: "/contact" },
-      { label: "Sucursales", href: "/branches" },
-    ]}
+    routes={getToKnowRoutes.map(({ path, text }) => ({
+      label: text,
+      href: path,
+    }))}
   />
 </nav>

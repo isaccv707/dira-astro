@@ -1,21 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HeaderBySection from "../components/astro/ui/HeaderBySection.astro";
-
-import logoDyra from "../assets/images/logos/logo.png";
+import BlogHero from "../sections/astro/blog/BlogHero.astro";
 import Posts from "../sections/react/blog/Posts";
 ---
 
-<Layout title="" description="">
-  <section class="w-full flex justify-center py-12 lg:py-20">
-    <HeaderBySection
-      textHeader="Blog"
-      title="Bienvenido a nuestro Blog — DYRA"
-      paragraph="Consejos, noticias y artículos sobre salud y diagnóstico clínico."
-      textColor="yellow-secondary"
-      img={logoDyra}
-      btnProperties={{ text: "Contáctanos" }}
-    />
+<Layout
+  title="Blog | Laboratorio DYRA"
+  description="Consejos, noticias y artículos sobre salud y diagnóstico clínico del Laboratorio DYRA."
+>
+  <BlogHero />
+
+  <section id="articulos" class="scroll-mt-24">
+    <Posts client:load />
   </section>
-  <Posts client:load />
 </Layout>

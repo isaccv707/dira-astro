@@ -8,11 +8,9 @@ export type GetAllStudiesParams = {
 }
 
 export interface GetAllStudiesResponse {
-    items: Study[];
-    meta: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-    }
+    data: Study[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
 }

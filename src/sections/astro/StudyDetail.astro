@@ -1,14 +1,18 @@
 ---
+import { Icon } from "astro-icon/components";
 import type { Study } from "../../interfaces/study.interface";
 import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
 import NavLinkButton from "../../components/react/navigation/NavLinkButton";
+import StudyActionCard from "../../components/react/cards/StudyActionCard";
+import CardStudy from "../../components/react/cards/CardStudy";
 import { Buttonstyles } from "../../styles/buttonsStyles";
 
 interface Props {
   study: Study | null;
+  recommendedStudies?: Study[];
 }
 
-const { study } = Astro.props;
+const { study, recommendedStudies = [] } = Astro.props;
 
 if (!study) {
   return null; // Or a redirect, but the page already handles this
@@ -20,12 +24,40 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 
 <section class="min-h-screen bg-ui-bg pb-20">
   <div class="bg-white pt-10 pb-16 border-b border-ui-border">
-    <HeaderBySection
-      textHeader="Detalle del Estudio"
-      title={name}
-      paragraph={`Código: ${code}`}
-      textColor="black"
-    />
+    <nav
+      aria-label="Breadcrumb"
+      class="mb-6 flex items-center gap-1.5 text-xs text-grey-custom/70"
+    >
+      <a href="/" class="transition-colors hover:text-green-primary"
+        >Inicio</a
+      >
+      <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
+      <a href="/quoter" class="transition-colors hover:text-green-primary"
+        >Cotizador</a
+      >
+      <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
+      <span class="max-w-50 truncate font-semibold text-green-light sm:max-w-xs"
+        >{name}</span
+      >
+    </nav>
+
+    <HeaderBySection textHeader="Detalle del Estudio" title={name} textColor="black" />
+
+    <div class="mt-6 flex flex-wrap gap-2">
+      <div
+        class="flex items-center gap-2 rounded-clinical-sm border border-green-light/15 bg-green-light/8 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-green-light"
+      >
+        <Icon name="lucide:clipboard-list" class="h-3 w-3" />
+        <span>Código: {code}</span>
+      </div>
+      {
+        sampleType && (
+          <div class="flex items-center gap-2 rounded-clinical-sm border border-yellow-secondary/15 bg-yellow-secondary/8 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-yellow-secondary">
+            <span>{sampleType}</span>
+          </div>
+        )
+      }
+    </div>
   </div>
 
   <div class="mt-12">
@@ -40,23 +72,7 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
             <div
               class="p-3 bg-green-secondary/10 rounded-clinical-md text-green-secondary"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-file-text"
-                ><path
-                  d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
-                ></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path
-                  d="M10 9H8"></path><path d="M16 13H8"></path><path
-                  d="M16 17H8"></path></svg
-              >
+              <Icon name="lucide:file-text" class="h-6 w-6" />
             </div>
             <h2 class="text-xl font-black tracking-tight text-green-light">
               Descripción del Estudio
@@ -80,21 +96,7 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
               <div
                 class="p-3 bg-yellow-primary/10 rounded-clinical-md text-yellow-secondary"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-flask-conical"
-                  ><path d="M10 2v7.5"></path><path d="M14 2v7.5"></path><path
-                    d="M4.8 22h14.4c.5 0 .9-.3 1.1-.7.3-.5.2-1-.1-1.4L14 9.5V2h-4v7.5L3.9 19.9c-.3.4-.4.9-.1 1.4.2.4.6.7 1 .7Z"
-                  ></path></svg
-                >
+                <Icon name="lucide:flask-conical" class="h-6 w-6" />
               </div>
               <h2 class="text-lg font-black tracking-tight text-green-light">
                 Preparación
@@ -117,23 +119,7 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                 <div
                   class="p-2 bg-green-light/10 rounded-clinical-sm text-green-light"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-test-tube-2"
-                    ><path d="M21 7 7 21"></path><path d="M16 2.5 2.5 16"
-                    ></path><path d="M12 11 6 5"></path><path d="m19 14-6-6"
-                    ></path><path d="M10 16 4 10"></path><path
-                      d="M20 4a2 2 0 0 0-2.828 0L14 7.172l2.828 2.828L20 7.172A2 2 0 0 0 20 4Z"
-                    ></path></svg
-                  >
+                  <Icon name="lucide:test-tube-2" class="h-5 w-5" />
                 </div>
                 <div>
                   <p
@@ -151,20 +137,7 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                 <div
                   class="p-2 bg-green-secondary/10 rounded-clinical-sm text-green-secondary"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-clock"
-                    ><circle cx="12" cy="12" r="10"></circle><polyline
-                      points="12 6 12 12 16 14"></polyline></svg
-                  >
+                  <Icon name="lucide:clock" class="h-5 w-5" />
                 </div>
                 <div>
                   <p
@@ -209,8 +182,10 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
 
       <!-- Right Column: Action Card -->
       <div class="lg:col-span-1">
-        <div class="sticky top-24">
-          <div class="mt-8 flex justify-center">
+        <div class="sticky top-24 space-y-6">
+          <StudyActionCard study={study} client:load />
+
+          <div class="flex justify-center">
             <button
               onclick="history.back()"
               class:list={[
@@ -218,24 +193,38 @@ const { name, code, description, preparation, sampleType, deliveryTime } =
                 Buttonstyles({ variant: "text", size: "none" }),
               ]}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-arrow-left"
-                ><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg
-              >
+              <Icon name="lucide:arrow-left" class="h-5 w-5" />
               Regresar
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    {
+      recommendedStudies.length > 0 && (
+        <div class="mt-20">
+          <div class="motion-safe:animate-fade-up">
+            <h2 class="text-2xl font-black tracking-tight text-green-light sm:text-3xl">
+              Estudios recomendados
+            </h2>
+            <p class="mt-2 text-sm text-grey-custom sm:text-base">
+              Otros análisis que también podrían interesarte
+            </p>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
+            {recommendedStudies.map((recommended, index) => (
+              <div
+                class="motion-safe:animate-fade-up"
+                style={`animation-delay:${(index % 4) * 100}ms`}
+              >
+                <CardStudy study={recommended} client:visible />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
   </div>
 </section>

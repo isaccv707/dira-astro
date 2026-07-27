@@ -9,6 +9,7 @@ import BranchSelectorManager from "../components/react/branch/BranchSelectorMana
 import FloatingActions from "../sections/react/FloatingActions";
 import DrawerManager from "../components/react/drawer/DrawerManager";
 import Footer from "../sections/astro/layout/Footer.astro";
+import { getServicesNavRoutes } from "../api/servicesApi/serviceApi";
 
 interface Props {
   title: string;
@@ -35,6 +36,8 @@ const canonicalURL = new URL(
 const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
 
 const GA_MEASUREMENT_ID = "AW-17974653170";
+
+const servicesRoutes = await getServicesNavRoutes();
 ---
 
 <!doctype html>
@@ -120,7 +123,7 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     <FloatingActions client:load />
 
     <ModalManager client:load />
-    <DrawerManager client:load />
+    <DrawerManager client:load services={servicesRoutes} />
 
     <BranchSelectorManager client:load />
     <Footer />

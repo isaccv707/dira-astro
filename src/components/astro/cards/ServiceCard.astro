@@ -10,6 +10,10 @@ interface Props {
 
 const { service } = Astro.props;
 const { description, id, slug, name, benefits, icon } = service;
+
+const KNOWN_SETS = ["lucide:", "tabler:", "logos:", "simple-icons:"];
+const isAstroIcon = icon && !icon.startsWith("http") && KNOWN_SETS.some((s) => icon.startsWith(s));
+const isImgIcon = icon && icon.startsWith("http");
 ---
 
 <div
@@ -19,7 +23,13 @@ const { description, id, slug, name, benefits, icon } = service;
   <div
     class="w-16 h-16 flex items-center justify-center rounded-full mb-4 bg-linear-to-tr from-green-light to-green-secondary/50 p-2 transition-transform duration-300 group-hover:scale-105"
   >
-    {icon && <Icon name={icon} class={"text-white w-6 h-auto"} />}
+    {
+      isAstroIcon ? (
+        <Icon name={icon} class="text-white w-6 h-auto" />
+      ) : (
+        isImgIcon && <img src={icon} alt={name} class="w-6 h-6 object-contain" />
+      )
+    }
   </div>
 
   <h5
