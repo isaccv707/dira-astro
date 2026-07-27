@@ -2,6 +2,10 @@
 import NavigationQuickActions from "../../components/astro/buttons/NavigationQuickAction.astro";
 import { quickActions } from "../../data/quickActions/quickActions";
 import QuickActionButton from "../../components/react/buttons/QuickActionButton";
+import { getActiveBranchContact } from "../../api/branchesApi/branchesApi";
+import { buildWhatsappUrl } from "../../utils/whatsapp";
+
+const contact = await getActiveBranchContact();
 ---
 
 <section>
@@ -9,9 +13,9 @@ import QuickActionButton from "../../components/react/buttons/QuickActionButton"
     class="flex flex-col items-center justify-center gap-4 md:flex-row md:gap-6"
   >
     {
-      quickActions.map(({ path, accent, icon, text, description }) => (
+      quickActions.map(({ path, isWhatsapp, accent, icon, text, description }) => (
         <NavigationQuickActions
-          path={path}
+          path={isWhatsapp && contact?.phone ? buildWhatsappUrl(contact.phone) : path}
           text={text}
           description={description}
           accent={accent}

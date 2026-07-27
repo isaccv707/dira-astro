@@ -4,7 +4,8 @@ import NavLinkButton from "../navigation/NavLinkButton";
 import { getToKnowRoutes, routes, type Routes } from "../../../routes/routes";
 import { closeDrawer, drawerStore } from "../../../stores/drawerStore";
 import Drawer from "./Drawer";
-import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
+import { buildSocialNetworks } from "../../../constants/socialNetworks";
+import { useActiveBranchContact } from "../../../hooks/useActiveBranchContact";
 import { useStore } from "@nanostores/react";
 
 interface NavDrawerProps {
@@ -19,6 +20,8 @@ export const NavDrawer = ({
   title = "Menu",
 }: NavDrawerProps) => {
   const { isOpen, view } = useStore(drawerStore);
+  const contact = useActiveBranchContact();
+  const socialNetworks = buildSocialNetworks(contact);
 
   if (!isOpen || view !== id) return null;
 
@@ -49,7 +52,7 @@ export const NavDrawer = ({
         <div className="mt-auto pt-10 flex flex-col gap-4 border-t border-ui-border">
           {/* Redes Sociales */}
           <nav className="flex gap-4 items-center">
-            {SOCIAL_NETWORKS.map(({ icon, name, route }) => (
+            {socialNetworks.map(({ icon, name, route }) => (
               <NavLinkButton
                 key={name}
                 path={route}

@@ -13,7 +13,7 @@ const hasStudies = (_count?.studies ?? 0) > 0;
 
 <section id="servicio-detalle" class="scroll-mt-24">
   {
-    hasStudies ? (
+    hasStudies && (
       <div class="space-y-8">
         <div
           class="motion-safe:animate-fade-up"
@@ -34,10 +34,6 @@ const hasStudies = (_count?.studies ?? 0) > 0;
 
         <ServiceStudiesCatalog client:visible />
       </div>
-    ) : (
-      <h1 class="text-2xl font-black tracking-tight text-green-light sm:text-3xl">
-        Detalles de servicio
-      </h1>
     )
   }
 </section>

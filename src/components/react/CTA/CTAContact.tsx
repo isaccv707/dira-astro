@@ -1,7 +1,11 @@
-import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
+import { buildSocialNetworks } from "../../../constants/socialNetworks";
+import { useActiveBranchContact } from "../../../hooks/useActiveBranchContact";
 import NavLinkButton from "../navigation/NavLinkButton";
 
 const CTAContact = () => {
+  const contact = useActiveBranchContact();
+  const socialNetworks = buildSocialNetworks(contact);
+
   return (
     <div className="rounded-clinical-md border border-green-primary/15 bg-green-primary/5 p-4">
       <p className="text-xs font-medium text-green-primary sm:text-sm">
@@ -11,7 +15,7 @@ const CTAContact = () => {
         Contáctanos por el medio de tu preferencia
       </p>
       <div className="flex gap-2 flex-row sm:items-center sm:gap-3">
-        {SOCIAL_NETWORKS.map(({ name, route, icon }) => (
+        {socialNetworks.map(({ name, route, icon }) => (
           <NavLinkButton
             path={route}
             icon={icon}

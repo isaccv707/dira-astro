@@ -3,7 +3,9 @@ import Layout from "../../layouts/Layout.astro";
 
 import ServiceHeroSection from "../../sections/astro/service/ServiceHero.astro";
 import ServiceBenefitsSection from "../../sections/astro/service/ServiceBenefits.astro";
+import ServiceDetailsSection from "../../sections/astro/service/ServiceDetails.astro";
 import ServicesSection from "../../sections/astro/service/Services.astro";
+import ServiceRecommendedSection from "../../sections/astro/service/ServiceRecommended.astro";
 
 import type { Service } from "../../interfaces/service.interface";
 import { getOneResource } from "../../utils/getOneResource";
@@ -19,7 +21,14 @@ const service = (await getOneResource<Service>(
 if (!service) {
   return Astro.redirect("/404");
 }
-const { name, description = "", imageUrl = "", benefits = [] } = service;
+const {
+  id,
+  name,
+  description = "",
+  imageUrl = "",
+  benefits = [],
+  details = [],
+} = service;
 ---
 
 <Layout
@@ -35,7 +44,11 @@ const { name, description = "", imageUrl = "", benefits = [] } = service;
 
   <ServiceBenefitsSection benefits={benefits} />
 
+  <ServiceDetailsSection details={details} />
+
   <ServicesSection service={service} />
+
+  <ServiceRecommendedSection currentServiceId={id} />
 
   <CTAContact />
 </Layout>

@@ -1,6 +1,9 @@
 ---
-import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
+import { buildSocialNetworks } from "../../../constants/socialNetworks";
+import { getActiveBranchContact } from "../../../api/branchesApi/branchesApi";
 import NavigationButton from "../navigation/NavigationButton.astro";
+
+const socialNetworks = buildSocialNetworks(await getActiveBranchContact());
 ---
 
 <div class="rounded-clinical-md border border-green-primary/15 bg-green-primary/5 p-4">
@@ -12,7 +15,7 @@ import NavigationButton from "../navigation/NavigationButton.astro";
   </p>
   <div class="flex gap-2 flex-row sm:items-center sm:gap-3">
     {
-      SOCIAL_NETWORKS.map(({ name, route, icon }) => (
+      socialNetworks.map(({ name, route, icon }) => (
         <NavigationButton
           href={route}
           icon={icon}

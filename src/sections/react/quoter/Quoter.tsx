@@ -6,6 +6,7 @@ import QuoterSelectStudies from "./QuoterSelectStudies";
 
 import StepIndicator from "../../../components/react/ui/StepIndicator";
 import Button from "../../../components/react/buttons/Button";
+import { ClipboardList } from "lucide-react";
 
 import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
 
@@ -47,9 +48,14 @@ const Quoter = () => {
   const previousStep = () => setStep((prev) => prev - 1);
   return (
     <div className="rounded-clinical-lg w-full grid">
-      <header className="bg-green-primary rounded-t-clinical-lg p-4 text-center sticky top-0 z-10">
-        <h1 className="text-white font-bold text-lg">Cotiza tus estudios</h1>
-        <small className="text-white text-sm opacity-90">
+      <header className="bg-green-primary rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
+        <div className="flex items-center justify-center gap-2">
+          <ClipboardList className="h-5 w-5 text-white/90" strokeWidth={2} />
+          <h1 className="text-white font-bold text-base sm:text-lg">
+            Cotiza tus estudios
+          </h1>
+        </div>
+        <small className="text-white text-xs sm:text-sm opacity-90">
           Rellena la información necesaria para obtener una cotización.
         </small>
       </header>
@@ -74,7 +80,7 @@ const Quoter = () => {
       </div>
 
       {/* DESKTOP */}
-      <div className="hidden sm:flex relative items-center px-4 sm:px-6 mt-10">
+      <div className="hidden sm:flex relative items-center px-4 sm:px-6 mt-6 sm:mt-8">
         <div className="absolute left-1/2 -translate-x-1/2">
           <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
         </div>
