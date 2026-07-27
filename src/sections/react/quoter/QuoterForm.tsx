@@ -39,113 +39,104 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-full px-4 sm:px-6">
-        <div className="mx-auto w-full max-w-3xl">
-          {/* Card */}
-          <div className="p-5 sm:p-8">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 items-start">
-              {/* Tipo de cliente */}
-              <div className="md:col-span-12">
-                <RHFSelectInput
-                  id="clientType"
-                  name="clientType"
-                  label="Tipo de cliente"
-                  placeholder="Selecciona una opción"
-                  options={[
-                    { label: "Particular", value: "particular" },
-                    { label: "Empresa", value: "company" },
-                  ]}
-                />
-              </div>
+      <div className="w-full px-4 py-5 sm:px-6 sm:py-6 md:py-8">
+        <div className="mx-auto w-full max-w-2xl">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-5">
+            {/* Tipo de cliente */}
+            <RHFSelectInput
+              id="clientType"
+              name="clientType"
+              label="Tipo de cliente"
+              placeholder="Selecciona una opción"
+              options={[
+                { label: "Particular", value: "particular" },
+                { label: "Empresa", value: "company" },
+              ]}
+            />
 
-              {/* Identidad: Nombre + Apellido/RFC */}
-              <div className="md:col-span-7">
-                <RHFTextInput
-                  id="name"
-                  name="name"
-                  label={clientType === "company" ? "Razón social" : "Nombre"}
-                  placeholder={
-                    clientType === "company"
-                      ? "Ingresa la razón social"
-                      : "Ingresa tu nombre"
-                  }
-                />
-              </div>
+            {/* Nombre / Razón social */}
+            <RHFTextInput
+              id="name"
+              name="name"
+              label={clientType === "company" ? "Razón social" : "Nombre"}
+              placeholder={
+                clientType === "company"
+                  ? "Ingresa la razón social"
+                  : "Ingresa tu nombre"
+              }
+            />
 
-              <div className="md:col-span-5">
-                {/* Evita “brinco” al animar cambiando de campo */}
-                <div className="min-h-23">
-                  <AnimatePresence mode="wait">
-                    {clientType === "particular" ? (
-                      <motion.div
-                        key="lastName"
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <RHFTextInput
-                          id="lastName"
-                          name="lastName"
-                          label="Apellidos"
-                          placeholder="Ingresa tu apellidos"
-                        />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="companyRFC"
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <RHFTextInput
-                          id="companyRFC"
-                          name="companyRFC"
-                          label="RFC de la empresa"
-                          placeholder="Ej. ABC123456XYZ"
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
+            {/* Apellidos / RFC — evita "brinco" al animar cambiando de campo */}
+            <div className="min-h-23">
+              <AnimatePresence mode="wait">
+                {clientType === "particular" ? (
+                  <motion.div
+                    key="lastName"
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <RHFTextInput
+                      id="lastName"
+                      name="lastName"
+                      label="Apellidos"
+                      placeholder="Ingresa tu apellidos"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="companyRFC"
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <RHFTextInput
+                      id="companyRFC"
+                      name="companyRFC"
+                      label="RFC de la empresa"
+                      placeholder="Ej. ABC123456XYZ"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-              {/* Contacto: Teléfono + Email */}
-              <div className="md:col-span-5">
-                <RHFTextInput
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  label="Teléfono"
-                  placeholder="Ej. 3312345678"
-                />
-              </div>
+            {/* Teléfono */}
+            <RHFTextInput
+              id="phoneNumber"
+              name="phoneNumber"
+              label="Teléfono"
+              placeholder="Ej. 3312345678"
+            />
 
-              <div className="md:col-span-7">
-                <RHFTextInput
-                  id="email"
-                  name="email"
-                  label="Correo electrónico"
-                  placeholder="correo@dominio.com"
-                />
-              </div>
+            {/* Correo electrónico */}
+            <div className="sm:col-span-2">
+              <RHFTextInput
+                id="email"
+                name="email"
+                label="Correo electrónico"
+                placeholder="correo@dominio.com"
+              />
+            </div>
 
-              {/* Botón */}
-              <div className="md:col-span-12 pt-2">
-                <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
-                  <Button
-                    text="Siguiente"
-                    type="button"
-                    variant="secondary"
-                    size="lg"
-                    onClick={handleNext}
-                  />
-                </div>
-
-                {/* Tip opcional: microcopy */}
-                <p className="mt-3 text-xs text-grey-custom">
-                  Usaremos estos datos únicamente para enviarte la cotización.
+            {/* Botón */}
+            <div className="sm:col-span-2 mt-2 border-t border-ui-border pt-5">
+              <div className="flex flex-col-reverse items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs text-grey-custom leading-relaxed">
+                  Usaremos estos datos únicamente para enviarte la
+                  cotización.
                 </p>
+                <Button
+                  text="Siguiente"
+                  type="button"
+                  variant="secondary"
+                  size="lg"
+                  width="full"
+                  className="sm:w-auto"
+                  onClick={handleNext}
+                />
               </div>
             </div>
           </div>

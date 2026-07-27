@@ -5,6 +5,7 @@ interface QuickActions {
   path: string;
   accent: "green-primary" | "yellow-primary";
   disabled?: boolean;
+  isWhatsapp?: boolean;
 }
 
 export const quickActions: QuickActions[] = [
@@ -13,6 +14,7 @@ export const quickActions: QuickActions[] = [
     text: "Agenda tu cita",
     description: "Vía WhatsApp, respuesta inmediata",
     path: "https://wa.me/3318622542",
+    isWhatsapp: true,
     accent: "green-primary",
   },
   {

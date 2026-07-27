@@ -1,10 +1,13 @@
 ---
 import NavigationButton from "../../../components/astro/navigation/NavigationButton.astro";
 import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
-import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
+import { buildSocialNetworks } from "../../../constants/socialNetworks";
 import { getToKnowRoutes, routes, type Routes } from "../../../routes/routes";
 import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
-import { getActiveBranchResultsUrl } from "../../../api/branchesApi/branchesApi";
+import {
+  getActiveBranchResultsUrl,
+  getActiveBranchContact,
+} from "../../../api/branchesApi/branchesApi";
 import dyraLogo from "../../../assets/images/logos/logo.png";
 
 const servicesRoutes = await getServicesNavRoutes();
@@ -12,6 +15,7 @@ const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
 const resultsRoutes: Routes[] = [
   { path: resultsUrl, text: "Consultar resultados" },
 ];
+const socialNetworks = buildSocialNetworks(await getActiveBranchContact());
 ---
 
 <footer class="bg-green-primary text-white pt-12">
@@ -35,7 +39,7 @@ const resultsRoutes: Routes[] = [
         <h4 class="font-bold uppercase tracking-widest text-xs">Contáctanos</h4>
         <div class="flex gap-4">
           {
-            SOCIAL_NETWORKS.map(({ name, route, icon }) => (
+            socialNetworks.map(({ name, route, icon }) => (
               <NavigationButton
                 href={route}
                 icon={icon}

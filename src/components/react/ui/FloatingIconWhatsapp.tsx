@@ -1,16 +1,20 @@
 import { useState } from "react";
 
 import { urlWhatsapp } from "../../../constants/urlWhatsapp";
+import { buildWhatsappUrl } from "../../../utils/whatsapp";
+import { useActiveBranchContact } from "../../../hooks/useActiveBranchContact";
 import Button from "../buttons/Button";
 import NavLinkButton from "../navigation/NavLinkButton";
 
 const FloatingIconWhatsapp = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const contact = useActiveBranchContact();
+  const whatsappUrl = contact?.phone ? buildWhatsappUrl(contact.phone) : urlWhatsapp;
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    if (urlWhatsapp) {
-      window.open(urlWhatsapp, "_blank", "noopener,noreferrer");
+    if (whatsappUrl) {
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     } else {
       console.error("Error: La URL de WhatsApp no está definida en .env");
     }

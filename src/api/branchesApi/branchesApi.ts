@@ -29,24 +29,41 @@ export const getOneBranch = async (id: string): Promise<Branch | null> => {
   return apiGet<Branch>(`/branches/${id}`);
 };
 
-const resultsUrlCache = createTtlCache<string | null>();
+const activeBranchCache = createTtlCache<Branch | null>();
 
-export const getActiveBranchResultsUrl = async (
-  branchId?: string,
-): Promise<string | null> => {
+const getActiveBranch = async (branchId?: string): Promise<Branch | null> => {
   const resolvedBranchId = branchId ?? resolveBranchId();
   if (!resolvedBranchId) return null;
 
-  const cached = resultsUrlCache.get(resolvedBranchId);
+  const cached = activeBranchCache.get(resolvedBranchId);
   if (cached !== undefined) return cached;
 
   try {
     const branch = await getOneBranch(resolvedBranchId);
-    const url = branch?.urlResults ?? null;
-    resultsUrlCache.set(resolvedBranchId, url);
-    return url;
+    activeBranchCache.set(resolvedBranchId, branch);
+    return branch;
   } catch (error) {
-    console.error("Error fetching active branch results url:", error);
-    return resultsUrlCache.getStale(resolvedBranchId) ?? null;
+    console.error("Error fetching active branch:", error);
+    return activeBranchCache.getStale(resolvedBranchId) ?? null;
   }
+};
+
+export const getActiveBranchResultsUrl = async (
+  branchId?: string,
+): Promise<string | null> => {
+  const branch = await getActiveBranch(branchId);
+  return branch?.urlResults ?? null;
+};
+
+export interface ActiveBranchContact {
+  phone: string;
+  email: string;
+}
+
+export const getActiveBranchContact = async (
+  branchId?: string,
+): Promise<ActiveBranchContact | null> => {
+  const branch = await getActiveBranch(branchId);
+  if (!branch) return null;
+  return { phone: branch.phone, email: branch.email };
 };

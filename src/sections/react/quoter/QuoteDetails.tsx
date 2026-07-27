@@ -5,6 +5,7 @@ import TotalQuoteCard from "../../../components/react/cards/TotalQuoteCard";
 import Button from "../../../components/react/buttons/Button";
 import SelectedStudiesAccordion from "../../../components/react/accordion/SelectedStudiesAccordion";
 import useQuotationPdf from "../../../hooks/useQuotationPdf";
+import { FileText } from "lucide-react";
 
 const QuoteDetails = () => {
   const { selectedStudies, client, totals, removeStudy, updateStudyQuantity } =
@@ -14,21 +15,24 @@ const QuoteDetails = () => {
     useQuotationPdf({ client, selectedStudies });
   return (
     <div className="w-full h-full">
-      <header className="bg-green-primary rounded-t-clinical-lg p-4 text-center sticky top-0 z-10">
-        <h1 className="text-white font-bold text-lg">
-          Detalles de tu cotización
-        </h1>
-        <small className="text-white text-sm opacity-90">
+      <header className="bg-green-primary rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
+        <div className="flex items-center justify-center gap-2">
+          <FileText className="h-5 w-5 text-white/90" strokeWidth={2} />
+          <h1 className="text-white font-bold text-base sm:text-lg">
+            Detalles de tu cotización
+          </h1>
+        </div>
+        <small className="text-white text-xs sm:text-sm opacity-90">
           Aquí encontrarás todos los detalles de tu cotización
         </small>
       </header>
 
-      <div className="flex-1 overflow-y-auto max-h-[75vh] px-4 py-5 space-y-5 scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-ui-bg rounded-b-clinical-lg">
+      <div className="flex-1 overflow-y-auto max-h-[75vh] px-4 py-5 sm:px-5 space-y-4 scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-ui-bg rounded-b-clinical-lg">
         <ClientInformationCard client={client} />
 
         <Accordion
           id={"studies"}
-          title={`Estudios Seleccionados: ${selectedStudies.length}`}
+          title={`Estudios seleccionados (${selectedStudies.length})`}
         >
           <SelectedStudiesAccordion
             updateStudyQuantity={updateStudyQuantity}
@@ -39,11 +43,12 @@ const QuoteDetails = () => {
 
         <TotalQuoteCard totals={totals} selectedStudies={selectedStudies} />
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
+        <div className="flex flex-col gap-3 pt-1 sm:flex-row">
           <Button
             text={isViewing ? "Generando..." : "Ver cotización"}
-            variant="primary"
+            variant="outline"
             size="sm"
+            width="full"
             type="button"
             onClick={viewQuotation}
             isLoading={isViewing}
@@ -52,6 +57,7 @@ const QuoteDetails = () => {
             text={isDownloading ? "Generando..." : "Descargar cotización"}
             variant="primary"
             size="sm"
+            width="full"
             type="button"
             onClick={downloadQuotation}
             isLoading={isDownloading}

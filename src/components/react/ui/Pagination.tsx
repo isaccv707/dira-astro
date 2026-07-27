@@ -29,7 +29,7 @@ const Pagination = ({
 
   return (
     <nav aria-label="Pagination" className="select-none">
-      <ul className="inline-flex items-center gap-1 text-sm">
+      <ul className="flex flex-wrap items-center gap-1 text-sm">
         <li>
           <Button
             type="button"

@@ -84,13 +84,6 @@ const DrawerStudies = ({
           </div>
 
           <div className="space-y-2">
-            <NavLinkButton
-              path="/quoter"
-              text="Generar Cotización"
-              variant="primary"
-              width="full"
-              onClick={closeDrawer}
-            />
             <Button
               text="Agendar cita"
               type="button"

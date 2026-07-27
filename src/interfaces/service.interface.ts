@@ -16,7 +16,7 @@ export interface Details {
   id: string;
   title: string;
   description: string;
-  image: string;
+  image?: string | null;
 }
 
 export interface Count {

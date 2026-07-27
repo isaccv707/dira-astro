@@ -83,7 +83,8 @@ const QuoterSelectStudies = () => {
           <SearchServices onSearchChange={handleSearchChange} />
         </div>
 
-        <div className="text-sm text-grey-custom sm:text-right">
+        <div className="inline-flex w-fit items-center gap-2 self-start rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary sm:self-auto">
+          <span className="h-1.5 w-1.5 rounded-full bg-green-primary" />
           {isFetching ? "Buscando..." : `${totalStudies} disponibles`}
         </div>
       </div>
