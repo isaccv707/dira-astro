@@ -2,7 +2,7 @@ import RHFTextInput from "../../../components/react/hk-form/RHFTextInput";
 import RHFSelectInput from "../../../components/react/hk-form/RHFSelectInput";
 import Button from "../../../components/react/buttons/Button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuoterContext } from "../../../hooks/useQuoterContext";
+import { setClient } from "../../../stores/quoterStore";
 import * as yup from "yup";
 import FormProvider from "../../../components/react/hk-form/FormProvider";
 import type { UseFormReturn } from "react-hook-form";
@@ -17,7 +17,6 @@ interface QuotationFormProps {
 }
 
 const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
-  const { setClient } = useQuoterContext();
   const { watch, handleSubmit } = methods;
 
   const clientType = watch("clientType");

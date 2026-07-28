@@ -1,4 +1,13 @@
-import { useQuoterContext } from "../../../hooks/useQuoterContext";
+import { useEffect } from "react";
+import { useStore } from "@nanostores/react";
+import {
+  clientStore,
+  selectedStudiesStore,
+  totalsStore,
+  removeStudy,
+  updateStudyQuantity,
+  ensureQuoterStudiesSynced,
+} from "../../../stores/quoterStore";
 import Accordion from "../../../components/react/accordion/Accordion";
 import ClientInformationCard from "../../../components/react/cards/ClientInformationCard";
 import TotalQuoteCard from "../../../components/react/cards/TotalQuoteCard";
@@ -8,8 +17,13 @@ import useQuotationPdf from "../../../hooks/useQuotationPdf";
 import { FileText } from "lucide-react";
 
 const QuoteDetails = () => {
-  const { selectedStudies, client, totals, removeStudy, updateStudyQuantity } =
-    useQuoterContext();
+  const selectedStudies = useStore(selectedStudiesStore);
+  const client = useStore(clientStore);
+  const totals = useStore(totalsStore);
+
+  useEffect(() => {
+    ensureQuoterStudiesSynced();
+  }, []);
 
   const { viewQuotation, downloadQuotation, isDownloading, isViewing } =
     useQuotationPdf({ client, selectedStudies });
