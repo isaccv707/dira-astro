@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BranchSection from "../sections/react/branch/Branch-section";
+import Branch from "../sections/react/branch/Branch";
 ---
 
 <Layout
@@ -27,11 +27,11 @@ import BranchSection from "../sections/react/branch/Branch-section";
       </span>
     </h1>
 
-    <p class="mt-4 max-w-xl text-pretty text-sm text-gray-600 sm:text-base">
+    <p class="mt-4 max-w-xl text-pretty text-sm text-grey-custom sm:text-base">
       Contamos con múltiples puntos de atención para tu comodidad. Cada una de
       nuestras sucursales cumple con los más altos estándares de calidad y
       tecnología.
     </p>
   </header>
-  <BranchSection client:load />
+  <Branch client:load />
 </Layout>

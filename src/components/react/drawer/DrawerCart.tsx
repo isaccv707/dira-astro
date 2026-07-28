@@ -73,9 +73,9 @@ const DrawerStudies = ({
           />
         </div>
 
-        <div className="mt-auto border-t pt-4 space-y-4 bg-white">
+        <div className="mt-auto border-t border-ui-border pt-4 space-y-4 bg-white">
           <div className="flex justify-between items-center px-2">
-            <span className="text-gray-600 font-semibold uppercase text-sm tracking-wider">
+            <span className="text-grey-custom font-semibold uppercase text-sm tracking-wider">
               Total
             </span>
             <span className="text-xl font-black text-green-light">
@@ -84,13 +84,6 @@ const DrawerStudies = ({
           </div>
 
           <div className="space-y-2">
-            <NavLinkButton
-              path="/quoter"
-              text="Generar Cotización"
-              variant="primary"
-              width="full"
-              onClick={closeDrawer}
-            />
             <Button
               text="Agendar cita"
               type="button"
@@ -99,12 +92,6 @@ const DrawerStudies = ({
               width="full"
               size={"md"}
             />
-            {/* <button
-                            onClick={() => close(id)}
-                            className="w-full py-3 text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors uppercase tracking-widest cursor-pointer"
-                        >
-                            Seguir Comprando
-                        </button> */}
           </div>
         </div>
       </div>

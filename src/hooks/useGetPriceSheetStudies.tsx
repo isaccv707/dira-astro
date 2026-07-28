@@ -1,31 +1,26 @@
 import { useEffect, useState, useCallback } from "react";
-import { getPriceSheet } from "../api/priceSheetApi/priceSheetApi";
+import { getAllStudies } from "../api/studiesApi/studiesApi";
 import type { Study } from "../interfaces/study.interface";
 
-interface useGetPriceSheetStudiesProps {
+interface Props {
   page: number;
   limit: number;
   search?: string;
-  priceSheetId: string | null;
+  branchId: string | null;
 }
 
-interface PriceSheetStudiesState {
+interface State {
   studies: Study[];
   totalStudies: number;
   totalPages: number;
   isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
-  error: any;
+  error: unknown;
 }
 
-const useGetPriceSheetStudies = ({
-  limit,
-  page,
-  search,
-  priceSheetId,
-}: useGetPriceSheetStudiesProps) => {
-  const [state, setState] = useState<PriceSheetStudiesState>({
+const useGetPriceSheetStudies = ({ limit, page, search, branchId }: Props) => {
+  const [state, setState] = useState<State>({
     studies: [],
     totalStudies: 0,
     totalPages: 1,
@@ -35,46 +30,30 @@ const useGetPriceSheetStudies = ({
     error: null,
   });
 
-  const fetchPriceSheet = useCallback(async () => {
-    if (!priceSheetId) {
-      setState((prev) => ({
-        ...prev,
-        studies: [],
-        isLoading: false,
-        isFetching: false,
-      }));
-      return;
-    }
-
+  const fetchStudies = useCallback(async () => {
     setState((prev) => ({ ...prev, isFetching: true, isError: false }));
 
     try {
-      const response = await getPriceSheet(priceSheetId, page, limit, search);
+      const raw = (await getAllStudies({
+        page,
+        limit,
+        search,
+        branchId: branchId ?? undefined,
+      })) as any;
 
-      if (response) {
-        const mappedStudies: Study[] = response.studyOnPriceSheets.data.map(
-          (item) => ({
-            ...item.study,
-            priceInfo: {
-              ...item.study.priceInfo,
-              price: Number(item.price),
-              showPrice: item.showPrice,
-            },
-          }),
-        );
+      const items: Study[] = (raw.data ?? raw.items ?? []) as unknown as Study[];
+      const totalStudies: number = raw.total ?? raw.meta?.total ?? 0;
+      const totalPages: number = raw.totalPages ?? raw.meta?.totalPages ?? 1;
 
-        setState({
-          studies: mappedStudies,
-          totalStudies: response.studyOnPriceSheets.meta.total,
-          totalPages: response.studyOnPriceSheets.meta.totalPages,
-          isLoading: false,
-          isFetching: false,
-          isError: false,
-          error: null,
-        });
-      } else {
-        throw new Error("No se pudo obtener la hoja de precios");
-      }
+      setState({
+        studies: items,
+        totalStudies,
+        totalPages,
+        isLoading: false,
+        isFetching: false,
+        isError: false,
+        error: null,
+      });
     } catch (err) {
       setState((prev) => ({
         ...prev,
@@ -84,15 +63,13 @@ const useGetPriceSheetStudies = ({
         error: err,
       }));
     }
-  }, [priceSheetId, page, limit, search]);
+  }, [branchId, page, limit, search]);
 
   useEffect(() => {
-    fetchPriceSheet();
-  }, [fetchPriceSheet]);
+    fetchStudies();
+  }, [fetchStudies]);
 
-  return {
-    ...state,
-  };
+  return state;
 };
 
 export default useGetPriceSheetStudies;

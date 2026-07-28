@@ -7,10 +7,12 @@ interface NavLinkButtonProps extends VariantProps<typeof Buttonstyles> {
   path: string;
   text?: string;
   icon?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   target?: "_blank" | "_self" | "_parent" | "_top";
   className?: string;
   iconClassName?: string;
+  children?: React.ReactNode;
+  ariaLabel?: string;
 }
 
 const NavLinkButton = ({
@@ -25,6 +27,8 @@ const NavLinkButton = ({
   target,
   className,
   iconClassName = "w-6 h-6",
+  children,
+  ariaLabel,
 }: NavLinkButtonProps) => {
   const isExternal = target === "_blank";
 
@@ -35,10 +39,14 @@ const NavLinkButton = ({
       target={target}
       rel={isExternal ? "noopener noreferrer" : undefined}
       className={clsx(Buttonstyles({ variant, size, align, width }), className)}
+      aria-label={ariaLabel}
     >
-      {icon && <Icon icon={icon} className={iconClassName} />}
-
-      {text && <span className={icon ? "ml-2" : ""}>{text}</span>}
+      {children ?? (
+        <>
+          {icon && <Icon icon={icon} className={iconClassName} />}
+          {text && <span className={icon ? "ml-2" : ""}>{text}</span>}
+        </>
+      )}
     </a>
   );
 };

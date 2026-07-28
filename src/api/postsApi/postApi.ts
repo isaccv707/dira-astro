@@ -1,42 +1,56 @@
-import { API_URL } from "../../constants/apiUrl";
+import { apiGet } from "../apiGet";
 import type { PostResponse } from "./post.interface";
+import { resolveBranchId } from "../../stores/branchStore";
+import { createTtlCache } from "../../utils/ttlCache";
 
 interface FetchPostsParams {
   page?: number;
   limit?: number;
   search?: string;
+  branchId?: string;
 }
+
+const postsCache = createTtlCache<PostResponse>();
+
+const emptyPostsResponse = (limit?: number): PostResponse => ({
+  data: [],
+  meta: { total: 0, page: 1, lastPage: 1, limit: limit ?? 10, totalPages: 1 },
+});
 
 export const fetchGetAllPosts = async ({
   page,
   limit,
   search,
-}: FetchPostsParams = {}): Promise<PostResponse[]> => {
-  // 1. Construimos la URL base para los posts
-  const url = new URL(`${API_URL}/posts`);
+  branchId,
+}: FetchPostsParams = {}): Promise<PostResponse> => {
+  const resolvedBranchId = branchId ?? resolveBranchId();
+  const cacheKey = JSON.stringify({
+    page,
+    limit,
+    search,
+    branchId: resolvedBranchId,
+  });
 
-  if (page) url.searchParams.append("page", page.toString());
-  if (limit) url.searchParams.append("limit", limit.toString());
-  if (search) url.searchParams.append("search", search);
+  const cached = postsCache.get(cacheKey);
+  if (cached) return cached;
 
   try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const data = await apiGet<PostResponse>("/posts", {
+      page,
+      limit,
+      search,
+      branchId: resolvedBranchId,
+      status: "PUBLISHED",
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      throw new Error(
-        errorData?.message || "Error al obtener las publicaciones",
-      );
-    }
-
-    return await response.json();
+    const result = data ?? emptyPostsResponse(limit);
+    postsCache.set(cacheKey, result);
+    return result;
   } catch (error) {
-    console.error("Error en fetchGetAllPosts:", error);
+    const stale = postsCache.getStale(cacheKey);
+    if (stale) {
+      console.error("Error fetching posts, serving stale cache:", error);
+      return stale;
+    }
     throw error;
   }
 };

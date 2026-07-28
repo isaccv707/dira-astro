@@ -1,6 +1,10 @@
 ---
+import { Icon } from "astro-icon/components";
 import type { Post, ContentBlock } from "../../../api/postsApi/post.interface";
+import { fetchGetAllPosts } from "../../../api/postsApi/postApi";
 import Tags from "../../../components/astro/Tags.astro";
+import CTAContact from "../../../components/astro/CTA/CTAContact.astro";
+import PostCard from "../../../components/react/cards/PostCard";
 import { formattedDate } from "../../../utils/formattedDate";
 
 interface Props {
@@ -11,71 +15,89 @@ const { post } = Astro.props;
 if (!post) return;
 
 const date = formattedDate(post.createdAt);
+
+// The API returns `image` as a plain URL string, not the `ImageMetadata`
+// object the shared Post interface declares — handle both shapes safely.
+const rawImage = post.image as unknown as string | ImageMetadata | undefined;
+const heroImageSrc =
+  typeof rawImage === "string" ? rawImage : rawImage?.src;
+
+const contentBlocks = post.contentBlocks ?? [];
+const firstParagraphIndex = contentBlocks.findIndex(
+  (block) => block.type === "PARAGRAPH",
+);
+
+let relatedPosts: Post[] = [];
+try {
+  const { data } = await fetchGetAllPosts({ limit: 4 });
+  relatedPosts = data.filter((p) => p.slug !== post.slug).slice(0, 3);
+} catch (error) {
+  console.error("[Post] Error fetching related posts:", error);
+}
 ---
 
-<article class="w-full max-w-5xl mx-auto px-4 py-12 animate-fade-up">
+<article class="w-full max-w-5xl mx-auto py-12 motion-safe:animate-fade-up">
+  <!-- Back to blog -->
+  <a
+    href="/blog"
+    class="mb-8 inline-flex items-center gap-1.5 text-sm font-semibold text-grey-custom transition-colors hover:text-green-primary"
+  >
+    <Icon name="tabler:arrow-left" class="h-4 w-4" />
+    Volver al blog
+  </a>
+
   <!-- Header Section -->
   <header class="mb-12">
-    <div class="flex flex-wrap items-center gap-4 mb-6">
-      <span
-        class="px-4 py-1.5 bg-green-light/10 text-green-light text-xs font-bold uppercase tracking-wider rounded-full border border-green-light/20"
+    <div class="mb-6 flex flex-wrap items-center gap-4">
+      <div
+        class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary"
       >
+        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
         {post.category}
-      </span>
-      <div class="flex items-center gap-2 text-gray-400 text-sm">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-grey-custom/70">
+        <Icon name="tabler:clock" class="h-4 w-4" />
         <span>{post.readingTime} min de lectura</span>
-        <span class="mx-1">•</span>
-        <span>{formattedDate}</span>
+        <span class="text-grey-custom/40">•</span>
+        <Icon name="tabler:calendar" class="h-4 w-4" />
+        <span>{date}</span>
       </div>
     </div>
 
     <h1
-      class="text-4xl md:text-5xl lg:text-6xl font-black text-green-light leading-[1.1] mb-8"
+      class="mb-8 text-4xl font-black leading-[1.1] tracking-tight text-green-light md:text-5xl lg:text-6xl"
     >
       {post.title}
     </h1>
 
     <p
-      class="text-lg md:text-xl text-gray-600 leading-relaxed font-medium mb-10 border-l-4 border-yellow-secondary pl-6"
+      class="mb-10 border-l-4 border-green-primary pl-6 text-lg font-medium leading-relaxed text-grey-custom md:text-xl"
     >
       {post.description}
     </p>
 
     <!-- Author Profile -->
     <div
-      class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 w-fit"
+      class="flex w-fit items-center gap-4 rounded-clinical-md border border-ui-border bg-ui-bg p-4"
     >
       <div class="relative">
         <img
           src={post.author.avatar || "/favicon.svg"}
           alt={post.author.name}
-          class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-gray-200"
+          class="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-ui-border"
           loading="lazy"
         />
         <div
-          class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-secondary border-2 border-white rounded-full"
+          class="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-white bg-green-secondary"
         >
         </div>
       </div>
       <div>
-        <p class="text-sm font-bold text-gray-900 leading-tight">
+        <p class="text-sm font-bold leading-tight text-green-light">
           {post.author.name}
         </p>
         <p
-          class="text-xs text-yellow-secondary font-medium uppercase tracking-tighter mt-0.5"
+          class="mt-0.5 text-xs font-medium uppercase tracking-tighter text-green-primary"
         >
           Especialista en Salud
         </p>
@@ -85,14 +107,23 @@ const date = formattedDate(post.createdAt);
 
   <!-- Hero Image -->
   {
-    post.image && (
-      <div class="relative aspect-21/9 w-full mb-16 overflow-hidden rounded-4xl shadow-2xl ring-1 ring-black/5">
-        <img
-          src={post.image.src}
-          alt={post.title}
-          class="w-full h-full object-cover"
-        />
-        <div class="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+    heroImageSrc && (
+      <div class="relative mb-16 w-full">
+        <div class="relative aspect-21/9 w-full overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5">
+          <img
+            src={heroImageSrc}
+            alt={post.title}
+            class="h-full w-full object-cover"
+          />
+          <div class="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+        </div>
+
+        <div class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md">
+          <span class="h-1.5 w-1.5 rounded-full bg-green-primary" />
+          <span class="text-[11px] font-bold uppercase tracking-widest text-green-primary">
+            Artículo DYRA
+          </span>
+        </div>
       </div>
     )
   }
@@ -104,16 +135,23 @@ const date = formattedDate(post.createdAt);
         class="prose prose-lg prose-gray max-w-none
                 prose-headings:text-green-light prose-headings:font-black
                 prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-8
-                prose-p:text-gray-600 prose-p:leading-8 prose-p:mb-8
-                prose-strong:text-gray-900
-                prose-ul:my-8 prose-li:text-gray-600"
+                prose-p:text-grey-custom prose-p:leading-8 prose-p:mb-8
+                prose-strong:text-green-light
+                prose-ul:my-8 prose-li:text-grey-custom"
       >
         {
-          post.contentBlocks?.map((block: ContentBlock) => {
+          contentBlocks.map((block: ContentBlock, index: number) => {
             switch (block.type) {
               case "PARAGRAPH":
+                const isFirstParagraph = index === firstParagraphIndex;
                 return (
-                  <p class="text-gray-600 leading-relaxed text-lg mb-8 first-letter:text-5xl first-letter:font-black first-letter:text-green-light first-letter:mr-3 first-letter:float-left">
+                  <p
+                    class={
+                      isFirstParagraph
+                        ? "text-grey-custom leading-relaxed text-lg mb-8 first-letter:text-5xl first-letter:font-black first-letter:text-green-light first-letter:mr-3 first-letter:float-left"
+                        : "text-grey-custom leading-relaxed text-lg mb-8"
+                    }
+                  >
                     {block.content}
                   </p>
                 );
@@ -137,10 +175,10 @@ const date = formattedDate(post.createdAt);
                 return (
                   <ul class="list-none space-y-6 my-10 pl-0">
                     {listItems.map((item) => (
-                      <li class="flex items-start gap-4 p-4 bg-gray-50/50 rounded-2xl border border-transparent hover:border-green-light/10 hover:bg-white transition-all duration-300">
-                        <div class="mt-1 shrink-0 w-6 h-6 rounded-lg bg-green-light/10 flex items-center justify-center">
+                      <li class="flex items-start gap-4 p-4 bg-ui-bg/50 rounded-clinical-md border border-transparent hover:border-green-primary/15 hover:bg-white transition-all duration-300">
+                        <div class="mt-1 shrink-0 w-6 h-6 rounded-clinical-sm bg-green-primary/10 flex items-center justify-center">
                           <svg
-                            class="w-4 h-4 text-green-light"
+                            class="w-4 h-4 text-green-primary"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -153,7 +191,7 @@ const date = formattedDate(post.createdAt);
                             />
                           </svg>
                         </div>
-                        <span class="text-gray-700 font-medium leading-relaxed">
+                        <span class="text-grey-custom font-medium leading-relaxed">
                           {item}
                         </span>
                       </li>
@@ -168,7 +206,7 @@ const date = formattedDate(post.createdAt);
                       “
                     </div>
                     <blockquote class="not-prose relative z-10 px-8 py-4 border-l-4 border-yellow-secondary">
-                      <p class="text-2xl md:text-3xl font-bold text-gray-800 italic leading-snug tracking-tight">
+                      <p class="text-2xl md:text-3xl font-bold text-green-light italic leading-snug tracking-tight">
                         {block.content}
                       </p>
                     </blockquote>
@@ -181,18 +219,18 @@ const date = formattedDate(post.createdAt);
               case "IMAGE":
                 return (
                   <figure class="not-prose my-16 group">
-                    <div class="relative overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100">
+                    <div class="relative overflow-hidden rounded-clinical-lg shadow-xl border border-ui-border">
                       <img
                         src={block.src}
                         alt={block.alt || ""}
                         class="w-full h-auto transform transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
                       />
-                      <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-[2.5rem]" />
+                      <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-clinical-lg" />
                     </div>
                     {block.alt && (
                       <figcaption class="mt-6 text-center">
-                        <span class="inline-block px-4 py-1 bg-gray-100 text-gray-500 text-xs font-bold uppercase tracking-widest rounded-full">
+                        <span class="inline-block px-4 py-1 bg-ui-bg text-grey-custom text-xs font-bold uppercase tracking-widest rounded-full">
                           {block.alt}
                         </span>
                       </figcaption>
@@ -208,10 +246,10 @@ const date = formattedDate(post.createdAt);
       </div>
 
       <!-- Tags Section -->
-      <div class="mt-16 pt-8 border-t border-gray-100">
+      <div class="mt-16 pt-8 border-t border-ui-border">
         <div class="flex items-center gap-3 flex-wrap">
           <span
-            class="text-sm font-bold text-gray-400 uppercase tracking-widest"
+            class="text-sm font-bold text-grey-custom uppercase tracking-widest"
             >Etiquetas:</span
           >
           <Tags tags={post.tags} />
@@ -220,25 +258,11 @@ const date = formattedDate(post.createdAt);
     </main>
 
     <!-- Sidebar / CTA -->
-    <aside class="lg:col-span-4 lg:sticky lg:top-24 h-fit">
-      <div
-        class="bg-green-light rounded-[2.5rem] p-8 text-white shadow-2xl shadow-green-light/30"
-      >
-        <h3 class="text-2xl font-black mb-4">¿Necesitas orientación?</h3>
-        <p class="text-white/80 text-sm leading-relaxed mb-8">
-          Nuestros especialistas están listos para ayudarte con tus dudas sobre
-          preparación, resultados y más.
-        </p>
-        <a
-          href="/contact"
-          class="block w-full text-center py-4 bg-white text-green-light font-bold rounded-2xl hover:bg-yellow-primary hover:text-white transition-all duration-300 shadow-lg"
-        >
-          Contactar ahora
-        </a>
-      </div>
+    <aside class="lg:col-span-4 lg:sticky lg:top-24 h-fit space-y-6">
+      <CTAContact />
 
-      <div class="mt-8 p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100">
-        <p class="text-xs text-gray-400 font-medium leading-relaxed italic">
+      <div class="rounded-clinical-md border border-ui-border bg-ui-bg p-6">
+        <p class="text-xs italic leading-relaxed text-grey-custom/70">
           * La información presentada es de carácter informativo. Consulta
           siempre a tu médico para una interpretación personalizada de tus
           estudios.
@@ -246,20 +270,31 @@ const date = formattedDate(post.createdAt);
       </div>
     </aside>
   </div>
-</article>
 
-<style>
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  <!-- Related posts -->
+  {
+    relatedPosts.length > 0 && (
+      <section class="mt-20 border-t border-ui-border pt-12">
+        <div class="motion-safe:animate-fade-up">
+          <div class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary">
+            <span class="h-1.5 w-1.5 rounded-full bg-green-primary" />
+            Sigue leyendo
+          </div>
+          <h2 class="mt-3 text-2xl font-black tracking-tight text-green-light sm:text-3xl">
+            Artículos relacionados
+          </h2>
+          <p class="mt-2 text-sm text-grey-custom sm:text-base">
+            Más contenido sobre salud y diagnóstico clínico que te puede
+            interesar.
+          </p>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {relatedPosts.map((relatedPost) => (
+            <PostCard post={relatedPost} />
+          ))}
+        </div>
+      </section>
+    )
   }
-  .animate-fade-up {
-    animation: fadeUp 0.6s ease-out forwards;
-  }
-</style>
+</article>

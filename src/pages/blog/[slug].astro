@@ -12,10 +12,11 @@ if (!post) {
   return Astro.redirect("/404");
 }
 
-const { postTitle } = Astro.props;
-
-const title = `${postTitle}`;
-const description = `Leé nuestro articulo sobre: ${postTitle}`;
+const title = `${post.title} | Blog DYRA`;
+const description =
+  post.metaDescription ||
+  post.description ||
+  `Leé nuestro artículo sobre ${post.title} en el blog de Laboratorio DYRA.`;
 ---
 
 <Layout title={title} description={description}>

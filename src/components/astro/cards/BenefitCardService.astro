@@ -8,27 +8,26 @@ interface Props {
 }
 
 const { title, description, icon } = Astro.props;
+
+const KNOWN_SETS = ["lucide:", "tabler:", "logos:"];
+const isAstroIcon = icon && !icon.startsWith("http") && KNOWN_SETS.some((s) => icon.startsWith(s));
+const isImgIcon = icon && icon.startsWith("http");
 ---
 
 <div
-  class="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/40 p-6 shadow-lg backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:bg-white/60 hover:shadow-xl"
+  class="group relative overflow-hidden rounded-clinical-lg border border-ui-border bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
 >
-  <div
-    class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-green-primary/5 blur-2xl transition-all duration-500 group-hover:bg-green-primary/10"
-  >
-  </div>
-
   <div class="relative flex flex-col gap-4">
     <div
-      class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110"
+      class="flex h-12 w-12 items-center justify-center rounded-clinical-sm bg-white shadow-xs ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110"
     >
       {
-        icon && !icon.startsWith("http") ? (
+        isAstroIcon ? (
           <Icon name={icon} class="h-7 w-7 text-green-primary" />
-        ) : icon ? (
+        ) : isImgIcon ? (
           <img src={icon} alt={title} class="h-7 w-7 object-contain" />
         ) : (
-          <div class="h-7 w-7 bg-green-primary/10 rounded-lg" />
+          <div class="h-7 w-7 bg-green-primary/10 rounded-clinical-sm" />
         )
       }
     </div>
@@ -37,7 +36,7 @@ const { title, description, icon } = Astro.props;
       <h3 class="text-base font-bold tracking-tight text-green-primary">
         {title}
       </h3>
-      <p class="mt-2 text-sm leading-relaxed text-grey/90">
+      <p class="mt-2 text-sm leading-relaxed text-grey-custom">
         {description}
       </p>
     </div>

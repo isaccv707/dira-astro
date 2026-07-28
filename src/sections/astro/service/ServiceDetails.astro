@@ -1,0 +1,51 @@
+---
+import type { Details } from "../../../interfaces/service.interface";
+import ServiceDetailCard from "../../../components/astro/cards/ServiceDetailCard.astro";
+
+interface Props {
+  details: Details[];
+}
+
+const { details } = Astro.props;
+if (!details || details.length === 0) return;
+---
+
+<section class="space-y-8">
+  <div
+    class="motion-safe:animate-fade-up"
+    style="animation-fill-mode:backwards;"
+  >
+    <div
+      class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary"
+    >
+      <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
+      Detalles
+    </div>
+    <h2
+      class="mt-3 text-2xl font-black tracking-tight text-green-light sm:text-3xl"
+    >
+      Qué incluye este servicio
+    </h2>
+    <p class="mt-2 max-w-xl text-sm leading-relaxed text-grey-custom sm:text-base">
+      Un vistazo a las áreas y procesos que cubrimos dentro de este servicio.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      details.map((detail, index) => (
+        <div
+          class="motion-safe:animate-fade-up"
+          style={`animation-delay:${(index % 4) * 100}ms`}
+        >
+          <ServiceDetailCard
+            title={detail.title}
+            description={detail.description}
+            image={detail.image}
+            index={index}
+          />
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
+import ImgCarouselHome from "../../../components/react/ui/ImgCarouselHome";
+import Carousel from "../../../components/react/carousel/Carousel";
+
+let banners: Awaited<ReturnType<typeof fetchActiveBanners>> = [];
+try {
+  banners = await fetchActiveBanners("HOME");
+} catch (error) {
+  console.error("Error al obtener los banners:", error);
+}
+if (!banners || banners.length === 0) return null;
+---
+
+<Carousel client:load slidesPreview={1}>
+  {
+    banners.map(({ imageUrl, mobileImageUrl }, index) => {
+      const isLCP = index === 0;
+
+      return (
+        <ImgCarouselHome
+          imageUrl={imageUrl}
+          mobileImageUrl={mobileImageUrl}
+          isLCP={isLCP}
+          index={index}
+        />
+      );
+    })
+  }
+</Carousel>

@@ -1,27 +1,27 @@
 import Accordion from "../accordion/Accordion";
 import NavigationAccordion from "../accordion/NavigationAccordion";
 import NavLinkButton from "../navigation/NavLinkButton";
-import {
-  getToKnowRoutes,
-  routes,
-  servicesRoutes,
-} from "../../../routes/routes";
+import { getToKnowRoutes, routes, type Routes } from "../../../routes/routes";
 import { closeDrawer, drawerStore } from "../../../stores/drawerStore";
 import Drawer from "./Drawer";
-import { SOCIAL_NETWORKS } from "../../../constants/socialNetworks";
-import ButtonNetworkIcons from "../buttons/ButtonNetworkIcons";
+import { buildSocialNetworks } from "../../../constants/socialNetworks";
+import { useActiveBranchContact } from "../../../hooks/useActiveBranchContact";
 import { useStore } from "@nanostores/react";
 
 interface NavDrawerProps {
+  services: Routes[];
   id?: string;
   title?: string;
 }
 
 export const NavDrawer = ({
+  services,
   id = "DRAWER_NAVBAR",
   title = "Menu",
 }: NavDrawerProps) => {
   const { isOpen, view } = useStore(drawerStore);
+  const contact = useActiveBranchContact();
+  const socialNetworks = buildSocialNetworks(contact);
 
   if (!isOpen || view !== id) return null;
 
@@ -41,7 +41,7 @@ export const NavDrawer = ({
           ))}
 
           <Accordion id={"services"} title={"Servicios"}>
-            <NavigationAccordion routes={servicesRoutes} />
+            <NavigationAccordion routes={services} />
           </Accordion>
 
           <Accordion id={"our"} title={"Conócenos"}>
@@ -49,21 +49,24 @@ export const NavDrawer = ({
           </Accordion>
         </nav>
 
-        <div className="mt-auto pt-10 flex flex-col gap-4 border-t border-gray-100 dark:border-gray-800">
+        <div className="mt-auto pt-10 flex flex-col gap-4 border-t border-ui-border">
           {/* Redes Sociales */}
           <nav className="flex gap-4 items-center">
-            {SOCIAL_NETWORKS.map(({ icon, name, route }) => (
-              <ButtonNetworkIcons
+            {socialNetworks.map(({ icon, name, route }) => (
+              <NavLinkButton
                 key={name}
+                path={route}
                 icon={icon}
-                name={name}
-                route={route}
+                iconClassName="w-7 h-7"
+                variant="icon"
+                size="icon"
+                ariaLabel={name}
               />
             ))}
           </nav>
 
           {/* Texto de Copyright */}
-          <p className="text-xs text-gray-400 dark:text-gray-500 font-medium tracking-wide">
+          <p className="text-xs text-grey-custom/70 font-medium tracking-wide">
             © {new Date().getFullYear()} dyranalitica. Todos los derechos
             reservados.
           </p>

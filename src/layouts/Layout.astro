@@ -5,10 +5,11 @@ import "../styles/global.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ModalManager from "../components/react/modal/ModalManager";
-import BranchSelectorSection from "../sections/react/BranchSelector-section";
-import FloatingActionsSection from "../sections/react/FloatingActions-section";
+import BranchSelectorManager from "../components/react/branch/BranchSelectorManager";
+import FloatingActions from "../sections/react/FloatingActions";
 import DrawerManager from "../components/react/drawer/DrawerManager";
-import FooterSection from "../sections/astro/layout/Footer-section.astro";
+import Footer from "../sections/astro/layout/Footer.astro";
+import { getServicesNavRoutes } from "../api/servicesApi/serviceApi";
 
 interface Props {
   title: string;
@@ -30,11 +31,13 @@ const {
 
 const canonicalURL = new URL(
   Astro.url.pathname,
-  Astro.site || "https://dira.mx",
+  Astro.site || "https://dyranalitica.com",
 );
 const absoluteImageUrl = new URL(image, Astro.url.origin).toString();
 
 const GA_MEASUREMENT_ID = "AW-17974653170";
+
+const servicesRoutes = await getServicesNavRoutes();
 ---
 
 <!doctype html>
@@ -105,7 +108,7 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
     </style>
   </head>
   <body
-    class="min-h-screen bg-gray-100 font-sans text-gray-900 antialiased flex flex-col"
+    class="min-h-screen bg-ui-bg font-sans text-green-light antialiased flex flex-col"
   >
     <Header />
 
@@ -117,12 +120,12 @@ const GA_MEASUREMENT_ID = "AW-17974653170";
       <slot />
     </main>
     <ToastContainer client:only="react" />
-    <FloatingActionsSection client:load />
+    <FloatingActions client:load />
 
     <ModalManager client:load />
-    <DrawerManager client:load />
+    <DrawerManager client:load services={servicesRoutes} />
 
-    <BranchSelectorSection client:load />
-    <FooterSection />
+    <BranchSelectorManager client:load />
+    <Footer />
   </body>
 </html>

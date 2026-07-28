@@ -1,18 +1,33 @@
+import { apiGet } from "../apiGet";
 import type { Banner } from "../../interfaces/banner.interface";
+import { resolveBranchId } from "../../stores/branchStore";
+import { createTtlCache } from "../../utils/ttlCache";
 
-const API_URL = import.meta.env.PUBLIC_API_URL;
+const bannersCache = createTtlCache<Banner[]>();
 
 export const fetchActiveBanners = async (
   placement: string,
+  branchId?: string,
 ): Promise<Banner[]> => {
+  const resolvedBranchId = branchId ?? resolveBranchId();
+  const cacheKey = `${placement}:${resolvedBranchId ?? "__no_branch__"}`;
+
+  const cached = bannersCache.get(cacheKey);
+  if (cached) return cached;
+
   try {
-    const response = await fetch(`${API_URL}/banners/active/${placement}`);
-    if (!response.ok) {
-      throw new Error(`Error retrieving banners: ${response.statusText}`);
-    }
-    return await response.json();
+    const data = await apiGet<Banner[]>(`/banners/active/${placement}`, {
+      branchId: resolvedBranchId,
+    });
+    const result = data ?? [];
+    bannersCache.set(cacheKey, result);
+    return result;
   } catch (error) {
-    console.error("Error en fetchActiveBanners:", error);
-    return [];
+    const stale = bannersCache.getStale(cacheKey);
+    if (stale) {
+      console.error("Error fetching banners, serving stale cache:", error);
+      return stale;
+    }
+    throw error;
   }
 };

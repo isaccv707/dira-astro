@@ -6,16 +6,12 @@ interface Props {
 const { tags } = Astro.props;
 ---
 
-<div>
-  <div class="flex flex-wrap gap-1 mt-2">
-    {
-      tags.map((tag) => (
-        <div class="bg-green-light rounded-2xl">
-          <span class="px-3 py-1 rounded-full text-xs font-medium text-white shadow-3xl">
-            {tag}
-          </span>
-        </div>
-      ))
-    }
-  </div>
+<div class="flex flex-wrap gap-2 mt-2">
+  {
+    tags.map((tag) => (
+      <span class="rounded-clinical-sm border border-green-primary/15 bg-green-primary/8 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary">
+        #{tag}
+      </span>
+    ))
+  }
 </div>

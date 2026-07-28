@@ -1,0 +1,230 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Study } from "../../interfaces/study.interface";
+import HeaderBySection from "../../components/astro/ui/HeaderBySection.astro";
+import NavLinkButton from "../../components/react/navigation/NavLinkButton";
+import StudyActionCard from "../../components/react/cards/StudyActionCard";
+import CardStudy from "../../components/react/cards/CardStudy";
+import { Buttonstyles } from "../../styles/buttonsStyles";
+
+interface Props {
+  study: Study | null;
+  recommendedStudies?: Study[];
+}
+
+const { study, recommendedStudies = [] } = Astro.props;
+
+if (!study) {
+  return null; // Or a redirect, but the page already handles this
+}
+
+const { name, code, description, preparation, sampleType, deliveryTime } =
+  study;
+---
+
+<section class="min-h-screen bg-ui-bg pb-20">
+  <div class="bg-white pt-10 pb-16 border-b border-ui-border">
+    <nav
+      aria-label="Breadcrumb"
+      class="mb-6 flex items-center gap-1.5 text-xs text-grey-custom/70"
+    >
+      <a href="/" class="transition-colors hover:text-green-primary"
+        >Inicio</a
+      >
+      <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
+      <a href="/quoter" class="transition-colors hover:text-green-primary"
+        >Cotizador</a
+      >
+      <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
+      <span class="max-w-50 truncate font-semibold text-green-light sm:max-w-xs"
+        >{name}</span
+      >
+    </nav>
+
+    <HeaderBySection textHeader="Detalle del Estudio" title={name} textColor="black" />
+
+    <div class="mt-6 flex flex-wrap gap-2">
+      <div
+        class="flex items-center gap-2 rounded-clinical-sm border border-green-light/15 bg-green-light/8 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-green-light"
+      >
+        <Icon name="lucide:clipboard-list" class="h-3 w-3" />
+        <span>Código: {code}</span>
+      </div>
+      {
+        sampleType && (
+          <div class="flex items-center gap-2 rounded-clinical-sm border border-yellow-secondary/15 bg-yellow-secondary/8 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-yellow-secondary">
+            <span>{sampleType}</span>
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="mt-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Left Column: Info -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Description Section -->
+        <div
+          class="bg-white p-8 rounded-clinical-lg shadow-xs border border-ui-border"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div
+              class="p-3 bg-green-secondary/10 rounded-clinical-md text-green-secondary"
+            >
+              <Icon name="lucide:file-text" class="h-6 w-6" />
+            </div>
+            <h2 class="text-xl font-black tracking-tight text-green-light">
+              Descripción del Estudio
+            </h2>
+          </div>
+          <p class="text-grey-custom leading-relaxed">
+            {
+              description ||
+                "Este estudio clínico proporciona información valiosa para el diagnóstico y seguimiento de diversos padecimientos. Realizado bajo los más altos estándares de calidad."
+            }
+          </p>
+        </div>
+
+        <!-- Preparation & Sample -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Preparation -->
+          <div
+            class="bg-white p-8 rounded-clinical-lg shadow-xs border border-ui-border"
+          >
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="p-3 bg-yellow-primary/10 rounded-clinical-md text-yellow-secondary"
+              >
+                <Icon name="lucide:flask-conical" class="h-6 w-6" />
+              </div>
+              <h2 class="text-lg font-black tracking-tight text-green-light">
+                Preparación
+              </h2>
+            </div>
+            <p class="text-sm text-grey-custom leading-relaxed">
+              {
+                preparation ||
+                  "No requiere preparación especial para este estudio."
+              }
+            </p>
+          </div>
+
+          <!-- Details Stats -->
+          <div
+            class="bg-white p-8 rounded-clinical-lg shadow-xs border border-ui-border flex flex-col justify-between"
+          >
+            <div class="space-y-6">
+              <div class="flex items-center gap-4">
+                <div
+                  class="p-2 bg-green-light/10 rounded-clinical-sm text-green-light"
+                >
+                  <Icon name="lucide:test-tube-2" class="h-5 w-5" />
+                </div>
+                <div>
+                  <p
+                    class="text-[10px] font-bold uppercase tracking-wider text-grey-custom"
+                  >
+                    Tipo de Muestra
+                  </p>
+                  <p class="text-sm font-bold text-green-light">
+                    {sampleType || "No especificado"}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div
+                  class="p-2 bg-green-secondary/10 rounded-clinical-sm text-green-secondary"
+                >
+                  <Icon name="lucide:clock" class="h-5 w-5" />
+                </div>
+                <div>
+                  <p
+                    class="text-[10px] font-bold uppercase tracking-wider text-grey-custom"
+                  >
+                    Tiempo de Entrega
+                  </p>
+                  <p class="text-sm font-bold text-green-light">
+                    {deliveryTime} horas
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div
+          class="p-8 rounded-clinical-lg bg-linear-to-r from-green-primary to-green-secondary text-white overflow-hidden relative"
+        >
+          <div
+            class="flex flex-col md:flex-row items-center justify-between gap-6"
+          >
+            <div class="text-center md:text-left">
+              <h3 class="text-2xl font-black mb-2 text-white">
+                ¿Buscas otros estudios?
+              </h3>
+              <p class="text-white/80 max-w-md">
+                Contamos con un amplio catálogo de análisis clínicos para tu
+                salud.
+              </p>
+            </div>
+            <NavLinkButton
+              path="/quoter"
+              variant="cta"
+              size="lg"
+              text="Explorar Catálogo"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Action Card -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-24 space-y-6">
+          <StudyActionCard study={study} client:load />
+
+          <div class="flex justify-center">
+            <button
+              onclick="history.back()"
+              class:list={[
+                "cursor-pointer",
+                Buttonstyles({ variant: "text", size: "none" }),
+              ]}
+            >
+              <Icon name="lucide:arrow-left" class="h-5 w-5" />
+              Regresar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {
+      recommendedStudies.length > 0 && (
+        <div class="mt-20">
+          <div class="motion-safe:animate-fade-up">
+            <h2 class="text-2xl font-black tracking-tight text-green-light sm:text-3xl">
+              Estudios recomendados
+            </h2>
+            <p class="mt-2 text-sm text-grey-custom sm:text-base">
+              Otros análisis que también podrían interesarte
+            </p>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
+            {recommendedStudies.map((recommended, index) => (
+              <div
+                class="motion-safe:animate-fade-up"
+                style={`animation-delay:${(index % 4) * 100}ms`}
+              >
+                <CardStudy study={recommended} client:visible />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>

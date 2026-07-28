@@ -12,8 +12,17 @@ export interface ReviewResponse {
     updatedAt: string;
 }
 
+export interface ReviewPaginatedResponse {
+    data: ReviewResponse[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
 export interface ReviewPayload {
-   fullName: string;
+    fullName: string;
     rating: number;
     comment: string;
+    branchId: string;
 }

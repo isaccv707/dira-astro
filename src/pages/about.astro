@@ -5,11 +5,14 @@ import Layout from "../layouts/Layout.astro";
 import { carouselHomeData } from "../data/carousel/carouselHome-data";
 import HeroAbout from "../sections/astro/hero/HeroAbout.astro";
 import CompanyValues from "../sections/astro/about/CompanyValues.astro";
-import MetricsDyra from "../sections/react/common/MetricsDyra-section";
-import ReviewSection from "../sections/astro/reviews/Review-section.astro";
+import MetricsDyra from "../sections/react/common/MetricsDyra";
+import Review from "../sections/astro/review/Review.astro";
 ---
 
-<Layout title="" description="">
+<Layout
+  title="Quiénes Somos | Laboratorio DYRA"
+  description="Conoce a Laboratorio DYRA: nuestra historia, valores y el equipo detrás de un diagnóstico clínico confiable, humano y tecnológico."
+>
   <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
     <HeroAbout />
 
@@ -39,6 +42,6 @@ import ReviewSection from "../sections/astro/reviews/Review-section.astro";
   <MetricsDyra client:visible />
 
   <div class="mt-14">
-    <ReviewSection />
+    <Review />
   </div>
 </Layout>

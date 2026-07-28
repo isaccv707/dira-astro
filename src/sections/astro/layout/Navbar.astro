@@ -1,0 +1,54 @@
+---
+import Dropdown from "../../../components/astro/ui/Dropdown.astro";
+import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
+import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
+import { getActiveBranchResultsUrl } from "../../../api/branchesApi/branchesApi";
+import { getToKnowRoutes, routes } from "../../../routes/routes";
+
+const currentPath = Astro.url.pathname;
+const servicesRoutes = await getServicesNavRoutes();
+const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
+---
+
+<nav class="hidden md:flex items-center gap-6">
+  <div class="flex gap-5">
+    {
+      routes.map(({ path, text }) => (
+        <div>
+          <a href={path} class="text-green-light hover:text-yellow-primary">
+            {text}
+          </a>
+          {currentPath === path ? (
+            <div
+              transition:name="menu-line"
+              class="border-b-2 border-yellow-primary"
+            />
+          ) : (
+            <div class="border-b-2 border-transparent" />
+          )}
+        </div>
+      ))
+    }
+  </div>
+  <Dropdown
+    text={"Servicios"}
+    routes={servicesRoutes.map(({ path, text }) => ({
+      label: text,
+      href: path,
+    }))}
+  />
+  <NavLinkButton
+    path={resultsUrl}
+    text={"Resultados"}
+    variant="primary"
+    size="sm"
+    target={resultsUrl.startsWith("http") ? "_blank" : "_self"}
+  />
+  <Dropdown
+    text={"Conócenos"}
+    routes={getToKnowRoutes.map(({ path, text }) => ({
+      label: text,
+      href: path,
+    }))}
+  />
+</nav>

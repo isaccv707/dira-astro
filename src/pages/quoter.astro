@@ -1,8 +1,32 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import QuoterWrapper from "../components/react/wrappers/QuoterWrapper";
+import Quoter from "../sections/react/quoter/Quoter";
+import QuoteDetails from "../sections/react/quoter/QuoteDetails";
 ---
 
-<Layout title="" description="">
-  <QuoterWrapper client:load />
+<Layout
+  title="Cotizador de Estudios | Laboratorio DYRA"
+  description="Arma tu cotización de estudios clínicos en minutos: elige tus análisis, consulta precios y agenda tu cita en Laboratorio DYRA."
+>
+  <section class="w-full py-6 sm:py-10">
+    <div
+      class="grid gap-6 lg:gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)] items-start"
+    >
+      <section class="w-full">
+        <div
+          class="h-full rounded-clinical-lg border border-ui-border bg-white shadow-xs overflow-hidden"
+        >
+          <Quoter client:load />
+        </div>
+      </section>
+
+      <section class="w-full lg:sticky lg:top-6">
+        <div
+          class="h-full rounded-clinical-lg border border-ui-border bg-white shadow-xs overflow-hidden"
+        >
+          <QuoteDetails client:load />
+        </div>
+      </section>
+    </div>
+  </section>
 </Layout>

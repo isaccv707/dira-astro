@@ -10,12 +10,14 @@ interface useGetAllPostsParams {
   page?: number;
   limit?: number;
   search?: string;
+  branchId?: string;
 }
 
 export const useGetAllPosts = ({
   limit = 10,
   page = 1,
   search,
+  branchId,
 }: useGetAllPostsParams) => {
   // 1. Estados locales para suplir lo que hacía RTK Query
   const [posts, setPosts] = useState<Post[]>([]);
@@ -30,12 +32,9 @@ export const useGetAllPosts = ({
         setIsLoading(true);
         setError(null);
 
-        const response = await fetchGetAllPosts({ page, limit, search });
-        const normalizedResponse = Array.isArray(response)
-          ? response[0]
-          : response;
-        setPosts(normalizedResponse?.data ?? []);
-        setMeta(normalizedResponse?.meta);
+        const response = await fetchGetAllPosts({ page, limit, search, branchId });
+        setPosts(response.data);
+        setMeta(response.meta);
       } catch (err) {
         console.error("Error en useGetAllPosts hook:", err);
         setError(
@@ -49,7 +48,7 @@ export const useGetAllPosts = ({
     };
 
     getPosts();
-  }, [page, limit, search]);
+  }, [page, limit, search, branchId]);
 
   return {
     posts,

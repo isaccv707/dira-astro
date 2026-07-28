@@ -9,7 +9,7 @@ export const ErrorMessage = ({ id, error }: ErrorProps) => {
     return (
        <p
       id={id}
-      className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-1"
+      className="text-xs text-red-custom bg-red-custom/5 border border-red-custom/20 rounded-clinical-sm px-3 py-1"
     >
       {error?.message}
     </p>

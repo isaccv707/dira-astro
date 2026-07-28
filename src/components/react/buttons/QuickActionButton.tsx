@@ -1,24 +1,33 @@
 import { Icon } from "@iconify/react";
-import { modalStore, openModal } from "../../../stores/modalStore";
-import { getAllBranches } from "../../../api/branchesApi/branchesApi";
+import { openModal } from "../../../stores/modalStore";
+import {
+  getAllBranches,
+  getActiveBranchResultsUrl,
+} from "../../../api/branchesApi/branchesApi";
+import { getStoredBranchId } from "../../../stores/branchStore";
 import { useState } from "react";
-import ModalBranches from "../modal/ModalBranches";
-import { useStore } from "@nanostores/react";
+import Button from "./Button";
 
 interface QuickActionButtonProps {
   text: string;
-  bgColor?: string;
+  description?: string;
 }
 
-const QuickActionButton = ({
-  text,
-  bgColor = "bg-green-secondary",
-}: QuickActionButtonProps) => {
+const QuickActionButton = ({ text, description }: QuickActionButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { isOpen } = useStore(modalStore);
-  const handleOpenModal = async () => {
+  const handleClick = async () => {
     setIsLoading(true);
     try {
+      const activeBranchId = getStoredBranchId();
+      const resultsUrl = await getActiveBranchResultsUrl(
+        activeBranchId ?? undefined,
+      );
+
+      if (resultsUrl) {
+        window.open(resultsUrl, "_blank", "noopener,noreferrer");
+        return;
+      }
+
       const branches = await getAllBranches();
       openModal("MODAL_BRANCHES", {
         data: branches,
@@ -34,24 +43,34 @@ const QuickActionButton = ({
   };
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={handleOpenModal}
-        disabled={isLoading}
-        className={`flex items-center justify-center gap-4 text-white font-semibold rounded-xl shadow-md 
-          transition-all duration-300 ${bgColor} hover:brightness-110 w-full h-10 p-10 md:w-80 md:h-auto md:p-6 cursor-pointer disabled:opacity-70`}
-      >
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 text-2xl">
-          {isLoading ? (
-            <Icon icon="line-md:loading-twotone-loop" />
-          ) : (
-            <Icon icon={"lucide:test-tube-diagonal"} />
-          )}
-        </div>
-        <span className="text-lg text-center">{text}</span>
-      </button>
-    </>
+    <Button
+      type="button"
+      onClick={handleClick}
+      disabled={isLoading}
+      variant="tile"
+      size="none"
+      align="left"
+      className="group w-full gap-4 p-5 md:w-80"
+    >
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-secondary/10 text-2xl text-green-secondary transition-colors duration-300 group-hover:bg-green-secondary/20">
+        {isLoading ? (
+          <Icon icon="line-md:loading-twotone-loop" />
+        ) : (
+          <Icon icon="lucide:test-tube-diagonal" />
+        )}
+      </div>
+
+      <div className="min-w-0">
+        <span className="block text-base font-bold text-green-light">
+          {text}
+        </span>
+        {description && (
+          <span className="mt-0.5 block text-xs text-grey-custom">
+            {description}
+          </span>
+        )}
+      </div>
+    </Button>
   );
 };
 
