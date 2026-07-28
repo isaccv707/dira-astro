@@ -92,12 +92,6 @@ const DrawerStudies = ({
               width="full"
               size={"md"}
             />
-            {/* <button
-                            onClick={() => close(id)}
-                            className="w-full py-3 text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors uppercase tracking-widest cursor-pointer"
-                        >
-                            Seguir Comprando
-                        </button> */}
           </div>
         </div>
       </div>
