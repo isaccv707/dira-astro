@@ -17,6 +17,7 @@ export interface Details {
   title: string;
   description: string;
   image?: string | null;
+  imageMobile?: string | null;
 }
 
 export interface Count {

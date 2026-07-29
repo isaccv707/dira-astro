@@ -1,30 +1,51 @@
 import React from "react";
 import NavLinkButton from "../navigation/NavLinkButton";
 import type { Post } from "../../../api/postsApi/post.interface";
+import {
+  getCloudinaryUrl,
+  getCloudinarySrcSet,
+} from "../../../utils/cloudinary";
 
 interface PostCardProps {
   post: Post;
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { image, title, author, description, tags, slug, category } = post;
+  const { image, imageMobile, title, author, description, tags, slug, category } = post;
 
-  // The API returns `image` as a plain URL string, not the `ImageMetadata`
-  // object the shared Post interface declares — handle both shapes safely.
+  // The API returns `image`/`imageMobile` as plain URL strings, not the
+  // `ImageMetadata` object the shared Post interface declares — handle both shapes safely.
   const rawImage = image as unknown as string | ImageMetadata | undefined;
   const imageSrc = typeof rawImage === "string" ? rawImage : rawImage?.src;
+  const rawMobileImage = imageMobile as unknown as string | ImageMetadata | undefined;
+  const mobileImageSrc =
+    typeof rawMobileImage === "string" ? rawMobileImage : rawMobileImage?.src;
 
   return (
     <article className="w-full h-full bg-white border border-ui-border rounded-clinical-md shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col overflow-hidden group">
       {/* Image Container with fixed Aspect Ratio */}
       {imageSrc && (
         <div className="relative aspect-video overflow-hidden">
-          <img
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            src={imageSrc}
-            alt={title}
-            loading="lazy"
-          />
+          <picture>
+            <source
+              media="(min-width: 768px)"
+              srcSet={getCloudinarySrcSet(imageSrc, [640, 768, 1024], {
+                w: 16,
+                h: 9,
+              })}
+            />
+            <img
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              src={getCloudinaryUrl(mobileImageSrc || imageSrc, {
+                width: 640,
+                height: 360,
+              })}
+              alt={title}
+              loading="lazy"
+              width={640}
+              height={360}
+            />
+          </picture>
           <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-300" />
 
           {/* Category Tag */}

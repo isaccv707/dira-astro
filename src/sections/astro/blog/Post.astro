@@ -6,6 +6,10 @@ import Tags from "../../../components/astro/Tags.astro";
 import CTAContact from "../../../components/astro/CTA/CTAContact.astro";
 import PostCard from "../../../components/react/cards/PostCard";
 import { formattedDate } from "../../../utils/formattedDate";
+import {
+  getCloudinaryUrl,
+  getCloudinarySrcSet,
+} from "../../../utils/cloudinary";
 
 interface Props {
   post: Post | undefined;
@@ -16,11 +20,16 @@ if (!post) return;
 
 const date = formattedDate(post.createdAt);
 
-// The API returns `image` as a plain URL string, not the `ImageMetadata`
-// object the shared Post interface declares — handle both shapes safely.
+// The API returns `image`/`imageMobile` as plain URL strings, not the
+// `ImageMetadata` object the shared Post interface declares — handle both shapes safely.
 const rawImage = post.image as unknown as string | ImageMetadata | undefined;
-const heroImageSrc =
-  typeof rawImage === "string" ? rawImage : rawImage?.src;
+const heroImageSrc = typeof rawImage === "string" ? rawImage : rawImage?.src;
+const rawMobileImage = post.imageMobile as unknown as
+  | string
+  | ImageMetadata
+  | undefined;
+const heroImageMobileSrc =
+  typeof rawMobileImage === "string" ? rawMobileImage : rawMobileImage?.src;
 
 const contentBlocks = post.contentBlocks ?? [];
 const firstParagraphIndex = contentBlocks.findIndex(
@@ -110,11 +119,29 @@ try {
     heroImageSrc && (
       <div class="relative mb-16 w-full">
         <div class="relative aspect-21/9 w-full overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5">
-          <img
-            src={heroImageSrc}
-            alt={post.title}
-            class="h-full w-full object-cover"
-          />
+          <picture>
+            <source
+              media="(min-width: 768px)"
+              srcset={getCloudinarySrcSet(
+                heroImageSrc,
+                [768, 1024, 1280, 1536],
+                { w: 21, h: 9 },
+              )}
+            />
+            <img
+              src={getCloudinaryUrl(heroImageMobileSrc || heroImageSrc, {
+                width: 800,
+                height: 343,
+              })}
+              alt={post.title}
+              class="h-full w-full object-cover"
+              loading="eager"
+              fetchpriority="high"
+              decoding="sync"
+              width={800}
+              height={343}
+            />
+          </picture>
           <div class="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
         </div>
 
