@@ -20,14 +20,10 @@ if (!post) return;
 
 const date = formattedDate(post.createdAt);
 
-// The API returns `image`/`imageMobile` as plain URL strings, not the
-// `ImageMetadata` object the shared Post interface declares — handle both shapes safely.
 const rawImage = post.image as unknown as string | ImageMetadata | undefined;
 const heroImageSrc = typeof rawImage === "string" ? rawImage : rawImage?.src;
 const rawMobileImage = post.imageMobile as unknown as
-  | string
-  | ImageMetadata
-  | undefined;
+  string | ImageMetadata | undefined;
 const heroImageMobileSrc =
   typeof rawMobileImage === "string" ? rawMobileImage : rawMobileImage?.src;
 
@@ -46,7 +42,6 @@ try {
 ---
 
 <article class="w-full max-w-5xl mx-auto py-12 motion-safe:animate-fade-up">
-  <!-- Back to blog -->
   <a
     href="/blog"
     class="mb-8 inline-flex items-center gap-1.5 text-sm font-semibold text-grey-custom transition-colors hover:text-green-primary"
@@ -55,7 +50,6 @@ try {
     Volver al blog
   </a>
 
-  <!-- Header Section -->
   <header class="mb-12">
     <div class="mb-6 flex flex-wrap items-center gap-4">
       <div
@@ -118,28 +112,28 @@ try {
   {
     heroImageSrc && (
       <div class="relative mb-16 w-full">
-        <div class="relative aspect-21/9 w-full overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5">
+        <div class="relative aspect-4/3 md:aspect-16/7 w-full overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5">
           <picture>
             <source
               media="(min-width: 768px)"
               srcset={getCloudinarySrcSet(
                 heroImageSrc,
-                [768, 1024, 1280, 1536],
-                { w: 21, h: 9 },
+                [1024, 1280, 1600],
+                { w: 16, h: 7 },
               )}
             />
             <img
               src={getCloudinaryUrl(heroImageMobileSrc || heroImageSrc, {
-                width: 800,
-                height: 343,
+                width: 1200,
+                height: 900,
               })}
               alt={post.title}
               class="h-full w-full object-cover"
               loading="eager"
               fetchpriority="high"
               decoding="sync"
-              width={800}
-              height={343}
+              width={1200}
+              height={900}
             />
           </picture>
           <div class="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />

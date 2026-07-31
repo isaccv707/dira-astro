@@ -26,6 +26,7 @@ const {
   name,
   description = "",
   imageUrl = "",
+  mobileImageUrl,
   benefits = [],
   details = [],
 } = service;
@@ -40,6 +41,7 @@ const {
     name={name}
     description={description}
     imageUrl={imageUrl}
+    mobileImageUrl={mobileImageUrl}
   />
 
   <ServiceBenefitsSection benefits={benefits} />

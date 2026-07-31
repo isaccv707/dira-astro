@@ -7,6 +7,9 @@ interface ImgCarouselHomeProps {
   index: number;
 }
 
+// Marketing only supplies 2 assets per banner: imageUrl (desktop) and mobileImageUrl (mobile).
+// There is no separate tablet asset — the tablet breakpoint just requests a smaller
+// Cloudinary crop of the same desktop image (same 2:1 ratio, lower width).
 const mobileDims = { width: 800, height: 1000 };
 const tabletDims = { width: 1400, height: 700 };
 const desktopDims = { width: 2000, height: 1000 };
