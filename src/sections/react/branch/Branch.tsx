@@ -16,6 +16,7 @@ const BranchSection = () => {
 
   useEffect(() => {
     const savedBranchId = getStoredBranchId();
+
     if (savedBranchId) {
       getOneBranch(savedBranchId)
         .then((data) => {
