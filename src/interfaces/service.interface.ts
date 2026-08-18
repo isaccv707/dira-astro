@@ -4,6 +4,7 @@
 //     | "home-shots"
 
 import type { Study } from "./study.interface";
+import type { Branch } from "./branch.interface";
 
 export interface Benefits {
   id: string;
@@ -24,6 +25,12 @@ export interface Count {
   studies: number;
 }
 
+export interface ServicePriceSheet {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export interface Service {
   id?: string;
   name: string;
@@ -33,8 +40,12 @@ export interface Service {
   imageUrl?: string;
   mobileImageUrl?: string;
   isActive?: boolean;
+  branchId?: string;
+  branch?: Branch;
   benefits?: Benefits[];
   details?: Details[];
-  _count?: Count;
+  priceSheetId?: string | null;
+  priceSheet?: ServicePriceSheet | null;
   studies?: Study[];
+  _count?: Count;
 }

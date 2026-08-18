@@ -7,13 +7,13 @@ interface Props {
 }
 
 const { service } = Astro.props;
-const { _count } = service;
-const hasStudies = (_count?.studies ?? 0) > 0;
+const { priceSheet, studies = [] } = service;
+const hasStudies = studies.length > 0;
 ---
 
 <section id="servicio-detalle" class="scroll-mt-24">
   {
-    hasStudies && (
+    priceSheet && hasStudies ? (
       <div class="space-y-8">
         <div
           class="motion-safe:animate-fade-up"
@@ -24,15 +24,22 @@ const hasStudies = (_count?.studies ?? 0) > 0;
             Catálogo de estudios
           </div>
           <h2 class="mt-3 text-2xl font-black tracking-tight text-green-light sm:text-3xl">
-            {`Estudios de ${service.name} disponibles`}
+            {priceSheet.name}
           </h2>
           <p class="mt-2 max-w-xl text-sm leading-relaxed text-grey-custom sm:text-base">
-            Explora nuestro catálogo con una gran variedad de estudios y
-            encuentra el ideal para ti.
+            {priceSheet.description ||
+              `Estudios de ${service.name} disponibles y sus precios.`}
           </p>
         </div>
 
-        <ServiceStudiesCatalog client:visible />
+        <ServiceStudiesCatalog studies={studies} client:visible />
+      </div>
+    ) : (
+      <div class="rounded-clinical-md border border-ui-border bg-white p-8 text-center shadow-xs motion-safe:animate-fade-up">
+        <p class="text-sm text-grey-custom leading-relaxed">
+          Este servicio no tiene un tarifario público disponible. Consulta
+          precios directamente en sucursal.
+        </p>
       </div>
     )
   }

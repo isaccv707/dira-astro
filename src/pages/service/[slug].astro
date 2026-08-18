@@ -9,14 +9,15 @@ import ServiceRecommendedSection from "../../sections/astro/service/ServiceRecom
 
 import type { Service } from "../../interfaces/service.interface";
 import { getOneResource } from "../../utils/getOneResource";
+import { resolveBranchId } from "../../stores/branchStore";
 import CTAContact from "../../components/astro/CTA/CTAContact.astro";
 
 const { slug } = Astro.params;
+const branchId = resolveBranchId();
 
-const service = (await getOneResource<Service>(
-  "services",
-  slug as string,
-)) as Service;
+const service = await getOneResource<Service>("services", slug as string, {
+  branchId,
+});
 
 if (!service) {
   return Astro.redirect("/404");
