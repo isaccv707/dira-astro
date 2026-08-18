@@ -1,54 +1,149 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MapPin } from "lucide-react";
+import { useStore } from "@nanostores/react";
+
 import Button from "../../../components/react/buttons/Button";
-import Pagination from "../../../components/react/ui/Pagination";
 import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
-import type { Study } from "../../../interfaces/study.interface";
+import SelectInput from "../../../components/react/form/SelectInput";
+import Pagination from "../../../components/react/ui/Pagination";
 import usePagination from "../../../hooks/usePagination";
-import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
-import SearchServices from "../service/SearchServices";
-import useSearchStudies from "../../../hooks/useSearchStudies";
+
+import type { Study } from "../../../interfaces/study.interface";
+import type { Service } from "../../../interfaces/service.interface";
+import { getOneResource } from "../../../utils/getOneResource";
+import { getAllService } from "../../../api/servicesApi/serviceApi";
 import {
   getStoredBranchId,
   openBranchSelectorModal,
 } from "../../../stores/branchStore";
-import { useStore } from "@nanostores/react";
 import {
   addStudy,
   removeStudy,
   selectedStudiesStore,
+  selectedServiceStore,
+  selectQuoterService,
   ensureQuoterStudiesSynced,
 } from "../../../stores/quoterStore";
 
-const LIMIT = 4;
+const SERVICES_PER_PAGE = 8;
+const STUDIES_PER_PAGE = 12;
 
 const QuoterSelectStudies = () => {
-  const [totalPagesForHook, setTotalPagesForHook] = useState(1);
   const [branchId] = useState<string | null>(() => getStoredBranchId());
+  const [services, setServices] = useState<Service[]>([]);
+  const [selectedSlug, setSelectedSlug] = useState("");
+  const [serviceDetail, setServiceDetail] = useState<Service | null>(null);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
 
   const selectedStudies = useStore(selectedStudiesStore);
+  const persistedService = useStore(selectedServiceStore);
 
   useEffect(() => {
     ensureQuoterStudiesSynced();
   }, []);
 
-  const { currentPage, nextPage, prevPage, setPage } = usePagination({
-    totalPages: totalPagesForHook,
-    initialPage: 1,
-  });
-  const { search, handleSearchChange } = useSearchStudies({ setPage });
+  useEffect(() => {
+    if (!branchId) return;
+    getAllService(branchId)
+      .then(setServices)
+      .catch(() => setServices([]));
+  }, [branchId]);
 
-  const { studies, totalPages, isLoading, isFetching, isError, totalStudies } =
-    useGetPriceSheetStudies({
-      page: currentPage,
-      limit: LIMIT,
-      search,
-      branchId,
-    });
+  // Only services with studies actually attached are quotable.
+  const servicesWithStudies = useMemo(
+    () => services.filter((service) => (service._count?.studies ?? 0) > 0),
+    [services],
+  );
+
+  const servicesTotalPages = Math.max(
+    Math.ceil(servicesWithStudies.length / SERVICES_PER_PAGE),
+    1,
+  );
+  const {
+    currentPage: servicesPage,
+    nextPage: servicesNextPage,
+    prevPage: servicesPrevPage,
+    setPage: setServicesPage,
+  } = usePagination({ totalPages: servicesTotalPages, initialPage: 1 });
+
+  const pagedServices = useMemo(
+    () =>
+      servicesWithStudies.slice(
+        (servicesPage - 1) * SERVICES_PER_PAGE,
+        servicesPage * SERVICES_PER_PAGE,
+      ),
+    [servicesWithStudies, servicesPage],
+  );
+
+  // Pre-select whichever service the quoter already has studies from.
+  useEffect(() => {
+    if (persistedService && !selectedSlug) {
+      setSelectedSlug(persistedService.slug);
+    }
+  }, [persistedService, selectedSlug]);
+
+  // Keep the service list on the page that actually contains the current selection.
+  useEffect(() => {
+    if (!selectedSlug || servicesWithStudies.length === 0) return;
+    const index = servicesWithStudies.findIndex(
+      (service) => service.slug === selectedSlug,
+    );
+    if (index >= 0) {
+      setServicesPage(Math.floor(index / SERVICES_PER_PAGE) + 1);
+    }
+  }, [selectedSlug, servicesWithStudies]);
+
+  // Studies come paginated straight from GET /services/:idOrSlug — each
+  // page turn re-requests that same endpoint with page/limit.
+  const studiesTotalPages = serviceDetail?.studies?.totalPages ?? 1;
+  const {
+    currentPage: studiesPage,
+    nextPage: studiesNextPage,
+    prevPage: studiesPrevPage,
+    setPage: setStudiesPage,
+  } = usePagination({ totalPages: studiesTotalPages, initialPage: 1 });
 
   useEffect(() => {
-    setTotalPagesForHook(totalPages || 1);
-  }, [totalPages]);
+    setStudiesPage(1);
+  }, [selectedSlug]);
+
+  useEffect(() => {
+    if (!selectedSlug || !branchId) {
+      setServiceDetail(null);
+      return;
+    }
+
+    let cancelled = false;
+    setIsLoadingDetail(true);
+
+    getOneResource<Service>("services", selectedSlug, {
+      branchId,
+      page: studiesPage,
+      limit: STUDIES_PER_PAGE,
+    })
+      .then((data) => {
+        if (cancelled) return;
+        setServiceDetail(data);
+        if (data?.id && data.priceSheetId) {
+          selectQuoterService({
+            id: data.id,
+            slug: data.slug,
+            name: data.name,
+            priceSheetId: data.priceSheetId,
+          });
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingDetail(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedSlug, branchId, studiesPage]);
+
+  const studies = serviceDetail?.studies?.data ?? [];
+  const totalStudies = serviceDetail?.studies?.total ?? 0;
 
   const handleAddStudy = (study: Study) => addStudy(study);
   const handleDeletStudy = (studyId: string) => removeStudy(studyId);
@@ -86,33 +181,79 @@ const QuoterSelectStudies = () => {
     );
   }
 
+  const serviceOptions = [
+    { value: "", label: "Selecciona un servicio" },
+    ...pagedServices.map((service) => ({
+      value: service.slug,
+      label: service.name,
+    })),
+  ];
+
+  const hasPriceSheet = Boolean(serviceDetail?.priceSheet);
+
   return (
     <div className="flex h-full flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="w-full sm:max-w-md">
-          <SearchServices onSearchChange={handleSearchChange} />
+          <SelectInput
+            id="quoter-service"
+            name="service"
+            label="Servicio"
+            placeholder="Selecciona un servicio"
+            options={serviceOptions}
+            value={selectedSlug}
+            onChange={(e) => setSelectedSlug(e.target.value)}
+          />
         </div>
 
-        <div className="inline-flex w-fit items-center gap-2 self-start rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary sm:self-auto">
-          <span className="h-1.5 w-1.5 rounded-full bg-green-primary" />
-          {isFetching ? "Buscando..." : `${totalStudies} disponibles`}
-        </div>
+        {hasPriceSheet && (
+          <div className="inline-flex w-fit items-center gap-2 self-start rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary sm:self-auto">
+            <span className="h-1.5 w-1.5 rounded-full bg-green-primary" />
+            {isLoadingDetail ? "Cargando..." : `${totalStudies} disponibles`}
+          </div>
+        )}
       </div>
 
+      {servicesTotalPages > 1 && (
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <Pagination
+            currentPage={servicesPage}
+            totalPages={servicesTotalPages}
+            onPageChange={setServicesPage}
+            nextPage={servicesNextPage}
+            prevPage={servicesPrevPage}
+          />
+          <span className="shrink-0 text-[11px] font-semibold text-grey-custom">
+            {`${servicesPage} / ${servicesTotalPages}`}
+          </span>
+        </div>
+      )}
+
       <div className="mt-5 flex-1">
-        {isLoading ? (
+        {!selectedSlug ? (
+          <div className="py-10 text-center text-grey-custom">
+            Elige un servicio para ver sus estudios disponibles.
+          </div>
+        ) : isLoadingDetail && studies.length === 0 ? (
           <div className="py-10 text-center text-grey-custom">
             Cargando estudios...
           </div>
-        ) : isError ? (
+        ) : !hasPriceSheet ? (
           <div className="py-10 text-center text-grey-custom">
-            Ocurrió un error al cargar los estudios.
+            Este servicio no tiene un tarifario público disponible. Consulta
+            precios directamente en sucursal.
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+          <div
+            className={`grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4 transition-opacity ${
+              isLoadingDetail ? "opacity-50 pointer-events-none" : ""
+            }`}
+          >
             {studies.length > 0 ? (
               studies.map((study: Study) => {
-                const isAdded = selectedStudies.some((s) => s.id === study.id);
+                const isAdded = selectedStudies.some(
+                  (s) => s.id === study.id,
+                );
                 return (
                   <CardQuoteStudy
                     key={study.id}
@@ -132,19 +273,21 @@ const QuoterSelectStudies = () => {
         )}
       </div>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Pagination
-          nextPage={nextPage}
-          prevPage={prevPage}
-          currentPage={currentPage}
-          onPageChange={setPage}
-          totalPages={totalPages}
-        />
+      {hasPriceSheet && studiesTotalPages > 1 && (
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Pagination
+            nextPage={studiesNextPage}
+            prevPage={studiesPrevPage}
+            currentPage={studiesPage}
+            onPageChange={setStudiesPage}
+            totalPages={studiesTotalPages}
+          />
 
-        <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-clinical-sm sm:self-auto">
-          {`${currentPage} / ${totalPages || 1}`}
+          <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-clinical-sm sm:self-auto">
+            {`${studiesPage} / ${studiesTotalPages}`}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

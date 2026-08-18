@@ -15,8 +15,11 @@ import CTAContact from "../../components/astro/CTA/CTAContact.astro";
 const { slug } = Astro.params;
 const branchId = resolveBranchId();
 
+const STUDIES_PAGE_SIZE = 12;
+
 const service = await getOneResource<Service>("services", slug as string, {
   branchId,
+  limit: STUDIES_PAGE_SIZE,
 });
 
 if (!service) {

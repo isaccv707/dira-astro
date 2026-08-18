@@ -7,8 +7,9 @@ interface Props {
 }
 
 const { service } = Astro.props;
-const { priceSheet, studies = [] } = service;
-const hasStudies = studies.length > 0;
+const { priceSheet, studies, slug, branchId } = service;
+const initialStudies = studies?.data ?? [];
+const hasStudies = initialStudies.length > 0;
 ---
 
 <section id="servicio-detalle" class="scroll-mt-24">
@@ -32,7 +33,15 @@ const hasStudies = studies.length > 0;
           </p>
         </div>
 
-        <ServiceStudiesCatalog studies={studies} client:visible />
+        <ServiceStudiesCatalog
+          slug={slug}
+          branchId={branchId}
+          initialStudies={initialStudies}
+          initialPage={studies?.page ?? 1}
+          initialTotalPages={studies?.totalPages ?? 1}
+          initialTotal={studies?.total ?? initialStudies.length}
+          client:visible
+        />
       </div>
     ) : (
       <div class="rounded-clinical-md border border-ui-border bg-white p-8 text-center shadow-xs motion-safe:animate-fade-up">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { QuotationPayload } from "../api/quotationsApi/quotation.interface";
 import type { Client } from "../interfaces/client.interface";
 import type { Study } from "../interfaces/study.interface";
+import type { QuoterService } from "../utils/quoterStudies";
 import { toast } from "react-toastify";
 import { generateQuotationPdf } from "../api/quotationsApi/quotationApi";
 import { resolveBranchId } from "../stores/branchStore";
@@ -9,9 +10,14 @@ import { resolveBranchId } from "../stores/branchStore";
 interface useQuotationPdfProps {
   client: Client | null;
   selectedStudies: Study[];
+  selectedService: QuoterService | null;
 }
 
-const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
+const useQuotationPdf = ({
+  client,
+  selectedStudies,
+  selectedService,
+}: useQuotationPdfProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentAction, setCurrentAction] = useState<
     "view" | "download" | null
@@ -37,10 +43,15 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
       return null;
     }
 
+    if (!selectedService?.priceSheetId) {
+      toast.error("Selecciona un servicio con tarifario disponible para cotizar.");
+      return null;
+    }
+
     const payloadStudies = selectedStudies.map((study) => ({
       id: study.id,
       name: study.name,
-      price: study.priceInfo.price,
+      price: Number(study.priceInfo.price),
       quantity: study.quantity ?? 1,
     }));
 
@@ -52,6 +63,7 @@ const useQuotationPdf = ({ client, selectedStudies }: useQuotationPdfProps) => {
       email: client?.email,
       studies: payloadStudies,
       branchId,
+      priceSheetId: selectedService.priceSheetId,
     };
   };
 

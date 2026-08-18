@@ -47,7 +47,7 @@ const CardQuoteStudy = ({
             <div className="flex items-baseline gap-1">
               <span className="text-xs font-bold text-grey-custom">$</span>
               <span className="text-2xl font-black text-green-light tracking-tight">
-                {study.priceInfo.price.toLocaleString("es-MX", {
+                {Number(study.priceInfo.price).toLocaleString("es-MX", {
                   minimumFractionDigits: 2,
                 })}
               </span>

@@ -31,6 +31,17 @@ export interface ServicePriceSheet {
   description: string;
 }
 
+// Only the service *detail* endpoint (GET /services/:idOrSlug) paginates
+// studies this way; the list endpoint (GET /services) never populates this
+// field at all (it only returns _count.studies).
+export interface PaginatedStudies {
+  data: Study[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export interface Service {
   id?: string;
   name: string;
@@ -46,6 +57,6 @@ export interface Service {
   details?: Details[];
   priceSheetId?: string | null;
   priceSheet?: ServicePriceSheet | null;
-  studies?: Study[];
+  studies?: PaginatedStudies;
   _count?: Count;
 }

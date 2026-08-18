@@ -22,6 +22,16 @@ export const generateQuotationPdf = async (
   });
 
   if (!response.ok) {
+    if (response.status === 400) {
+      throw new Error(
+        "Esta cotización ya no está disponible, recarga la página.",
+      );
+    }
+    if (response.status === 404) {
+      throw new Error(
+        "Uno o más estudios seleccionados ya no tienen precio disponible, actualiza la página e inténtalo de nuevo.",
+      );
+    }
     const errorData = await response.json().catch(() => null);
     throw new Error(
       extractErrorMessage(errorData, "Error al generar el PDF de la cotización"),
