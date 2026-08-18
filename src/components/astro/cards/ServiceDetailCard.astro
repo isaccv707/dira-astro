@@ -1,12 +1,20 @@
 ---
+import {
+  getCloudinaryUrl,
+  getCloudinarySrcSet,
+} from "../../../utils/cloudinary";
+
 interface Props {
   title: string;
   description: string;
   image?: string | null;
+  imageMobile?: string | null;
   index: number;
 }
 
-const { title, description, image, index } = Astro.props;
+const { title, description, image, imageMobile, index } = Astro.props;
+
+const mobileSrc = imageMobile || image;
 
 const panelNumber = String(index + 1).padStart(2, "0");
 ---
@@ -18,13 +26,23 @@ const panelNumber = String(index + 1).padStart(2, "0");
     class="relative aspect-4/3 w-full overflow-hidden bg-linear-to-br from-green-primary/8 to-green-secondary/10 sm:aspect-video"
   >
     {
-      image ? (
-        <img
-          src={image}
-          alt={title}
-          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
+      mobileSrc ? (
+        <picture>
+          {image && (
+            <source
+              media="(min-width: 640px)"
+              srcset={getCloudinarySrcSet(image, [640, 768, 1024])}
+            />
+          )}
+          <img
+            src={getCloudinaryUrl(mobileSrc, { width: 640, height: 480 })}
+            alt={title}
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            width={640}
+            height={480}
+          />
+        </picture>
       ) : (
         <div class="flex h-full w-full items-center justify-center">
           <span

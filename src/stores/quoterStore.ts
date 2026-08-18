@@ -7,7 +7,11 @@ import {
   removeQuoterStudy,
   updateQuoterStudyQuantity,
   clearQuoterStudies,
+  getQuoterService,
+  setQuoterService,
+  clearQuoterService,
   QUOTER_UPDATED_EVENT,
+  type QuoterService,
 } from "../utils/quoterStudies";
 
 export const clientStore = atom<Client | null>(null);
@@ -19,18 +23,22 @@ export const clientStore = atom<Client | null>(null);
 // causes a client/server hydration mismatch for anyone with a non-empty quote.
 export const selectedStudiesStore = atom<Study[]>([]);
 
-const syncSelectedStudies = () => {
+// Same empty-on-server / synced-on-client rationale as selectedStudiesStore above.
+export const selectedServiceStore = atom<QuoterService | null>(null);
+
+const syncFromStorage = () => {
   selectedStudiesStore.set(getQuoterStudies());
+  selectedServiceStore.set(getQuoterService());
 };
 
 let listenersAttached = false;
 
 export const ensureQuoterStudiesSynced = () => {
-  syncSelectedStudies();
+  syncFromStorage();
   if (listenersAttached) return;
   listenersAttached = true;
-  window.addEventListener(QUOTER_UPDATED_EVENT, syncSelectedStudies);
-  window.addEventListener("storage", syncSelectedStudies);
+  window.addEventListener(QUOTER_UPDATED_EVENT, syncFromStorage);
+  window.addEventListener("storage", syncFromStorage);
 };
 
 export const setClient = (client: Client) => clientStore.set(client);
@@ -42,19 +50,34 @@ export const removeStudy = (id: string) => removeQuoterStudy(id);
 export const updateStudyQuantity = (id: string, quantity: number) =>
   updateQuoterStudyQuantity(id, quantity);
 
+// A quotation can only reference one price sheet, so switching services
+// drops whatever was selected against the previous one.
+export const selectQuoterService = (service: QuoterService) => {
+  const current = getQuoterService();
+  if (current?.id !== service.id) {
+    clearQuoterStudies();
+  }
+  setQuoterService(service);
+};
+
 export const clearStudies = () => {
   clientStore.set(null);
   clearQuoterStudies();
+  clearQuoterService();
 };
 
+const IVA_RATE = 0.16;
+
 export const totalsStore = computed(selectedStudiesStore, (studies) => {
+  // Study prices are IVA-included totals, so the subtotal is derived by
+  // dividing the total by 1.16 — not by subtracting 16% from it.
   const total = studies.reduce((acc, s) => {
     const qty = s.quantity ?? 1;
-    return acc + (s.priceInfo?.price ?? 0) * qty;
+    return acc + Number(s.priceInfo?.price ?? 0) * qty;
   }, 0);
 
-  const tax = total * 0.16;
-  const subtotal = total - tax;
+  const subtotal = total / (1 + IVA_RATE);
+  const tax = total - subtotal;
 
   return { subtotal, tax, total };
 });

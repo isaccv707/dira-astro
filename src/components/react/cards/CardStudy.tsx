@@ -139,7 +139,7 @@ const CardStudy = ({
             <div className="flex items-baseline gap-1">
               <span className="text-sm font-black text-grey-custom">$</span>
               <span className="text-4xl font-black text-green-light tracking-tighter">
-                {priceInfo.price.toLocaleString("es-MX", {
+                {Number(priceInfo.price).toLocaleString("es-MX", {
                   minimumFractionDigits: 2,
                 })}
               </span>

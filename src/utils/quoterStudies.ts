@@ -1,7 +1,15 @@
 import type { Study } from "../interfaces/study.interface";
 
 export const QUOTER_STORAGE_KEY = "dira_quoter_studies";
+export const QUOTER_SERVICE_KEY = "dira_quoter_service";
 export const QUOTER_UPDATED_EVENT = "dira_quoter_updated";
+
+export interface QuoterService {
+    id: string;
+    slug: string;
+    name: string;
+    priceSheetId: string;
+}
 
 export const getQuoterStudies = (): Study[] => {
     if (typeof window === "undefined") return [];
@@ -53,5 +61,31 @@ export const updateQuoterStudyQuantity = (studyId: string, quantity: number) => 
 export const clearQuoterStudies = () => {
     if (typeof window === "undefined") return;
     localStorage.removeItem(QUOTER_STORAGE_KEY);
+    window.dispatchEvent(new CustomEvent(QUOTER_UPDATED_EVENT));
+};
+
+export const getQuoterService = (): QuoterService | null => {
+    if (typeof window === "undefined") return null;
+    const stored = localStorage.getItem(QUOTER_SERVICE_KEY);
+    if (!stored) return null;
+
+    try {
+        const parsed = JSON.parse(stored);
+        if (parsed?.id && parsed?.priceSheetId) return parsed as QuoterService;
+        return null;
+    } catch {
+        return null;
+    }
+};
+
+export const setQuoterService = (service: QuoterService) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(QUOTER_SERVICE_KEY, JSON.stringify(service));
+    window.dispatchEvent(new CustomEvent(QUOTER_UPDATED_EVENT));
+};
+
+export const clearQuoterService = () => {
+    if (typeof window === "undefined") return;
+    localStorage.removeItem(QUOTER_SERVICE_KEY);
     window.dispatchEvent(new CustomEvent(QUOTER_UPDATED_EVENT));
 };

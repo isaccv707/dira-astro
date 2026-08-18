@@ -1,4 +1,6 @@
-import type { Post } from "../../interfaces/blog.interface";
+import type { Post, ContentBlock } from "../../interfaces/blog.interface";
+
+export type { Post, ContentBlock };
 
 export interface PostMeta {
   total: number;

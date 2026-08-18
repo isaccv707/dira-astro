@@ -1,14 +1,27 @@
 ---
 import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
 import logo from "../../../assets/images/logos/logo.png";
+import { getCloudinaryUrl } from "../../../utils/cloudinary";
 
 interface Props {
   name: string;
   description: string;
   imageUrl: string;
+  mobileImageUrl?: string;
 }
 
-const { name, description, imageUrl } = Astro.props;
+const { name, description, imageUrl, mobileImageUrl } = Astro.props;
+
+// Marketing only supplies 2 assets: imageUrl (desktop) and mobileImageUrl (mobile).
+// The tablet breakpoint reuses imageUrl — Cloudinary just resizes it to a smaller 16:9 crop.
+const mobileDims = { width: 900, height: 675 };
+const tabletDims = { width: 1200, height: 675 };
+const desktopDims = { width: 1600, height: 700 };
+
+const mobileSrc = mobileImageUrl || imageUrl;
+const finalMobileUrl = getCloudinaryUrl(mobileSrc, mobileDims);
+const finalTabletUrl = getCloudinaryUrl(imageUrl, tabletDims);
+const finalDesktopUrl = getCloudinaryUrl(imageUrl, desktopDims);
 ---
 
 <section class="w-full">
@@ -31,14 +44,30 @@ const { name, description, imageUrl } = Astro.props;
         class="relative overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5 bg-linear-to-b from-green-primary/10 to-yellow-primary/10"
       >
         <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7">
-          <img
-            src={imageUrl}
-            alt={name}
-            class="h-full w-full object-cover"
-            loading="eager"
-            fetchpriority="high"
-            decoding="sync"
-          />
+          <picture>
+            <source
+              media="(min-width: 1024px)"
+              srcset={finalDesktopUrl}
+              width={desktopDims.width}
+              height={desktopDims.height}
+            />
+            <source
+              media="(min-width: 640px)"
+              srcset={finalTabletUrl}
+              width={tabletDims.width}
+              height={tabletDims.height}
+            />
+            <img
+              src={finalMobileUrl}
+              alt={name}
+              class="h-full w-full object-cover"
+              loading="eager"
+              fetchpriority="high"
+              decoding="sync"
+              width={mobileDims.width}
+              height={mobileDims.height}
+            />
+          </picture>
         </div>
       </div>
 

@@ -4,9 +4,14 @@ import Carousel from "../../../components/react/carousel/Carousel";
 import logo from "../../../assets/images/logos/logo.png";
 import { fetchGetAllPosts } from "../../../api/postsApi/postApi";
 import type { Post } from "../../../api/postsApi/post.interface";
+import {
+  getCloudinaryUrl,
+  getCloudinarySrcSet,
+} from "../../../utils/cloudinary";
 
 interface Slide {
   image: string;
+  imageMobile?: string;
   title: string;
 }
 
@@ -16,7 +21,13 @@ try {
   slides = data.reduce<Slide[]>((acc, post: Post) => {
     const rawImage = post.image as unknown as string | ImageMetadata | undefined;
     const image = typeof rawImage === "string" ? rawImage : rawImage?.src;
-    if (image) acc.push({ image, title: post.title });
+    const rawMobileImage = post.imageMobile as unknown as
+      | string
+      | ImageMetadata
+      | undefined;
+    const imageMobile =
+      typeof rawMobileImage === "string" ? rawMobileImage : rawMobileImage?.src;
+    if (image) acc.push({ image, imageMobile, title: post.title });
     return acc;
   }, []);
 } catch (error) {
@@ -46,14 +57,36 @@ try {
         {
           slides.length > 0 ? (
             <Carousel client:load slidesPreview={1}>
-              {slides.map(({ image, title }) => (
+              {slides.map(({ image, imageMobile, title }) => (
                 <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7 w-full">
-                  <img
-                    src={image}
-                    alt={title}
-                    class="h-full w-full object-cover"
-                    loading="lazy"
-                  />
+                  <picture>
+                    <source
+                      media="(min-width: 1024px)"
+                      srcset={getCloudinarySrcSet(
+                        image,
+                        [1024, 1280, 1600],
+                        { w: 16, h: 7 },
+                      )}
+                    />
+                    <source
+                      media="(min-width: 640px)"
+                      srcset={getCloudinarySrcSet(image, [640, 768, 1024], {
+                        w: 16,
+                        h: 9,
+                      })}
+                    />
+                    <img
+                      src={getCloudinaryUrl(imageMobile || image, {
+                        width: 640,
+                        height: 480,
+                      })}
+                      alt={title}
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                      width={640}
+                      height={480}
+                    />
+                  </picture>
                 </div>
               ))}
             </Carousel>

@@ -3,6 +3,7 @@ import { useStore } from "@nanostores/react";
 import {
   clientStore,
   selectedStudiesStore,
+  selectedServiceStore,
   totalsStore,
   removeStudy,
   updateStudyQuantity,
@@ -18,6 +19,7 @@ import { FileText } from "lucide-react";
 
 const QuoteDetails = () => {
   const selectedStudies = useStore(selectedStudiesStore);
+  const selectedService = useStore(selectedServiceStore);
   const client = useStore(clientStore);
   const totals = useStore(totalsStore);
 
@@ -26,7 +28,7 @@ const QuoteDetails = () => {
   }, []);
 
   const { viewQuotation, downloadQuotation, isDownloading, isViewing } =
-    useQuotationPdf({ client, selectedStudies });
+    useQuotationPdf({ client, selectedStudies, selectedService });
   return (
     <div className="w-full h-full">
       <header className="bg-green-primary rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">

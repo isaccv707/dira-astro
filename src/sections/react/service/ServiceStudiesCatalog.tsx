@@ -1,100 +1,103 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import usePagination from "../../../hooks/usePagination";
-import useSearchStudies from "../../../hooks/useSearchStudies";
-import useGetPriceSheetStudies from "../../../hooks/useGetPriceSheetStudies";
-
-import Button from "../../../components/react/buttons/Button";
-import Pagination from "../../../components/react/ui/Pagination";
 import CardStudy from "../../../components/react/cards/CardStudy";
-import StudyCardSkeleton from "../../../components/react/skeleton/StudyCardSkeleton";
-import SearchServices from "./SearchServices";
+import Pagination from "../../../components/react/ui/Pagination";
+import usePagination from "../../../hooks/usePagination";
 
 import type { Study } from "../../../interfaces/study.interface";
-import { getStoredBranchId } from "../../../stores/branchStore";
+import type { Service } from "../../../interfaces/service.interface";
+import { getOneResource } from "../../../utils/getOneResource";
+
+interface Props {
+  slug: string;
+  branchId?: string;
+  initialStudies: Study[];
+  initialPage: number;
+  initialTotalPages: number;
+  initialTotal: number;
+}
 
 const LIMIT = 12;
 
-const StudiesServices = () => {
-  const [dynamicTotalPages, setDynamicTotalPages] = useState(1);
-  const [branchId] = useState<string | null>(() => getStoredBranchId());
+const ServiceStudiesCatalog = ({
+  slug,
+  branchId,
+  initialStudies,
+  initialPage,
+  initialTotalPages,
+  initialTotal,
+}: Props) => {
+  const [studies, setStudies] = useState<Study[]>(initialStudies);
+  const [total, setTotal] = useState(initialTotal);
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const [isLoading, setIsLoading] = useState(false);
+  const isFirstRun = useRef(true);
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
-    totalPages: dynamicTotalPages,
-    initialPage: 1,
+    totalPages,
+    initialPage,
   });
-
-  const { search, handleSearchChange } = useSearchStudies({
-    setPage,
-  });
-
-  const { studies, totalStudies, totalPages, isLoading, isFetching } =
-    useGetPriceSheetStudies({
-      page: currentPage,
-      limit: LIMIT,
-      search: search,
-      branchId: branchId,
-    });
 
   useEffect(() => {
-    if (totalPages && totalPages !== dynamicTotalPages) {
-      setDynamicTotalPages(totalPages);
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
     }
-  }, [totalPages, dynamicTotalPages]);
+
+    let cancelled = false;
+    setIsLoading(true);
+
+    getOneResource<Service>("services", slug, {
+      branchId,
+      page: currentPage,
+      limit: LIMIT,
+    })
+      .then((data) => {
+        if (cancelled) return;
+        setStudies(data?.studies?.data ?? []);
+        setTotal(data?.studies?.total ?? 0);
+        setTotalPages(data?.studies?.totalPages ?? 1);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentPage]);
 
   return (
     <div id="services-section">
-      <div className="sticky top-0 z-30 backdrop-blur-md mb-8 border-b border-ui-border">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="w-full lg:max-w-xl">
-            <SearchServices onSearchChange={handleSearchChange} />
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="inline-flex items-center gap-3 rounded-full bg-green-light/8 border border-green-light/15 px-5 py-2.5 shadow-xs">
-              <div className="relative flex h-2.5 w-2.5">
-                {isFetching && (
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-light opacity-75"></span>
-                )}
-                <span
-                  className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                    isFetching ? "bg-green-light" : "bg-ui-border"
-                  }`}
-                ></span>
-              </div>
-              <span className="text-sm font-bold text-green-light">
-                {isFetching
-                  ? "Sincronizando..."
-                  : `${totalStudies || 0} Estudios`}
-              </span>
-            </div>
-          </div>
+      <div className="mb-8 flex items-center justify-end">
+        <div className="inline-flex items-center gap-3 rounded-full bg-green-light/8 border border-green-light/15 px-5 py-2.5 shadow-xs">
+          <span
+            className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+              isLoading ? "bg-ui-border" : "bg-green-light"
+            }`}
+          />
+          <span className="text-sm font-bold text-green-light">
+            {isLoading ? "Cargando..." : `${total} Estudios`}
+          </span>
         </div>
       </div>
 
       <div className="min-h-125">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
-          {isLoading ? (
-            Array.from({ length: LIMIT }).map((_, index) => (
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12 transition-opacity ${
+            isLoading ? "opacity-50 pointer-events-none" : ""
+          }`}
+        >
+          {studies.length > 0 ? (
+            studies.map((study: Study, index: number) => (
               <div
-                key={`skeleton-${index}`}
+                key={study.id}
                 className="motion-safe:animate-fade-up"
+                style={{ animationDelay: `${(index % 4) * 100}ms` }}
               >
-                <StudyCardSkeleton />
+                <CardStudy study={study} />
               </div>
             ))
-          ) : studies && studies.length > 0 ? (
-            studies.map((study: Study, index: number) => {
-              return (
-                <div
-                  key={study.id || `study-${index}`}
-                  className="motion-safe:animate-fade-up"
-                  style={{ animationDelay: `${(index % 4) * 100}ms` }}
-                >
-                  <CardStudy study={study} />
-                </div>
-              );
-            })
           ) : (
             <div className="col-span-full py-32 flex flex-col items-center justify-center text-center bg-ui-bg/50 rounded-clinical-lg border-2 border-dashed border-ui-border">
               <div className="bg-white p-6 rounded-full shadow-sm shadow-ui-border/50 mb-6">
@@ -113,33 +116,25 @@ const StudiesServices = () => {
                 </svg>
               </div>
               <h2 className="text-2xl font-black tracking-tight text-green-light">
-                No encontramos resultados
+                No encontramos estudios
               </h2>
               <p className="text-grey-custom mt-3 max-w-sm mx-auto leading-relaxed">
-                Prueba buscando con palabras más generales o revisa si hay algún
-                error de escritura.
+                No hay estudios disponibles en esta página del catálogo.
               </p>
-              <Button
-                type="button"
-                onClick={() => handleSearchChange("")}
-                variant="primary"
-                text="Limpiar búsqueda"
-                className="mt-8"
-              />
             </div>
           )}
         </div>
       </div>
 
-      {!isLoading && studies && studies.length > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 p-8 bg-ui-bg/50 rounded-clinical-lg border border-ui-border">
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 p-8 bg-ui-bg/50 rounded-clinical-lg border border-ui-border mt-8">
           <div className="order-2 sm:order-1">
             <Pagination
               nextPage={nextPage}
               prevPage={prevPage}
               currentPage={currentPage}
               onPageChange={setPage}
-              totalPages={dynamicTotalPages}
+              totalPages={totalPages}
             />
           </div>
 
@@ -153,7 +148,7 @@ const StudiesServices = () => {
               </span>
               <span className="text-grey-custom/50">/</span>
               <span className="text-sm font-black text-grey-custom">
-                {dynamicTotalPages}
+                {totalPages}
               </span>
             </div>
           </div>
@@ -163,4 +158,4 @@ const StudiesServices = () => {
   );
 };
 
-export default StudiesServices;
+export default ServiceStudiesCatalog;

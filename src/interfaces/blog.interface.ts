@@ -19,6 +19,7 @@ export interface Post {
   description: string;
   excerpt: string;
   image?: string;
+  imageMobile?: string;
   readingTime?: number;
   metaDescription?: string;
   status: "DRAFT" | "PUBLISHED";

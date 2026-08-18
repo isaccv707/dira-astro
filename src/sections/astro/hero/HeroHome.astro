@@ -4,36 +4,31 @@ import { Icon as ReactIcon } from "@iconify/react";
 import logo from "../../../assets/images/logos/logo.png";
 import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
 import CarouselHome from "../home/CarouselHome.astro";
+import ServicesCarousel from "../../../components/react/carousel/Carousel";
+import { getAllService } from "../../../api/servicesApi/serviceApi";
+import type { Service } from "../../../interfaces/service.interface";
 
 const reveal = (delayMs: number) =>
   `animation-delay:${delayMs}ms; animation-fill-mode:backwards;`;
 
-const stats = [
-  { value: "+15", label: "Años de exp.", accent: "text-green-primary" },
-  { value: "2", label: "Ciudades", accent: "text-green-primary" },
-  { value: "500+", label: "Estudios", accent: "text-yellow-secondary" },
-];
+let services: Service[] = [];
+try {
+  services = await getAllService();
+} catch (error) {
+  console.error("Error al obtener los servicios:", error);
+}
 
-const features = [
-  {
-    icon: "tabler:microscope",
-    label: "Análisis Clínicos",
-    desc: "Alta precisión",
-    path: "/service/analisis-clinicos",
-  },
-  {
-    icon: "tabler:building-community",
-    label: "Salud Empresarial",
-    desc: "A tu medida",
-    path: "/service/salud-empresarial",
-  },
-  {
-    icon: "tabler:home-check",
-    label: "Tomas a Domicilio",
-    desc: "En tu hogar",
-    path: "/service/tomas-a-domicilio",
-  },
-];
+const ASTRO_ICON_SETS = ["lucide:", "tabler:", "logos:", "simple-icons:"];
+const isAstroIcon = (icon?: string) =>
+  !!icon &&
+  !icon.startsWith("http") &&
+  ASTRO_ICON_SETS.some((set) => icon.startsWith(set));
+const isImgIcon = (icon?: string) => !!icon && icon.startsWith("http");
+
+const getServiceDesc = ({ _count, description }: Service) => {
+  if (_count?.studies) return `${_count.studies} estudios`;
+  return description ?? "";
+};
 ---
 
 <section class="relative overflow-hidden py-12">
@@ -48,11 +43,9 @@ const features = [
 
   <div class="relative">
     <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
-      <!-- ===== LEFT: Hero content ===== -->
       <div
         class="flex flex-col items-center text-center lg:items-start lg:text-left"
       >
-        <!-- Category label — small tracked caps, evoking lab signage -->
         <div
           class="mb-5 flex items-center justify-center gap-2 motion-safe:animate-fade-up lg:justify-start"
           style={reveal(0)}
@@ -66,7 +59,6 @@ const features = [
           <div class="h-px w-8 bg-green-primary/50"></div>
         </div>
 
-        <!-- Logo + live status badge -->
         <div
           class="mb-6 flex items-center gap-3 motion-safe:animate-fade-up"
           style={reveal(80)}
@@ -89,7 +81,6 @@ const features = [
           </div>
         </div>
 
-        <!-- Main heading -->
         <h1
           class="mb-5 text-4xl font-black leading-[1.05] tracking-tight motion-safe:animate-fade-up sm:text-5xl lg:text-5xl xl:text-6xl"
           style={reveal(140)}
@@ -99,7 +90,6 @@ const features = [
           <span class="text-yellow-secondary">con precisión.</span>
         </h1>
 
-        <!-- Description -->
         <p
           class="mb-8 max-w-md text-base leading-relaxed text-grey-custom motion-safe:animate-fade-up sm:text-lg"
           style={reveal(220)}
@@ -108,7 +98,6 @@ const features = [
           para ti y tu empresa en Jalisco y Colima.
         </p>
 
-        <!-- CTA buttons -->
         <div
           class="mb-10 flex flex-wrap justify-center gap-3 motion-safe:animate-fade-up lg:justify-start"
           style={reveal(300)}
@@ -119,7 +108,7 @@ const features = [
             size="lg"
             className="group"
           >
-            Ver servicios
+            Analisis Clinicos Disponibles
             <ReactIcon
               icon="tabler:arrow-right"
               className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
@@ -132,25 +121,6 @@ const features = [
             size="lg"
             width="auto"
           />
-        </div>
-
-        <!-- Stats — unified readout panel, like a lab instrument display -->
-        <div
-          class="flex w-full max-w-xs divide-x divide-green-primary/12 overflow-hidden rounded-xl border border-green-primary/12 bg-white shadow-sm motion-safe:animate-fade-up sm:max-w-sm lg:max-w-none"
-          style={reveal(380)}
-        >
-          {
-            stats.map(({ value, label, accent }) => (
-              <div class="flex flex-1 flex-col items-center px-4 py-3">
-                <span class={`text-xl font-black leading-none ${accent}`}>
-                  {value}
-                </span>
-                <span class="mt-1 text-[10px] font-semibold uppercase tracking-wide text-grey-custom">
-                  {label}
-                </span>
-              </div>
-            ))
-          }
         </div>
       </div>
 
@@ -202,27 +172,48 @@ const features = [
           </div>
         </div>
 
-        <!-- Service navigation pills -->
-        <div class="grid grid-cols-3 gap-2">
-          {
-            features.map(({ icon, label, desc, path }) => (
-              <a
-                href={path}
-                class="group flex flex-col items-center gap-2 rounded-xl border border-green-primary/10 bg-white p-3 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-primary/25 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary/40 focus-visible:ring-offset-2"
-              >
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-green-primary/10 transition-colors duration-200 group-hover:bg-green-primary/20">
-                  <Icon name={icon} class="h-5 w-5 text-green-primary" />
-                </div>
-                <span class="text-[11px] font-bold leading-tight text-green-light">
-                  {label}
-                </span>
-                <span class="text-[9px] leading-tight text-grey-custom">
-                  {desc}
-                </span>
-              </a>
-            ))
-          }
-        </div>
+        {
+          services.length > 0 && (
+            <ServicesCarousel
+              client:load
+              slidesPreview={3}
+              swipperOptions={{ spaceBetween: 8 }}
+            >
+              {services.map((service) => (
+                <a
+                  href={`/service/${service.slug}`}
+                  class="group flex h-full flex-col items-center gap-2 rounded-xl border border-green-primary/10 bg-white p-3 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-primary/25 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary/40 focus-visible:ring-offset-2"
+                >
+                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-green-primary/10 transition-colors duration-200 group-hover:bg-green-primary/20">
+                    {isAstroIcon(service.icon) ? (
+                      <ReactIcon
+                        icon={service.icon}
+                        className="h-5 w-5 text-green-primary"
+                      />
+                    ) : isImgIcon(service.icon) ? (
+                      <img
+                        src={service.icon}
+                        alt=""
+                        class="h-5 w-5 object-contain"
+                      />
+                    ) : (
+                      <ReactIcon
+                        icon="tabler:flask"
+                        className="h-5 w-5 text-green-primary"
+                      />
+                    )}
+                  </div>
+                  <span class="text-[11px] font-bold leading-tight text-green-light">
+                    {service.name}
+                  </span>
+                  <span class="line-clamp-1 text-[9px] leading-tight text-grey-custom">
+                    {getServiceDesc(service)}
+                  </span>
+                </a>
+              ))}
+            </ServicesCarousel>
+          )
+        }
       </div>
     </div>
   </div>
