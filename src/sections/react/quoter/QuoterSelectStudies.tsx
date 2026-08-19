@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, Search, X } from "lucide-react";
 import { useStore } from "@nanostores/react";
 
 import Button from "../../../components/react/buttons/Button";
@@ -26,7 +26,8 @@ import {
 } from "../../../stores/quoterStore";
 
 const SERVICES_PER_PAGE = 8;
-const STUDIES_PER_PAGE = 12;
+const STUDIES_PER_PAGE = 8;
+const SEARCH_DEBOUNCE_MS = 350;
 
 const QuoterSelectStudies = () => {
   const [branchId] = useState<string | null>(() => getStoredBranchId());
@@ -34,6 +35,8 @@ const QuoterSelectStudies = () => {
   const [selectedSlug, setSelectedSlug] = useState("");
   const [serviceDetail, setServiceDetail] = useState<Service | null>(null);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
 
   const selectedStudies = useStore(selectedStudiesStore);
   const persistedService = useStore(selectedServiceStore);
@@ -107,6 +110,26 @@ const QuoterSelectStudies = () => {
     setStudiesPage(1);
   }, [selectedSlug]);
 
+  // Studies search is scoped to the selected service — clear it whenever
+  // the user switches service so a stale term doesn't silently filter
+  // the newly picked one.
+  useEffect(() => {
+    setSearchInput("");
+    setSearch("");
+  }, [selectedSlug]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSearch(searchInput.trim());
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => clearTimeout(timeout);
+  }, [searchInput]);
+
+  useEffect(() => {
+    setStudiesPage(1);
+  }, [search]);
+
   useEffect(() => {
     if (!selectedSlug || !branchId) {
       setServiceDetail(null);
@@ -120,6 +143,7 @@ const QuoterSelectStudies = () => {
       branchId,
       page: studiesPage,
       limit: STUDIES_PER_PAGE,
+      search,
     })
       .then((data) => {
         if (cancelled) return;
@@ -140,7 +164,7 @@ const QuoterSelectStudies = () => {
     return () => {
       cancelled = true;
     };
-  }, [selectedSlug, branchId, studiesPage]);
+  }, [selectedSlug, branchId, studiesPage, search]);
 
   const studies = serviceDetail?.studies?.data ?? [];
   const totalStudies = serviceDetail?.studies?.total ?? 0;
@@ -229,6 +253,30 @@ const QuoterSelectStudies = () => {
         </div>
       )}
 
+      {hasPriceSheet && (
+        <div className="relative mt-5 w-full sm:max-w-xs">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-custom/70" />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Buscar por nombre o código..."
+            aria-label="Buscar estudios por nombre o código"
+            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-green-light placeholder:text-grey-custom/70 transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
+          />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => setSearchInput("")}
+              aria-label="Limpiar búsqueda"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-grey-custom/70 transition hover:text-green-light"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="mt-5 flex-1">
         {!selectedSlug ? (
           <div className="py-10 text-center text-grey-custom">
@@ -266,7 +314,9 @@ const QuoterSelectStudies = () => {
               })
             ) : (
               <p className="col-span-1 text-center text-grey-custom sm:col-span-2 lg:col-span-3 xl:col-span-4">
-                No se encontraron estudios.
+                {search
+                  ? `No hay resultados para "${search}".`
+                  : "No se encontraron estudios."}
               </p>
             )}
           </div>
