@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Search, X } from "lucide-react";
 
 import CardStudy from "../../../components/react/cards/CardStudy";
 import Pagination from "../../../components/react/ui/Pagination";
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const LIMIT = 12;
+const SEARCH_DEBOUNCE_MS = 350;
 
 const ServiceStudiesCatalog = ({
   slug,
@@ -31,12 +33,29 @@ const ServiceStudiesCatalog = ({
   const [total, setTotal] = useState(initialTotal);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
   const isFirstRun = useRef(true);
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
     totalPages,
     initialPage,
   });
+
+  // Debounce the raw input, then reset to page 1 once the committed search
+  // term actually changes so the fetch effect below only fires once.
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSearch(searchInput.trim());
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => clearTimeout(timeout);
+  }, [searchInput]);
+
+  useEffect(() => {
+    if (isFirstRun.current) return;
+    setPage(1);
+  }, [search]);
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -51,6 +70,7 @@ const ServiceStudiesCatalog = ({
       branchId,
       page: currentPage,
       limit: LIMIT,
+      search,
     })
       .then((data) => {
         if (cancelled) return;
@@ -65,12 +85,36 @@ const ServiceStudiesCatalog = ({
     return () => {
       cancelled = true;
     };
-  }, [currentPage]);
+  }, [currentPage, search]);
+
+  const handleClearSearch = () => setSearchInput("");
 
   return (
     <div id="services-section">
-      <div className="mb-8 flex items-center justify-end">
-        <div className="inline-flex items-center gap-3 rounded-full bg-green-light/8 border border-green-light/15 px-5 py-2.5 shadow-xs">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative w-full sm:max-w-xs">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-custom/70" />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Buscar por nombre o código..."
+            aria-label="Buscar estudios por nombre o código"
+            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-green-light placeholder:text-grey-custom/70 transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
+          />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={handleClearSearch}
+              aria-label="Limpiar búsqueda"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-grey-custom/70 transition hover:text-green-light"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        <div className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-green-light/8 border border-green-light/15 px-5 py-2.5 shadow-xs sm:self-auto">
           <span
             className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
               isLoading ? "bg-ui-border" : "bg-green-light"
@@ -119,7 +163,9 @@ const ServiceStudiesCatalog = ({
                 No encontramos estudios
               </h2>
               <p className="text-grey-custom mt-3 max-w-sm mx-auto leading-relaxed">
-                No hay estudios disponibles en esta página del catálogo.
+                {search
+                  ? `No hay resultados para "${search}". Intenta con otro nombre o código.`
+                  : "No hay estudios disponibles en esta página del catálogo."}
               </p>
             </div>
           )}
