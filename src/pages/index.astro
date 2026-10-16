@@ -7,11 +7,18 @@ import HeroHome from "../sections/astro/hero/HeroHome.astro";
 import Review from "../sections/astro/review/Review.astro";
 import OurServices from "../sections/astro/service/OurServices.astro";
 import MetricsDyra from "../sections/react/common/MetricsDyra";
+import { getBranchesWithSchedules } from "../api/branchesApi/branchesApi";
+import { branchJsonLd } from "../utils/structuredData";
+
+// Local-business data for every branch (address, phone, hours).
+const branches = await getBranchesWithSchedules();
+const jsonLd = branches.map(branchJsonLd);
 ---
 
 <Layout
   title="Laboratorio DYRA | Diagnóstico y Referencia Analítica"
   description="Bienvenido a Laboratorio DYRA. Ofrecemos análisis clínicos con tecnología de punta y calidez humana en Guadalajara y Colima."
+  jsonLd={jsonLd}
 >
   <div class="-mt-10">
     <HeroHome />

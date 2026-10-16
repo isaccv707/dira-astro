@@ -1,16 +1,19 @@
-import { MapPin, Phone, ArrowRight, ExternalLink } from "lucide-react";
+import { MapPin, Phone, ArrowRight, ExternalLink, Check } from "lucide-react";
 import type { Branch } from "../../../interfaces/branch.interface";
 
 interface BranchOptionCardProps {
   branch: Branch;
   onSelect: (branch: Branch) => void;
   action?: "select" | "consult";
+  /** Highlights the branch the visitor already has selected. */
+  isCurrent?: boolean;
 }
 
 const BranchOptionCard = ({
   branch,
   onSelect,
   action = "select",
+  isCurrent = false,
 }: BranchOptionCardProps) => {
   const { address, state } = branch;
   const fullAddress = address
@@ -21,7 +24,8 @@ const BranchOptionCard = ({
     <button
       type="button"
       onClick={() => onSelect(branch)}
-      className="group relative flex w-full items-stretch overflow-hidden rounded-clinical-md border border-ui-border bg-white text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-green-secondary hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2"
+      aria-current={isCurrent ? "true" : undefined}
+      className={`group relative flex w-full items-stretch overflow-hidden rounded-clinical-md border ${isCurrent ? "border-green-primary bg-green-primary/5" : "border-ui-border bg-white"} text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-green-secondary hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2`}
     >
       <span
         aria-hidden="true"
@@ -42,7 +46,12 @@ const BranchOptionCard = ({
             </span>
           </div>
 
-          {action === "consult" ? (
+          {isCurrent ? (
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-primary px-2.5 py-1 text-[11px] font-semibold text-white">
+              <Check className="h-3 w-3" />
+              Actual
+            </span>
+          ) : action === "consult" ? (
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-primary/10 px-2.5 py-1 text-[11px] font-semibold text-green-primary">
               <ExternalLink className="h-3 w-3" />
               Resultados

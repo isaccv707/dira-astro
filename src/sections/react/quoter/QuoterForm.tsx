@@ -2,7 +2,6 @@ import RHFTextInput from "../../../components/react/hk-form/RHFTextInput";
 import RHFSelectInput from "../../../components/react/hk-form/RHFSelectInput";
 import Button from "../../../components/react/buttons/Button";
 import { motion, AnimatePresence } from "framer-motion";
-import { setClient } from "../../../stores/quoterStore";
 import * as yup from "yup";
 import FormProvider from "../../../components/react/hk-form/FormProvider";
 import type { UseFormReturn } from "react-hook-form";
@@ -20,17 +19,9 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
   const { watch, handleSubmit } = methods;
 
   const clientType = watch("clientType");
+  console.log(clientType);
 
   const handleNext = () => {
-    const values: Inputs = {
-      clientType: watch("clientType"),
-      name: watch("name"),
-      lastName: watch("lastName"),
-      phoneNumber: watch("phoneNumber"),
-      email: watch("email"),
-      companyRFC: watch("companyRFC"),
-    };
-    setClient(values);
     nextStep();
   };
 
@@ -124,8 +115,7 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
             <div className="sm:col-span-2 mt-2 border-t border-ui-border pt-5">
               <div className="flex flex-col-reverse items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-xs text-grey-custom leading-relaxed">
-                  Usaremos estos datos únicamente para enviarte la
-                  cotización.
+                  Usaremos estos datos únicamente para enviarte la cotización.
                 </p>
                 <Button
                   text="Siguiente"

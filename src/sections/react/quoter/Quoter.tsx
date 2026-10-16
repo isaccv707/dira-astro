@@ -9,6 +9,7 @@ import Button from "../../../components/react/buttons/Button";
 import { ClipboardList } from "lucide-react";
 
 import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
+import { setClient } from "../../../stores/quoterStore";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -30,7 +31,7 @@ const Quoter = () => {
     resolver: yupResolver(quoterFormSchema) as any,
   });
 
-  const { trigger } = methods;
+  const { trigger, getValues } = methods;
 
   const nextStep = async () => {
     if (step === 1) {
@@ -41,6 +42,14 @@ const Quoter = () => {
         "email",
       ]);
       if (!isFormValid) return;
+      // Store the cleaned values (trimmed, phone digits only) and only once
+      // the step is valid. Company clients carry no last name.
+      const client = quoterFormSchema.cast(getValues());
+      setClient({
+        ...client,
+        lastName: client.clientType === "company" ? "" : client.lastName,
+        companyRFC: client.companyRFC ?? undefined,
+      });
       setStep((prev) => prev + 1);
     }
   };

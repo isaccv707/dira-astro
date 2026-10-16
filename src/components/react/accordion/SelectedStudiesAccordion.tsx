@@ -38,7 +38,11 @@ const SelectedStudiesAccordion = ({
           <div className="min-w-0 flex-1 basis-32">
             <p className="text-green-light truncate">{study.name}</p>
             <p className="font-semibold text-green-primary text-xs sm:text-sm">
-              ${study.priceInfo.price}
+              {study.priceInfo.showPrice
+                ? `$${Number(study.priceInfo.price).toLocaleString("es-MX", {
+                    minimumFractionDigits: 2,
+                  })}`
+                : study.priceInfo.message}
             </p>
           </div>
 

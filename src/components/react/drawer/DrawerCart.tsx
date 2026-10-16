@@ -58,7 +58,7 @@ const DrawerStudies = ({
   };
 
   const total = cartItems.reduce(
-    (acc, item) => acc + item.priceInfo.price * (item.quantity || 1),
+    (acc, item) => acc + Number(item.priceInfo.price ?? 0) * (item.quantity || 1),
     0,
   );
 

@@ -1,5 +1,11 @@
-import type { Study } from "../../../interfaces/study.interface";
+import { FlaskConical, Timer } from "lucide-react";
+import {
+  getCatalogName,
+  type Study,
+} from "../../../interfaces/study.interface";
+import { getFastingHours } from "../../../utils/studyPreparation";
 import AddStudyButton from "../buttons/AddStudyButton";
+import PanelBadge from "../panel/PanelBadge";
 
 interface CardQuoteStudyProps {
   study: Study;
@@ -15,6 +21,9 @@ const CardQuoteStudy = ({
   study,
 }: CardQuoteStudyProps) => {
   const hasPrice = study.priceInfo?.showPrice === true;
+  const section = getCatalogName(study.section);
+  const sampleType = getCatalogName(study.sampleType);
+  const fastingHours = getFastingHours(study.preparation);
 
   return (
     <div
@@ -31,6 +40,15 @@ const CardQuoteStudy = ({
     >
       {/* Body */}
       <div className="flex flex-col flex-1 p-4 sm:p-5 gap-3">
+        {/* Code · section, profile badge */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-wider text-grey-custom/70">
+            <span className="font-mono">{study.code}</span>
+            {section && ` · ${section}`}
+          </span>
+          {study.isPanel && <PanelBadge />}
+        </div>
+
         {/* Name */}
         <h3
           className={`text-sm sm:text-[15px] font-semibold leading-snug line-clamp-2 min-h-10 ${
@@ -41,8 +59,48 @@ const CardQuoteStudy = ({
           {study.name}
         </h3>
 
-        {/* Price zone — fixed min-height so all cards align */}
-        <div className="min-h-12 flex items-center">
+        {study.description && (
+          <p
+            className="text-xs leading-relaxed text-grey-custom line-clamp-2"
+            title={study.description}
+          >
+            {study.description}
+          </p>
+        )}
+
+        {/* Sample + preparation */}
+        {(sampleType || study.preparation) && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {sampleType && (
+              <span className="inline-flex items-center gap-1 rounded-clinical-sm bg-ui-bg px-2 py-1 text-[11px] font-semibold text-grey-custom">
+                <FlaskConical className="h-3 w-3 text-green-light" />
+                {sampleType}
+              </span>
+            )}
+            {fastingHours ? (
+              <span
+                className="inline-flex items-center gap-1 rounded-clinical-sm bg-yellow-primary/10 px-2 py-1 text-[11px] font-bold text-yellow-secondary"
+                title={study.preparation ?? undefined}
+              >
+                <Timer className="h-3 w-3" />
+                Ayuno {fastingHours} h
+              </span>
+            ) : (
+              study.preparation && (
+                <span
+                  className="inline-flex min-w-0 items-center gap-1 rounded-clinical-sm bg-ui-bg px-2 py-1 text-[11px] font-semibold text-grey-custom"
+                  title={study.preparation}
+                >
+                  <Timer className="h-3 w-3 shrink-0 text-green-light" />
+                  <span className="truncate">{study.preparation}</span>
+                </span>
+              )
+            )}
+          </div>
+        )}
+
+        {/* Price zone — pushed down so prices align across the row */}
+        <div className="mt-auto min-h-12 flex items-center">
           {hasPrice ? (
             <div className="flex items-baseline gap-1">
               <span className="text-xs font-bold text-grey-custom">$</span>

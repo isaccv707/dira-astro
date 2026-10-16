@@ -1,26 +1,35 @@
 import type { Branch } from "../../../interfaces/branch.interface";
 import { closeModal } from "../../../stores/modalStore";
-import { setSelectedBranch } from "../../../stores/branchStore";
+import { switchBranch } from "../../../stores/branchStore";
 import BranchOptionCard from "../cards/BranchOptionCard";
 
 interface SelectBranchButtonProps {
   branch: Branch;
+  isCurrent?: boolean;
 }
 
-const SelectBranchButton = ({ branch }: SelectBranchButtonProps) => {
+const SelectBranchButton = ({
+  branch,
+  isCurrent = false,
+}: SelectBranchButtonProps) => {
   const handleBranchSelection = (branch: Branch) => {
-    setSelectedBranch({
+    // Re-picking the active branch: nothing changes, skip the reload.
+    if (isCurrent) {
+      closeModal();
+      return;
+    }
+    closeModal();
+    switchBranch({
       id: branch.id,
       name: branch.name,
     });
-    closeModal();
-    window.location.reload();
   };
 
   return (
     <BranchOptionCard
       branch={branch}
       action="select"
+      isCurrent={isCurrent}
       onSelect={handleBranchSelection}
     />
   );

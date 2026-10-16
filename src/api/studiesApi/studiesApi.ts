@@ -5,6 +5,7 @@ import type {
 } from "./study.interface";
 import { resolveBranchId } from "../../stores/branchStore";
 import { createTtlCache } from "../../utils/ttlCache";
+import type { PanelTree } from "../../interfaces/study.interface";
 
 const studiesCache = createTtlCache<GetAllStudiesResponse>();
 
@@ -50,4 +51,33 @@ export const getAllStudies = async ({
     }
     throw error;
   }
+};
+
+// Panel structure rarely changes, so keep it for the whole tab session.
+// In-flight promises are shared so cards rendering the same panel only
+// fire one request. Failures are not cached so "Reintentar" hits the API.
+const PANEL_TREE_TTL_MS = 30 * 60 * 1000;
+const panelTreeCache = createTtlCache<PanelTree | null>(PANEL_TREE_TTL_MS);
+const panelTreeInFlight = new Map<string, Promise<PanelTree | null>>();
+
+export const getCachedPanelTree = (id: string): PanelTree | null | undefined =>
+  panelTreeCache.get(id);
+
+// Resolves null on 404 — the panel is no longer active.
+export const getPanelTree = (id: string): Promise<PanelTree | null> => {
+  const cached = panelTreeCache.get(id);
+  if (cached !== undefined) return Promise.resolve(cached);
+
+  const pending = panelTreeInFlight.get(id);
+  if (pending) return pending;
+
+  const request = apiGet<PanelTree>(`/studies/${id}/panel-tree`)
+    .then((tree) => {
+      panelTreeCache.set(id, tree);
+      return tree;
+    })
+    .finally(() => panelTreeInFlight.delete(id));
+
+  panelTreeInFlight.set(id, request);
+  return request;
 };

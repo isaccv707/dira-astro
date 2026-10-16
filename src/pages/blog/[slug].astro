@@ -3,13 +3,14 @@ import Layout from "../../layouts/Layout.astro";
 import type { Post as PostType } from "../../api/postsApi/post.interface";
 import { getOneResource } from "../../utils/getOneResource";
 import PostSection from "../../sections/astro/blog/Post.astro";
+import { blogPostingJsonLd, breadcrumbJsonLd } from "../../utils/structuredData";
 
 const { slug = "" } = Astro.params;
 
 const post = await getOneResource<PostType>("posts", slug as string);
 
 if (!post) {
-  return Astro.redirect("/404");
+  return Astro.rewrite("/404");
 }
 
 const title = `${post.title} | Blog DYRA`;
@@ -17,8 +18,26 @@ const description =
   post.metaDescription ||
   post.description ||
   `Leé nuestro artículo sobre ${post.title} en el blog de Laboratorio DYRA.`;
+
+const jsonLd = [
+  blogPostingJsonLd(post, description),
+  breadcrumbJsonLd([
+    { name: "Inicio", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ]),
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout
+  title={title}
+  description={description}
+  type="article"
+  image={post.image}
+  imageAlt={post.title}
+  publishedTime={post.createdAt}
+  modifiedTime={post.updatedAt}
+  jsonLd={jsonLd}
+>
   <PostSection post={post} />
 </Layout>

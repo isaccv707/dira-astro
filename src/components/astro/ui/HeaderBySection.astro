@@ -14,6 +14,8 @@ interface Props {
   img?: ImageMetadata;
   btn?: boolean;
   btnProperties?: BtnProperties;
+  /** Heading level: only the page's main header should be h1. */
+  as?: "h1" | "h2";
 }
 
 // Explicit map, not a dynamic `text-${textColor}` template string — Tailwind's
@@ -34,6 +36,7 @@ const {
   img,
   btn = false,
   btnProperties = { text: "Contáctanos", path: "/contact" },
+  as: Heading = "h2",
 } = Astro.props;
 ---
 
@@ -63,11 +66,11 @@ const {
       {textHeader}
     </div>
 
-    <h1
+    <Heading
       class={`mt-3 text-2xl font-black tracking-tight lg:text-3xl ${TITLE_COLORS[textColor] ?? TITLE_COLORS.black}`}
     >
       {title}
-    </h1>
+    </Heading>
 
     <p
       class="mt-2 max-w-xl text-base leading-relaxed text-grey-custom lg:text-sm"

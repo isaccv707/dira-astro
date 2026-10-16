@@ -47,7 +47,7 @@ const FloatingIconWhatsapp = () => {
             iconClassName="w-7 h-auto"
           />
 
-          <h1 className="text-green-light font-semibold">Hola 👋</h1>
+          <p className="text-green-light font-semibold">Hola 👋</p>
           <p className="text-grey-custom text-sm mb-3">
             ¿Necesitas ayuda? Escríbenos por WhatsApp y te responderemos rápido.
           </p>
