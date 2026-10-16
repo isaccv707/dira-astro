@@ -77,9 +77,9 @@ export const ContactForm = () => {
           <p className="text-xs font-semibold tracking-wide uppercase text-green-primary">
             Envíanos un mensaje
           </p>
-          <h1 className="mt-1 text-lg sm:text-xl font-black tracking-tight text-green-light">
+          <h2 className="mt-1 text-lg sm:text-xl font-black tracking-tight text-green-light">
             Formulario de contacto
-          </h1>
+          </h2>
           <p className="mt-1 text-sm text-grey-custom">
             Compártenos tus datos y te contactaremos lo antes posible.
           </p>

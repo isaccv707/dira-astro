@@ -1,0 +1,67 @@
+---
+import type { PanelNode } from "../../../interfaces/study.interface";
+
+interface Props {
+  nodes: PanelNode[];
+  depth?: number;
+}
+
+// Server-rendered panel tree. Order comes from the API; children carry no
+// price — the profile is sold as a whole.
+const { nodes, depth = 0 } = Astro.props;
+
+// Abbreviation often repeats the code verbatim — show it only when it adds info.
+const extraAbbreviation = (node: PanelNode) =>
+  node.abbreviation &&
+  node.abbreviation.toLowerCase() !== node.code.toLowerCase()
+    ? node.abbreviation
+    : null;
+
+// Long flat lists (e.g. 19 HPV genotypes) read better in two columns.
+const isFlatList = nodes.length > 8 && nodes.every((node) => !node.isPanel);
+---
+
+<ul
+  class:list={[
+    depth > 0 && "mt-2 border-l-2 border-green-primary/15 pl-4",
+    isFlatList && "sm:columns-2 sm:gap-x-10",
+  ]}
+>
+  {
+    nodes.map((node) =>
+      node.isPanel ? (
+        <li class="break-inside-avoid border-b border-ui-border py-3 last:border-b-0">
+          <div class="flex items-baseline justify-between gap-4">
+            <p class="text-sm font-black tracking-tight text-green-light">
+              {node.title ?? node.name}
+            </p>
+            <span class="shrink-0 font-mono text-[11px] tabular-nums text-grey-custom/70">
+              {node.code}
+            </span>
+          </div>
+          {node.children.length > 0 ? (
+            <Astro.self nodes={node.children} depth={depth + 1} />
+          ) : (
+            <p class="mt-1 text-xs text-grey-custom/70">
+              Sin estudios registrados
+            </p>
+          )}
+        </li>
+      ) : (
+        <li class="flex break-inside-avoid items-baseline justify-between gap-4 border-b border-ui-border py-2.5 last:border-b-0">
+          <span class="min-w-0 text-sm leading-snug text-grey-custom">
+            {node.title ?? node.name}
+            {extraAbbreviation(node) && (
+              <span class="ml-1.5 text-[11px] font-bold uppercase text-grey-custom/70">
+                {extraAbbreviation(node)}
+              </span>
+            )}
+          </span>
+          <span class="shrink-0 font-mono text-[11px] tabular-nums text-grey-custom/70">
+            {node.code}
+          </span>
+        </li>
+      ),
+    )
+  }
+</ul>

@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import {
-  Clock,
   FlaskConical,
   Calendar,
-  ShoppingCart,
-  Trash2,
-  ArrowRight,
   ClipboardList,
+  Timer,
 } from "lucide-react";
 
 import NavLinkButton from "../navigation/NavLinkButton";
 import Button from "../buttons/Button";
-import type { Study } from "../../../interfaces/study.interface";
+import PanelBadge from "../panel/PanelBadge";
+import PanelParameters from "../panel/PanelParameters";
+import {
+  getCatalogName,
+  type Study,
+} from "../../../interfaces/study.interface";
+import { getFastingHours } from "../../../utils/studyPreparation";
 import {
   addToCart,
   getCart,
@@ -30,15 +33,17 @@ const CardStudy = ({
 }: CardStudyProps) => {
   const {
     code,
-    deliveryTime,
     id,
     name,
     priceInfo,
     slug,
     description,
     preparation,
-    sampleType,
+    isPanel,
   } = study;
+  const sampleType = getCatalogName(study.sampleType);
+  const section = getCatalogName(study.section);
+  const fastingHours = getFastingHours(preparation);
   const [isInCart, setIsInCart] = useState(false);
 
   const checkCartStatus = () => {
@@ -72,6 +77,7 @@ const CardStudy = ({
           <ClipboardList className="w-3 h-3" />
           <span>ID: {code}</span>
         </div>
+        {isPanel && <PanelBadge />}
         {sampleType && (
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-clinical-sm text-[10px] font-black uppercase tracking-wider bg-yellow-secondary/8 text-yellow-secondary border border-yellow-secondary/15 shadow-xs">
             <span>{sampleType}</span>
@@ -80,6 +86,12 @@ const CardStudy = ({
       </div>
 
       <div className="px-6 grow flex flex-col">
+        {section && (
+          <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-grey-custom/70">
+            {section}
+          </p>
+        )}
+
         {/* Title */}
         <h5
           title={name}
@@ -105,32 +117,39 @@ const CardStudy = ({
           )}
 
           {/* Meta Info */}
+          {preparation && (
           <div className="flex flex-col gap-3 py-4 border-y border-ui-border/80">
-            <div className="flex items-center gap-3 text-xs font-bold text-grey-custom">
-              <div className="p-1.5 rounded-clinical-sm bg-green-light/8 text-green-light">
-                <Clock className="w-4 h-4" />
-              </div>
-              <span>
-                Resultados en:{" "}
-                <span className="text-green-light font-black">
-                  {deliveryTime} hrs
-                </span>
-              </span>
-            </div>
-            {preparation && (
+            {fastingHours && (
               <div className="flex items-center gap-3 text-xs font-bold text-grey-custom">
-                <div className="p-1.5 rounded-clinical-sm bg-green-light/8 text-green-light">
-                  <FlaskConical className="w-4 h-4" />
+                <div className="p-1.5 rounded-clinical-sm bg-yellow-primary/10 text-yellow-secondary">
+                  <Timer className="w-4 h-4" />
                 </div>
-                <span className="line-clamp-1">
-                  Prep:{" "}
+                <span>
+                  Ayuno:{" "}
                   <span className="text-green-light font-black">
-                    {preparation}
+                    {fastingHours} h
                   </span>
                 </span>
               </div>
             )}
+            {preparation && (
+              <div className="flex items-start gap-3 text-xs font-bold text-grey-custom">
+                <div className="p-1.5 rounded-clinical-sm bg-green-light/8 text-green-light">
+                  <FlaskConical className="w-4 h-4" />
+                </div>
+                <span className="line-clamp-2 font-semibold leading-relaxed" title={preparation}>
+                  {preparation}
+                </span>
+              </div>
+            )}
           </div>
+          )}
+
+          {isPanel && (
+            <div className="mt-4">
+              <PanelParameters studyId={id} />
+            </div>
+          )}
         </div>
 
         {/* Price Section */}

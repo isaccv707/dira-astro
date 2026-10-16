@@ -7,23 +7,36 @@ import ServiceDetailsSection from "../../sections/astro/service/ServiceDetails.a
 import ServicesSection from "../../sections/astro/service/Services.astro";
 import ServiceRecommendedSection from "../../sections/astro/service/ServiceRecommended.astro";
 
-import type { Service } from "../../interfaces/service.interface";
+import type { ServiceDetail } from "../../interfaces/service.interface";
+import { breadcrumbJsonLd } from "../../utils/structuredData";
+import { getCloudinaryUrl } from "../../utils/cloudinary";
 import { getOneResource } from "../../utils/getOneResource";
 import { resolveBranchId } from "../../stores/branchStore";
 import CTAContact from "../../components/astro/CTA/CTAContact.astro";
+import {
+  STUDY_TYPE_QUERY_KEY,
+  parseStudyTypeFilter,
+  studyTypeToIsPanel,
+} from "../../utils/studyTypeFilter";
 
 const { slug } = Astro.params;
 const branchId = resolveBranchId();
 
 const STUDIES_PAGE_SIZE = 12;
 
-const service = await getOneResource<Service>("services", slug as string, {
+// ?tipo=perfiles|estudios — SSR the filtered list so shared links match.
+const studyType = parseStudyTypeFilter(
+  Astro.url.searchParams.get(STUDY_TYPE_QUERY_KEY),
+);
+
+const service = await getOneResource<ServiceDetail>("services", slug as string, {
   branchId,
   limit: STUDIES_PAGE_SIZE,
+  isPanel: studyTypeToIsPanel(studyType),
 });
 
 if (!service) {
-  return Astro.redirect("/404");
+  return Astro.rewrite("/404");
 }
 const {
   id,
@@ -34,10 +47,23 @@ const {
   benefits = [],
   details = [],
 } = service;
+
+const ogImage = imageUrl
+  ? getCloudinaryUrl(imageUrl, { width: 1200, height: 630, format: "jpg" })
+  : undefined;
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: "Inicio", path: "/" },
+    { name, path: `/service/${service.slug}` },
+  ]),
+];
 ---
 
 <Layout
   title={`${name} | Laboratorio DYRA`}
+  image={ogImage}
+  imageAlt={name}
+  jsonLd={jsonLd}
   description={description ||
     `Conoce nuestro servicio de ${name}: información, beneficios y estudios disponibles en Laboratorio DYRA.`}
 >
@@ -52,7 +78,7 @@ const {
 
   <ServiceDetailsSection details={details} />
 
-  <ServicesSection service={service} />
+  <ServicesSection service={service} studyType={studyType} />
 
   <ServiceRecommendedSection currentServiceId={id} />
 

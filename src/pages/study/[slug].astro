@@ -1,41 +1,104 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getOneResource } from "../../utils/getOneResource";
-import { getAllStudies } from "../../api/studiesApi/studiesApi";
+import { getPanelTree } from "../../api/studiesApi/studiesApi";
 import { resolveBranchId } from "../../stores/branchStore";
-import type { Study } from "../../interfaces/study.interface";
+import type { PanelTree, Study } from "../../interfaces/study.interface";
+import type { ServiceDetail } from "../../interfaces/service.interface";
 import StudyDetail from "../../sections/astro/StudyDetail.astro";
+import { breadcrumbJsonLd } from "../../utils/structuredData";
 
 const RECOMMENDED_STUDIES_COUNT = 4;
 
 const { slug = "" } = Astro.params;
 const branchId = resolveBranchId();
 
-const study = await getOneResource<Study>("studies", slug as string, {
-  branchId,
-});
+// GET /studies/:id only accepts UUIDs; slugs go through /studies/by-slug,
+// which requires branchId.
+const rawStudy = branchId
+  ? await getOneResource<Study & Record<string, unknown>>(
+      "studies/by-slug",
+      slug as string,
+      { branchId },
+    )
+  : null;
 
-if (!study) {
-  return Astro.redirect("/404");
+if (!rawStudy) {
+  return Astro.rewrite("/404");
+}
+
+// by-slug returns every price sheet (private ones included) and no
+// priceInfo. Whitelist the fields we render so nothing else ends up
+// serialized into island props in the HTML.
+const study: Study = {
+  id: rawStudy.id,
+  name: rawStudy.name,
+  slug: rawStudy.slug,
+  code: rawStudy.code,
+  description: rawStudy.description,
+  sampleType: rawStudy.sampleType,
+  deliveryTime: rawStudy.deliveryTime,
+  preparation: rawStudy.preparation,
+  isPanel: rawStudy.isPanel,
+  abbreviation: rawStudy.abbreviation,
+  section: rawStudy.section,
+  technique: rawStudy.technique,
+  priceInfo: rawStudy.priceInfo ?? {
+    showPrice: false,
+    price: null,
+    message: null,
+  },
+};
+
+// Profiles list every child study on the page. 404 or failure → hide it.
+let panelTree: PanelTree | null = null;
+if (study.isPanel) {
+  try {
+    panelTree = await getPanelTree(study.id);
+  } catch (error) {
+    console.error("Error fetching panel tree:", error);
+  }
 }
 
 const { name, description = "" } = study;
 
-const { data: otherStudies } = await getAllStudies({
-  limit: 20,
-  branchId,
-});
+const parentService = rawStudy.service as
+  | { name?: string; slug?: string }
+  | undefined;
 
-const recommendedStudies = otherStudies
-  .filter((item) => item.id !== study.id)
+// Recommend from the study's own service — same source as the service page,
+// so every card is sellable here and carries its branch price.
+const serviceDetail = parentService?.slug
+  ? await getOneResource<ServiceDetail>("services", parentService.slug, {
+      branchId,
+      limit: 24,
+    })
+  : null;
+
+const recommendedStudies = (serviceDetail?.studies?.data ?? [])
+  .filter((item) => item.id !== study.id && item.priceInfo?.showPrice)
   .sort(() => Math.random() - 0.5)
   .slice(0, RECOMMENDED_STUDIES_COUNT);
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: "Inicio", path: "/" },
+    ...(parentService?.name && parentService.slug
+      ? [{ name: parentService.name, path: `/service/${parentService.slug}` }]
+      : []),
+    { name, path: `/study/${study.slug}` },
+  ]),
+];
 ---
 
 <Layout
   title={`${name} | Laboratorio DYRA`}
   description={description ||
-    `Conoce todo sobre el estudio ${name}: preparación, tipo de muestra y tiempo de entrega en Laboratorio DYRA.`}
+    `Conoce todo sobre el estudio ${name}: preparación y tipo de muestra en Laboratorio DYRA.`}
+  jsonLd={jsonLd}
 >
-  <StudyDetail study={study} recommendedStudies={recommendedStudies} />
+  <StudyDetail
+    study={study}
+    panelTree={panelTree}
+    recommendedStudies={recommendedStudies}
+  />
 </Layout>

@@ -2,20 +2,31 @@ import { useEffect, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 
 import CardStudy from "../../../components/react/cards/CardStudy";
+import StudyTypeFilterControl from "../../../components/react/filter/StudyTypeFilterControl";
 import Pagination from "../../../components/react/ui/Pagination";
 import usePagination from "../../../hooks/usePagination";
 
-import type { Study } from "../../../interfaces/study.interface";
-import type { Service } from "../../../interfaces/service.interface";
+import type {
+  ServiceDetail,
+  ServiceStudy,
+} from "../../../interfaces/service.interface";
 import { getOneResource } from "../../../utils/getOneResource";
+import {
+  STUDY_TYPE_QUERY_KEY,
+  studyTypeEmptyMessage,
+  studyTypeToIsPanel,
+  studyTypeToQueryValue,
+  type StudyTypeFilter,
+} from "../../../utils/studyTypeFilter";
 
 interface Props {
   slug: string;
   branchId?: string;
-  initialStudies: Study[];
+  initialStudies: ServiceStudy[];
   initialPage: number;
   initialTotalPages: number;
   initialTotal: number;
+  initialStudyType?: StudyTypeFilter;
 }
 
 const LIMIT = 12;
@@ -28,13 +39,15 @@ const ServiceStudiesCatalog = ({
   initialPage,
   initialTotalPages,
   initialTotal,
+  initialStudyType = "all",
 }: Props) => {
-  const [studies, setStudies] = useState<Study[]>(initialStudies);
+  const [studies, setStudies] = useState<ServiceStudy[]>(initialStudies);
   const [total, setTotal] = useState(initialTotal);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [isLoading, setIsLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [studyType, setStudyType] = useState<StudyTypeFilter>(initialStudyType);
   const isFirstRun = useRef(true);
 
   const { currentPage, nextPage, prevPage, setPage } = usePagination({
@@ -55,7 +68,17 @@ const ServiceStudiesCatalog = ({
   useEffect(() => {
     if (isFirstRun.current) return;
     setPage(1);
-  }, [search]);
+  }, [search, studyType]);
+
+  // Mirror the filter in ?tipo= so the view is shareable and survives reloads.
+  const handleStudyTypeChange = (next: StudyTypeFilter) => {
+    setStudyType(next);
+    const url = new URL(window.location.href);
+    const queryValue = studyTypeToQueryValue(next);
+    if (queryValue) url.searchParams.set(STUDY_TYPE_QUERY_KEY, queryValue);
+    else url.searchParams.delete(STUDY_TYPE_QUERY_KEY);
+    window.history.replaceState(window.history.state, "", url);
+  };
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -66,11 +89,12 @@ const ServiceStudiesCatalog = ({
     let cancelled = false;
     setIsLoading(true);
 
-    getOneResource<Service>("services", slug, {
+    getOneResource<ServiceDetail>("services", slug, {
       branchId,
       page: currentPage,
       limit: LIMIT,
       search,
+      isPanel: studyTypeToIsPanel(studyType),
     })
       .then((data) => {
         if (cancelled) return;
@@ -85,14 +109,24 @@ const ServiceStudiesCatalog = ({
     return () => {
       cancelled = true;
     };
-  }, [currentPage, search]);
+  }, [currentPage, search, studyType]);
 
   const handleClearSearch = () => setSearchInput("");
 
+  const countLabel =
+    studyType === "profiles"
+      ? total === 1 ? "Perfil" : "Perfiles"
+      : total === 1 ? "Estudio" : "Estudios";
+
   return (
     <div id="services-section">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full sm:max-w-xs">
+      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <StudyTypeFilterControl
+            value={studyType}
+            onChange={handleStudyTypeChange}
+          />
+          <div className="relative w-full sm:max-w-xs">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-custom/70" />
           <input
             type="text"
@@ -112,6 +146,7 @@ const ServiceStudiesCatalog = ({
               <X className="h-4 w-4" />
             </button>
           )}
+          </div>
         </div>
 
         <div className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-green-light/8 border border-green-light/15 px-5 py-2.5 shadow-xs sm:self-auto">
@@ -121,7 +156,7 @@ const ServiceStudiesCatalog = ({
             }`}
           />
           <span className="text-sm font-bold text-green-light">
-            {isLoading ? "Cargando..." : `${total} Estudios`}
+            {isLoading ? "Cargando..." : `${total} ${countLabel}`}
           </span>
         </div>
       </div>
@@ -133,7 +168,7 @@ const ServiceStudiesCatalog = ({
           }`}
         >
           {studies.length > 0 ? (
-            studies.map((study: Study, index: number) => (
+            studies.map((study: ServiceStudy, index: number) => (
               <div
                 key={study.id}
                 className="motion-safe:animate-fade-up"
@@ -165,7 +200,7 @@ const ServiceStudiesCatalog = ({
               <p className="text-grey-custom mt-3 max-w-sm mx-auto leading-relaxed">
                 {search
                   ? `No hay resultados para "${search}". Intenta con otro nombre o código.`
-                  : "No hay estudios disponibles en esta página del catálogo."}
+                  : studyTypeEmptyMessage(studyType)}
               </p>
             </div>
           )}

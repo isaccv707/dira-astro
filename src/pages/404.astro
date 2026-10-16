@@ -1,13 +1,18 @@
 ---
 import NavLinkButton from "../components/react/navigation/NavLinkButton";
 import Layout from "../layouts/Layout.astro";
+
+// Served directly (and via Astro.rewrite from dynamic routes) with a real 404
+// status, so missing pages are not indexed as soft 404s.
+Astro.response.status = 404;
 ---
 
 <Layout
   title="Página no encontrada | DYRA"
   description="La página que buscas no existe o fue movida. Regresa al inicio de Laboratorio DYRA."
+  noindex
 >
-  <main class="grid min-h-screen place-items-center">
+  <section class="grid min-h-[60vh] place-items-center">
     <div class="text-center max-w-lg">
       <h1
         class="text-7xl sm:text-8xl font-black text-green-secondary drop-shadow-md"
@@ -34,5 +39,5 @@ import Layout from "../layouts/Layout.astro";
         />
       </div>
     </div>
-  </main>
+  </section>
 </Layout>

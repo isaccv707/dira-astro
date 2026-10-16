@@ -4,13 +4,22 @@ import { useStore } from "@nanostores/react";
 
 import Button from "../../../components/react/buttons/Button";
 import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
+import StudyTypeFilterControl from "../../../components/react/filter/StudyTypeFilterControl";
 import SelectInput from "../../../components/react/form/SelectInput";
 import Pagination from "../../../components/react/ui/Pagination";
 import usePagination from "../../../hooks/usePagination";
 
 import type { Study } from "../../../interfaces/study.interface";
-import type { Service } from "../../../interfaces/service.interface";
+import type {
+  Service,
+  ServiceDetail,
+} from "../../../interfaces/service.interface";
 import { getOneResource } from "../../../utils/getOneResource";
+import {
+  studyTypeEmptyMessage,
+  studyTypeToIsPanel,
+  type StudyTypeFilter,
+} from "../../../utils/studyTypeFilter";
 import { getAllService } from "../../../api/servicesApi/serviceApi";
 import {
   getStoredBranchId,
@@ -33,10 +42,11 @@ const QuoterSelectStudies = () => {
   const [branchId] = useState<string | null>(() => getStoredBranchId());
   const [services, setServices] = useState<Service[]>([]);
   const [selectedSlug, setSelectedSlug] = useState("");
-  const [serviceDetail, setServiceDetail] = useState<Service | null>(null);
+  const [serviceDetail, setServiceDetail] = useState<ServiceDetail | null>(null);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [studyType, setStudyType] = useState<StudyTypeFilter>("all");
 
   const selectedStudies = useStore(selectedStudiesStore);
   const persistedService = useStore(selectedServiceStore);
@@ -128,7 +138,7 @@ const QuoterSelectStudies = () => {
 
   useEffect(() => {
     setStudiesPage(1);
-  }, [search]);
+  }, [search, studyType]);
 
   useEffect(() => {
     if (!selectedSlug || !branchId) {
@@ -139,11 +149,12 @@ const QuoterSelectStudies = () => {
     let cancelled = false;
     setIsLoadingDetail(true);
 
-    getOneResource<Service>("services", selectedSlug, {
+    getOneResource<ServiceDetail>("services", selectedSlug, {
       branchId,
       page: studiesPage,
       limit: STUDIES_PER_PAGE,
       search,
+      isPanel: studyTypeToIsPanel(studyType),
     })
       .then((data) => {
         if (cancelled) return;
@@ -164,7 +175,7 @@ const QuoterSelectStudies = () => {
     return () => {
       cancelled = true;
     };
-  }, [selectedSlug, branchId, studiesPage, search]);
+  }, [selectedSlug, branchId, studiesPage, search, studyType]);
 
   const studies = serviceDetail?.studies?.data ?? [];
   const totalStudies = serviceDetail?.studies?.total ?? 0;
@@ -254,7 +265,9 @@ const QuoterSelectStudies = () => {
       )}
 
       {hasPriceSheet && (
-        <div className="relative mt-5 w-full sm:max-w-xs">
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <StudyTypeFilterControl value={studyType} onChange={setStudyType} />
+        <div className="relative w-full sm:max-w-xs">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-custom/70" />
           <input
             type="text"
@@ -275,6 +288,7 @@ const QuoterSelectStudies = () => {
             </button>
           )}
         </div>
+        </div>
       )}
 
       <div className="mt-5 flex-1">
@@ -286,10 +300,9 @@ const QuoterSelectStudies = () => {
           <div className="py-10 text-center text-grey-custom">
             Cargando estudios...
           </div>
-        ) : !hasPriceSheet ? (
+        ) : !hasPriceSheet || (totalStudies === 0 && !search && studyType === "all") ? (
           <div className="py-10 text-center text-grey-custom">
-            Este servicio no tiene un tarifario público disponible. Consulta
-            precios directamente en sucursal.
+            Sin estudios disponibles
           </div>
         ) : (
           <div
@@ -316,7 +329,7 @@ const QuoterSelectStudies = () => {
               <p className="col-span-1 text-center text-grey-custom sm:col-span-2 lg:col-span-3 xl:col-span-4">
                 {search
                   ? `No hay resultados para "${search}".`
-                  : "No se encontraron estudios."}
+                  : studyTypeEmptyMessage(studyType)}
               </p>
             )}
           </div>
