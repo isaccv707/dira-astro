@@ -2,6 +2,11 @@ import { atom } from "nanostores";
 import type { SelectedBranch } from "../interfaces/branch.interface";
 import { getAllBranches } from "../api/branchesApi/branchesApi";
 import { openModal } from "./modalStore";
+import { clearCart } from "../utils/cart";
+import {
+  clearQuoterService,
+  clearQuoterStudies,
+} from "../utils/quoterStudies";
 
 const BRANCH_ID_KEY = "dyra_branch_id";
 const BRANCH_NAME_KEY = "dyra_branch_name";
@@ -23,6 +28,18 @@ export const setSelectedBranch = (branch: SelectedBranch) => {
   localStorage.setItem(BRANCH_NAME_KEY, branch.name);
   document.cookie = `${BRANCH_ID_KEY}=${branch.id};path=/;max-age=31536000;SameSite=Lax`;
   branchStore.set(branch);
+};
+
+// Prices, catalogs and contact data are all branch-scoped. On a switch, drop
+// everything priced against the old branch (cart, quote) and land on the home
+// page with a fresh request — replace() so Back doesn't return to a page
+// rendered for the previous branch.
+export const switchBranch = (branch: SelectedBranch) => {
+  setSelectedBranch(branch);
+  clearCart();
+  clearQuoterStudies();
+  clearQuoterService();
+  window.location.replace("/");
 };
 
 export const getStoredBranchId = (): string | null => {

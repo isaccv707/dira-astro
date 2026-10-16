@@ -1,20 +1,23 @@
 import { apiGet } from "../apiGet";
-import type { Service } from "../../interfaces/service.interface";
+import type {
+  Service,
+  ServiceListItem,
+} from "../../interfaces/service.interface";
 import type { Routes } from "../../routes/routes";
 import { resolveBranchId } from "../../stores/branchStore";
 import { createTtlCache } from "../../utils/ttlCache";
 
 interface GetAllServicesResponse {
-  data: Service[];
+  data: ServiceListItem[];
   total: number;
   page: number;
   limit: number;
   totalPages: number;
 }
 
-const servicesCache = createTtlCache<Service[]>();
+const servicesCache = createTtlCache<ServiceListItem[]>();
 
-export const getAllService = async (branchId?: string): Promise<Service[]> => {
+export const getAllService = async (branchId?: string): Promise<ServiceListItem[]> => {
   const resolvedBranchId = branchId ?? resolveBranchId();
   const cacheKey = resolvedBranchId ?? "__no_branch__";
 

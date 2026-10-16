@@ -1,11 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Branch from "../sections/react/branch/Branch";
+import { getBranchesWithSchedules } from "../api/branchesApi/branchesApi";
+import { branchJsonLd } from "../utils/structuredData";
+
+const branches = await getBranchesWithSchedules();
+const jsonLd = branches.map(branchJsonLd);
 ---
 
 <Layout
   title="Nuestras Sucursales | DYRA"
   description="Encuentra tu sucursal de Laboratorio DYRA más cercana. Contamos con múltiples ubicaciones para tu comodidad."
+  jsonLd={jsonLd}
 >
   <header class="mb-14">
     <p

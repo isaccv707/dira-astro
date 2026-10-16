@@ -3,21 +3,39 @@ import { Image } from "astro:assets";
 import logoDyra from "../../assets/images/logos/logo_dyra.png";
 
 import ButtonDrawer from "../../components/react/buttons/ButtonDrawer";
+import BranchSwitcher from "../../components/react/branch/BranchSwitcher";
 import Navbar from "./layout/Navbar.astro";
+import { getActiveBranchName } from "../../api/branchesApi/branchesApi";
+
+// Middleware falls back to DEFAULT_BRANCH_ID without a cookie; only show a
+// name when the visitor actually picked one.
+const hasBranchCookie = Boolean(Astro.cookies.get("dyra_branch_id")?.value);
+const branchName = hasBranchCookie ? await getActiveBranchName() : null;
 ---
 
 <header class="bg-white shadow-md px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto flex justify-between items-center">
-    <a href="/" class="flex items-center gap-3">
-      <img src={logoDyra.src} alt="Logo DYRA" width="64" height="64" />
-    </a>
+  <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
+    <div class="flex min-w-0 items-center gap-4">
+      <a href="/" class="flex shrink-0 items-center gap-3">
+        <img src={logoDyra.src} alt="Logo DYRA" width="64" height="64" />
+      </a>
+
+      <div class="hidden lg:block">
+        <BranchSwitcher client:load initialName={branchName} />
+      </div>
+    </div>
 
     <div class="flex items-center gap-4">
       <div class="hidden md:block">
         <Navbar />
       </div>
 
-      <div class="md:hidden">
+      <div class="flex min-w-0 items-center gap-2 md:hidden">
+        <BranchSwitcher
+          client:load
+          initialName={branchName}
+          variant="compact"
+        />
         <ButtonDrawer client:load />
       </div>
     </div>

@@ -55,6 +55,13 @@ export const getActiveBranchResultsUrl = async (
   return branch?.urlResults ?? null;
 };
 
+export const getActiveBranchName = async (
+  branchId?: string,
+): Promise<string | null> => {
+  const branch = await getActiveBranch(branchId);
+  return branch?.name ?? null;
+};
+
 export interface ActiveBranchContact {
   phone: string;
   email: string;
@@ -66,4 +73,30 @@ export const getActiveBranchContact = async (
   const branch = await getActiveBranch(branchId);
   if (!branch) return null;
   return { phone: branch.phone, email: branch.email };
+};
+
+const branchDetailsCache = createTtlCache<Branch[]>();
+
+// GET /branches omits schedules; only the per-branch endpoint includes them.
+// Used for LocalBusiness structured data, so failures degrade to [].
+export const getBranchesWithSchedules = async (): Promise<Branch[]> => {
+  const cacheKey = "__details__";
+  const cached = branchDetailsCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const branches = await getAllBranches();
+    const details = await Promise.all(
+      branches.map((branch) => getOneBranch(branch.id).catch(() => null)),
+    );
+    const result = branches.map((branch, i) => ({
+      ...branch,
+      schedules: details[i]?.schedules ?? [],
+    }));
+    branchDetailsCache.set(cacheKey, result);
+    return result;
+  } catch (error) {
+    console.error("Error fetching branch details:", error);
+    return branchDetailsCache.getStale(cacheKey) ?? [];
+  }
 };

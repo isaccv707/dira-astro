@@ -1,15 +1,20 @@
 ---
-import type { Service } from "../../../interfaces/service.interface";
+import type { ServiceDetail } from "../../../interfaces/service.interface";
 import ServiceStudiesCatalog from "../../react/service/ServiceStudiesCatalog";
+import type { StudyTypeFilter } from "../../../utils/studyTypeFilter";
 
 interface Props {
-  service: Service;
+  service: ServiceDetail;
+  studyType?: StudyTypeFilter;
 }
 
-const { service } = Astro.props;
+const { service, studyType = "all" } = Astro.props;
 const { priceSheet, studies, slug, branchId } = service;
 const initialStudies = studies?.data ?? [];
-const hasStudies = initialStudies.length > 0;
+
+// With a filter active an empty page just means "none of that kind" — keep
+// the catalog (and its filter) visible instead of the no-studies notice.
+const hasStudies = initialStudies.length > 0 || studyType !== "all";
 ---
 
 <section id="servicio-detalle" class="scroll-mt-24">
@@ -40,14 +45,18 @@ const hasStudies = initialStudies.length > 0;
           initialPage={studies?.page ?? 1}
           initialTotalPages={studies?.totalPages ?? 1}
           initialTotal={studies?.total ?? initialStudies.length}
+          initialStudyType={studyType}
           client:visible
         />
       </div>
     ) : (
       <div class="rounded-clinical-md border border-ui-border bg-white p-8 text-center shadow-xs motion-safe:animate-fade-up">
-        <p class="text-sm text-grey-custom leading-relaxed">
-          Este servicio no tiene un tarifario público disponible. Consulta
-          precios directamente en sucursal.
+        <h3 class="text-lg font-black tracking-tight text-green-light">
+          Sin estudios disponibles
+        </h3>
+        <p class="mt-2 text-sm text-grey-custom leading-relaxed">
+          Este servicio aún no tiene estudios disponibles en esta sucursal.
+          Consulta directamente en sucursal.
         </p>
       </div>
     )
