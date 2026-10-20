@@ -19,11 +19,12 @@ try {
 }
 
 const ASTRO_ICON_SETS = ["lucide:", "tabler:", "logos:", "simple-icons:"];
-const isAstroIcon = (icon?: string) =>
+const isAstroIcon = (icon?: string): icon is string =>
   !!icon &&
   !icon.startsWith("http") &&
   ASTRO_ICON_SETS.some((set) => icon.startsWith(set));
-const isImgIcon = (icon?: string) => !!icon && icon.startsWith("http");
+const isImgIcon = (icon?: string): icon is string =>
+  !!icon && icon.startsWith("http");
 
 const getServiceDesc = ({ _count, description }: Service) => {
   if (_count?.studies) return `${_count.studies} estudios`;
