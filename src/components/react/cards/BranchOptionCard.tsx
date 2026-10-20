@@ -1,4 +1,4 @@
-import { MapPin, Phone, ArrowRight, ExternalLink, Check } from "lucide-react";
+import { MapPin, ArrowRight, ExternalLink, Check } from "lucide-react";
 import type { Branch } from "../../../interfaces/branch.interface";
 
 interface BranchOptionCardProps {
@@ -72,13 +72,6 @@ const BranchOptionCard = ({
           <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-secondary" />
           <span>{fullAddress}</span>
         </p>
-
-        {branch.phone && (
-          <p className="flex items-center gap-1.5 font-mono text-xs tabular-nums text-grey-custom">
-            <Phone className="h-3.5 w-3.5 shrink-0 text-green-secondary" />
-            {branch.phone}
-          </p>
-        )}
 
         {action === "select" && address?.references && (
           <p className="text-xs font-semibold text-green-primary">
