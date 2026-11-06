@@ -42,7 +42,7 @@ const SelectInput = ({
         name={name}
         value={value}
         onChange={onChange}
-        className={`block w-full px-4 py-2 text-green-light bg-white border rounded-clinical-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-green-primary focus:border-green-primary
+        className={`block w-full px-4 py-2 text-ink bg-white border rounded-clinical-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-green-primary focus:border-green-primary
           ${isError ? "border-red-custom" : "border-ui-border"}
           transition-colors duration-200 ease-in-out`}
         aria-invalid={isError ? "true" : "false"}

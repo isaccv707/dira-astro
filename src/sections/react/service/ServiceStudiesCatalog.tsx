@@ -127,21 +127,21 @@ const ServiceStudiesCatalog = ({
             onChange={handleStudyTypeChange}
           />
           <div className="relative w-full sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-custom/70" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Buscar por nombre o código..."
             aria-label="Buscar estudios por nombre o código"
-            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-green-light placeholder:text-grey-custom/70 transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
+            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-subtle transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
           />
           {searchInput && (
             <button
               type="button"
               onClick={handleClearSearch}
               aria-label="Limpiar búsqueda"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-grey-custom/70 transition hover:text-green-light"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle transition hover:text-ink"
             >
               <X className="h-4 w-4" />
             </button>
@@ -155,7 +155,7 @@ const ServiceStudiesCatalog = ({
               isLoading ? "bg-ui-border" : "bg-green-light"
             }`}
           />
-          <span className="text-sm font-bold text-green-light">
+          <span className="text-sm font-bold text-ink">
             {isLoading ? "Cargando..." : `${total} ${countLabel}`}
           </span>
         </div>
@@ -194,10 +194,10 @@ const ServiceStudiesCatalog = ({
                   />
                 </svg>
               </div>
-              <h2 className="text-2xl font-black tracking-tight text-green-light">
+              <h2 className="text-2xl font-bold tracking-tight text-ink">
                 No encontramos estudios
               </h2>
-              <p className="text-grey-custom mt-3 max-w-sm mx-auto leading-relaxed">
+              <p className="text-ink-muted mt-3 max-w-sm mx-auto leading-relaxed">
                 {search
                   ? `No hay resultados para "${search}". Intenta con otro nombre o código.`
                   : studyTypeEmptyMessage(studyType)}
@@ -221,14 +221,14 @@ const ServiceStudiesCatalog = ({
 
           <div className="order-1 sm:order-2 flex items-center gap-4">
             <div className="px-5 py-2.5 bg-white rounded-clinical-md shadow-xs border border-ui-border flex items-center gap-3">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-grey-custom">
+              <span className="text-2xs font-bold uppercase tracking-[0.2em] text-ink-muted">
                 Página
               </span>
-              <span className="text-sm font-black text-green-light">
+              <span className="text-sm font-bold text-ink">
                 {currentPage}
               </span>
-              <span className="text-grey-custom/50">/</span>
-              <span className="text-sm font-black text-grey-custom">
+              <span className="text-ink-subtle">/</span>
+              <span className="text-sm font-bold text-ink-muted">
                 {totalPages}
               </span>
             </div>

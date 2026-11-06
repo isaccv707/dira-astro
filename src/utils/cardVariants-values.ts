@@ -1,18 +1,18 @@
 const COLOR_MAP = {
     "green-primary": {
-        container: "bg-green-primary shadow-green-primary/20",
+        container: "bg-brand-ink shadow-brand-ink/20",
         text: "text-white",
         iconContainer: "bg-white/10 border-white/20",
         decoration: "bg-white/10 group-hover:bg-white/20",
     },
     "green-secondary": {
-        container: "bg-green-secondary shadow-green-secondary/20",
+        container: "bg-brand-ink-hover shadow-brand-ink-hover/20",
         text: "text-white",
         iconContainer: "bg-white/10 border-white/20",
         decoration: "bg-white/10 group-hover:bg-white/20",
     },
     "yellow-primary": {
-        container: "bg-yellow-primary shadow-yellow-primary/20",
+        container: "bg-yellow-ink shadow-yellow-ink/20",
         text: "text-white",
         iconContainer: "bg-black/10 border-black/10",
         decoration: "bg-white/20 group-hover:bg-white/30",

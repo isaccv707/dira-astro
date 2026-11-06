@@ -114,13 +114,13 @@ const QuotationForm = ({ nextStep, methods }: QuotationFormProps) => {
             {/* Botón */}
             <div className="sm:col-span-2 mt-2 border-t border-ui-border pt-5">
               <div className="flex flex-col-reverse items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs text-grey-custom leading-relaxed">
+                <p className="text-xs text-ink-muted leading-relaxed">
                   Usaremos estos datos únicamente para enviarte la cotización.
                 </p>
                 <Button
                   text="Siguiente"
                   type="button"
-                  variant="secondary"
+                  variant="primary"
                   size="lg"
                   width="full"
                   className="sm:w-auto"

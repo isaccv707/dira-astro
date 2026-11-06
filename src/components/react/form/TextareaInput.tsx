@@ -41,7 +41,7 @@ const TextareaInput = ({
         aria-invalid={isError ? "true" : "false"}
         aria-describedby={isError ? `${id}-error` : undefined}
         className={`
-          mt-1 block w-full rounded-clinical-sm border px-3 py-2 text-green-light
+          mt-1 block w-full rounded-clinical-sm border px-3 py-2 text-ink
           shadow-xs focus:outline-none focus:ring-2 focus:ring-green-primary focus:border-green-primary
           transition-colors duration-200 ease-in-out
           ${isError ? "border-red-custom" : "border-ui-border"}

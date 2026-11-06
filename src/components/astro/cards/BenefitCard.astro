@@ -13,7 +13,7 @@ const { description, icon, title } = Astro.props;
 <div
   class="flex flex-col items-center space-y-3 p-6 text-center bg-white border border-ui-border rounded-clinical-md shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
 >
-  <div class="rounded-full bg-green-light p-3">
+  <div class="rounded-full bg-brand-ink p-3">
     {
       icon && !icon.startsWith("http") ? (
         <Icon name={icon} class="w-8 h-auto text-white" />
@@ -24,6 +24,6 @@ const { description, icon, title } = Astro.props;
       )
     }
   </div>
-  <h3 class="font-black tracking-tight text-lg text-green-light">{title}</h3>
-  <p class="text-sm leading-relaxed text-grey-custom">{description}</p>
+  <h3 class="font-bold tracking-tight text-lg text-ink">{title}</h3>
+  <p class="text-sm leading-relaxed text-ink-muted">{description}</p>
 </div>

@@ -52,7 +52,7 @@ const QuickActionButton = ({ text, description }: QuickActionButtonProps) => {
       align="left"
       className="group w-full gap-4 p-5 md:w-80"
     >
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-secondary/10 text-2xl text-green-secondary transition-colors duration-300 group-hover:bg-green-secondary/20">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-secondary/10 text-2xl text-brand-ink transition-colors duration-300 group-hover:bg-green-secondary/20">
         {isLoading ? (
           <Icon icon="line-md:loading-twotone-loop" />
         ) : (
@@ -61,11 +61,11 @@ const QuickActionButton = ({ text, description }: QuickActionButtonProps) => {
       </div>
 
       <div className="min-w-0">
-        <span className="block text-base font-bold text-green-light">
+        <span className="block text-base font-bold text-ink">
           {text}
         </span>
         {description && (
-          <span className="mt-0.5 block text-xs text-grey-custom">
+          <span className="mt-0.5 block text-xs text-ink-muted">
             {description}
           </span>
         )}

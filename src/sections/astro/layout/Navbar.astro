@@ -1,54 +1,34 @@
 ---
 import Dropdown from "../../../components/astro/ui/Dropdown.astro";
-import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
 import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
-import { getActiveBranchResultsUrl } from "../../../api/branchesApi/branchesApi";
-import { getToKnowRoutes, routes } from "../../../routes/routes";
+import { getToKnowRoutes, isActivePath, routes } from "../../../routes/routes";
 
 const currentPath = Astro.url.pathname;
 const servicesRoutes = await getServicesNavRoutes();
-const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
+const toMenu = (items: { path: string; text: string }[]) =>
+  items.map(({ path, text }) => ({ label: text, href: path }));
 ---
 
-<nav class="hidden md:flex items-center gap-6">
-  <div class="flex gap-5">
-    {
-      routes.map(({ path, text }) => (
-        <div>
-          <a href={path} class="text-green-light hover:text-yellow-primary">
-            {text}
-          </a>
-          {currentPath === path ? (
-            <div
-              transition:name="menu-line"
-              class="border-b-2 border-yellow-primary"
-            />
-          ) : (
-            <div class="border-b-2 border-transparent" />
-          )}
-        </div>
-      ))
-    }
-  </div>
-  <Dropdown
-    text={"Servicios"}
-    routes={servicesRoutes.map(({ path, text }) => ({
-      label: text,
-      href: path,
-    }))}
-  />
-  <NavLinkButton
-    path={resultsUrl}
-    text={"Resultados"}
-    variant="primary"
-    size="sm"
-    target={resultsUrl.startsWith("http") ? "_blank" : "_self"}
-  />
-  <Dropdown
-    text={"Conócenos"}
-    routes={getToKnowRoutes.map(({ path, text }) => ({
-      label: text,
-      href: path,
-    }))}
-  />
+<nav aria-label="Principal" class="flex items-center gap-1">
+  <Dropdown text="Servicios" routes={toMenu(servicesRoutes)} currentPath={currentPath} />
+  {
+    routes.map(({ path, text }) => {
+      const isActive = isActivePath(currentPath, path);
+      return (
+        <a
+          href={path}
+          aria-current={isActive ? "page" : undefined}
+          class:list={[
+            "relative rounded-clinical-sm px-2 py-2 text-sm font-medium transition-colors duration-200 hover:text-brand-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2",
+            isActive
+              ? "text-brand-ink after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-green-primary"
+              : "text-ink",
+          ]}
+        >
+          {text}
+        </a>
+      );
+    })
+  }
+  <Dropdown text="Nosotros" routes={toMenu(getToKnowRoutes)} currentPath={currentPath} />
 </nav>

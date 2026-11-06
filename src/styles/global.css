@@ -1,8 +1,28 @@
 /* src/styles/global.css */
 @import "tailwindcss";
 
+/* IBM Plex, self-hosted (latin subset covers Spanish). Weights in use:
+   sans 400 body · 500 labels · 600 buttons · 700 headings; mono 400/500 codes. */
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-500.css";
+@import "@fontsource/ibm-plex-sans/latin-600.css";
+@import "@fontsource/ibm-plex-sans/latin-700.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+
 @theme {
-  /* --- PALETA DE COLORES PERSONALIZADA --- */
+  /* --- TYPOGRAPHY --- */
+  --font-sans:
+    "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Smallest allowed size (eyebrows, badges). Never go below it. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  /* --- BRAND PALETTE (fills, accents, dots, borders; not body text) --- */
   --color-green-primary: #228f04;
   --color-green-secondary: #6ec225;
   --color-green-light: #86ab27;
@@ -12,16 +32,26 @@
   --color-black-custom: #181818;
   --color-grey-custom: #808080;
 
-  /* ✨ TOKENS NEUTROS ESTRUCTURALES (bordes/fondos sobrios de tarjetas) ✨ */
-  --color-ui-bg: #f9fafb; /* Fondo grisáceo limpio para la app */
-  --color-ui-border: #e5e7eb; /* Bordes consistentes de tablas/cards */
+  /* --- TEXT ("ink") TOKENS: same brand hues, darkened to pass WCAG AA ---
+     Ratios measured on white / ui-bg (#f9fafb) / green-primary/8 tint. */
+  --color-ink: #313f0e; /* headings, strong text · 11.4 / 10.9 / 10.3 */
+  --color-ink-muted: #5c6157; /* paragraphs · 6.4 / 6.1 / 5.7 */
+  --color-ink-subtle: #6b7065; /* dates, counts, captions · 5.1 / 4.9 / 4.5 */
+  --color-brand-ink: #1b7103; /* links, eyebrows, primary button bg · 6.2 / 5.9 / 5.6 */
+  --color-brand-ink-hover: #155802; /* hover/active of brand-ink · 8.7 / 8.3 / 7.8 */
+  --color-yellow-ink: #726c0e; /* warnings (fasting), yellow accents as text · 5.4 / 5.2 */
+  --color-yellow-mark: #978f12; /* non-text yellow marks (stars, icons) · 3.4 / 3.2 */
 
-  /* --- RADIOS DE BORDE CLÍNICOS --- */
+  /* --- STRUCTURAL NEUTRALS --- */
+  --color-ui-bg: #f9fafb; /* app background */
+  --color-ui-border: #e5e7eb; /* card/table borders */
+
+  /* --- CLINICAL RADII --- */
   --radius-clinical-sm: 8px;
   --radius-clinical-md: 12px;
   --radius-clinical-lg: 16px;
 
-  /* --- ANIMACIONES --- */
+  /* --- ANIMATIONS --- */
   --animate-slide-in-right: slide-in-right 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
   --animate-fade-up: fade-up 0.32s ease;
   --animate-scan-line: scan-line 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -64,5 +94,12 @@
       top: 104%;
       opacity: 0;
     }
+  }
+}
+
+@layer base {
+  /* Codes, folios and prices line up in columns. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
   }
 }

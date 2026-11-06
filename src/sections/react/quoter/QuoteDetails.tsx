@@ -31,7 +31,7 @@ const QuoteDetails = () => {
     useQuotationPdf({ client, selectedStudies, selectedService });
   return (
     <div className="w-full h-full">
-      <header className="bg-green-primary rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
+      <header className="bg-brand-ink rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
         <div className="flex items-center justify-center gap-2">
           <FileText className="h-5 w-5 text-white/90" strokeWidth={2} />
           <h2 className="text-white font-bold text-base sm:text-lg">

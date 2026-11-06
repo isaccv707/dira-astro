@@ -51,10 +51,10 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-black tracking-tight text-green-light">
+            <h2 className="text-2xl font-bold tracking-tight text-ink">
               No pudimos cargar los artículos
             </h2>
-            <p className="mx-auto mt-3 max-w-sm leading-relaxed text-grey-custom">
+            <p className="mx-auto mt-3 max-w-sm leading-relaxed text-ink-muted">
               Ocurrió un error al conectar con el servidor. Intenta de nuevo
               en unos momentos.
             </p>
@@ -93,10 +93,10 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-black tracking-tight text-green-light">
+            <h2 className="text-2xl font-bold tracking-tight text-ink">
               Aún no hay artículos publicados
             </h2>
-            <p className="mx-auto mt-3 max-w-sm leading-relaxed text-grey-custom">
+            <p className="mx-auto mt-3 max-w-sm leading-relaxed text-ink-muted">
               Estamos preparando contenido sobre salud y diagnóstico clínico.
               Vuelve pronto.
             </p>
@@ -117,14 +117,14 @@ const Posts = () => {
           </div>
 
           <div className="order-1 flex items-center gap-3 rounded-clinical-md border border-ui-border bg-white px-5 py-2.5 shadow-xs sm:order-2">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-grey-custom">
+            <span className="text-2xs font-bold uppercase tracking-[0.2em] text-ink-muted">
               Página
             </span>
-            <span className="text-sm font-black text-green-light">
+            <span className="text-sm font-bold text-ink">
               {currentPage}
             </span>
-            <span className="text-grey-custom/50">/</span>
-            <span className="text-sm font-black text-grey-custom">
+            <span className="text-ink-subtle">/</span>
+            <span className="text-sm font-bold text-ink-muted">
               {totalPagesForHook}
             </span>
           </div>

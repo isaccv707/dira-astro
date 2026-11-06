@@ -1,4 +1,5 @@
 ---
+import Eyebrow from "../components/astro/ui/Eyebrow.astro";
 import Layout from "../layouts/Layout.astro";
 import Branch from "../sections/react/branch/Branch";
 import { getBranchesWithSchedules } from "../api/branchesApi/branchesApi";
@@ -14,16 +15,10 @@ const jsonLd = branches.map(branchJsonLd);
   jsonLd={jsonLd}
 >
   <header class="mb-14">
-    <p
-      class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
-    >
-      Ubicaciones
-      <span class="h-1 w-1 rounded-full bg-green-secondary"></span>
-      DYRA Laboratorio
-    </p>
+    <Eyebrow>Ubicaciones</Eyebrow>
 
     <h1
-      class="mt-4 text-3xl font-extrabold tracking-tight text-yellow-secondary sm:text-4xl lg:text-5xl"
+      class="mt-4 text-3xl font-bold tracking-tight text-yellow-ink sm:text-4xl lg:text-5xl"
     >
       Nuestras sucursales a
       <span
@@ -33,7 +28,7 @@ const jsonLd = branches.map(branchJsonLd);
       </span>
     </h1>
 
-    <p class="mt-4 max-w-xl text-pretty text-sm text-grey-custom sm:text-base">
+    <p class="mt-4 max-w-xl text-pretty text-sm text-ink-muted sm:text-base">
       Contamos con múltiples puntos de atención para tu comodidad. Cada una de
       nuestras sucursales cumple con los más altos estándares de calidad y
       tecnología.

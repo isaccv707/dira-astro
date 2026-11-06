@@ -16,10 +16,10 @@ const MapNotFound = ({ branch }: MapNotFoundProps) => {
           className="w-10 h-auto text-red-custom"
         />
       </div>
-      <p className="text-lg font-black tracking-tight text-green-light">
+      <p className="text-lg font-bold tracking-tight text-ink">
         Mapa no disponible
       </p>
-      <p className="mt-2 text-sm text-grey-custom max-w-60">
+      <p className="mt-2 text-sm text-ink-muted max-w-60">
         No pudimos cargar el mapa interactivo, pero puedes ver la ubicación
         directamente en Google Maps.
       </p>

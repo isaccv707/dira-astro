@@ -19,10 +19,10 @@ const { text, path, icon, accent, description } = Astro.props;
 // la variante "tile".
 const ACCENT = {
   "green-primary": {
-    chip: "bg-green-primary/10 text-green-primary group-hover:bg-green-primary/20",
+    chip: "bg-green-primary/10 text-brand-ink group-hover:bg-green-primary/20",
   },
   "yellow-primary": {
-    chip: "bg-yellow-primary/10 text-yellow-secondary group-hover:bg-yellow-primary/20",
+    chip: "bg-yellow-primary/10 text-yellow-ink group-hover:bg-yellow-primary/20",
   },
 } as const;
 
@@ -52,10 +52,10 @@ const { chip } = ACCENT[accent];
   </div>
 
   <div class="min-w-0">
-    <span class="block text-base font-bold text-green-light">{text}</span>
+    <span class="block text-base font-bold text-ink">{text}</span>
     {
       description && (
-        <span class="mt-0.5 block text-xs text-grey-custom">{description}</span>
+        <span class="mt-0.5 block text-xs text-ink-muted">{description}</span>
       )
     }
   </div>

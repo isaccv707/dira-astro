@@ -41,40 +41,40 @@ const BranchOptionCard = ({
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-green-secondary" />
               </span>
             )}
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-grey-custom">
+            <span className="font-mono text-2xs font-bold uppercase tracking-[0.18em] text-ink-muted">
               {state?.name}
             </span>
           </div>
 
           {isCurrent ? (
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-primary px-2.5 py-1 text-[11px] font-semibold text-white">
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-ink px-2.5 py-1 text-2xs font-semibold text-white">
               <Check className="h-3 w-3" />
               Actual
             </span>
           ) : action === "consult" ? (
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-primary/10 px-2.5 py-1 text-[11px] font-semibold text-green-primary">
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-primary/10 px-2.5 py-1 text-2xs font-semibold text-brand-ink">
               <ExternalLink className="h-3 w-3" />
               Resultados
             </span>
           ) : (
             <ArrowRight
               aria-hidden="true"
-              className="h-4 w-4 shrink-0 -translate-x-1 text-green-primary opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+              className="h-4 w-4 shrink-0 -translate-x-1 text-brand-ink opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
             />
           )}
         </div>
 
-        <p className="text-base font-bold leading-snug text-green-light">
+        <p className="text-base font-bold leading-snug text-ink">
           {branch.name}
         </p>
 
-        <p className="flex items-start gap-1.5 text-xs leading-relaxed text-grey-custom">
-          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-secondary" />
+        <p className="flex items-start gap-1.5 text-xs leading-relaxed text-ink-muted">
+          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-ink" />
           <span>{fullAddress}</span>
         </p>
 
         {action === "select" && address?.references && (
-          <p className="text-xs font-semibold text-green-primary">
+          <p className="text-xs font-semibold text-brand-ink">
             Ref: {address.references}
           </p>
         )}

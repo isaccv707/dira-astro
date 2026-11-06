@@ -74,13 +74,13 @@ export const ContactForm = () => {
       <div className="w-full rounded-clinical-md border border-ui-border bg-white shadow-xs overflow-hidden">
         {/* Header */}
         <div className="bg-green-primary/8 px-4 py-3 sm:px-6">
-          <p className="text-xs font-semibold tracking-wide uppercase text-green-primary">
+          <p className="text-xs font-semibold tracking-wide uppercase text-brand-ink">
             Envíanos un mensaje
           </p>
-          <h2 className="mt-1 text-lg sm:text-xl font-black tracking-tight text-green-light">
+          <h2 className="mt-1 text-lg sm:text-xl font-bold tracking-tight text-ink">
             Formulario de contacto
           </h2>
-          <p className="mt-1 text-sm text-grey-custom">
+          <p className="mt-1 text-sm text-ink-muted">
             Compártenos tus datos y te contactaremos lo antes posible.
           </p>
         </div>

@@ -24,7 +24,7 @@ const ModalSelectBranch = ({
     <Modal id={id} title={title} onClose={closeModal} open={isOpen}>
       <div className="p-5">
         {currentBranchId && (
-          <p className="mb-4 text-sm leading-relaxed text-grey-custom">
+          <p className="mb-4 text-sm leading-relaxed text-ink-muted">
             Precios y estudios se ajustan a la sucursal que elijas.
           </p>
         )}

@@ -20,13 +20,9 @@ const jsonLd = branches.map(branchJsonLd);
   description="Bienvenido a Laboratorio DYRA. Ofrecemos análisis clínicos con tecnología de punta y calidez humana en Guadalajara y Colima."
   jsonLd={jsonLd}
 >
-  <div class="-mt-10">
-    <HeroHome />
-  </div>
+  <HeroHome />
 
-  <div class="-mt-32">
-    <QuickActions />
-  </div>
+  <QuickActions />
 
   <OurServices />
 
@@ -34,7 +30,7 @@ const jsonLd = branches.map(branchJsonLd);
 
   <Benefits />
 
-  <section class="mb-24">
+  <section aria-label="DYRA en cifras">
     <MetricsDyra client:visible />
   </section>
 

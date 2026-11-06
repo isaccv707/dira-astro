@@ -26,20 +26,20 @@ const BranchCard = ({ branch }: BranchCardProps) => {
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             {state?.name && (
-              <span className="inline-flex items-center rounded-full bg-green-secondary/10 px-3 py-1 text-xs font-bold text-green-secondary ring-1 ring-green-secondary/20">
+              <span className="inline-flex items-center rounded-full bg-green-secondary/10 px-3 py-1 text-xs font-bold text-brand-ink ring-1 ring-green-secondary/20">
                 {state.name}
               </span>
             )}
-            <h3 className="mt-3 text-xl font-black tracking-tight text-green-light leading-tight">
+            <h3 className="mt-3 text-xl font-bold tracking-tight text-ink leading-tight">
               {name}
             </h3>
-            <p className="mt-2 text-sm font-medium text-grey-custom leading-relaxed">
+            <p className="mt-2 text-sm font-medium text-ink-muted leading-relaxed">
               {fullAddress}
             </p>
             {references && (
-              <div className="mt-2 flex items-start gap-1.5 text-xs text-grey-custom bg-green-secondary/10 p-2 rounded-clinical-sm border border-ui-border/50">
-                <span className="font-bold text-green-primary">Ref:</span>
-                <span className="font-bold text-green-secondary">
+              <div className="mt-2 flex items-start gap-1.5 text-xs text-ink-muted bg-green-secondary/10 p-2 rounded-clinical-sm border border-ui-border/50">
+                <span className="font-bold text-brand-ink">Ref:</span>
+                <span className="font-bold text-brand-ink">
                   {references}
                 </span>
               </div>

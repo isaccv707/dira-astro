@@ -23,7 +23,7 @@ const rows = (client: Client) => [
 const ClientInformationCard = ({ client }: ClientInformationCardProps) => {
   return (
     <div className="bg-white rounded-clinical-md p-5 sm:p-6 shadow-xs border border-ui-border">
-      <h2 className="font-black tracking-tight text-green-light mb-4 pb-2 border-b border-green-secondary/30">
+      <h2 className="font-bold tracking-tight text-ink mb-4 pb-2 border-b border-green-secondary/30">
         Información del cliente
       </h2>
       {client ? (
@@ -31,14 +31,14 @@ const ClientInformationCard = ({ client }: ClientInformationCardProps) => {
           {rows(client).map(({ icon: Icon, label, value }) => (
             <div key={label} className="flex items-start gap-3">
               <Icon
-                className="mt-0.5 h-4 w-4 shrink-0 text-green-secondary"
+                className="mt-0.5 h-4 w-4 shrink-0 text-brand-ink"
                 strokeWidth={2}
               />
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-bold uppercase tracking-wide text-green-secondary">
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-ink">
                   {label}
                 </p>
-                <p className="wrap-break-word text-sm text-grey-custom leading-relaxed">
+                <p className="wrap-break-word text-sm text-ink-muted leading-relaxed">
                   {value || "—"}
                 </p>
               </div>
@@ -46,7 +46,7 @@ const ClientInformationCard = ({ client }: ClientInformationCardProps) => {
           ))}
         </div>
       ) : (
-        <p className="text-grey-custom text-sm py-4 text-center leading-relaxed">
+        <p className="text-ink-muted text-sm py-4 text-center leading-relaxed">
           No hay información de cliente.
         </p>
       )}

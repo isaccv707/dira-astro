@@ -54,17 +54,17 @@ const BranchSwitcher = ({
     >
       <MapPin
         aria-hidden="true"
-        className={`h-4 w-4 shrink-0 text-green-primary ${isOpening ? "animate-pulse" : ""}`}
+        className={`h-4 w-4 shrink-0 text-brand-ink ${isOpening ? "animate-pulse" : ""}`}
       />
 
       <span className="flex min-w-0 flex-col leading-tight">
         {!isCompact && (
-          <span className="text-[10px] font-bold uppercase tracking-wide text-green-primary">
+          <span className="text-2xs font-bold uppercase tracking-wide text-brand-ink">
             {name ? "Tu sucursal" : "Sin sucursal"}
           </span>
         )}
         <span
-          className={`truncate text-sm font-bold text-green-light ${isCompact ? "max-w-28" : "max-w-40"}`}
+          className={`truncate text-sm font-bold text-ink ${isCompact ? "max-w-28" : "max-w-40"}`}
         >
           {name ?? "Elegir sucursal"}
         </span>
@@ -72,7 +72,7 @@ const BranchSwitcher = ({
 
       <ChevronDown
         aria-hidden="true"
-        className="h-4 w-4 shrink-0 text-green-primary transition-transform duration-200 group-hover:translate-y-0.5"
+        className="h-4 w-4 shrink-0 text-brand-ink transition-transform duration-200 group-hover:translate-y-0.5"
       />
     </button>
   );

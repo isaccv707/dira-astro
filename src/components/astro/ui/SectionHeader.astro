@@ -1,0 +1,28 @@
+---
+import { sectionLeadStyles, sectionTitleStyles } from "../../../styles/ui";
+
+interface Props {
+  title: string;
+  lead?: string;
+  /** id for aria-labelledby on the parent <section>. */
+  id?: string;
+  as?: "h1" | "h2" | "h3";
+  class?: string;
+}
+
+const { title, lead, id, as: Heading = "h2", class: className } = Astro.props;
+const hasAside = Astro.slots.has("aside");
+---
+
+<div
+  class:list={[
+    hasAside && "flex flex-wrap items-end justify-between gap-3",
+    className,
+  ]}
+>
+  <div>
+    <Heading id={id} class={sectionTitleStyles}>{title}</Heading>
+    {lead && <p class={sectionLeadStyles}>{lead}</p>}
+  </div>
+  {hasAside && <slot name="aside" />}
+</div>

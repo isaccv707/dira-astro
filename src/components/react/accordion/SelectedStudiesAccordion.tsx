@@ -1,3 +1,4 @@
+import { formatMXN } from "../../../utils/currency";
 import { PackageOpen } from "lucide-react";
 import NumberInput from "../form/NumberInput";
 import type { Study } from "../../../interfaces/study.interface";
@@ -18,10 +19,10 @@ const SelectedStudiesAccordion = ({
     return (
       <div className="flex flex-col items-center gap-2 py-6 text-center">
         <PackageOpen
-          className="h-6 w-6 text-grey-custom/50"
+          className="h-6 w-6 text-ink-subtle"
           strokeWidth={1.5}
         />
-        <p className="text-sm text-grey-custom leading-relaxed">
+        <p className="text-sm text-ink-muted leading-relaxed">
           No has seleccionado estudios todavía.
         </p>
       </div>
@@ -36,12 +37,10 @@ const SelectedStudiesAccordion = ({
           className="py-3 flex flex-wrap items-center justify-between gap-3 text-sm"
         >
           <div className="min-w-0 flex-1 basis-32">
-            <p className="text-green-light truncate">{study.name}</p>
-            <p className="font-semibold text-green-primary text-xs sm:text-sm">
+            <p className="text-ink truncate">{study.name}</p>
+            <p className="font-semibold text-brand-ink text-xs sm:text-sm">
               {study.priceInfo.showPrice
-                ? `$${Number(study.priceInfo.price).toLocaleString("es-MX", {
-                    minimumFractionDigits: 2,
-                  })}`
+                ? formatMXN(study.priceInfo.price)
                 : study.priceInfo.message}
             </p>
           </div>

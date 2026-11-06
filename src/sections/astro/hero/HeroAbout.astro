@@ -1,20 +1,15 @@
 ---
+import Eyebrow from "../../../components/astro/ui/Eyebrow.astro";
 import PillarGrid from "../../../components/astro/ui/PillarGrid.astro";
 import { benefitsCompany } from "../../../data/about/aboutIdentity";
 export const prerender = true;
 ---
 
 <section>
-  <p
-    class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
-  >
-    Conócenos
-    <span class="h-1 w-1 rounded-full bg-green-secondary"></span>
-    DYRA Laboratorio
-  </p>
+  <Eyebrow>Conócenos</Eyebrow>
 
   <h1
-    class="text-yellow-secondary text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
+    class="text-yellow-ink text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
   >
     Un laboratorio clínico
     <span
@@ -24,8 +19,8 @@ export const prerender = true;
     </span>
   </h1>
 
-  <p class="max-w-xl text-pretty text-sm text-grey-custom sm:text-base">
-    En <span class="font-semibold text-green-secondary"
+  <p class="max-w-xl text-pretty text-sm text-ink-muted sm:text-base">
+    En <span class="font-semibold text-brand-ink"
       >Diagnóstico y Referencia Analítica (DYRA)</span
     >
     {" "}unimos experiencia médica, tecnología de punta y procesos

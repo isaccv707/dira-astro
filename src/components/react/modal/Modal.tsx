@@ -54,7 +54,7 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
           <div className="flex items-start justify-between gap-4">
             <h3
               id={`${id}-title`}
-              className="text-xl font-black tracking-tight text-green-light"
+              className="text-xl font-bold tracking-tight text-ink"
             >
               {title}
             </h3>
@@ -67,7 +67,7 @@ const Modal = ({ children, id, title, onClose, open }: ModalProps) => {
             />
           </div>
 
-          <div className="mt-4 max-h-[70vh] overflow-y-auto text-grey-custom space-y-4">
+          <div className="mt-4 max-h-[70vh] overflow-y-auto text-ink-muted space-y-4">
             {children}
           </div>
         </div>

@@ -16,23 +16,23 @@ const PanelTree = ({ nodes, depth = 0 }: PanelTreeProps) => (
     {nodes.map((node) =>
       node.isPanel ? (
         <li key={node.id}>
-          <p className="text-xs font-bold text-green-light">
+          <p className="text-xs font-bold text-ink">
             {node.title ?? node.name}
           </p>
           {node.children.length > 0 ? (
             <PanelTree nodes={node.children} depth={depth + 1} />
           ) : (
-            <p className="mt-1 pl-3 text-[11px] text-grey-custom/70">
+            <p className="mt-1 pl-3 text-2xs text-ink-subtle">
               Sin parámetros registrados
             </p>
           )}
         </li>
       ) : (
         <li key={node.id} className="flex flex-col">
-          <span className="text-xs leading-snug text-grey-custom">
+          <span className="text-xs leading-snug text-ink-muted">
             {node.title ?? node.name}
           </span>
-          <span className="text-[10px] text-grey-custom/70">
+          <span className="text-2xs text-ink-subtle">
             {[node.code, node.abbreviation].filter(Boolean).join(" · ")}
           </span>
         </li>

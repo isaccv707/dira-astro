@@ -7,6 +7,7 @@ import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
 import StudyTypeFilterControl from "../../../components/react/filter/StudyTypeFilterControl";
 import SelectInput from "../../../components/react/form/SelectInput";
 import Pagination from "../../../components/react/ui/Pagination";
+import Eyebrow from "../../../components/react/ui/Eyebrow";
 import usePagination from "../../../hooks/usePagination";
 
 import type { Study } from "../../../interfaces/study.interface";
@@ -191,13 +192,13 @@ const QuoterSelectStudies = () => {
     return (
       <div className="flex h-full flex-col items-center justify-center px-6 py-16 text-center">
         <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-clinical-lg bg-green-light/10">
-          <MapPin className="h-9 w-9 text-green-light" strokeWidth={1.5} />
+          <MapPin className="h-9 w-9 text-ink" strokeWidth={1.5} />
         </div>
 
-        <h3 className="text-lg font-black tracking-tight text-green-light">
+        <h3 className="text-lg font-bold tracking-tight text-ink">
           Selecciona una sucursal para cotizar
         </h3>
-        <p className="mt-2 max-w-xs text-sm leading-relaxed text-grey-custom">
+        <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink-muted">
           Los precios varían por sucursal. Elige la tuya para ver tarifas y
           agregar estudios a tu cotización.
         </p>
@@ -242,10 +243,9 @@ const QuoterSelectStudies = () => {
         </div>
 
         {hasPriceSheet && (
-          <div className="inline-flex w-fit items-center gap-2 self-start rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary sm:self-auto">
-            <span className="h-1.5 w-1.5 rounded-full bg-green-primary" />
+          <Eyebrow className="self-start sm:self-auto">
             {isLoadingDetail ? "Cargando..." : `${totalStudies} disponibles`}
-          </div>
+          </Eyebrow>
         )}
       </div>
 
@@ -258,7 +258,7 @@ const QuoterSelectStudies = () => {
             nextPage={servicesNextPage}
             prevPage={servicesPrevPage}
           />
-          <span className="shrink-0 text-[11px] font-semibold text-grey-custom">
+          <span className="shrink-0 text-2xs font-semibold text-ink-muted">
             {`${servicesPage} / ${servicesTotalPages}`}
           </span>
         </div>
@@ -268,21 +268,21 @@ const QuoterSelectStudies = () => {
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <StudyTypeFilterControl value={studyType} onChange={setStudyType} />
         <div className="relative w-full sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-custom/70" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Buscar por nombre o código..."
             aria-label="Buscar estudios por nombre o código"
-            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-green-light placeholder:text-grey-custom/70 transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
+            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-subtle transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
           />
           {searchInput && (
             <button
               type="button"
               onClick={() => setSearchInput("")}
               aria-label="Limpiar búsqueda"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-grey-custom/70 transition hover:text-green-light"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle transition hover:text-ink"
             >
               <X className="h-4 w-4" />
             </button>
@@ -293,15 +293,15 @@ const QuoterSelectStudies = () => {
 
       <div className="mt-5 flex-1">
         {!selectedSlug ? (
-          <div className="py-10 text-center text-grey-custom">
+          <div className="py-10 text-center text-ink-muted">
             Elige un servicio para ver sus estudios disponibles.
           </div>
         ) : isLoadingDetail && studies.length === 0 ? (
-          <div className="py-10 text-center text-grey-custom">
+          <div className="py-10 text-center text-ink-muted">
             Cargando estudios...
           </div>
         ) : !hasPriceSheet || (totalStudies === 0 && !search && studyType === "all") ? (
-          <div className="py-10 text-center text-grey-custom">
+          <div className="py-10 text-center text-ink-muted">
             Sin estudios disponibles
           </div>
         ) : (
@@ -326,7 +326,7 @@ const QuoterSelectStudies = () => {
                 );
               })
             ) : (
-              <p className="col-span-1 text-center text-grey-custom sm:col-span-2 lg:col-span-3 xl:col-span-4">
+              <p className="col-span-1 text-center text-ink-muted sm:col-span-2 lg:col-span-3 xl:col-span-4">
                 {search
                   ? `No hay resultados para "${search}".`
                   : studyTypeEmptyMessage(studyType)}
@@ -346,7 +346,7 @@ const QuoterSelectStudies = () => {
             totalPages={studiesTotalPages}
           />
 
-          <div className="self-end bg-green-light px-3 py-1 text-sm font-semibold text-white shadow-inner rounded-clinical-sm sm:self-auto">
+          <div className="self-end bg-brand-ink px-3 py-1 text-sm font-semibold text-white rounded-clinical-sm sm:self-auto">
             {`${studiesPage} / ${studiesTotalPages}`}
           </div>
         </div>

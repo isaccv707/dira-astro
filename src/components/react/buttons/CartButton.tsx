@@ -1,62 +1,43 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { getCart, CART_UPDATED_EVENT } from "../../../utils/cart";
-import { openModal } from "../../../stores/modalStore";
 import { openDrawer } from "../../../stores/drawerStore";
-import Button from "./Button";
 
 const CartButton = () => {
   const [itemCount, setItemCount] = useState(0);
 
-  const updateCount = () => {
-    const cart = getCart();
-    setItemCount(cart.length);
-  };
-
   useEffect(() => {
+    const updateCount = () => setItemCount(getCart().length);
     updateCount();
-
-    const handleCartUpdate = () => {
-      updateCount();
-    };
-
-    window.addEventListener(CART_UPDATED_EVENT, handleCartUpdate);
-
-    window.addEventListener("storage", handleCartUpdate);
-
+    window.addEventListener(CART_UPDATED_EVENT, updateCount);
+    window.addEventListener("storage", updateCount);
     return () => {
-      window.removeEventListener(CART_UPDATED_EVENT, handleCartUpdate);
-      window.removeEventListener("storage", handleCartUpdate);
+      window.removeEventListener(CART_UPDATED_EVENT, updateCount);
+      window.removeEventListener("storage", updateCount);
     };
   }, []);
 
-  const handleOpenCart = () => {
-    const currentCart = getCart();
-
-    openDrawer("DRAWER_STUDIES", {
-      data: currentCart,
-    });
-  };
-
   if (itemCount === 0) return null;
 
-  return (
-    <Button
-      type="button"
-      onClick={handleOpenCart}
-      variant="fab"
-      size="fab"
-      className="relative bg-green-primary hover:bg-green-primary/90 group mb-2"
-      ariaLabel="Ver carrito"
-    >
-      <ShoppingCart size={24} className="group-hover:animate-bounce" />
+  const label = `Ver estudios seleccionados (${itemCount})`;
 
-      {itemCount > 0 && (
-        <span className="absolute -top-1 -right-1 bg-red-custom text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white animate-in zoom-in duration-300">
-          {itemCount}
-        </span>
-      )}
-    </Button>
+  return (
+    <button
+      type="button"
+      onClick={() => openDrawer("DRAWER_STUDIES", { data: getCart() })}
+      aria-label={label}
+      title={label}
+      aria-haspopup="dialog"
+      className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand-ink text-white shadow-md transition-colors duration-200 hover:bg-brand-ink-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+    >
+      <ShoppingCart aria-hidden="true" className="h-6 w-6" />
+      <span
+        aria-hidden="true"
+        className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-white bg-red-custom px-1 text-xs font-bold tabular-nums text-white"
+      >
+        {itemCount}
+      </span>
+    </button>
   );
 };
 

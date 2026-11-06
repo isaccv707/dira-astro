@@ -21,11 +21,11 @@ const { title, paragraph, items, images } = Astro.props;
     <div class="flex items-center justify-between gap-4 pb-3">
       <div>
         <p
-          class="text-xs uppercase tracking-[0.2em] font-bold text-green-secondary"
+          class="text-xs uppercase tracking-[0.2em] font-bold text-brand-ink"
         >
           {title}
         </p>
-        <p class="text-xl font-bold text-green-primary">
+        <p class="text-xl font-bold text-brand-ink">
           {paragraph}
         </p>
       </div>
@@ -35,12 +35,12 @@ const { title, paragraph, items, images } = Astro.props;
       <CarouselAbout client:load />
     </div>
 
-    <div class="mt-10 grid gap-3 text-xs text-grey-custom sm:text-sm">
+    <div class="mt-10 grid gap-3 text-xs text-ink-muted sm:text-sm">
       {
         items.map(({ icon, text }) => (
           <div class="flex items-center justify-between gap-2">
             <span class="flex items-center gap-2">
-              <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-green-secondary">
+              <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-primary/10 text-xs text-brand-ink">
                 {icon}
               </span>
               {text}

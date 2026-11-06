@@ -26,7 +26,7 @@ const avatarUrl = review.avatarUrl || avatarFallback;
     {
       [...Array(totalStars)].map((_, index) => (
         <svg
-          class={`w-5 h-5 ${index < rating ? "text-yellow-primary" : "text-ui-border"}`}
+          class={`w-5 h-5 ${index < rating ? "text-yellow-mark" : "text-ui-border"}`}
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -38,7 +38,7 @@ const avatarUrl = review.avatarUrl || avatarFallback;
 
   <blockquote class="grow">
     <p
-      class="text-xl font-semibold text-green-light tracking-tight line-clamp-4 italic"
+      class="text-xl font-semibold text-ink tracking-tight line-clamp-4 italic"
     >
       "{review.comment}"
     </p>
@@ -53,10 +53,10 @@ const avatarUrl = review.avatarUrl || avatarFallback;
       alt={review.fullName}
     />
     <div class="flex items-center divide-x divide-ui-border">
-      <cite class="pe-3 font-medium text-yellow-primary not-italic">
+      <cite class="pe-3 font-medium text-yellow-mark not-italic">
         {review.fullName}
       </cite>
-      <cite class="ps-3 text-sm text-green-primary not-italic"> Paciente </cite>
+      <cite class="ps-3 text-sm text-brand-ink not-italic"> Paciente </cite>
     </div>
   </figcaption>
 </figure>

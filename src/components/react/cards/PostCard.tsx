@@ -51,7 +51,7 @@ const PostCard = ({ post }: PostCardProps) => {
           {/* Category Tag */}
           {category && (
             <div className="absolute top-4 left-4">
-              <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-green-primary text-[10px] uppercase tracking-widest font-bold rounded-full shadow-sm">
+              <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-brand-ink text-2xs uppercase tracking-widest font-bold rounded-full shadow-sm">
                 {category}
               </span>
             </div>
@@ -66,7 +66,7 @@ const PostCard = ({ post }: PostCardProps) => {
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2.5 py-1 bg-green-primary/8 text-green-primary text-[10px] uppercase tracking-wider font-bold rounded-clinical-sm border border-green-primary/15"
+                  className="px-2.5 py-1 bg-green-primary/8 text-brand-ink text-2xs uppercase tracking-wider font-bold rounded-clinical-sm border border-green-primary/15"
                 >
                   #{tag}
                 </span>
@@ -74,11 +74,11 @@ const PostCard = ({ post }: PostCardProps) => {
             </div>
           )}
 
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-green-light leading-tight line-clamp-2 group-hover:text-green-primary transition-colors duration-300">
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-ink leading-tight line-clamp-2 group-hover:text-brand-ink transition-colors duration-300">
             {title}
           </h2>
 
-          <p className="text-grey-custom text-sm md:text-base leading-relaxed line-clamp-3">
+          <p className="text-ink-muted text-sm md:text-base leading-relaxed line-clamp-3">
             {description}
           </p>
         </div>
@@ -96,10 +96,10 @@ const PostCard = ({ post }: PostCardProps) => {
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-secondary border-2 border-white rounded-full shadow-sm"></div>
             </div>
             <div className="flex flex-col">
-              <p className="text-xs font-bold text-green-light leading-none">
+              <p className="text-xs font-bold text-ink leading-none">
                 {author.name}
               </p>
-              <p className="text-[10px] text-grey-custom/70 uppercase tracking-tighter mt-1">
+              <p className="text-2xs text-ink-subtle uppercase tracking-tighter mt-1">
                 Autor(a)
               </p>
             </div>

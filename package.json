@@ -14,7 +14,8 @@
     "astro": "astro",
     "api:types": "openapi-typescript ../backend-dyra/openapi.json -o src/api/generated/openapi.d.ts",
     "check": "astro check",
-    "lint": "eslint . --max-warnings 53"
+    "lint": "eslint . --max-warnings 50 && node scripts/check-ui.mjs",
+    "lint:ui": "node scripts/check-ui.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.2",
@@ -22,6 +23,8 @@
     "@astrojs/sitemap": "^3.7.2",
     "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.14.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "@hookform/resolvers": "^5.2.2",
     "@iconify-json/logos": "^1.2.11",
     "@iconify-json/lucide": "^1.2.109",

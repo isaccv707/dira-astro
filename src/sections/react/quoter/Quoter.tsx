@@ -57,7 +57,7 @@ const Quoter = () => {
   const previousStep = () => setStep((prev) => prev - 1);
   return (
     <div className="rounded-clinical-lg w-full grid">
-      <header className="bg-green-primary rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
+      <header className="bg-brand-ink rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
         <div className="flex items-center justify-center gap-2">
           <ClipboardList className="h-5 w-5 text-white/90" strokeWidth={2} />
           <h1 className="text-white font-bold text-base sm:text-lg">

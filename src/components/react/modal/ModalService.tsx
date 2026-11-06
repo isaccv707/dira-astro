@@ -67,11 +67,11 @@ const ModalService = ({ id = "MODAL_SERVICE" }: ModalServiceProps) => {
 
             <div className="md:w-7/12">
               <div className="flex flex-col gap-4">
-                <p className="text-sm leading-6 text-grey-custom sm:text-base sm:leading-7 md:text-lg md:leading-7">
+                <p className="text-sm leading-6 text-ink-muted sm:text-base sm:leading-7 md:text-lg md:leading-7">
                   {description}
                 </p>
                 <CTAContact />
-                <p className="text-xs text-grey-custom/70">
+                <p className="text-xs text-ink-subtle">
                   * La disponibilidad puede variar según sucursal.
                 </p>
               </div>

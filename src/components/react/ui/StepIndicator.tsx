@@ -16,10 +16,10 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
             <div
               className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 text-xs sm:text-sm font-bold transition-all duration-300 ${
                 isCompleted
-                  ? "bg-green-primary border-green-primary text-white"
+                  ? "bg-brand-ink border-brand-ink text-white"
                   : isActive
-                  ? "bg-white border-green-secondary text-green-primary"
-                  : "bg-ui-bg border-ui-border text-grey-custom"
+                  ? "bg-white border-green-secondary text-brand-ink"
+                  : "bg-ui-bg border-ui-border text-ink-muted"
               }`}
             >
               {isCompleted ? "✓" : stepNumber}
@@ -27,7 +27,7 @@ const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
 
             <span
               className={`ml-2 text-xs sm:text-sm font-medium ${
-                isActive ? "text-green-primary" : "text-grey-custom"
+                isActive ? "text-brand-ink" : "text-ink-muted"
               }`}
             >
               {label}

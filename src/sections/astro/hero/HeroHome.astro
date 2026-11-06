@@ -53,7 +53,7 @@ const getServiceDesc = ({ _count, description }: Service) => {
         >
           <div class="h-px w-8 bg-green-primary/50"></div>
           <span
-            class="text-[10px] font-bold tracking-[0.2em] uppercase text-green-primary"
+            class="text-2xs font-bold tracking-[0.2em] uppercase text-brand-ink"
           >
             Laboratorio Clínico Certificado
           </span>
@@ -73,7 +73,7 @@ const getServiceDesc = ({ _count, description }: Service) => {
             height={48}
           />
           <div
-            class="inline-flex items-center gap-2 rounded-full border border-green-primary/20 bg-green-primary/8 px-3 py-1 text-[11px] font-semibold text-green-primary"
+            class="inline-flex items-center gap-2 rounded-full border border-green-primary/20 bg-green-primary/8 px-3 py-1 text-2xs font-semibold text-brand-ink"
           >
             <span
               class="h-1.5 w-1.5 animate-pulse rounded-full bg-green-primary"
@@ -83,16 +83,16 @@ const getServiceDesc = ({ _count, description }: Service) => {
         </div>
 
         <h1
-          class="mb-5 text-4xl font-black leading-[1.05] tracking-tight motion-safe:animate-fade-up sm:text-5xl lg:text-5xl xl:text-6xl"
+          class="mb-5 text-4xl font-bold leading-[1.05] tracking-tight motion-safe:animate-fade-up sm:text-5xl lg:text-5xl xl:text-6xl"
           style={reveal(140)}
         >
-          <span class="text-green-light">Tu salud,</span><br />
-          <span class="text-green-primary">analizada</span><br />
-          <span class="text-yellow-secondary">con precisión.</span>
+          <span class="text-ink">Tu salud,</span><br />
+          <span class="text-brand-ink">analizada</span><br />
+          <span class="text-yellow-ink">con precisión.</span>
         </h1>
 
         <p
-          class="mb-8 max-w-md text-base leading-relaxed text-grey-custom motion-safe:animate-fade-up sm:text-lg"
+          class="mb-8 max-w-md text-base leading-relaxed text-ink-muted motion-safe:animate-fade-up sm:text-lg"
           style={reveal(220)}
         >
           Tecnología de vanguardia con atención humana. Resultados confiables
@@ -162,7 +162,7 @@ const getServiceDesc = ({ _count, description }: Service) => {
           >
             <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
             <span
-              class="text-[9px] font-bold uppercase tracking-[0.12em] text-green-primary/70"
+              class="text-2xs font-bold uppercase tracking-[0.12em] text-brand-ink"
               >DYRA Lab</span
             >
           </div>
@@ -189,7 +189,7 @@ const getServiceDesc = ({ _count, description }: Service) => {
                     {isAstroIcon(service.icon) ? (
                       <ReactIcon
                         icon={service.icon}
-                        className="h-5 w-5 text-green-primary"
+                        className="h-5 w-5 text-brand-ink"
                       />
                     ) : isImgIcon(service.icon) ? (
                       <img
@@ -200,14 +200,14 @@ const getServiceDesc = ({ _count, description }: Service) => {
                     ) : (
                       <ReactIcon
                         icon="tabler:flask"
-                        className="h-5 w-5 text-green-primary"
+                        className="h-5 w-5 text-brand-ink"
                       />
                     )}
                   </div>
-                  <span class="text-[11px] font-bold leading-tight text-green-light">
+                  <span class="text-2xs font-bold leading-tight text-ink">
                     {service.name}
                   </span>
-                  <span class="line-clamp-1 text-[9px] leading-tight text-grey-custom">
+                  <span class="line-clamp-1 text-2xs leading-tight text-ink-muted">
                     {getServiceDesc(service)}
                   </span>
                 </a>

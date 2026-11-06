@@ -1,3 +1,4 @@
+import Price from "../ui/Price";
 import { FlaskConical, Timer } from "lucide-react";
 import {
   getCatalogName,
@@ -42,7 +43,7 @@ const CardQuoteStudy = ({
       <div className="flex flex-col flex-1 p-4 sm:p-5 gap-3">
         {/* Code · section, profile badge */}
         <div className="flex items-center justify-between gap-2">
-          <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-wider text-grey-custom/70">
+          <span className="min-w-0 truncate text-2xs font-bold uppercase tracking-wider text-ink-subtle">
             <span className="font-mono">{study.code}</span>
             {section && ` · ${section}`}
           </span>
@@ -52,7 +53,7 @@ const CardQuoteStudy = ({
         {/* Name */}
         <h3
           className={`text-sm sm:text-[15px] font-semibold leading-snug line-clamp-2 min-h-10 ${
-            hasPrice ? "text-green-light" : "text-grey-custom"
+            hasPrice ? "text-ink" : "text-ink-muted"
           }`}
           title={study.name}
         >
@@ -61,7 +62,7 @@ const CardQuoteStudy = ({
 
         {study.description && (
           <p
-            className="text-xs leading-relaxed text-grey-custom line-clamp-2"
+            className="text-xs leading-relaxed text-ink-muted line-clamp-2"
             title={study.description}
           >
             {study.description}
@@ -72,14 +73,14 @@ const CardQuoteStudy = ({
         {(sampleType || study.preparation) && (
           <div className="flex flex-wrap items-center gap-1.5">
             {sampleType && (
-              <span className="inline-flex items-center gap-1 rounded-clinical-sm bg-ui-bg px-2 py-1 text-[11px] font-semibold text-grey-custom">
-                <FlaskConical className="h-3 w-3 text-green-light" />
+              <span className="inline-flex items-center gap-1 rounded-clinical-sm bg-ui-bg px-2 py-1 text-2xs font-semibold text-ink-muted">
+                <FlaskConical className="h-3 w-3 text-ink" />
                 {sampleType}
               </span>
             )}
             {fastingHours ? (
               <span
-                className="inline-flex items-center gap-1 rounded-clinical-sm bg-yellow-primary/10 px-2 py-1 text-[11px] font-bold text-yellow-secondary"
+                className="inline-flex items-center gap-1 rounded-clinical-sm bg-yellow-primary/10 px-2 py-1 text-2xs font-bold text-yellow-ink"
                 title={study.preparation ?? undefined}
               >
                 <Timer className="h-3 w-3" />
@@ -88,10 +89,10 @@ const CardQuoteStudy = ({
             ) : (
               study.preparation && (
                 <span
-                  className="inline-flex min-w-0 items-center gap-1 rounded-clinical-sm bg-ui-bg px-2 py-1 text-[11px] font-semibold text-grey-custom"
+                  className="inline-flex min-w-0 items-center gap-1 rounded-clinical-sm bg-ui-bg px-2 py-1 text-2xs font-semibold text-ink-muted"
                   title={study.preparation}
                 >
-                  <Timer className="h-3 w-3 shrink-0 text-green-light" />
+                  <Timer className="h-3 w-3 shrink-0 text-ink" />
                   <span className="truncate">{study.preparation}</span>
                 </span>
               )
@@ -102,19 +103,9 @@ const CardQuoteStudy = ({
         {/* Price zone — pushed down so prices align across the row */}
         <div className="mt-auto min-h-12 flex items-center">
           {hasPrice ? (
-            <div className="flex items-baseline gap-1">
-              <span className="text-xs font-bold text-grey-custom">$</span>
-              <span className="text-2xl font-black text-green-light tracking-tight">
-                {Number(study.priceInfo.price).toLocaleString("es-MX", {
-                  minimumFractionDigits: 2,
-                })}
-              </span>
-              <span className="text-[10px] font-bold text-green-light/60 uppercase tracking-widest ml-0.5">
-                MXN
-              </span>
-            </div>
+            <Price value={study.priceInfo.price} size="md" />
           ) : (
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-ui-bg px-3 py-1.5 text-[11px] font-semibold text-grey-custom leading-tight max-w-full">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-ui-bg px-3 py-1.5 text-2xs font-semibold text-ink-muted leading-tight max-w-full">
               <span className="h-1.5 w-1.5 rounded-full bg-ui-border shrink-0" />
               <span className="truncate">
                 {study.priceInfo?.message ?? "Consulte en sucursal"}
@@ -131,8 +122,8 @@ const CardQuoteStudy = ({
             }`}
           />
           <span
-            className={`text-[11px] font-semibold ${
-              isAdded && hasPrice ? "text-green-light" : "text-grey-custom"
+            className={`text-2xs font-semibold ${
+              isAdded && hasPrice ? "text-ink" : "text-ink-muted"
             }`}
           >
             {isAdded && hasPrice ? "Agregado a cotización" : "Disponible"}

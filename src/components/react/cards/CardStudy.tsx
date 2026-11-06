@@ -1,8 +1,9 @@
+import Price from "../ui/Price";
+import StudyCode from "../ui/StudyCode";
 import { useState, useEffect } from "react";
 import {
   FlaskConical,
-  Calendar,
-  ClipboardList,
+  Calendar,
   Timer,
 } from "lucide-react";
 
@@ -70,16 +71,13 @@ const CardStudy = ({
   };
 
   return (
-    <div className="group relative max-w-sm w-full bg-white border border-ui-border rounded-clinical-lg shadow-xs hover:shadow-sm hover:shadow-green-primary/10 hover:-translate-y-1 transition-all duration-500 flex flex-col overflow-hidden h-full">
+    <div className="group relative flex h-full w-full max-w-sm flex-col overflow-hidden rounded-clinical-md border border-ui-border bg-white shadow-xs transition-[border-color,box-shadow] duration-200 hover:border-brand-ink/30 hover:shadow-sm motion-reduce:transition-none">
       {/* Header Badges */}
       <div className="p-6 pb-4 flex flex-wrap justify-between items-start gap-2">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-clinical-sm text-[10px] font-black uppercase tracking-wider bg-green-light/8 text-green-light border border-green-light/15 shadow-xs">
-          <ClipboardList className="w-3 h-3" />
-          <span>ID: {code}</span>
-        </div>
+        <StudyCode code={code} />
         {isPanel && <PanelBadge />}
         {sampleType && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-clinical-sm text-[10px] font-black uppercase tracking-wider bg-yellow-secondary/8 text-yellow-secondary border border-yellow-secondary/15 shadow-xs">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-clinical-sm text-2xs font-bold uppercase tracking-wider bg-yellow-secondary/8 text-yellow-ink border border-yellow-secondary/15 shadow-xs">
             <span>{sampleType}</span>
           </div>
         )}
@@ -87,7 +85,7 @@ const CardStudy = ({
 
       <div className="px-6 grow flex flex-col">
         {section && (
-          <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-grey-custom/70">
+          <p className="mb-1.5 text-2xs font-bold uppercase tracking-wider text-ink-subtle">
             {section}
           </p>
         )}
@@ -95,14 +93,14 @@ const CardStudy = ({
         {/* Title */}
         <h5
           title={name}
-          className="mb-3 text-xl font-black tracking-tight text-green-light leading-tight group-hover:text-green-primary transition-colors duration-300 line-clamp-2 min-h-14"
+          className="mb-3 text-xl font-bold tracking-tight text-ink leading-tight group-hover:text-brand-ink transition-colors duration-300 line-clamp-2 min-h-14"
         >
           {name}
         </h5>
 
         {/* Requirements */}
         {isRequiredAppointment && (
-          <div className="flex items-center gap-2 mb-4 text-red-custom font-bold text-[10px] uppercase tracking-wider bg-red-custom/5 w-fit px-3 py-1 rounded-clinical-sm">
+          <div className="flex items-center gap-2 mb-4 text-red-custom font-bold text-2xs uppercase tracking-wider bg-red-custom/5 w-fit px-3 py-1 rounded-clinical-sm">
             <Calendar className="w-3 h-3" />
             <span>Requiere cita</span>
           </div>
@@ -111,7 +109,7 @@ const CardStudy = ({
         {/* Description */}
         <div className="mb-6 grow">
           {description && (
-            <p className="text-sm text-grey-custom line-clamp-3 leading-relaxed mb-4">
+            <p className="text-sm text-ink-muted line-clamp-3 leading-relaxed mb-4">
               {description}
             </p>
           )}
@@ -120,21 +118,21 @@ const CardStudy = ({
           {preparation && (
           <div className="flex flex-col gap-3 py-4 border-y border-ui-border/80">
             {fastingHours && (
-              <div className="flex items-center gap-3 text-xs font-bold text-grey-custom">
-                <div className="p-1.5 rounded-clinical-sm bg-yellow-primary/10 text-yellow-secondary">
+              <div className="flex items-center gap-3 text-xs font-bold text-ink-muted">
+                <div className="p-1.5 rounded-clinical-sm bg-yellow-primary/10 text-yellow-ink">
                   <Timer className="w-4 h-4" />
                 </div>
                 <span>
                   Ayuno:{" "}
-                  <span className="text-green-light font-black">
+                  <span className="text-ink font-bold">
                     {fastingHours} h
                   </span>
                 </span>
               </div>
             )}
             {preparation && (
-              <div className="flex items-start gap-3 text-xs font-bold text-grey-custom">
-                <div className="p-1.5 rounded-clinical-sm bg-green-light/8 text-green-light">
+              <div className="flex items-start gap-3 text-xs font-bold text-ink-muted">
+                <div className="p-1.5 rounded-clinical-sm bg-green-light/8 text-ink">
                   <FlaskConical className="w-4 h-4" />
                 </div>
                 <span className="line-clamp-2 font-semibold leading-relaxed" title={preparation}>
@@ -155,20 +153,10 @@ const CardStudy = ({
         {/* Price Section */}
         <div className="mb-6">
           {priceInfo?.showPrice ? (
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm font-black text-grey-custom">$</span>
-              <span className="text-4xl font-black text-green-light tracking-tighter">
-                {Number(priceInfo.price).toLocaleString("es-MX", {
-                  minimumFractionDigits: 2,
-                })}
-              </span>
-              <span className="text-[10px] font-black text-green-light/60 uppercase tracking-widest ml-1">
-                MXN
-              </span>
-            </div>
+            <Price value={priceInfo.price} size="lg" />
           ) : (
             <div className="py-2 px-4 rounded-clinical-md bg-ui-bg border border-ui-border w-fit">
-              <span className="text-[10px] font-black text-green-light uppercase tracking-widest">
+              <span className="text-2xs font-bold text-ink uppercase tracking-widest">
                 {priceInfo?.message ?? "Consulte en sucursal"}
               </span>
             </div>

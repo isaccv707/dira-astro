@@ -1,112 +1,185 @@
 ---
-import NavigationButton from "../../../components/astro/navigation/NavigationButton.astro";
-import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
+import { Icon } from "astro-icon/components";
 import { buildSocialNetworks } from "../../../constants/socialNetworks";
 import { getToKnowRoutes, routes, type Routes } from "../../../routes/routes";
 import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
-import {
-  getActiveBranchResultsUrl,
-  getActiveBranchContact,
-} from "../../../api/branchesApi/branchesApi";
+import { getActiveBranchDetails } from "../../../api/branchesApi/branchesApi";
+import { getFullAddress } from "../../../utils/maps.utils";
+import { formatSchedule } from "../../../utils/schedule.utils";
+import { buildWhatsappUrl } from "../../../utils/whatsapp";
 import dyraLogo from "../../../assets/images/logos/logo.png";
 
 const servicesRoutes = await getServicesNavRoutes();
-const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
-const resultsRoutes: Routes[] = [
-  { path: resultsUrl, text: "Consultar resultados" },
+const branch = await getActiveBranchDetails();
+const resultsUrl = branch?.urlResults || "/branches";
+const resultsIsExternal = resultsUrl.startsWith("http");
+const contact = branch ? { phone: branch.phone, email: branch.email } : null;
+const socialNetworks = buildSocialNetworks(contact);
+
+const address = branch ? getFullAddress(branch) : "";
+// "Lunes a Viernes 07:00 a 18:00, Sábado 07:00 a 14:00" → one line per group.
+const scheduleLines = formatSchedule(branch?.schedules)
+  .split(", ")
+  .filter(Boolean);
+const mapsUrl = address
+  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`DYRA Laboratorio ${address}`)}`
+  : null;
+
+const linkGroups: { title: string; items: Routes[] }[] = [
+  { title: "Servicios", items: servicesRoutes },
+  { title: "Laboratorio", items: [...routes, ...getToKnowRoutes] },
 ];
-const socialNetworks = buildSocialNetworks(await getActiveBranchContact());
+
+const linkClass =
+  "rounded-sm text-sm text-white/90 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white";
+const headingClass = "text-2xs font-semibold uppercase tracking-wide text-white/90";
 ---
 
-<footer class="bg-green-primary text-white pt-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div
-      class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center border-b border-white/20 pb-10"
-    >
-      <div
-        class="lg:col-span-2 flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left"
-      >
-        <img src={dyraLogo.src} alt="logo" class="w-36 h-auto shrink-0" />
-        <div class="md:border-l-2 md:border-white/30 md:pl-6">
-          <p class="text-sm md:text-base font-bold leading-relaxed max-w-xl">
-            En DYRA, ofrecemos servicios de calidad con un enfoque profesional
-            para garantizar la mejor experiencia a nuestros clientes.
-          </p>
-        </div>
-      </div>
+<footer class="bg-brand-ink text-white">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-12">
+      <!-- Active branch: address, phone and hours (NAP) -->
+      <section aria-labelledby="footer-branch" class="lg:col-span-5">
+        <a
+          href="/"
+          aria-label="DYRA, ir al inicio"
+          class="inline-flex rounded-clinical-md bg-white p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <img src={dyraLogo.src} alt="" width="56" height="56" class="h-14 w-14" />
+        </a>
 
-      <div class="flex flex-col items-center lg:items-end space-y-4">
-        <h4 class="font-bold uppercase tracking-widest text-xs">Contáctanos</h4>
-        <div class="flex gap-4">
-          {
-            socialNetworks.map(({ name, route, icon }) => (
-              <NavigationButton
-                href={route}
-                icon={icon}
-                target={name !== "Gmail" ? "_blank" : "_self"}
-                className="inline-flex items-center justify-center transition hover:scale-105 active:scale-95"
-                iconClassName="w-7 h-7"
-              />
-            ))
-          }
-        </div>
-      </div>
-    </div>
+        <h2 id="footer-branch" class:list={[headingClass, "mt-6"]}>
+          {branch ? branch.name : "Nuestras sucursales"}
+        </h2>
 
-    <div class="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-      {
-        [
-          { title: "Generales", data: routes },
-          { title: "Servicios", data: servicesRoutes },
-          { title: "Conócenos", data: getToKnowRoutes },
-          { title: "Resultados", data: resultsRoutes },
-        ].map((section) => (
-          <div class="flex flex-col items-center sm:items-start">
-            <h2 class="font-bold text-lg">{section.title}:</h2>
-            <nav class="flex flex-col space-y-1 w-full text-center sm:text-left">
-              {section.data.map(({ path, text }) => (
-                <div class="footer-link-container">
-                  <NavLinkButton text={text} path={path} variant={"footer"} />
+        {
+          branch ? (
+            <address class="mt-3 space-y-3 text-sm not-italic text-white/90">
+              {address && (
+                <p class="flex gap-2">
+                  <Icon name="lucide:map-pin" aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0" />
+                  {mapsUrl ? (
+                    <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class={linkClass}>
+                      {address}
+                    </a>
+                  ) : (
+                    address
+                  )}
+                </p>
+              )}
+              {branch.phone && (
+                <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <Icon name="lucide:phone" aria-hidden="true" class="h-4 w-4 shrink-0" />
+                  <a href={`tel:${branch.phone}`} class:list={[linkClass, "font-mono"]}>
+                    {branch.phone}
+                  </a>
+                  <a
+                    href={buildWhatsappUrl(branch.phone)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={linkClass}
+                  >
+                    WhatsApp
+                  </a>
+                </p>
+              )}
+              {branch.email && (
+                <p class="flex items-center gap-2">
+                  <Icon name="lucide:mail" aria-hidden="true" class="h-4 w-4 shrink-0" />
+                  <a href={`mailto:${branch.email}`} class={linkClass}>
+                    {branch.email}
+                  </a>
+                </p>
+              )}
+              {scheduleLines.length > 0 && (
+                <div class="flex gap-2">
+                  <Icon name="lucide:clock" aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0" />
+                  <ul>
+                    {scheduleLines.map((line) => (
+                      <li class="tabular-nums">{line}</li>
+                    ))}
+                  </ul>
                 </div>
+              )}
+            </address>
+          ) : (
+            <p class="mt-3 text-sm text-white/90">
+              Consulta direcciones y horarios en la página de sucursales.
+            </p>
+          )
+        }
+
+        <a href="/branches" class:list={[linkClass, "mt-4 inline-flex items-center gap-1 font-semibold"]}>
+          Ver todas las sucursales
+          <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+        </a>
+      </section>
+
+      {
+        linkGroups.map(({ title, items }) => (
+          <nav aria-label={title} class="lg:col-span-2">
+            <h2 class={headingClass}>{title}</h2>
+            <ul class="mt-3 space-y-2">
+              {items.map(({ path, text }) => (
+                <li>
+                  <a href={path} class={linkClass}>
+                    {text}
+                  </a>
+                </li>
               ))}
-            </nav>
-          </div>
+            </ul>
+          </nav>
         ))
       }
+
+      <section aria-labelledby="footer-results" class="lg:col-span-3">
+        <h2 id="footer-results" class={headingClass}>Resultados</h2>
+        <p class="mt-3 text-sm text-white/90">
+          Consulta en línea los resultados de tus estudios.
+        </p>
+        <a
+          href={resultsUrl}
+          target={resultsIsExternal ? "_blank" : undefined}
+          rel={resultsIsExternal ? "noopener noreferrer" : undefined}
+          class="mt-4 inline-flex h-10 items-center gap-2 rounded-clinical-sm bg-white px-4 text-sm font-semibold text-brand-ink transition-colors duration-200 hover:bg-ui-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ink"
+        >
+          Consultar resultados
+          {resultsIsExternal && <Icon name="lucide:external-link" aria-hidden="true" class="h-4 w-4" />}
+        </a>
+
+        <ul class="mt-6 flex items-center gap-2" aria-label="Redes y contacto">
+          {
+            socialNetworks.map(({ name, route, icon }) => (
+              <li>
+                <a
+                  href={route}
+                  target={name === "Gmail" ? undefined : "_blank"}
+                  rel={name === "Gmail" ? undefined : "noopener noreferrer"}
+                  aria-label={name === "Gmail" ? "Enviar correo" : name}
+                  class="flex h-11 w-11 items-center justify-center rounded-clinical-sm bg-white transition-colors duration-150 hover:bg-ui-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ink"
+                >
+                  <Icon name={icon} aria-hidden="true" class="h-6 w-6" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
     </div>
 
-    <div
-      class="border-t border-white/10 py-6 text-center text-xs tracking-wide"
-    >
+    <p class="border-t border-white/20 py-6 text-xs leading-relaxed text-white/90">
       Consulte a su médico; es el único facultado para indicar el tipo de
       estudio de laboratorio a realizar de acuerdo a su historia clínica y a la
       interpretación de sus resultados.
-    </div>
+    </p>
 
     <div
-      class="border-t border-white/10 py-6 flex flex-col md:flex-row justify-center items-center gap-4 text-xs opacity-60 tracking-wide"
+      class="flex flex-col items-start gap-2 border-t border-white/20 py-6 text-xs text-white/90 sm:flex-row sm:items-center sm:justify-between"
     >
-      <p>© {new Date().getFullYear()} DYRA. TODOS LOS DERECHOS RESERVADOS.</p>
-      <span class="hidden md:inline">|</span>
-      <a
-        href="/aviso-de-privacidad.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-xs font-medium uppercase tracking-wider hover:underline hover:opacity-100 transition-all duration-300"
-      >
-        AVISO DE PRIVACIDAD
+      <p>© {new Date().getFullYear()} Diagnóstico y Referencia Analítica (DYRA).</p>
+      <a href="/aviso-de-privacidad.pdf" target="_blank" rel="noopener noreferrer" class={linkClass}>
+        Aviso de privacidad
       </a>
     </div>
   </div>
 </footer>
-
-<style>
-  .footer-link-container :global(a),
-  .footer-link-container :global(button) {
-    display: block !important;
-    width: 100% !important;
-    padding: 0.5rem 0 !important;
-    background: transparent !important;
-    text-align: inherit !important;
-  }
-</style>

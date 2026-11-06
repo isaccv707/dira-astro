@@ -40,7 +40,7 @@ const TextInput = ({
                 onChange={onChange}
                 className={`
           mt-1 w-full rounded-clinical-sm border px-4 py-2 text-sm
-          placeholder:text-grey-custom
+          placeholder:text-ink-muted
           transition focus:outline-none focus:ring-2
           ${hasError
                         ? "border-red-custom focus:ring-red-custom"

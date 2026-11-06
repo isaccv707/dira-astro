@@ -27,8 +27,8 @@ const StudyTypeFilterControl = ({ value, onChange, disabled }: Props) => (
           onClick={() => !isActive && onChange(option.value)}
           className={`cursor-pointer rounded-clinical-sm px-4 py-1.5 text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary disabled:cursor-not-allowed ${
             isActive
-              ? "bg-white text-green-light shadow-xs"
-              : "text-grey-custom hover:text-green-light"
+              ? "bg-white text-ink shadow-xs"
+              : "text-ink-muted hover:text-ink"
           }`}
         >
           {option.label}

@@ -23,7 +23,7 @@ const isImgIcon = icon && icon.startsWith("http");
     >
       {
         isAstroIcon ? (
-          <Icon name={icon} class="h-7 w-7 text-green-primary" />
+          <Icon name={icon} class="h-7 w-7 text-brand-ink" />
         ) : isImgIcon ? (
           <img src={icon} alt={title} class="h-7 w-7 object-contain" />
         ) : (
@@ -33,10 +33,10 @@ const isImgIcon = icon && icon.startsWith("http");
     </div>
 
     <div>
-      <h3 class="text-base font-bold tracking-tight text-green-primary">
+      <h3 class="text-base font-bold tracking-tight text-brand-ink">
         {title}
       </h3>
-      <p class="mt-2 text-sm leading-relaxed text-grey-custom">
+      <p class="mt-2 text-sm leading-relaxed text-ink-muted">
         {description}
       </p>
     </div>

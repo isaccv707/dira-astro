@@ -41,7 +41,7 @@ const AddStudyButton = ({
           </>
         ) : (
           <>
-            <FiCheckCircle className="text-green-primary" />
+            <FiCheckCircle className="text-brand-ink" />
             Agregado
           </>
         )

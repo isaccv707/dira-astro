@@ -1,0 +1,90 @@
+---
+import { buildBarcode } from "../../../utils/barcode";
+
+export interface SpecimenLabelRow {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  /** Study code, printed in monospace under the barcode. */
+  code: string;
+  /** Shown top-right only when it differs from the code. */
+  abbreviation?: string | null;
+  rows?: SpecimenLabelRow[];
+  /** Accessible name of the figure, e.g. "Ficha del estudio Glucosa". */
+  label: string;
+  class?: string;
+  style?: string;
+}
+
+const {
+  code,
+  abbreviation = null,
+  rows = [],
+  label,
+  class: className,
+  style,
+} = Astro.props;
+
+// Signature element of the site: the study as its specimen label.
+// Bars are derived from the code, so every study gets its own pattern.
+const barcode = buildBarcode(`${code}${abbreviation ?? ""}`);
+---
+
+<figure
+  class:list={[
+    "relative overflow-hidden rounded-clinical-md border border-ui-border bg-white shadow-xs",
+    className,
+  ]}
+  style={style}
+  aria-label={label}
+>
+  <div aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-green-primary">
+  </div>
+
+  <div class="pl-7 pr-6 pt-5">
+    <div
+      class="flex items-center justify-between text-2xs font-semibold uppercase tracking-[0.2em] text-ink-subtle"
+    >
+      <span>DYRA · Laboratorio</span>
+      {abbreviation && <span class="font-mono">{abbreviation}</span>}
+    </div>
+
+    <svg
+      aria-hidden="true"
+      class="mt-4 h-14 w-full text-ink"
+      viewBox={`0 0 ${barcode.width} 40`}
+      preserveAspectRatio="none"
+    >
+      {
+        barcode.bars.map((bar) => (
+          <rect x={bar.x} y="0" width={bar.width} height="40" fill="currentColor" />
+        ))
+      }
+    </svg>
+
+    <p class="mt-2 font-mono text-xs font-medium tracking-[0.3em] text-ink">
+      <span class="sr-only">Código </span>{code}
+    </p>
+  </div>
+
+  {
+    rows.length > 0 ? (
+      <dl class="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-dashed border-ui-border pb-5 pl-7 pr-6 pt-5">
+        {rows.map((row) => (
+          <div class="min-w-0">
+            <dt class="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">
+              {row.label}
+            </dt>
+            <dd class="mt-0.5 text-sm font-bold leading-snug text-ink">
+              {row.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    ) : (
+      <div class="pb-5" />
+    )
+  }
+</figure>
