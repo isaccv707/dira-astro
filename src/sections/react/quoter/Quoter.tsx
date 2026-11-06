@@ -1,115 +1,149 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { useStore } from "@nanostores/react";
+import clsx from "clsx";
 
-import QuotationForm from "./QuoterForm";
 import QuoterSelectStudies from "./QuoterSelectStudies";
+import QuoterForm from "./QuoterForm";
+import QuoteSummary from "./QuoteSummary";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
+import { formatMXN } from "../../../utils/currency";
+import {
+  ensureQuoterStudiesSynced,
+  selectedStudiesStore,
+  totalsStore,
+} from "../../../stores/quoterStore";
 
-import StepIndicator from "../../../components/react/ui/StepIndicator";
-import Button from "../../../components/react/buttons/Button";
-import { ClipboardList } from "lucide-react";
+type Step = "studies" | "details";
 
-import { quoterFormSchema } from "../../../schemas/quoter-form/quoterFormSchema";
-import { setClient } from "../../../stores/quoterStore";
+const STEPS: { id: Step; label: string }[] = [
+  { id: "studies", label: "Estudios" },
+  { id: "details", label: "Tus datos y PDF" },
+];
 
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-type Inputs = yup.InferType<typeof quoterFormSchema>;
-
+/**
+ * Quoter: studies first (prices visible right away), personal data only at
+ * the end, when it is needed for the PDF. The summary stays beside the steps
+ * on desktop; on phones a bottom bar keeps the total and the next step in reach.
+ */
 const Quoter = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<Step>("studies");
+  const studies = useStore(selectedStudiesStore);
+  const totals = useStore(totalsStore);
+  const itemCount = studies.reduce((acc, study) => acc + (study.quantity ?? 1), 0);
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const isFirstRender = useRef(true);
 
-  const methods = useForm<Inputs>({
-    defaultValues: {
-      clientType: "particular",
-      name: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "",
-      companyRFC: "",
-    },
-    resolver: yupResolver(quoterFormSchema) as any,
-  });
+  useEffect(() => ensureQuoterStudiesSynced(), []);
 
-  const { trigger, getValues } = methods;
-
-  const nextStep = async () => {
-    if (step === 1) {
-      const isFormValid = await trigger([
-        "name",
-        "lastName",
-        "phoneNumber",
-        "email",
-      ]);
-      if (!isFormValid) return;
-      // Store the cleaned values (trimmed, phone digits only) and only once
-      // the step is valid. Company clients carry no last name.
-      const client = quoterFormSchema.cast(getValues());
-      setClient({
-        ...client,
-        lastName: client.clientType === "company" ? "" : client.lastName,
-        companyRFC: client.companyRFC ?? undefined,
-      });
-      setStep((prev) => prev + 1);
+  // Move focus to the new step's heading so keyboard and screen-reader
+  // users land where the content changed.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  };
+    stepHeadingRef.current?.focus();
+    stepHeadingRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+  }, [step]);
 
-  const previousStep = () => setStep((prev) => prev - 1);
+  // Lift the floating buttons above the mobile bottom bar while it shows.
+  const showBottomBar = step === "studies" && studies.length > 0;
+  useEffect(() => {
+    if (showBottomBar) document.body.dataset.bottomBar = "";
+    else delete document.body.dataset.bottomBar;
+    return () => {
+      delete document.body.dataset.bottomBar;
+    };
+  }, [showBottomBar]);
+
+  const goToDetails = () => studies.length > 0 && setStep("details");
+  const currentIndex = STEPS.findIndex((item) => item.id === step);
+
   return (
-    <div className="rounded-clinical-lg w-full grid">
-      <header className="bg-brand-ink rounded-t-clinical-lg px-4 py-4 sm:px-6 text-center sticky top-0 z-10">
-        <div className="flex items-center justify-center gap-2">
-          <ClipboardList className="h-5 w-5 text-white/90" strokeWidth={2} />
-          <h1 className="text-white font-bold text-base sm:text-lg">
-            Cotiza tus estudios
-          </h1>
-        </div>
-        <small className="text-white text-xs sm:text-sm opacity-90">
-          Rellena la información necesaria para obtener una cotización.
-        </small>
-      </header>
-
-      {/* MOBILE */}
-      <div className="sm:hidden px-4">
-        <div className="flex justify-center">
-          <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
-        </div>
-
-        {step === 2 ? (
-          <div className="mt-3 flex justify-end pr-1">
-            <Button
-              text="Regresar"
-              variant="primary"
-              size="sm"
-              icon={"tabler:arrow-back"}
-              onClick={previousStep}
-            />
-          </div>
-        ) : null}
-      </div>
-
-      {/* DESKTOP */}
-      <div className="hidden sm:flex relative items-center px-4 sm:px-6 mt-6 sm:mt-8">
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <StepIndicator currentStep={step} steps={["Datos", "Estudios"]} />
-        </div>
-
-        <div className="ml-auto pr-2 sm:pr-4">
-          {step === 2 ? (
-            <Button
-              text="Regresar"
-              variant="primary"
-              size="sm"
-              icon={"tabler:arrow-back"}
-              onClick={previousStep}
-            />
-          ) : null}
-        </div>
-      </div>
-      {step === 1 && (
-        <QuotationForm methods={methods} nextStep={nextStep} step={step} />
+    <div
+      className={clsx(
+        "grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]",
+        showBottomBar && "pb-20 lg:pb-0",
       )}
-      {step === 2 && <QuoterSelectStudies />}
+    >
+      <div className="min-w-0 rounded-clinical-md border border-ui-border bg-white p-4 shadow-xs sm:p-6">
+        <ol className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-ui-border pb-4">
+          {STEPS.map((item, index) => {
+            const isCurrent = item.id === step;
+            const isDone = index < currentIndex;
+            return (
+              <li
+                key={item.id}
+                aria-current={isCurrent ? "step" : undefined}
+                className="flex items-center gap-2 text-sm"
+              >
+                <span
+                  aria-hidden="true"
+                  className={clsx(
+                    "flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold tabular-nums",
+                    isCurrent || isDone
+                      ? "bg-brand-ink text-white"
+                      : "border border-ui-border text-ink-subtle",
+                  )}
+                >
+                  {index + 1}
+                </span>
+                <span className={isCurrent ? "font-semibold text-ink" : "text-ink-muted"}>
+                  {item.label}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+
+        <h2
+          ref={stepHeadingRef}
+          tabIndex={-1}
+          className="mt-5 scroll-mt-24 text-xl font-bold tracking-tight text-ink focus:outline-none"
+        >
+          {step === "studies" ? "Elige tus estudios" : "¿A nombre de quién?"}
+        </h2>
+        <p className="mb-5 mt-1 text-sm text-ink-muted">
+          {step === "studies"
+            ? "Busca por nombre o código y agrega los que necesites. El total se actualiza al instante."
+            : "Con estos datos generamos el PDF de tu cotización."}
+        </p>
+
+        {step === "studies" ? (
+          <QuoterSelectStudies />
+        ) : (
+          <QuoterForm onBack={() => setStep("studies")} onRestart={() => setStep("studies")} />
+        )}
+      </div>
+
+      <aside aria-label="Resumen de la cotización" className="lg:sticky lg:top-24">
+        <QuoteSummary onContinue={step === "studies" ? goToDetails : undefined} />
+      </aside>
+
+      {showBottomBar && (
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-ui-border bg-white px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-md lg:hidden">
+          <div className="mx-auto flex max-w-xl items-center justify-between gap-3">
+            <a
+              href="#resumen-cotizacion"
+              className="min-w-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary"
+            >
+              <span className="block text-xs text-ink-muted">
+                {itemCount} {itemCount === 1 ? "estudio" : "estudios"} · Ver resumen
+              </span>
+              <span className="block text-lg font-bold tabular-nums text-ink">
+                {formatMXN(totals.total)}
+              </span>
+            </a>
+            <button
+              type="button"
+              onClick={goToDetails}
+              className={Buttonstyles({ variant: "primary", size: "md" })}
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

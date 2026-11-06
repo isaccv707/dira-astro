@@ -11,7 +11,7 @@ interface FormProviderProps {
 const FormProvider = ({ methods, children, onSubmit, ref }: FormProviderProps) => {
     return (
         <RHFProvider {...methods}>
-            <form ref={ref} onSubmit={onSubmit}>
+            <form ref={ref} onSubmit={onSubmit} noValidate>
                 {children}
             </form>
         </RHFProvider>

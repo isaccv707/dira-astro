@@ -7,126 +7,108 @@ import { toast } from "react-toastify";
 import { generateQuotationPdf } from "../api/quotationsApi/quotationApi";
 import { resolveBranchId } from "../stores/branchStore";
 
-interface useQuotationPdfProps {
-  client: Client | null;
+interface UseQuotationPdfProps {
   selectedStudies: Study[];
   selectedService: QuoterService | null;
 }
 
-const useQuotationPdf = ({
-  client,
-  selectedStudies,
-  selectedService,
-}: useQuotationPdfProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentAction, setCurrentAction] = useState<
-    "view" | "download" | null
-  >(null);
+type Action = "view" | "download";
 
-  const hasClient = Boolean(client);
-  const hasStudies = selectedStudies.length > 0;
+/**
+ * Builds the PDF through POST /quotations/pdf. The client is passed per call
+ * (right after the form validates) so the request never uses stale data.
+ */
+const useQuotationPdf = ({ selectedStudies, selectedService }: UseQuotationPdfProps) => {
+  const [currentAction, setCurrentAction] = useState<Action | null>(null);
 
-  const buildPayload = (): QuotationPayload | null => {
-    if (!hasClient || !client) {
-      toast.error("Primero llena la información del cliente.");
+  const buildPayload = (client: Client): QuotationPayload | null => {
+    if (selectedStudies.length === 0) {
+      toast.error("Agrega al menos un estudio para cotizar.");
       return null;
     }
-
-    if (!hasStudies) {
-      toast.error("Debes seleccionar al menos un estudio para cotizar.");
-      return null;
-    }
-
     const branchId = resolveBranchId();
     if (!branchId) {
-      toast.error("Selecciona una sucursal antes de continuar.");
+      toast.error("Elige una sucursal antes de continuar.");
       return null;
     }
-
     if (!selectedService?.priceSheetId) {
-      toast.error("Selecciona un servicio con tarifario disponible para cotizar.");
+      toast.error("Este servicio no tiene lista de precios en tu sucursal.");
       return null;
     }
-
-    const payloadStudies = selectedStudies.map((study) => ({
-      id: study.id,
-      name: study.name,
-      price: Number(study.priceInfo.price),
-      quantity: study.quantity ?? 1,
-    }));
-
     return {
       clientType: client.clientType,
       name: client.name,
-      lastName: client?.lastName,
+      lastName: client.lastName,
       phoneNumber: client.phoneNumber,
-      email: client?.email,
-      studies: payloadStudies,
+      email: client.email,
+      studies: selectedStudies.map((study) => ({
+        id: study.id,
+        name: study.name,
+        price: Number(study.priceInfo.price),
+        quantity: study.quantity ?? 1,
+      })),
       branchId,
       priceSheetId: selectedService.priceSheetId,
     };
   };
 
-  const generateBlob = async (action: "view" | "download") => {
-    const payload = buildPayload();
+  const generate = async (client: Client, action: Action): Promise<Blob | null> => {
+    const payload = buildPayload(client);
     if (!payload) return null;
-
     try {
-      setIsLoading(true);
       setCurrentAction(action);
-
-      const blob = await generateQuotationPdf(payload);
-      return blob;
+      return await generateQuotationPdf(payload);
     } catch (error) {
       console.error(error);
-      const message =
+      toast.error(
         error instanceof Error
           ? error.message
-          : "Hubo un error al generar la cotización en PDF.";
-      toast.error(message);
+          : "No pudimos generar la cotización. Intenta de nuevo.",
+      );
       return null;
     } finally {
-      setIsLoading(false);
       setCurrentAction(null);
     }
   };
 
-  const downloadQuotation = async () => {
-    const blob = await generateBlob("download");
-    if (!blob) return;
-
+  /** Resolves true when the PDF was downloaded. */
+  const downloadQuotation = async (client: Client): Promise<boolean> => {
+    const blob = await generate(client, "download");
+    if (!blob) return false;
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `cotizacion-${client?.name?.replace(/\s+/g, "_") || "dyra"}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `cotizacion-dyra-${client.name.trim().replace(/\s+/g, "_") || "cliente"}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
     setTimeout(() => window.URL.revokeObjectURL(url), 10000);
-    toast.success("Cotización descargada con éxito");
+    return true;
   };
 
-  const viewQuotation = async () => {
-    const blob = await generateBlob("view");
-    if (!blob) return;
-
+  /**
+   * Shows the PDF in `tab`, a window the caller opened synchronously in the
+   * click handler (pop-up blockers reject windows opened after an await).
+   */
+  const viewQuotation = async (client: Client, tab: Window | null): Promise<boolean> => {
+    const blob = await generate(client, "view");
+    if (!blob) {
+      tab?.close();
+      return false;
+    }
     const url = window.URL.createObjectURL(blob);
-    window.open(url, "_blank");
-
-    setTimeout(() => {
-      window.URL.revokeObjectURL(url);
-    }, 10000);
+    if (tab) tab.location.href = url;
+    else window.open(url, "_blank");
+    setTimeout(() => window.URL.revokeObjectURL(url), 60000);
+    return true;
   };
 
   return {
     downloadQuotation,
     viewQuotation,
-    isLoading,
-    hasClient,
-    hasStudies,
-    isDownloading: isLoading && currentAction === "download",
-    isViewing: isLoading && currentAction === "view",
+    isDownloading: currentAction === "download",
+    isViewing: currentAction === "view",
+    isBusy: currentAction !== null,
   };
 };
 

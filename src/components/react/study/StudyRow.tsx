@@ -1,20 +1,20 @@
-import clsx from "clsx";
-import { Check, Plus } from "lucide-react";
+import type { ReactNode } from "react";
 
 import type { Study } from "../../../interfaces/study.interface";
 import { getCatalogName } from "../../../interfaces/study.interface";
-import { useCartItem } from "../../../hooks/useCartItem";
 import { getStudyFacts } from "../../../utils/studyFacts";
-import { Buttonstyles } from "../../../styles/buttonsStyles";
 import Eyebrow from "../ui/Eyebrow";
 import Price from "../ui/Price";
 import StudyCode from "../ui/StudyCode";
 import PanelParameters from "../panel/PanelParameters";
+import CartToggleButton from "./CartToggleButton";
 
 interface StudyRowProps {
   study: Study;
   /** Heading level inside the page outline (h3 under a section's h2). */
   headingLevel?: "h2" | "h3";
+  /** Replaces the default "add to selected studies" button (e.g. the quoter). */
+  action?: ReactNode;
 }
 
 /**
@@ -22,8 +22,11 @@ interface StudyRowProps {
  * needs (sample, fasting, delivery), price and the add action. Rendered as
  * an <li>; place it inside a <ul> (see StudyCatalog).
  */
-const StudyRow = ({ study, headingLevel: Heading = "h3" }: StudyRowProps) => {
-  const { isInCart, toggle } = useCartItem(study);
+const StudyRow = ({
+  study,
+  headingLevel: Heading = "h3",
+  action,
+}: StudyRowProps) => {
   const facts = getStudyFacts(study);
   const section = getCatalogName(study.section);
   const { priceInfo } = study;
@@ -85,32 +88,7 @@ const StudyRow = ({ study, headingLevel: Heading = "h3" }: StudyRowProps) => {
           </span>
         )}
 
-        <button
-          type="button"
-          onClick={toggle}
-          aria-pressed={isInCart}
-          aria-label={
-            isInCart
-              ? `Quitar ${study.name} de tus estudios`
-              : `Agregar ${study.name} a tus estudios`
-          }
-          className={clsx(
-            Buttonstyles({ variant: isInCart ? "outline" : "primary", size: "sm" }),
-            "min-w-30",
-          )}
-        >
-          {isInCart ? (
-            <>
-              <Check aria-hidden="true" className="h-4 w-4" />
-              Agregado
-            </>
-          ) : (
-            <>
-              <Plus aria-hidden="true" className="h-4 w-4" />
-              Agregar
-            </>
-          )}
-        </button>
+        {action ?? <CartToggleButton study={study} />}
       </div>
     </li>
   );

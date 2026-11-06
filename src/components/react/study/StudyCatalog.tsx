@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { RotateCw, Search, X } from "lucide-react";
 
 import StudyRow from "./StudyRow";
@@ -29,11 +29,16 @@ interface StudyCatalogProps {
   basePath: string;
   pageSize: number;
   initialQuery: CatalogQuery;
-  initialStudies: Study[];
-  initialTotal: number;
-  initialTotalPages: number;
+  /** Server-rendered first page. Omit it to fetch on mount (client-only use). */
+  initialStudies?: Study[];
+  initialTotal?: number;
+  initialTotalPages?: number;
   /** Optional label for the scope in the result count, e.g. "en Análisis clínicos". */
   scopeLabel?: string;
+  /** Mirror search, filter and page in the URL (off inside the quoter). */
+  syncUrl?: boolean;
+  /** Replaces each row's default "add to selected studies" button. */
+  renderAction?: (study: Study) => ReactNode;
 }
 
 type Status = "idle" | "loading" | "error";
@@ -89,16 +94,19 @@ const StudyCatalog = ({
   pageSize,
   initialQuery,
   initialStudies,
-  initialTotal,
-  initialTotalPages,
+  initialTotal = 0,
+  initialTotalPages = 1,
   scopeLabel,
+  syncUrl = true,
+  renderAction,
 }: StudyCatalogProps) => {
+  const hasInitialData = initialStudies !== undefined;
   const [query, setQuery] = useState<CatalogQuery>(initialQuery);
   const [searchInput, setSearchInput] = useState(initialQuery.search);
-  const [studies, setStudies] = useState(initialStudies);
+  const [studies, setStudies] = useState<Study[]>(initialStudies ?? []);
   const [total, setTotal] = useState(initialTotal);
   const [totalPages, setTotalPages] = useState(initialTotalPages);
-  const [status, setStatus] = useState<Status>("idle");
+  const [status, setStatus] = useState<Status>(hasInitialData ? "idle" : "loading");
   const [reloadKey, setReloadKey] = useState(0);
   const listTopRef = useRef<HTMLDivElement>(null);
   const isFirstRun = useRef(true);
@@ -116,7 +124,7 @@ const StudyCatalog = ({
   useEffect(() => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
-      return;
+      if (hasInitialData) return;
     }
     let cancelled = false;
     setStatus("loading");
@@ -138,6 +146,7 @@ const StudyCatalog = ({
   }, [query, reloadKey]);
 
   const updateUrl = (next: CatalogQuery, push: boolean) => {
+    if (!syncUrl) return;
     const href = buildCatalogHref(basePath, next, false);
     const state = window.history.state;
     if (push) window.history.pushState(state, "", href);
@@ -150,6 +159,7 @@ const StudyCatalog = ({
 
   // Back/forward between pages restores that page.
   useEffect(() => {
+    if (!syncUrl) return;
     const onPopState = () => {
       const params = new URLSearchParams(window.location.search);
       const page = Number.parseInt(params.get(PAGE_QUERY_KEY) ?? "1", 10) || 1;
@@ -157,7 +167,7 @@ const StudyCatalog = ({
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
-  }, []);
+  }, [syncUrl]);
 
   const goToPage = (page: number) => {
     const next = { ...query, page };
@@ -263,7 +273,7 @@ const StudyCatalog = ({
             }`}
           >
             {studies.map((study) => (
-              <StudyRow key={study.id} study={study} />
+              <StudyRow key={study.id} study={study} action={renderAction?.(study)} />
             ))}
           </ul>
         ) : isLoading ? (
@@ -307,7 +317,9 @@ const StudyCatalog = ({
           <CatalogPagination
             currentPage={query.page}
             totalPages={totalPages}
-            getHref={(page) => buildCatalogHref(basePath, { ...query, page })}
+            getHref={(page) =>
+              syncUrl ? buildCatalogHref(basePath, { ...query, page }) : `#${CATALOG_ANCHOR}`
+            }
             onNavigate={goToPage}
           />
         </div>

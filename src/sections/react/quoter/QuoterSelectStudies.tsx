@@ -1,355 +1,240 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, Search, X } from "lucide-react";
+import { AlertTriangle, MapPin } from "lucide-react";
 import { useStore } from "@nanostores/react";
+import clsx from "clsx";
 
-import Button from "../../../components/react/buttons/Button";
-import CardQuoteStudy from "../../../components/react/cards/CardQuoteStudy";
-import StudyTypeFilterControl from "../../../components/react/filter/StudyTypeFilterControl";
-import SelectInput from "../../../components/react/form/SelectInput";
-import Pagination from "../../../components/react/ui/Pagination";
-import Eyebrow from "../../../components/react/ui/Eyebrow";
-import usePagination from "../../../hooks/usePagination";
-
+import StudyCatalog from "../../../components/react/study/StudyCatalog";
+import SelectToggleButton from "../../../components/react/study/SelectToggleButton";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
 import type { Study } from "../../../interfaces/study.interface";
-import type {
-  Service,
-  ServiceDetail,
-} from "../../../interfaces/service.interface";
+import type { Service, ServiceDetail } from "../../../interfaces/service.interface";
 import { getOneResource } from "../../../utils/getOneResource";
-import {
-  studyTypeEmptyMessage,
-  studyTypeToIsPanel,
-  type StudyTypeFilter,
-} from "../../../utils/studyTypeFilter";
 import { getAllService } from "../../../api/servicesApi/serviceApi";
+import { getStoredBranchId, openBranchSelectorModal } from "../../../stores/branchStore";
 import {
-  getStoredBranchId,
-  openBranchSelectorModal,
-} from "../../../stores/branchStore";
-import {
-  addStudy,
+  addStudyToQuote,
   removeStudy,
   selectedStudiesStore,
   selectedServiceStore,
-  selectQuoterService,
-  ensureQuoterStudiesSynced,
+  clearStudies,
 } from "../../../stores/quoterStore";
+import type { QuoterService } from "../../../utils/quoterStudies";
 
-const SERVICES_PER_PAGE = 8;
-const STUDIES_PER_PAGE = 8;
-const SEARCH_DEBOUNCE_MS = 350;
+const PAGE_SIZE = 10;
 
+type ServiceMeta = QuoterService | "no-price-sheet" | null;
+
+/**
+ * Step 1: pick a service, then add its priced studies. A quote holds one
+ * service (one price sheet); switching service with studies already added
+ * asks first instead of silently dropping them.
+ */
 const QuoterSelectStudies = () => {
   const [branchId] = useState<string | null>(() => getStoredBranchId());
-  const [services, setServices] = useState<Service[]>([]);
-  const [selectedSlug, setSelectedSlug] = useState("");
-  const [serviceDetail, setServiceDetail] = useState<ServiceDetail | null>(null);
-  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
-  const [studyType, setStudyType] = useState<StudyTypeFilter>("all");
+  const [services, setServices] = useState<Service[] | null>(null);
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const [pendingSlug, setPendingSlug] = useState<string | null>(null);
+  const [serviceMeta, setServiceMeta] = useState<ServiceMeta>(null);
 
   const selectedStudies = useStore(selectedStudiesStore);
-  const persistedService = useStore(selectedServiceStore);
-
-  useEffect(() => {
-    ensureQuoterStudiesSynced();
-  }, []);
+  const quoteService = useStore(selectedServiceStore);
 
   useEffect(() => {
     if (!branchId) return;
     getAllService(branchId)
-      .then(setServices)
+      .then((list) => setServices(list.filter((s) => (s._count?.studies ?? 0) > 0)))
       .catch(() => setServices([]));
   }, [branchId]);
 
-  // Only services with studies actually attached are quotable.
-  const servicesWithStudies = useMemo(
-    () => services.filter((service) => (service._count?.studies ?? 0) > 0),
-    [services],
-  );
-
-  const servicesTotalPages = Math.max(
-    Math.ceil(servicesWithStudies.length / SERVICES_PER_PAGE),
-    1,
-  );
-  const {
-    currentPage: servicesPage,
-    nextPage: servicesNextPage,
-    prevPage: servicesPrevPage,
-    setPage: setServicesPage,
-  } = usePagination({ totalPages: servicesTotalPages, initialPage: 1 });
-
-  const pagedServices = useMemo(
-    () =>
-      servicesWithStudies.slice(
-        (servicesPage - 1) * SERVICES_PER_PAGE,
-        servicesPage * SERVICES_PER_PAGE,
-      ),
-    [servicesWithStudies, servicesPage],
-  );
-
-  // Pre-select whichever service the quoter already has studies from.
+  // Open the quote's service if it has one, else the first quotable service.
   useEffect(() => {
-    if (persistedService && !selectedSlug) {
-      setSelectedSlug(persistedService.slug);
-    }
-  }, [persistedService, selectedSlug]);
+    if (activeSlug || !services?.length) return;
+    const fromQuote = services.find((s) => s.slug === quoteService?.slug);
+    setActiveSlug((fromQuote ?? services[0]).slug);
+  }, [services, quoteService, activeSlug]);
 
-  // Keep the service list on the page that actually contains the current selection.
+  // Price sheet of the service on screen (needed to pin the quote to it).
   useEffect(() => {
-    if (!selectedSlug || servicesWithStudies.length === 0) return;
-    const index = servicesWithStudies.findIndex(
-      (service) => service.slug === selectedSlug,
-    );
-    if (index >= 0) {
-      setServicesPage(Math.floor(index / SERVICES_PER_PAGE) + 1);
-    }
-  }, [selectedSlug, servicesWithStudies]);
-
-  // Studies come paginated straight from GET /services/:idOrSlug — each
-  // page turn re-requests that same endpoint with page/limit.
-  const studiesTotalPages = serviceDetail?.studies?.totalPages ?? 1;
-  const {
-    currentPage: studiesPage,
-    nextPage: studiesNextPage,
-    prevPage: studiesPrevPage,
-    setPage: setStudiesPage,
-  } = usePagination({ totalPages: studiesTotalPages, initialPage: 1 });
-
-  useEffect(() => {
-    setStudiesPage(1);
-  }, [selectedSlug]);
-
-  // Studies search is scoped to the selected service — clear it whenever
-  // the user switches service so a stale term doesn't silently filter
-  // the newly picked one.
-  useEffect(() => {
-    setSearchInput("");
-    setSearch("");
-  }, [selectedSlug]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSearch(searchInput.trim());
-    }, SEARCH_DEBOUNCE_MS);
-
-    return () => clearTimeout(timeout);
-  }, [searchInput]);
-
-  useEffect(() => {
-    setStudiesPage(1);
-  }, [search, studyType]);
-
-  useEffect(() => {
-    if (!selectedSlug || !branchId) {
-      setServiceDetail(null);
-      return;
-    }
-
+    if (!activeSlug || !branchId) return;
     let cancelled = false;
-    setIsLoadingDetail(true);
-
-    getOneResource<ServiceDetail>("services", selectedSlug, {
-      branchId,
-      page: studiesPage,
-      limit: STUDIES_PER_PAGE,
-      search,
-      isPanel: studyTypeToIsPanel(studyType),
-    })
-      .then((data) => {
+    setServiceMeta(null);
+    getOneResource<ServiceDetail>("services", activeSlug, { branchId, limit: 1 }).then(
+      (detail) => {
         if (cancelled) return;
-        setServiceDetail(data);
-        if (data?.id && data.priceSheetId) {
-          selectQuoterService({
-            id: data.id,
-            slug: data.slug,
-            name: data.name,
-            priceSheetId: data.priceSheetId,
-          });
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoadingDetail(false);
-      });
-
+        setServiceMeta(
+          detail?.id && detail.priceSheetId
+            ? {
+                id: detail.id,
+                slug: detail.slug,
+                name: detail.name,
+                priceSheetId: detail.priceSheetId,
+              }
+            : "no-price-sheet",
+        );
+      },
+    );
     return () => {
       cancelled = true;
     };
-  }, [selectedSlug, branchId, studiesPage, search, studyType]);
+  }, [activeSlug, branchId]);
 
-  const studies = serviceDetail?.studies?.data ?? [];
-  const totalStudies = serviceDetail?.studies?.total ?? 0;
+  const activeService = useMemo(
+    () => services?.find((s) => s.slug === activeSlug) ?? null,
+    [services, activeSlug],
+  );
 
-  const handleAddStudy = (study: Study) => addStudy(study);
-  const handleDeletStudy = (studyId: string) => removeStudy(studyId);
+  const requestService = (slug: string) => {
+    if (slug === activeSlug) return;
+    const hasOtherServiceStudies =
+      selectedStudies.length > 0 && quoteService && quoteService.slug !== slug;
+    if (hasOtherServiceStudies) setPendingSlug(slug);
+    else setActiveSlug(slug);
+  };
 
-  const handleOpenBranchSelector = async () => {
-    await openBranchSelectorModal();
+  const confirmSwitch = () => {
+    clearStudies();
+    setActiveSlug(pendingSlug);
+    setPendingSlug(null);
   };
 
   if (!branchId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center px-6 py-16 text-center">
-        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-clinical-lg bg-green-light/10">
-          <MapPin className="h-9 w-9 text-ink" strokeWidth={1.5} />
-        </div>
-
-        <h3 className="text-lg font-bold tracking-tight text-ink">
-          Selecciona una sucursal para cotizar
-        </h3>
-        <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink-muted">
-          Los precios varían por sucursal. Elige la tuya para ver tarifas y
-          agregar estudios a tu cotización.
+      <div className="flex flex-col items-center px-6 py-14 text-center">
+        <MapPin aria-hidden="true" className="h-8 w-8 text-brand-ink" strokeWidth={1.5} />
+        <h2 className="mt-4 text-lg font-bold text-ink">Elige tu sucursal para cotizar</h2>
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-ink-muted">
+          Los precios cambian según la sucursal. Elige la tuya para ver la lista
+          de precios y armar tu cotización.
         </p>
-
-        <Button
+        <button
           type="button"
-          onClick={handleOpenBranchSelector}
-          variant="primary"
-          size="lg"
-          className="mt-8"
+          onClick={() => openBranchSelectorModal()}
+          className={`${Buttonstyles({ variant: "primary", size: "lg" })} mt-6`}
         >
-          <MapPin className="h-4 w-4" />
+          <MapPin aria-hidden="true" className="h-4 w-4" />
           Elegir sucursal
-        </Button>
+        </button>
       </div>
     );
   }
 
-  const serviceOptions = [
-    { value: "", label: "Selecciona un servicio" },
-    ...pagedServices.map((service) => ({
-      value: service.slug,
-      label: service.name,
-    })),
-  ];
+  if (services === null) {
+    return <p className="py-10 text-center text-sm text-ink-muted">Cargando servicios…</p>;
+  }
 
-  const hasPriceSheet = Boolean(serviceDetail?.priceSheet);
+  if (services.length === 0) {
+    return (
+      <p className="py-10 text-center text-sm text-ink-muted">
+        Esta sucursal aún no tiene estudios con precio para cotizar en línea.
+        Consulta en sucursal.
+      </p>
+    );
+  }
+
+  const pendingService = services.find((s) => s.slug === pendingSlug);
+  const quoteMeta = serviceMeta && serviceMeta !== "no-price-sheet" ? serviceMeta : null;
+  const isQuotable = quoteMeta !== null;
+
+  const renderAction = (study: Study) => {
+    const isSelected = selectedStudies.some((s) => s.id === study.id);
+    const hasPrice = study.priceInfo?.showPrice === true;
+    return (
+      <SelectToggleButton
+        isSelected={isSelected}
+        disabled={!isQuotable || (!hasPrice && !isSelected)}
+        studyName={study.name}
+        target="la cotización"
+        onToggle={() => {
+          if (isSelected) removeStudy(study.id);
+          else if (quoteMeta) addStudyToQuote(study, quoteMeta);
+        }}
+      />
+    );
+  };
 
   return (
-    <div className="flex h-full flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="w-full sm:max-w-md">
-          <SelectInput
-            id="quoter-service"
-            name="service"
-            label="Servicio"
-            placeholder="Selecciona un servicio"
-            options={serviceOptions}
-            value={selectedSlug}
-            onChange={(e) => setSelectedSlug(e.target.value)}
-          />
-        </div>
-
-        {hasPriceSheet && (
-          <Eyebrow className="self-start sm:self-auto">
-            {isLoadingDetail ? "Cargando..." : `${totalStudies} disponibles`}
-          </Eyebrow>
-        )}
-      </div>
-
-      {servicesTotalPages > 1 && (
-        <div className="mt-3 flex items-center justify-between gap-3">
-          <Pagination
-            currentPage={servicesPage}
-            totalPages={servicesTotalPages}
-            onPageChange={setServicesPage}
-            nextPage={servicesNextPage}
-            prevPage={servicesPrevPage}
-          />
-          <span className="shrink-0 text-2xs font-semibold text-ink-muted">
-            {`${servicesPage} / ${servicesTotalPages}`}
-          </span>
-        </div>
+    <div className="space-y-6">
+      {services.length > 1 && (
+        <fieldset>
+          <legend className="text-sm font-semibold text-ink">Servicio</legend>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {services.map((service) => {
+              const isActive = service.slug === activeSlug;
+              return (
+                <button
+                  key={service.slug}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => requestService(service.slug)}
+                  className={clsx(
+                    "inline-flex h-10 items-center rounded-full border px-4 text-sm font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary",
+                    isActive
+                      ? "border-brand-ink bg-brand-ink text-white"
+                      : "border-ui-border bg-white text-ink hover:border-brand-ink/30 hover:text-brand-ink",
+                  )}
+                >
+                  {service.name}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
       )}
 
-      {hasPriceSheet && (
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <StudyTypeFilterControl value={studyType} onChange={setStudyType} />
-        <div className="relative w-full sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Buscar por nombre o código..."
-            aria-label="Buscar estudios por nombre o código"
-            className="w-full rounded-clinical-sm border border-ui-border bg-white py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-subtle transition focus:border-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary"
-          />
-          {searchInput && (
+      {pendingService && (
+        <div
+          role="alertdialog"
+          aria-labelledby="switch-title"
+          aria-describedby="switch-desc"
+          className="rounded-clinical-md border border-yellow-secondary/40 bg-yellow-primary/10 p-4"
+        >
+          <p id="switch-title" className="flex items-center gap-2 font-semibold text-ink">
+            <AlertTriangle aria-hidden="true" className="h-4 w-4 text-yellow-ink" />
+            ¿Cambiar a {pendingService.name}?
+          </p>
+          <p id="switch-desc" className="mt-1 text-sm text-ink-muted">
+            Cada servicio tiene su propia lista de precios, así que una cotización
+            solo puede incluir estudios de un servicio. Se quitarán los{" "}
+            {selectedStudies.length} estudios de {quoteService?.name}.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => setSearchInput("")}
-              aria-label="Limpiar búsqueda"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle transition hover:text-ink"
+              onClick={confirmSwitch}
+              className={Buttonstyles({ variant: "primary", size: "sm" })}
             >
-              <X className="h-4 w-4" />
+              Cambiar y quitar estudios
             </button>
-          )}
-        </div>
+            <button
+              type="button"
+              onClick={() => setPendingSlug(null)}
+              className={Buttonstyles({ variant: "outline", size: "sm" })}
+            >
+              Mantener {quoteService?.name}
+            </button>
+          </div>
         </div>
       )}
 
-      <div className="mt-5 flex-1">
-        {!selectedSlug ? (
-          <div className="py-10 text-center text-ink-muted">
-            Elige un servicio para ver sus estudios disponibles.
-          </div>
-        ) : isLoadingDetail && studies.length === 0 ? (
-          <div className="py-10 text-center text-ink-muted">
-            Cargando estudios...
-          </div>
-        ) : !hasPriceSheet || (totalStudies === 0 && !search && studyType === "all") ? (
-          <div className="py-10 text-center text-ink-muted">
-            Sin estudios disponibles
-          </div>
-        ) : (
-          <div
-            className={`grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4 transition-opacity ${
-              isLoadingDetail ? "opacity-50 pointer-events-none" : ""
-            }`}
-          >
-            {studies.length > 0 ? (
-              studies.map((study: Study) => {
-                const isAdded = selectedStudies.some(
-                  (s) => s.id === study.id,
-                );
-                return (
-                  <CardQuoteStudy
-                    key={study.id}
-                    isAdded={isAdded}
-                    handleAddStudy={handleAddStudy}
-                    handleDeletStudy={handleDeletStudy}
-                    study={study}
-                  />
-                );
-              })
-            ) : (
-              <p className="col-span-1 text-center text-ink-muted sm:col-span-2 lg:col-span-3 xl:col-span-4">
-                {search
-                  ? `No hay resultados para "${search}".`
-                  : studyTypeEmptyMessage(studyType)}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
+      {serviceMeta === "no-price-sheet" && (
+        <p className="rounded-clinical-md border border-ui-border bg-ui-bg p-4 text-sm text-ink-muted">
+          {activeService?.name} aún no tiene lista de precios en tu sucursal.
+          Elige otro servicio o consulta en sucursal.
+        </p>
+      )}
 
-      {hasPriceSheet && studiesTotalPages > 1 && (
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Pagination
-            nextPage={studiesNextPage}
-            prevPage={studiesPrevPage}
-            currentPage={studiesPage}
-            onPageChange={setStudiesPage}
-            totalPages={studiesTotalPages}
-          />
-
-          <div className="self-end bg-brand-ink px-3 py-1 text-sm font-semibold text-white rounded-clinical-sm sm:self-auto">
-            {`${studiesPage} / ${studiesTotalPages}`}
-          </div>
-        </div>
+      {activeSlug && (
+        <StudyCatalog
+          key={activeSlug}
+          source={{ type: "service", slug: activeSlug }}
+          branchId={branchId}
+          basePath="/quoter"
+          pageSize={PAGE_SIZE}
+          initialQuery={{ search: "", page: 1, studyType: "all" }}
+          scopeLabel={activeService ? `en ${activeService.name}` : undefined}
+          syncUrl={false}
+          renderAction={renderAction}
+        />
       )}
     </div>
   );

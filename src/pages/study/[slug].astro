@@ -75,6 +75,17 @@ const serviceDetail = parentService?.slug
     })
   : null;
 
+// The quote is pinned to one price sheet: the study's own service.
+const quoterService =
+  serviceDetail?.id && serviceDetail.priceSheetId
+    ? {
+        id: serviceDetail.id,
+        slug: serviceDetail.slug,
+        name: serviceDetail.name,
+        priceSheetId: serviceDetail.priceSheetId,
+      }
+    : null;
+
 const recommendedStudies = (serviceDetail?.studies?.data ?? [])
   .filter((item) => item.id !== study.id && item.priceInfo?.showPrice)
   .sort(() => Math.random() - 0.5)
@@ -100,6 +111,7 @@ const jsonLd = [
     study={study}
     panelTree={panelTree}
     recommendedStudies={recommendedStudies}
+    quoterService={quoterService}
     parentService={parentService?.name && parentService.slug ? { name: parentService.name, slug: parentService.slug } : null}
   />
 </Layout>

@@ -74,19 +74,19 @@ const RULES = [
     id: "hover-translate",
     why: "lift-on-hover cards are a template tell",
     pattern: /(?<![\w-])(?:hover|group-hover):-?translate-y-/g,
-    max: 11,
+    max: 10,
   },
   {
     id: "transition-all",
     why: "animate specific properties (transition-colors, -shadow, -transform)",
     pattern: /(?<![\w-])transition-all(?![\w-])/g,
-    max: 19,
+    max: 15,
   },
   {
     id: "large-radius",
     why: "use rounded-clinical-sm|md|lg (rounded-full for pills/avatars)",
     pattern: /(?<![\w-])rounded-(?:[tblr]{1,2}-)?(?:xl|2xl|3xl|4xl|\[)/g,
-    max: 7,
+    max: 6,
   },
   {
     id: "heavy-shadow",
@@ -104,7 +104,7 @@ const RULES = [
     id: "emoji",
     why: "emojis as icons or decoration: use astro-icon / lucide",
     pattern: /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,
-    max: 7,
+    max: 6,
   },
 ];
 

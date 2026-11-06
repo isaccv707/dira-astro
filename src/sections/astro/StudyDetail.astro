@@ -16,6 +16,7 @@ import { getFastingHours } from "../../utils/studyPreparation";
 import { formatDeliveryTime } from "../../utils/studyFacts";
 import { Buttonstyles } from "../../styles/buttonsStyles";
 import { cardStyles } from "../../styles/ui";
+import type { QuoterService } from "../../utils/quoterStudies";
 
 interface Props {
   study: Study | null;
@@ -23,6 +24,8 @@ interface Props {
   recommendedStudies?: Study[];
   /** Service the study belongs to, for the breadcrumb. */
   parentService?: { name: string; slug: string } | null;
+  /** Service + price sheet used to add this study to the quote. */
+  quoterService?: QuoterService | null;
 }
 
 const {
@@ -30,6 +33,7 @@ const {
   panelTree = null,
   recommendedStudies = [],
   parentService = null,
+  quoterService = null,
 } = Astro.props;
 
 if (!study) {
@@ -222,7 +226,7 @@ const labelRows = [
 
     <aside class="lg:col-span-4">
       <div class="sticky top-24 space-y-4">
-        <StudyActionCard study={study} client:load />
+        <StudyActionCard study={study} quoterService={quoterService} client:load />
 
         <button
           type="button"

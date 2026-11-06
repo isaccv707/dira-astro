@@ -18,7 +18,7 @@ pnpm dev        # http://localhost:4321 (host: true → also on the local networ
 pnpm build      # → dist/ (client + server)
 pnpm preview
 pnpm start      # node ./dist/server/entry.mjs (after build)
-pnpm lint       # ESLint (eslint.config.js), --max-warnings 48 (existing debt; lower the cap when fixing, never raise it) + UI guard
+pnpm lint       # ESLint (eslint.config.js), --max-warnings 46 (existing debt; lower the cap when fixing, never raise it) + UI guard
 pnpm lint:ui    # UI guard only (scripts/check-ui.mjs)
 pnpm check      # astro check: typecheck of .astro/.ts/.tsx
 pnpm api:types  # regenerates src/api/generated/openapi.d.ts from ../backend-dyra/openapi.json
@@ -54,6 +54,7 @@ Routes: `/`, `/estudios` (catalog: `?q=&tipo=&pagina=`, search pages are `noinde
 - **Data:** `apiGet()` (fetch GET, query params, `404 → null`, other errors → `throw Error(message)`). In-memory cache with `createTtlCache` (5 min; `getStale` as fallback if the API fails). Example to mimic: `src/api/studiesApi/studiesApi.ts`.
 - **UI state:** `openModal(view, payload)` / `closeModal()`; `ModalManager.tsx` and `DrawerManager.tsx` render by `view` key. `Drawer` is a modal dialog (Escape/backdrop close, focus trap).
 - **Catalog:** `components/react/study/StudyCatalog.tsx` (search + type filter + link-based pagination, state in the URL via `src/utils/catalogQuery.ts`) serves `/estudios` (`GET /studies`) and each service page (`GET /services/:slug`). Rows are `StudyRow` (code, name, sample, fasting, delivery, price, add to the selected-studies list).
+- **Quoter (`/quoter`):** one island (`sections/react/quoter/Quoter.tsx`): step 1 studies (`QuoterSelectStudies`, reuses `StudyCatalog` with `renderAction`), step 2 client data + PDF (`QuoterForm`, `POST /quotations/pdf`), `QuoteSummary` beside it (bottom bar on phones). A quote holds one service/price sheet: add with `addStudyToQuote(study, service)` and ask first when `wouldReplaceQuote(service)`. The quote (`quoterStore`) and the selected-studies list for WhatsApp (`utils/cart.ts`) are separate on purpose.
 - **Shell:** header search is `components/react/search/StudySearch.tsx` (ARIA combobox over `GET /studies?search=`, active branch); nav items and `isActivePath` (for `aria-current`) live in `src/routes/routes.ts`; `Dropdown.astro` is a click/keyboard disclosure menu. The footer shows the active branch's address, phone and hours (`getActiveBranchDetails`).
 - **Forms:** RHF + Yup (`src/schemas/`); fields in `components/react/form/` (uncontrolled) and `components/react/hk-form/` (`RHF*`).
 - **Amounts:** `formatMXN` / `Price` (`src/utils/currency.ts`, es-MX). Dates: the backend sends ISO; format only for display.
