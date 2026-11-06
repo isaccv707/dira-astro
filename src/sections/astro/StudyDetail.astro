@@ -6,13 +6,14 @@ import {
   type Study,
 } from "../../interfaces/study.interface";
 import StudyActionCard from "../../components/react/cards/StudyActionCard";
-import CardStudy from "../../components/react/cards/CardStudy";
+import StudyList from "../../components/react/study/StudyList";
 import StudyPanelTree from "../../components/astro/study/StudyPanelTree.astro";
 import SpecimenLabel from "../../components/astro/study/SpecimenLabel.astro";
 import Eyebrow from "../../components/astro/ui/Eyebrow.astro";
 import SectionHeader from "../../components/astro/ui/SectionHeader.astro";
 import { countPanelLeaves } from "../../hooks/usePanelTree";
 import { getFastingHours } from "../../utils/studyPreparation";
+import { formatDeliveryTime } from "../../utils/studyFacts";
 import { Buttonstyles } from "../../styles/buttonsStyles";
 import { cardStyles } from "../../styles/ui";
 
@@ -20,9 +21,16 @@ interface Props {
   study: Study | null;
   panelTree?: PanelTree | null;
   recommendedStudies?: Study[];
+  /** Service the study belongs to, for the breadcrumb. */
+  parentService?: { name: string; slug: string } | null;
 }
 
-const { study, panelTree = null, recommendedStudies = [] } = Astro.props;
+const {
+  study,
+  panelTree = null,
+  recommendedStudies = [],
+  parentService = null,
+} = Astro.props;
 
 if (!study) {
   return null; // The page already redirects when the study is missing
@@ -59,6 +67,10 @@ const labelRows = [
   { label: "Muestra", value: sampleType },
   { label: "Técnica", value: technique },
   {
+    label: "Entrega",
+    value: formatDeliveryTime(study.deliveryTime)?.replace("Resultados ", "") ?? null,
+  },
+  {
     label: "Incluye",
     value: isPanel && panelTree
       ? `${panelCount} ${panelCount === 1 ? "estudio" : "estudios"}`
@@ -76,9 +88,15 @@ const labelRows = [
     >
       <a href="/" class="transition-colors hover:text-brand-ink">Inicio</a>
       <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
-      <a href="/quoter" class="transition-colors hover:text-brand-ink"
-        >Cotizador</a
-      >
+      {
+        parentService ? (
+          <a href={`/service/${parentService.slug}`} class="transition-colors hover:text-brand-ink">
+            {parentService.name}
+          </a>
+        ) : (
+          <a href="/estudios" class="transition-colors hover:text-brand-ink">Estudios</a>
+        )
+      }
       <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
       <span class="max-w-50 truncate font-semibold text-ink sm:max-w-xs"
         >{name}</span
@@ -227,18 +245,15 @@ const labelRows = [
         <SectionHeader
           class="motion-safe:animate-fade-up"
           title="Otros estudios"
-          lead="Disponibles en tu sucursal."
+          lead="Del mismo servicio, con precio en tu sucursal."
         />
 
-        <div class="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
-          {recommendedStudies.map((recommended, index) => (
-            <div
-              class="motion-safe:animate-fade-up"
-              style={`animation-delay:${(index % 4) * 100}ms`}
-            >
-              <CardStudy study={recommended} client:visible />
-            </div>
-          ))}
+        <div class="mt-6">
+          <StudyList studies={recommendedStudies} client:visible />
+          <a href="/estudios" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline">
+            Ver todos los estudios
+            <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+          </a>
         </div>
       </section>
     )

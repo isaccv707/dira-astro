@@ -13,26 +13,23 @@ import { getCloudinaryUrl } from "../../utils/cloudinary";
 import { getOneResource } from "../../utils/getOneResource";
 import { resolveBranchId } from "../../stores/branchStore";
 import CTAContact from "../../components/astro/CTA/CTAContact.astro";
-import {
-  STUDY_TYPE_QUERY_KEY,
-  parseStudyTypeFilter,
-  studyTypeToIsPanel,
-} from "../../utils/studyTypeFilter";
+import { studyTypeToIsPanel } from "../../utils/studyTypeFilter";
+import { parseCatalogQuery } from "../../utils/catalogQuery";
 
 const { slug } = Astro.params;
 const branchId = resolveBranchId();
 
-const STUDIES_PAGE_SIZE = 12;
+const STUDIES_PAGE_SIZE = 20;
 
-// ?tipo=perfiles|estudios — SSR the filtered list so shared links match.
-const studyType = parseStudyTypeFilter(
-  Astro.url.searchParams.get(STUDY_TYPE_QUERY_KEY),
-);
+// ?q=&tipo=&pagina= — SSR the exact catalog view so shared links match.
+const catalogQuery = parseCatalogQuery(Astro.url.searchParams);
 
 const service = await getOneResource<ServiceDetail>("services", slug as string, {
   branchId,
+  page: catalogQuery.page,
   limit: STUDIES_PAGE_SIZE,
-  isPanel: studyTypeToIsPanel(studyType),
+  search: catalogQuery.search || undefined,
+  isPanel: studyTypeToIsPanel(catalogQuery.studyType),
 });
 
 if (!service) {
@@ -64,6 +61,7 @@ const jsonLd = [
   image={ogImage}
   imageAlt={name}
   jsonLd={jsonLd}
+  noindex={Boolean(catalogQuery.search)}
   description={description ||
     `Conoce nuestro servicio de ${name}: información, beneficios y estudios disponibles en Laboratorio DYRA.`}
 >
@@ -78,7 +76,11 @@ const jsonLd = [
 
   <ServiceDetailsSection details={details} />
 
-  <ServicesSection service={service} studyType={studyType} />
+  <ServicesSection
+    service={service}
+    catalogQuery={catalogQuery}
+    pageSize={STUDIES_PAGE_SIZE}
+  />
 
   <ServiceRecommendedSection currentServiceId={id} />
 

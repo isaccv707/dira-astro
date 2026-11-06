@@ -6,6 +6,7 @@ import { getAllStudies } from "../../../api/studiesApi/studiesApi";
 import type { Study } from "../../../interfaces/study.interface";
 import { getCatalogName } from "../../../interfaces/study.interface";
 import { formatMXN } from "../../../utils/currency";
+import { buildCatalogHref } from "../../../utils/catalogQuery";
 
 const MIN_CHARS = 2; // same as the backend's minSearchLength
 const DEBOUNCE_MS = 250;
@@ -42,6 +43,11 @@ const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
 
   const term = query.trim();
   const canSearch = term.length >= MIN_CHARS;
+  const allResultsHref = buildCatalogHref("/estudios", {
+    search: term,
+    page: 1,
+    studyType: "all",
+  }, false);
 
   useEffect(() => {
     if (!canSearch) {
@@ -101,10 +107,14 @@ const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
       event.preventDefault();
       setActiveIndex((index) => (index <= 0 ? results.length - 1 : index - 1));
     } else if (event.key === "Enter") {
-      const study = results[activeIndex] ?? results[0];
+      // A highlighted option opens that study; otherwise show all results.
+      const study = results[activeIndex];
       if (study) {
         event.preventDefault();
         goTo(study);
+      } else if (canSearch) {
+        event.preventDefault();
+        window.location.href = allResultsHref;
       }
     } else if (event.key === "Escape") {
       if (query) setQuery("");
@@ -206,6 +216,15 @@ const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
           })}
         </ul>
 
+        {status === "done" && results.length > 0 && (
+          <a
+            href={allResultsHref}
+            onPointerDown={(event) => event.preventDefault()}
+            className="block border-t border-ui-border bg-ui-bg px-4 py-2.5 text-sm font-semibold text-brand-ink transition-colors hover:bg-green-primary/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-green-primary"
+          >
+            Ver todos los resultados para “{term}”
+          </a>
+        )}
         {status === "done" && results.length === 0 && (
           <p className="px-4 py-4 text-sm text-ink-muted">
             Sin resultados para “{term}”. Prueba con otro nombre, la abreviatura

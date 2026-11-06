@@ -14,6 +14,7 @@ export const getAllStudies = async ({
   limit = 10,
   search,
   branchId,
+  isPanel,
 }: GetAllStudiesParams = {}): Promise<GetAllStudiesResponse> => {
   const resolvedBranchId = branchId ?? resolveBranchId();
   const emptyResponse: GetAllStudiesResponse = {
@@ -27,6 +28,7 @@ export const getAllStudies = async ({
     page,
     limit,
     search,
+    isPanel,
     branchId: resolvedBranchId,
   });
 
@@ -38,6 +40,7 @@ export const getAllStudies = async ({
       page,
       limit,
       search,
+      isPanel,
       branchId: resolvedBranchId,
     });
     const result = data ?? emptyResponse;

@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Eyebrow from "../components/astro/ui/Eyebrow.astro";
+import StudyCatalog from "../components/react/study/StudyCatalog";
+import { getAllStudies } from "../api/studiesApi/studiesApi";
+import { getActiveBranchName } from "../api/branchesApi/branchesApi";
+import { resolveBranchId } from "../stores/branchStore";
+import { parseCatalogQuery } from "../utils/catalogQuery";
+import { studyTypeToIsPanel } from "../utils/studyTypeFilter";
+import { breadcrumbJsonLd, studyItemListJsonLd } from "../utils/structuredData";
+import type { GetAllStudiesResponse } from "../api/studiesApi/study.interface";
+
+const PAGE_SIZE = 20;
+
+const branchId = resolveBranchId() ?? undefined;
+const query = parseCatalogQuery(Astro.url.searchParams);
+const branchName = await getActiveBranchName();
+
+let result: GetAllStudiesResponse = {
+  data: [],
+  total: 0,
+  page: query.page,
+  limit: PAGE_SIZE,
+  totalPages: 1,
+};
+try {
+  result = await getAllStudies({
+    page: query.page,
+    limit: PAGE_SIZE,
+    search: query.search || undefined,
+    isPanel: studyTypeToIsPanel(query.studyType),
+    branchId,
+  });
+} catch (error) {
+  // The island shows its own empty state; the page still renders.
+  console.error("Error fetching studies catalog:", error);
+}
+
+// Search result pages are thin duplicates of the catalog: keep them out of
+// the index (links are still followed). Page 2+ and filters stay indexable.
+const noindex = Boolean(query.search);
+const pageSuffix = query.page > 1 ? ` · Página ${query.page}` : "";
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: "Inicio", path: "/" },
+    { name: "Estudios", path: "/estudios" },
+  ]),
+  ...(result.data.length && !noindex
+    ? [studyItemListJsonLd(result.data, (query.page - 1) * PAGE_SIZE)]
+    : []),
+];
+---
+
+<Layout
+  title={`Estudios de laboratorio y precios${pageSuffix} | Laboratorio DYRA`}
+  description="Consulta los estudios y perfiles de Laboratorio DYRA: precio por sucursal, tipo de muestra, ayuno y tiempo de entrega. Busca por nombre, abreviatura o código."
+  noindex={noindex}
+  jsonLd={jsonLd}
+>
+  <div class="space-y-8">
+    <header class="max-w-3xl">
+      <nav aria-label="Breadcrumb" class="mb-6 text-xs text-ink-subtle">
+        <ol class="flex items-center gap-1.5">
+          <li><a href="/" class="transition-colors hover:text-brand-ink">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="font-semibold text-ink">Estudios</li>
+        </ol>
+      </nav>
+      <Eyebrow>Catálogo</Eyebrow>
+      <h1 class="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+        Estudios de laboratorio
+      </h1>
+      <p class="mt-3 text-base leading-relaxed text-ink-muted">
+        Busca por nombre, abreviatura o código. Precios y disponibilidad de la
+        sucursal {branchName ? <strong class="font-semibold text-ink">{branchName}</strong> : "seleccionada"};
+        cámbiala desde el selector del encabezado.
+      </p>
+    </header>
+
+    <StudyCatalog
+      client:idle
+      source={{ type: "all" }}
+      branchId={branchId}
+      basePath="/estudios"
+      pageSize={PAGE_SIZE}
+      initialQuery={query}
+      initialStudies={result.data}
+      initialTotal={result.total}
+      initialTotalPages={result.totalPages}
+    />
+  </div>
+</Layout>

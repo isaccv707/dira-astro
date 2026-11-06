@@ -100,5 +100,6 @@ const jsonLd = [
     study={study}
     panelTree={panelTree}
     recommendedStudies={recommendedStudies}
+    parentService={parentService?.name && parentService.slug ? { name: parentService.name, slug: parentService.slug } : null}
   />
 </Layout>

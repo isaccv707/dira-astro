@@ -1,60 +1,65 @@
 ---
+import SectionHeader from "../../../components/astro/ui/SectionHeader.astro";
 import Eyebrow from "../../../components/astro/ui/Eyebrow.astro";
 import type { ServiceDetail } from "../../../interfaces/service.interface";
-import ServiceStudiesCatalog from "../../react/service/ServiceStudiesCatalog";
-import type { StudyTypeFilter } from "../../../utils/studyTypeFilter";
+import StudyCatalog from "../../../components/react/study/StudyCatalog";
+import type { CatalogQuery } from "../../../utils/catalogQuery";
 
 interface Props {
   service: ServiceDetail;
-  studyType?: StudyTypeFilter;
+  catalogQuery: CatalogQuery;
+  pageSize: number;
 }
 
-const { service, studyType = "all" } = Astro.props;
+const { service, catalogQuery, pageSize } = Astro.props;
 const { priceSheet, studies, slug, branchId } = service;
 const initialStudies = studies?.data ?? [];
 
-// With a filter active an empty page just means "none of that kind" — keep
-// the catalog (and its filter) visible instead of the no-studies notice.
-const hasStudies = initialStudies.length > 0 || studyType !== "all";
+// With a search or filter active an empty page just means "no matches":
+// keep the catalog (and its controls) visible instead of the notice.
+const isFiltered = Boolean(catalogQuery.search) || catalogQuery.studyType !== "all";
+const hasStudies = initialStudies.length > 0 || isFiltered || catalogQuery.page > 1;
 ---
 
-<section id="servicio-detalle" class="scroll-mt-24">
+<section id="servicio-detalle" aria-labelledby="catalog-title" class="scroll-mt-24">
   {
     priceSheet && hasStudies ? (
-      <div class="space-y-8">
-        <div
-          class="motion-safe:animate-fade-up"
-          style="animation-fill-mode:backwards;"
-        >
+      <div class="space-y-6">
+        <div>
           <Eyebrow>Catálogo de estudios</Eyebrow>
-          <h2 class="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-            {priceSheet.name}
-          </h2>
-          <p class="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted sm:text-base">
-            {priceSheet.description ||
-              `Estudios de ${service.name} disponibles y sus precios.`}
-          </p>
+          <SectionHeader
+            id="catalog-title"
+            class="mt-3"
+            title={priceSheet.name}
+            lead={priceSheet.description || `Estudios de ${service.name} disponibles y sus precios.`}
+          />
         </div>
 
-        <ServiceStudiesCatalog
-          slug={slug}
-          branchId={branchId}
-          initialStudies={initialStudies}
-          initialPage={studies?.page ?? 1}
-          initialTotalPages={studies?.totalPages ?? 1}
-          initialTotal={studies?.total ?? initialStudies.length}
-          initialStudyType={studyType}
+        <StudyCatalog
           client:visible
+          source={{ type: "service", slug }}
+          branchId={branchId}
+          basePath={`/service/${slug}`}
+          pageSize={pageSize}
+          initialQuery={catalogQuery}
+          initialStudies={initialStudies}
+          initialTotal={studies?.total ?? initialStudies.length}
+          initialTotalPages={studies?.totalPages ?? 1}
+          scopeLabel={`en ${service.name}`}
         />
       </div>
     ) : (
-      <div class="rounded-clinical-md border border-ui-border bg-white p-8 text-center shadow-xs motion-safe:animate-fade-up">
-        <h3 class="text-lg font-bold tracking-tight text-ink">
+      <div class="rounded-clinical-md border border-ui-border bg-white p-8 text-center shadow-xs">
+        <h2 id="catalog-title" class="text-lg font-bold tracking-tight text-ink">
           Sin estudios disponibles
-        </h3>
-        <p class="mt-2 text-sm text-ink-muted leading-relaxed">
-          Este servicio aún no tiene estudios disponibles en esta sucursal.
-          Consulta directamente en sucursal.
+        </h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-muted">
+          {service.name} aún no tiene estudios con precio en esta sucursal.
+          Consulta en sucursal o busca en el{" "}
+          <a href="/estudios" class="font-semibold text-brand-ink underline-offset-4 hover:underline">
+            catálogo completo
+          </a>
+          .
         </p>
       </div>
     )

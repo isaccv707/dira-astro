@@ -18,7 +18,15 @@ interface SitemapEntry {
   lastmod?: string;
 }
 
-const STATIC_PATHS = ["/", "/about", "/blog", "/branches", "/contact", "/quoter"];
+const STATIC_PATHS = [
+  "/",
+  "/estudios",
+  "/about",
+  "/blog",
+  "/branches",
+  "/contact",
+  "/quoter",
+];
 const PAGE_LIMIT = 100;
 const MAX_PAGES = 50;
 

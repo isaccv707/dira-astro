@@ -6,6 +6,7 @@ export interface Routes {
 // Primary navigation, ordered by what patients come to do. The logo links
 // home, so "Inicio" is not repeated here.
 const routes: Routes[] = [
+  { path: "/estudios", text: "Estudios" },
   { path: "/quoter", text: "Cotizador" },
   { path: "/branches", text: "Sucursales" },
   { path: "/blog", text: "Blog" },
