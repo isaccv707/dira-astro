@@ -2,115 +2,133 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Rol
+## Role
 
-Sitio público de _Diagnóstico y Referencia Analítica_ (DYRA): servicios, búsqueda de estudios, sucursales, blog, reseñas y cotizador (PDF). **Depende de** `../backend-dyra`, solo rutas `@Public()` y sin auth. Nadie depende de él. Contexto del sistema: `../CLAUDE.md`.
+Public site of _Diagnóstico y Referencia Analítica_ (DYRA): services, study search, branches, blog, reviews and quoter (PDF). **Depends on** `../backend-dyra`, only `@Public()` routes and no auth. Nothing depends on it. System context: `../CLAUDE.md`.
 
 ## Stack
 
-Astro 5 en modo SSR (`output: "server"`, `@astrojs/node` standalone) · islas React 19.1 · Tailwind CSS 4 (`@tailwindcss/vite`, configuración en CSS) · nanostores · React Hook Form + Yup · framer-motion/motion · swiper · astro-icon · EmailJS · react-toastify. Node 22. Gestor: **pnpm**.
+Astro 5 in SSR mode (`output: "server"`, `@astrojs/node` standalone) · React 19.1 islands · Tailwind CSS 4 (`@tailwindcss/vite`, configured in CSS) · nanostores · React Hook Form + Yup · framer-motion/motion · swiper · astro-icon · EmailJS · react-toastify. Node 22. Package manager: **pnpm**.
 
-## Comandos
+## Commands
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:4321 (host: true → también en la red local)
+pnpm dev        # http://localhost:4321 (host: true → also on the local network)
 pnpm build      # → dist/ (client + server)
 pnpm preview
-pnpm start      # node ./dist/server/entry.mjs (tras build)
-pnpm lint       # ESLint (eslint.config.js), --max-warnings 53 (deuda previa; bajar el tope al arreglar, nunca subirlo)
-pnpm check      # astro check: typecheck de .astro/.ts/.tsx
-pnpm api:types  # regenera src/api/generated/openapi.d.ts desde ../backend-dyra/openapi.json
+pnpm start      # node ./dist/server/entry.mjs (after build)
+pnpm lint       # ESLint (eslint.config.js), --max-warnings 50 (existing debt; lower the cap when fixing, never raise it) + UI guard
+pnpm lint:ui    # UI guard only (scripts/check-ui.mjs)
+pnpm check      # astro check: typecheck of .astro/.ts/.tsx
+pnpm api:types  # regenerates src/api/generated/openapi.d.ts from ../backend-dyra/openapi.json
 ```
 
-No hay tests ni formateador. CI (`.github/workflows/ci.yml`): lint + check + build.
+No tests or formatter. CI (`.github/workflows/ci.yml`): lint + check + build.
 
-## Estructura
+## Structure
 
 ```
-src/pages/                 rutas (.astro) + sitemap.xml.ts, robots.txt.ts
+src/pages/                 routes (.astro) + sitemap.xml.ts, robots.txt.ts
 src/layouts/Layout.astro   shell: Header, Footer, ModalManager, DrawerManager, BranchSelectorSection,
                            FloatingActionsSection, ToastContainer
-src/sections/{astro,react}/  secciones de página (estáticas / interactivas)
-src/components/{astro,react}/ componentes (react/: form/, hk-form/, modal/, drawer/, cards/, ...)
-src/api/<dominio>Api/      funciones fetch + *.interface.ts; apiGet.ts es el helper GET
+src/sections/{astro,react}/  page sections (static / interactive)
+src/components/{astro,react}/ components (react/: form/, hk-form/, modal/, drawer/, cards/, ...)
+src/api/<domain>Api/       fetch functions + *.interface.ts; apiGet.ts is the GET helper
 src/stores/                nanostores: branchStore, modalStore, drawerStore, quoterStore
-src/middleware.ts          sucursal por cookie + headers de caché
-src/server/branchContext.ts AsyncLocalStorage del branchId (solo servidor)
+src/middleware.ts          branch by cookie + cache headers
+src/server/branchContext.ts AsyncLocalStorage for branchId (server only)
 src/constants/             apiUrl.ts, site.ts (SITE_URL, DEFAULT_BRANCH_ID), emailJs.ts
-src/hooks/, src/utils/     lógica compartida (ttlCache, cart, quoterStudies, formattedDate)
-src/schemas/               esquemas Yup
-src/routes/routes.ts       grupos de links del nav
+src/hooks/, src/utils/     shared logic (ttlCache, cart, quoterStudies, formattedDate)
+src/schemas/               Yup schemas
+src/routes/routes.ts       nav link groups
 ```
 
-Rutas: `/`, `/about`, `/blog`, `/blog/[slug]`, `/branches`, `/contact`, `/quoter`, `/service/[slug]`, `/study/[slug]`, `/404`, `/sitemap.xml`, `/robots.txt`.
+Routes: `/`, `/about`, `/blog`, `/blog/[slug]`, `/branches`, `/contact`, `/quoter`, `/service/[slug]`, `/study/[slug]`, `/404`, `/sitemap.xml`, `/robots.txt`.
 
-## Patrones y convenciones
+## Patterns and conventions
 
-- **Astro ↔ React:** Astro para layout, SEO y datos renderizados en servidor; React solo para interactividad (`client:load` / `client:visible`).
-- **Sucursal:** todo el contenido depende de la sucursal. El navegador la guarda en `localStorage` + cookie `dyra_branch_id` (`setSelectedBranch`/`switchBranch` en `branchStore.ts`). En SSR, `middleware.ts` lee la cookie (fallback `DEFAULT_BRANCH_ID`) y la expone con `runWithBranchId`. Las funciones de `src/api/` llaman `resolveBranchId()`, que funciona en ambos lados. Cambiar de sucursal limpia carrito y cotizador y recarga `/`.
-- **HTML por sucursal:** el middleware fuerza `Cache-Control: private, no-cache` + `Vary: Cookie`; no cachear páginas en proxy.
-- **Datos:** `apiGet()` (fetch GET, query params, `404 → null`, otros errores → `throw Error(message)`). Caché en memoria con `createTtlCache` (5 min; `getStale` como respaldo si falla la API). Ejemplo a imitar: `src/api/studiesApi/studiesApi.ts`.
-- **Estado UI:** `openModal(view, payload)` / `closeModal()`; `ModalManager.tsx` y `DrawerManager.tsx` renderizan por clave `view`.
-- **Formularios:** RHF + Yup (`src/schemas/`); campos en `components/react/form/` (no controlados) y `components/react/hk-form/` (`RHF*`).
-- **Montos:** `toLocaleString("es-MX", …)`. Fechas: el backend manda ISO; formatear solo al mostrar.
-- **Iconos:** `astro-icon` (`lucide`, `tabler`, `logos`, `simple-icons`) en .astro; `@iconify/react` / `lucide-react` en React.
-- **Variantes:** `class-variance-authority` + `clsx`. Estilos globales en `src/styles/global.css`.
+- **Astro ↔ React:** Astro for layout, SEO and server-rendered data; React only for interactivity (`client:load` / `client:visible`).
+- **Branch:** all content depends on the branch. The browser stores it in `localStorage` + cookie `dyra_branch_id` (`setSelectedBranch`/`switchBranch` in `branchStore.ts`). In SSR, `middleware.ts` reads the cookie (fallback `DEFAULT_BRANCH_ID`) and exposes it with `runWithBranchId`. `src/api/` functions call `resolveBranchId()`, which works on both sides. Switching branch clears the cart and quoter and reloads `/`.
+- **HTML per branch:** the middleware forces `Cache-Control: private, no-cache` + `Vary: Cookie`; don't cache pages in a proxy.
+- **Data:** `apiGet()` (fetch GET, query params, `404 → null`, other errors → `throw Error(message)`). In-memory cache with `createTtlCache` (5 min; `getStale` as fallback if the API fails). Example to mimic: `src/api/studiesApi/studiesApi.ts`.
+- **UI state:** `openModal(view, payload)` / `closeModal()`; `ModalManager.tsx` and `DrawerManager.tsx` render by `view` key. `Drawer` is a modal dialog (Escape/backdrop close, focus trap).
+- **Shell:** header search is `components/react/search/StudySearch.tsx` (ARIA combobox over `GET /studies?search=`, active branch); nav items and `isActivePath` (for `aria-current`) live in `src/routes/routes.ts`; `Dropdown.astro` is a click/keyboard disclosure menu. The footer shows the active branch's address, phone and hours (`getActiveBranchDetails`).
+- **Forms:** RHF + Yup (`src/schemas/`); fields in `components/react/form/` (uncontrolled) and `components/react/hk-form/` (`RHF*`).
+- **Amounts:** `formatMXN` / `Price` (`src/utils/currency.ts`, es-MX). Dates: the backend sends ISO; format only for display.
+- **Icons:** `astro-icon` (`lucide`, `tabler`, `logos`, `simple-icons`) in .astro; `@iconify/react` / `lucide-react` in React.
+- **Variants:** `class-variance-authority` + `clsx`. Global styles in `src/styles/global.css`.
 
-## Sistema de diseño (obligatorio)
+## Design system (mandatory)
 
-Referencia canónica: `src/sections/astro/hero/HeroHome.astro`. Fondo lab-grid, esquinas tipo "targeting bracket" y badge pulsante son motivos **solo de hero** (HeroHome, HeroAbout, ServiceHero); el resto del sitio usa la misma paleta/tipografía/espaciado en forma sobria.
+Tokens live in `src/styles/global.css` (`@theme`); class recipes in `src/styles/ui.ts`. Reference implementation: `src/sections/astro/StudyDetail.astro`. Its **specimen label** (`components/astro/study/SpecimenLabel.astro`: barcode from the study code, monospace code, `dl` of sample/technique) is the site's signature element; reuse it instead of inventing decorative motifs. Lab-grid background and targeting brackets stay hero-only (HeroHome, HeroAbout, ServiceHero) until the hero refactor.
 
-**Color**
-- Títulos H1–H3: `text-green-light font-black tracking-tight`. Títulos de color (`text-green-primary` / `text-yellow-secondary`) solo en heros y momentos destacados, no en cards ni encabezados genéricos.
-- Párrafos: `text-grey-custom leading-relaxed`; texto secundario (fechas, conteos) `text-grey-custom/70`.
-- Acentos: `text-green-primary` / `bg-green-primary`. Badge/eyebrow canónico: `inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary` con punto `h-1.5 w-1.5 rounded-full bg-green-primary`. Animar el punto (`animate-pulse`/`animate-ping`) solo en señales "en vivo"/hero.
-- **Prohibido:** grises crudos de Tailwind (`text-gray-*`, `border-gray-*`, `bg-gray-*`) y colores inventados (`bg-primary`, `text-neutral-*`) → usar `text-green-light`, `text-grey-custom`, `border-ui-border`, `bg-ui-bg`. Sin "blobs" de blur decorativos. Sin clases `dark:` (no hay modo oscuro).
+**Typography**
+- IBM Plex Sans (`font-sans`, weights 400/500/600/700) and IBM Plex Mono (`font-mono`, 400/500), self-hosted via `@fontsource`. Max weight is 700: use `font-bold`, never `font-black`/`font-extrabold`.
+- Mono only for study codes, folios and technical identifiers (`StudyCode`, `SpecimenLabel`). Prices use `tabular-nums` (`Price`).
+- Smallest size is `text-2xs` (11px, eyebrows/badges only); no `text-[Npx]` below it.
+
+**Color: brand tones vs. text tones**
+- Brand tones (`green-primary`, `green-secondary`, `green-light`, `yellow-*`) are for fills, dots, borders and tints (`bg-green-primary/8`). **As text they fail WCAG AA.**
+- Text uses the "ink" tokens (same hues, darkened, AA on white/`ui-bg`):
+  - `text-ink`: headings and strong text
+  - `text-ink-muted`: paragraphs
+  - `text-ink-subtle`: dates, counts, captions
+  - `text-brand-ink`: links, eyebrows, accents; `bg-brand-ink` for primary buttons and dark brand surfaces, with `brand-ink-hover`
+  - `text-yellow-ink`: warnings such as fasting
+  - `text-yellow-mark`: non-text yellow marks such as stars
+- White text only on `bg-brand-ink`, `bg-brand-ink-hover`, `bg-yellow-ink` or `bg-red-custom` (`text-white/90` minimum).
+- Eyebrow/badge: `Eyebrow` (`components/astro/ui/Eyebrow.astro`, React twin `components/react/ui/Eyebrow.tsx`; `tone` brand|warn|neutral, `live` only for real live signals). Don't copy its classes by hand.
+- **Forbidden:** raw Tailwind grays, invented colors (`bg-primary`, `text-neutral-*`), brand tones as text, gradient text, decorative blur/glass, `dark:` classes (there is no dark mode).
 
 **Layout**
-- Card/sección por defecto: `bg-white border border-ui-border rounded-clinical-md shadow-xs p-6`, hover `hover:shadow-sm`.
-- Paneles de marca/hero: pueden usar `border-green-primary/10` o `/12`.
-- Radios: `rounded-clinical-sm` (8px: chips, inputs), `rounded-clinical-md` (12px: card), `rounded-clinical-lg` (16px: paneles destacados, imágenes). No `rounded-2xl/3xl/4xl` ni radios arbitrarios en cards. Overlays usan un radio grande consistente.
-- Sombras: `shadow-xs` en reposo, `shadow-sm` en hover; `shadow-md` en adelante solo overlays (Modal, Drawer, paneles flotantes).
-- Espaciado: escala estándar (`space-y-4`, `gap-6`, `p-8`); nada arbitrario (`mt-[13px]`).
-- Encabezado de sección:
-  ```astro
-  <div class="motion-safe:animate-fade-up">
-    <h2 class="text-2xl font-black tracking-tight text-green-light sm:text-3xl">Título</h2>
-    <p class="mt-2 text-sm text-grey-custom sm:text-base">Descripción</p>
-  </div>
-  ```
+- Default card/section: `cardStyles()` from `src/styles/ui.ts` = `bg-white border border-ui-border rounded-clinical-md shadow-xs p-6`; hover (`interactive: true`) changes border and shadow only, never translate or scale.
+- Buttons: `Buttonstyles` (`src/styles/buttonsStyles.ts`); `primary` is the single main action of a view.
+- Brand/hero panels: may use `border-green-primary/10` or `/12`.
+- Radii: `rounded-clinical-sm` (8px: chips, inputs), `rounded-clinical-md` (12px: card), `rounded-clinical-lg` (16px: highlighted panels, images). No `rounded-2xl/3xl/4xl` or arbitrary radii on cards. Overlays use one consistent large radius.
+- Shadows: `shadow-xs` at rest, `shadow-sm` on hover; `shadow-md` and above only for overlays (Modal, Drawer, floating panels).
+- Spacing: standard scale (`space-y-4`, `gap-6`, `p-8`); nothing arbitrary (`mt-[13px]`).
+- Section header: `<SectionHeader title="…" lead="…" />` (`components/astro/ui/SectionHeader.astro`, optional `slot="aside"` for a count or chip). Amounts: `Price` / `formatMXN` (`src/utils/currency.ts`).
+- Motion: transitions on specific properties (`transition-colors`, `transition-[border-color,box-shadow]`), never `transition-all`; entrance animations behind `motion-safe:`.
 
-## Variables de entorno (ver `.env.example`)
+**UI guard:** `pnpm lint` also runs `scripts/check-ui.mjs`, which caps generic-UI and contrast patterns (gradient text, glass, hover scale/translate, `transition-all`, large radii, heavy shadows, emojis, brand tones as text…). Caps hold existing debt: when a refactor removes occurrences, lower the cap (the script prints the new value); never raise it.
 
-| Variable | Uso |
+## UI design (mandatory)
+
+- Any new or restyled page, section, card, form, modal, drawer or quoter UI **must** follow the `ui-ux-designer` skill (`.claude/skills/ui-ux-designer/SKILL.md`) together with the design system above. Load it before writing UI code.
+- No generic AI-looking UI: no gradient text, neon/purple gradients, glassmorphism, decorative blobs, generic metric heroes, identical icon-card grids or scattered animations.
+- Mobile-first (360 px), WCAG AA contrast, visible focus, `motion-safe:` for animations.
+
+## Environment variables (see `.env.example`)
+
+| Variable | Use |
 |---|---|
-| `PUBLIC_API_URL` | Backend con `/api` (default `http://localhost:3000/api`) |
-| `PORT` | Puerto del servidor (default 4321) |
-| `PUBLIC_SITE_URL` | Origen público para canonical/OG/sitemap (default `https://dyranalitica.com`) |
-| `PUBLIC_DEFAULT_BRANCH_ID` | Sucursal sin cookie. En local: `a1b2c3d4-0001-4000-8000-000000000001` (seed dev del backend) |
-| `PUBLIC_URL_WHATSAPP` | Link de WhatsApp para citas |
-| `PUBLIC_SERVICE_EMAILJS`, `PUBLIC_TEMPLATEID_EMAILJS`, `PUBLIC_KEY_EMAILJS` | Formulario de contacto (EmailJS) |
+| `PUBLIC_API_URL` | Backend with `/api` (default `http://localhost:3000/api`) |
+| `PORT` | Server port (default 4321) |
+| `PUBLIC_SITE_URL` | Public origin for canonical/OG/sitemap (default `https://dyranalitica.com`) |
+| `PUBLIC_DEFAULT_BRANCH_ID` | Branch without cookie. Locally: `a1b2c3d4-0001-4000-8000-000000000001` (backend dev seed) |
+| `PUBLIC_URL_WHATSAPP` | WhatsApp link for appointments |
+| `PUBLIC_SERVICE_EMAILJS`, `PUBLIC_TEMPLATEID_EMAILJS`, `PUBLIC_KEY_EMAILJS` | Contact form (EmailJS) |
 
-Todas son `PUBLIC_*`: terminan en el bundle del cliente. Nunca poner secretos aquí.
+All are `PUBLIC_*`: they end up in the client bundle. Never put secrets here.
 
-## Integración
+## Integration
 
-- **Cliente:** `src/api/apiGet.ts` (GET) y `fetch` directo para `POST /quotations/pdf` (`quotationsApi/quotationApi.ts`, devuelve PDF) y `POST /reviews`. Base: `src/constants/apiUrl.ts`.
-- **Auth:** ninguna. Si un endpoint deja de ser `@Public()` en el backend, el sitio se rompe.
-- **Endpoints usados:** `/studies`, `/studies/by-slug/:slug?branchId=`, `/studies/:id/panel-tree`, `/services`, `/services/:idOrSlug`, `/branches`, `/branches/:id`, `/posts`, `/banners/active/:placement`, `/reviews/approved`.
-- **Contrato:** fuente de verdad = DTOs del backend → `../backend-dyra/openapi.json` → `src/api/generated/openapi.d.ts` (`pnpm api:types`, no editar a mano; cubre rutas y bodies de entrada). Las respuestas siguen tipadas a mano en `src/api/<dominio>Api/*.interface.ts` y `src/interfaces/`. `/studies/:id` solo acepta UUID: por slug usar `/studies/by-slug`.
+- **Client:** `src/api/apiGet.ts` (GET) and direct `fetch` for `POST /quotations/pdf` (`quotationsApi/quotationApi.ts`, returns a PDF) and `POST /reviews`. Base: `src/constants/apiUrl.ts`.
+- **Auth:** none. If an endpoint stops being `@Public()` in the backend, the site breaks.
+- **Endpoints used:** `/studies`, `/studies/by-slug/:slug?branchId=`, `/studies/:id/panel-tree`, `/services`, `/services/:idOrSlug`, `/branches`, `/branches/:id`, `/posts`, `/banners/active/:placement`, `/reviews/approved`.
+- **Contract:** source of truth = backend DTOs → `../backend-dyra/openapi.json` → `src/api/generated/openapi.d.ts` (`pnpm api:types`, don't edit by hand; covers routes and input bodies). Responses remain hand-typed in `src/api/<domain>Api/*.interface.ts` and `src/interfaces/`. `/studies/:id` only accepts UUIDs: by slug use `/studies/by-slug`.
 
-## Errores comunes / evitar
+## Common mistakes / avoid
 
-- Sin `PUBLIC_DEFAULT_BRANCH_ID` en local, el fallback apunta a la sucursal de producción y las páginas salen vacías.
-- No importar `src/server/*` (usa `node:async_hooks`) desde código que llegue al navegador; solo desde `middleware.ts`.
-- No derivar URLs canónicas de `Astro.url` (detrás del proxy resuelve a localhost): usar `SITE_URL`.
-- No usar npm/yarn (lockfile `pnpm-lock.yaml`). pnpm 11: los paquetes con build script deben aprobarse en `pnpm-workspace.yaml` (`allowBuilds`).
-- Respetar el sistema de diseño: los grises crudos y radios arbitrarios son los errores más frecuentes.
+- Without `PUBLIC_DEFAULT_BRANCH_ID` locally, the fallback points to the production branch and pages come out empty.
+- Don't import `src/server/*` (uses `node:async_hooks`) from code that reaches the browser; only from `middleware.ts`.
+- Don't derive canonical URLs from `Astro.url` (behind the proxy it resolves to localhost): use `SITE_URL`.
+- Don't use npm/yarn (lockfile `pnpm-lock.yaml`). pnpm 11: packages with a build script must be approved in `pnpm-workspace.yaml` (`allowBuilds`).
+- Respect the design system: brand tones used as text (`text-green-light`, `text-grey-custom`), raw grays and arbitrary radii are the most frequent mistakes; `pnpm lint:ui` catches them.
 
-## Definición de terminado
+## Definition of done
 
-1. `pnpm lint`, `pnpm check` y `pnpm build` en verde.
-2. Revisado en `pnpm dev` contra el backend local, en móvil y escritorio, y con cambio de sucursal si aplica.
-3. Estilos conforme al sistema de diseño.
+1. `pnpm lint`, `pnpm check` and `pnpm build` green.
+2. Reviewed in `pnpm dev` against the local backend, on mobile and desktop, and with a branch switch if applicable.
+3. Styles conform to the design system and the `ui-ux-designer` skill.
