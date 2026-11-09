@@ -8,7 +8,7 @@ Public site of _Diagnóstico y Referencia Analítica_ (DYRA): services, study se
 
 ## Stack
 
-Astro 5 in SSR mode (`output: "server"`, `@astrojs/node` standalone) · React 19.1 islands · Tailwind CSS 4 (`@tailwindcss/vite`, configured in CSS) · nanostores · React Hook Form + Yup · framer-motion/motion · swiper · astro-icon · EmailJS · react-toastify. Node 22. Package manager: **pnpm**.
+Astro 5 in SSR mode (`output: "server"`, `@astrojs/node` standalone) · React 19.1 islands · Tailwind CSS 4 (`@tailwindcss/vite`, configured in CSS) · nanostores · React Hook Form + Yup · framer-motion/motion · swiper · astro-icon · react-toastify. Node 22. Package manager: **pnpm**.
 
 ## Commands
 
@@ -18,7 +18,7 @@ pnpm dev        # http://localhost:4321 (host: true → also on the local networ
 pnpm build      # → dist/ (client + server)
 pnpm preview
 pnpm start      # node ./dist/server/entry.mjs (after build)
-pnpm lint       # ESLint (eslint.config.js), --max-warnings 46 (existing debt; lower the cap when fixing, never raise it) + UI guard
+pnpm lint       # ESLint (eslint.config.js), --max-warnings 14 (existing debt; lower the cap when fixing, never raise it) + UI guard
 pnpm lint:ui    # UI guard only (scripts/check-ui.mjs)
 pnpm check      # astro check: typecheck of .astro/.ts/.tsx
 pnpm api:types  # regenerates src/api/generated/openapi.d.ts from ../backend-dyra/openapi.json
@@ -53,9 +53,10 @@ Routes: `/`, `/estudios` (catalog: `?q=&tipo=&pagina=`, search pages are `noinde
 - **HTML per branch:** the middleware forces `Cache-Control: private, no-cache` + `Vary: Cookie`; don't cache pages in a proxy.
 - **Data:** `apiGet()` (fetch GET, query params, `404 → null`, other errors → `throw Error(message)`). In-memory cache with `createTtlCache` (5 min; `getStale` as fallback if the API fails). Example to mimic: `src/api/studiesApi/studiesApi.ts`.
 - **UI state:** `openModal(view, payload)` / `closeModal()`; `ModalManager.tsx` and `DrawerManager.tsx` render by `view` key. `Drawer` is a modal dialog (Escape/backdrop close, focus trap).
-- **Catalog:** `components/react/study/StudyCatalog.tsx` (search + type filter + link-based pagination, state in the URL via `src/utils/catalogQuery.ts`) serves `/estudios` (`GET /studies`) and each service page (`GET /services/:slug`). Rows are `StudyRow` (code, name, sample, fasting, delivery, price, add to the selected-studies list).
+- **Catalog:** `components/react/study/StudyCatalog.tsx` (search + type filter + link-based pagination, state in the URL via `src/utils/catalogQuery.ts`) serves `/estudios` (`GET /studies`) and each service page (`GET /services/:slug`). Results are vertical `StudyCard`s in a container-query grid (`@container`, 1→2→3→4 columns by the catalog's own width, so it also fits beside the quoter summary): label bar (yellow profile / green study), code, name, sample/fasting/delivery, price and actions pinned to the bottom.
 - **Quoter (`/quoter`):** one island (`sections/react/quoter/Quoter.tsx`): step 1 studies (`QuoterSelectStudies`, reuses `StudyCatalog` with `renderAction`), step 2 client data + PDF (`QuoterForm`, `POST /quotations/pdf`), `QuoteSummary` beside it (bottom bar on phones). A quote holds one service/price sheet: add with `addStudyToQuote(study, service)` and ask first when `wouldReplaceQuote(service)`. The quote (`quoterStore`) and the selected-studies list for WhatsApp (`utils/cart.ts`) are separate on purpose.
 - **Shell:** header search is `components/react/search/StudySearch.tsx` (ARIA combobox over `GET /studies?search=`, active branch); nav items and `isActivePath` (for `aria-current`) live in `src/routes/routes.ts`; `Dropdown.astro` is a click/keyboard disclosure menu. The footer shows the active branch's address, phone and hours (`getActiveBranchDetails`).
+- **Contact (`/contact`):** `ContactForm` posts to the backend (`POST /contact-messages`) for the branch resolved on the server (`contact.astro` passes `branchId`/`branchName`); privacy checkbox required, hidden honeypot `website`, success panel with the folio. The admin follows them up by status.
 - **Forms:** RHF + Yup (`src/schemas/`); fields in `components/react/form/` (uncontrolled) and `components/react/hk-form/` (`RHF*`).
 - **Amounts:** `formatMXN` / `Price` (`src/utils/currency.ts`, es-MX). Dates: the backend sends ISO; format only for display.
 - **Icons:** `astro-icon` (`lucide`, `tabler`, `logos`, `simple-icons`) in .astro; `@iconify/react` / `lucide-react` in React.
@@ -63,7 +64,7 @@ Routes: `/`, `/estudios` (catalog: `?q=&tipo=&pagina=`, search pages are `noinde
 
 ## Design system (mandatory)
 
-Tokens live in `src/styles/global.css` (`@theme`); class recipes in `src/styles/ui.ts`. Reference implementation: `src/sections/astro/StudyDetail.astro`. Its **specimen label** (`components/astro/study/SpecimenLabel.astro`: barcode from the study code, monospace code, `dl` of sample/technique) is the site's signature element; reuse it instead of inventing decorative motifs. Lab-grid background and targeting brackets stay hero-only (HeroHome, HeroAbout, ServiceHero) until the hero refactor.
+Tokens live in `src/styles/global.css` (`@theme`); class recipes in `src/styles/ui.ts`. Reference implementation: `src/sections/astro/StudyDetail.astro`. Its **specimen label** (`components/astro/study/SpecimenLabel.astro`: barcode from the study code, monospace code, `dl` of sample/technique) is the site's signature element; reuse it instead of inventing decorative motifs. The faint lab-grid background is the only decorative motif and lives in the home hero.
 
 **Typography**
 - IBM Plex Sans (`font-sans`, weights 400/500/600/700) and IBM Plex Mono (`font-mono`, 400/500), self-hosted via `@fontsource`. Max weight is 700: use `font-bold`, never `font-black`/`font-extrabold`.
@@ -79,6 +80,14 @@ Tokens live in `src/styles/global.css` (`@theme`); class recipes in `src/styles/
   - `text-brand-ink`: links, eyebrows, accents; `bg-brand-ink` for primary buttons and dark brand surfaces, with `brand-ink-hover`
   - `text-yellow-ink`: warnings such as fasting
   - `text-yellow-mark`: non-text yellow marks such as stars
+- **Brand fills (use them, the site must not look washed out):** solid brand colors carry `text-black-custom`, all AA: on `yellow-primary` 11.6:1, `green-secondary` 7.9, `yellow-secondary` 8.8, `green-light` 6.7. Roles:
+  - `yellow-primary`: the page-level CTA (`Buttonstyles({ variant: "accent" })`, one per view), `Eyebrow tone="accent"`, fasting chips, quote total, profile bar/badge.
+  - `green-secondary`: default `Eyebrow`, active filter/step/page, `variant: "secondary"`, nav active mark.
+  - `green-primary`: single-study bar on study rows/labels, hero mat, 24px+ accent text only (4.0:1).
+  - `brandFill(index)` (`src/styles/ui.ts`) cycles green-secondary → yellow-primary → green-light → yellow-secondary for icon tiles and step numbers, so each item gets its own color.
+  - `black-custom` is **text only** (on brand fills). **No black or dark backgrounds anywhere**: surfaces are `bg-white`, `bg-ui-bg`, brand tints (`bg-green-primary/8`) or brand fills. Footer is `bg-ui-bg`, `Metrics` a white card with brand marks, `StudyCode` an `ui-bg` label with `text-ink`. Only exception: the `bg-black/40` scrim behind Modal/Drawer. The UI guard (`dark-surface`) enforces it.
+  - `BrandStripe` (header/footer) and the `SectionHeader` mark repeat the logo colors as solid segments.
+  - Brand tones as text are forbidden; only for 24px+ text that is AA in context, mark the line with `ui-guard-ok: <reason>` so `pnpm lint:ui` accepts it.
 - White text only on `bg-brand-ink`, `bg-brand-ink-hover`, `bg-yellow-ink` or `bg-red-custom` (`text-white/90` minimum).
 - Eyebrow/badge: `Eyebrow` (`components/astro/ui/Eyebrow.astro`, React twin `components/react/ui/Eyebrow.tsx`; `tone` brand|warn|neutral, `live` only for real live signals). Don't copy its classes by hand.
 - **Forbidden:** raw Tailwind grays, invented colors (`bg-primary`, `text-neutral-*`), brand tones as text, gradient text, decorative blur/glass, `dark:` classes (there is no dark mode).
@@ -93,7 +102,7 @@ Tokens live in `src/styles/global.css` (`@theme`); class recipes in `src/styles/
 - Section header: `<SectionHeader title="…" lead="…" />` (`components/astro/ui/SectionHeader.astro`, optional `slot="aside"` for a count or chip). Amounts: `Price` / `formatMXN` (`src/utils/currency.ts`).
 - Motion: transitions on specific properties (`transition-colors`, `transition-[border-color,box-shadow]`), never `transition-all`; entrance animations behind `motion-safe:`.
 
-**UI guard:** `pnpm lint` also runs `scripts/check-ui.mjs`, which caps generic-UI and contrast patterns (gradient text, glass, hover scale/translate, `transition-all`, large radii, heavy shadows, emojis, brand tones as text…). Caps hold existing debt: when a refactor removes occurrences, lower the cap (the script prints the new value); never raise it.
+**UI guard:** `pnpm lint` also runs `scripts/check-ui.mjs`, which forbids generic-UI and contrast patterns (gradient text, glass, hover scale/translate, `transition-all`, large radii, heavy shadows, emojis, brand tones as text…). Every cap is 0: fix the pattern, never raise a cap.
 
 ## UI design (mandatory)
 
@@ -110,13 +119,12 @@ Tokens live in `src/styles/global.css` (`@theme`); class recipes in `src/styles/
 | `PUBLIC_SITE_URL` | Public origin for canonical/OG/sitemap (default `https://dyranalitica.com`) |
 | `PUBLIC_DEFAULT_BRANCH_ID` | Branch without cookie. Locally: `a1b2c3d4-0001-4000-8000-000000000001` (backend dev seed) |
 | `PUBLIC_URL_WHATSAPP` | WhatsApp link for appointments |
-| `PUBLIC_SERVICE_EMAILJS`, `PUBLIC_TEMPLATEID_EMAILJS`, `PUBLIC_KEY_EMAILJS` | Contact form (EmailJS) |
 
 All are `PUBLIC_*`: they end up in the client bundle. Never put secrets here.
 
 ## Integration
 
-- **Client:** `src/api/apiGet.ts` (GET) and direct `fetch` for `POST /quotations/pdf` (`quotationsApi/quotationApi.ts`, returns a PDF) and `POST /reviews`. Base: `src/constants/apiUrl.ts`.
+- **Client:** `src/api/apiGet.ts` (GET) and direct `fetch` for `POST /quotations/pdf` (`quotationsApi/quotationApi.ts`, returns a PDF), `POST /reviews` and `POST /contact-messages` (`contactApi/contactApi.ts`). Base: `src/constants/apiUrl.ts`.
 - **Auth:** none. If an endpoint stops being `@Public()` in the backend, the site breaks.
 - **Endpoints used:** `/studies`, `/studies/by-slug/:slug?branchId=`, `/studies/:id/panel-tree`, `/services`, `/services/:idOrSlug`, `/branches`, `/branches/:id`, `/posts`, `/banners/active/:placement`, `/reviews/approved`.
 - **Contract:** source of truth = backend DTOs → `../backend-dyra/openapi.json` → `src/api/generated/openapi.d.ts` (`pnpm api:types`, don't edit by hand; covers routes and input bodies). Responses remain hand-typed in `src/api/<domain>Api/*.interface.ts` and `src/interfaces/`. `/studies/:id` only accepts UUIDs: by slug use `/studies/by-slug`.

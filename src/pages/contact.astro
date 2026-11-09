@@ -1,47 +1,43 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
+import Eyebrow from "../components/astro/ui/Eyebrow.astro";
 import CTAContact from "../components/astro/CTA/CTAContact.astro";
 import { ContactForm } from "../sections/react/contact/ContactForm";
+import { getActiveBranchDetails } from "../api/branchesApi/branchesApi";
+
+// The message goes to the branch the visitor is browsing (cookie or default).
+const branch = await getActiveBranchDetails();
 ---
 
 <Layout
   title="Contacto | Laboratorio DYRA"
   description="Agenda una cita, resuelve dudas sobre tus resultados o conoce más sobre nuestros servicios. Contáctanos en Laboratorio DYRA."
 >
-  <section>
-    <div class="relative flex flex-col gap-16 lg:gap-20">
-      <section
-        class="grid items-start gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
-      >
-        <div class="space-y-6 animate-fade-up">
-          <h1
-            class="text-balance text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl text-yellow-ink"
-          >
-            Estamos listos para
-            <span
-              class="block bg-linear-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
-            >
-              atenderte y resolver tus dudas.
-            </span>
-          </h1>
+  <div class="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
+    <div class="space-y-6 lg:col-span-5">
+      <header>
+        <Eyebrow>Contacto</Eyebrow>
+        <h1 class="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          Estamos listos para atenderte
+        </h1>
+        <p class="mt-4 max-w-xl text-base leading-relaxed text-ink-muted">
+          Agenda una cita, resuelve una duda sobre tus resultados o pregunta por
+          nuestros servicios. Para respuestas rápidas, escríbenos por WhatsApp.
+        </p>
+      </header>
 
-          <p class="max-w-xl text-sm text-ink-muted sm:text-base">
-            Ya sea que necesites agendar una cita, resolver una duda sobre tus
-            resultados o conocer más sobre nuestros servicios, en
-            {" "}
-            <span class="font-semibold text-brand-ink">DYRA</span>
-            {" "}
-            estamos para apoyarte con un trato cercano y profesional.
-          </p>
+      <CTAContact variant="inline" />
 
-          <CTAContact />
-        </div>
-
-        <div class="animate-fade-up">
-          <ContactForm client:load />
-        </div>
-      </section>
+      <p class="text-sm text-ink-muted">
+        ¿Buscas direcciones y horarios?
+        <a href="/branches" class="font-semibold text-brand-ink underline-offset-4 hover:underline">
+          Ver sucursales
+        </a>
+      </p>
     </div>
-  </section>
+
+    <div class="lg:col-span-7">
+      <ContactForm client:visible branchId={branch?.id} branchName={branch?.name} />
+    </div>
+  </div>
 </Layout>
