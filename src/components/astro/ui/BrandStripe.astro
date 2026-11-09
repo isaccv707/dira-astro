@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<!-- Brand signature: the logo's colors as solid segments (no gradient). -->
+<div aria-hidden="true" class:list={["flex h-1 w-full", className]}>
+  <span class="flex-[3] bg-green-primary"></span>
+  <span class="flex-[2] bg-green-secondary"></span>
+  <span class="flex-[2] bg-green-light"></span>
+  <span class="flex-[1] bg-yellow-primary"></span>
+  <span class="flex-[1] bg-yellow-secondary"></span>
+</div>

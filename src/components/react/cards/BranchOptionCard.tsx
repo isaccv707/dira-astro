@@ -1,5 +1,6 @@
 import { MapPin, ArrowRight, ExternalLink, Check } from "lucide-react";
 import type { Branch } from "../../../interfaces/branch.interface";
+import { getFullAddress } from "../../../utils/maps.utils";
 
 interface BranchOptionCardProps {
   branch: Branch;
@@ -16,32 +17,23 @@ const BranchOptionCard = ({
   isCurrent = false,
 }: BranchOptionCardProps) => {
   const { address, state } = branch;
-  const fullAddress = address
-    ? `${address.street} #${address.extNumber}, ${address.neighborhood}, ${address.city}, ${state?.name ?? ""}.`
-    : "";
 
   return (
     <button
       type="button"
       onClick={() => onSelect(branch)}
       aria-current={isCurrent ? "true" : undefined}
-      className={`group relative flex w-full items-stretch overflow-hidden rounded-clinical-md border ${isCurrent ? "border-green-primary bg-green-primary/5" : "border-ui-border bg-white"} text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-green-secondary hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2`}
+      className={`group relative flex w-full items-stretch overflow-hidden rounded-clinical-md border ${isCurrent ? "border-green-primary bg-green-primary/5" : "border-ui-border bg-white"} text-left shadow-xs transition-[border-color,box-shadow] duration-200 hover:border-brand-ink/30 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2`}
     >
       <span
         aria-hidden="true"
-        className="w-1 shrink-0 bg-linear-to-b from-green-secondary to-green-primary opacity-70 transition-opacity duration-200 group-hover:opacity-100"
+        className="w-1 shrink-0 bg-green-primary"
       />
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
-            {branch.isActive && (
-              <span className="relative flex h-2 w-2" aria-hidden="true">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-secondary opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-secondary" />
-              </span>
-            )}
-            <span className="font-mono text-2xs font-bold uppercase tracking-[0.18em] text-ink-muted">
+            <span className="text-xs font-semibold text-ink-muted">
               {state?.name}
             </span>
           </div>
@@ -59,7 +51,7 @@ const BranchOptionCard = ({
           ) : (
             <ArrowRight
               aria-hidden="true"
-              className="h-4 w-4 shrink-0 -translate-x-1 text-brand-ink opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+              className="h-4 w-4 shrink-0 text-brand-ink opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
             />
           )}
         </div>
@@ -70,7 +62,7 @@ const BranchOptionCard = ({
 
         <p className="flex items-start gap-1.5 text-xs leading-relaxed text-ink-muted">
           <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-ink" />
-          <span>{fullAddress}</span>
+          <span>{getFullAddress(branch)}</span>
         </p>
 
         {action === "select" && address?.references && (

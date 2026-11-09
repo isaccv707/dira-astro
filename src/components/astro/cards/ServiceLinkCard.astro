@@ -1,0 +1,58 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Service } from "../../../interfaces/service.interface";
+import { brandFill } from "../../../styles/ui";
+
+interface Props {
+  service: Service;
+  headingLevel?: "h2" | "h3";
+  /** Position in its list: each service gets its own brand color. */
+  index?: number;
+}
+
+const { service, headingLevel: Heading = "h3", index = 0 } = Astro.props;
+const { name, slug, description, icon, _count } = service;
+
+const KNOWN_SETS = ["lucide:", "tabler:", "logos:", "simple-icons:"];
+const isIconName = Boolean(icon && !icon.startsWith("http") && KNOWN_SETS.some((s) => icon.startsWith(s)));
+const isIconImage = Boolean(icon?.startsWith("http"));
+const studyCount = _count?.studies ?? 0;
+---
+
+<!-- Whole card is one link: one tab stop, one clear destination. -->
+<a
+  href={`/service/${slug}`}
+  class="group flex h-full flex-col rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs transition-[border-color,box-shadow] duration-200 hover:border-green-secondary hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2"
+>
+  <span class:list={["flex h-12 w-12 items-center justify-center rounded-clinical-md", brandFill(index)]}>
+    {
+      isIconName ? (
+        <Icon name={icon as string} aria-hidden="true" class="h-6 w-6" />
+      ) : isIconImage ? (
+        <img src={icon} alt="" class="h-6 w-6 object-contain" />
+      ) : (
+        <Icon name="lucide:flask-conical" aria-hidden="true" class="h-6 w-6" />
+      )
+    }
+  </span>
+
+  <Heading class="mt-4 text-lg font-bold tracking-tight text-ink group-hover:text-brand-ink">
+    {name}
+  </Heading>
+
+  {
+    description && (
+      <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-muted">{description}</p>
+    )
+  }
+
+  <span class="mt-auto flex items-center justify-between gap-3 pt-5 text-sm">
+    <span class="text-ink-subtle tabular-nums">
+      {studyCount > 0 ? `${studyCount} ${studyCount === 1 ? "estudio" : "estudios"}` : "Consulta en sucursal"}
+    </span>
+    <span class="inline-flex items-center gap-1 font-semibold text-brand-ink">
+      Ver servicio
+      <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+    </span>
+  </span>
+</a>

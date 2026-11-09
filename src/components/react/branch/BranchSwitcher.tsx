@@ -50,7 +50,7 @@ const BranchSwitcher = ({
         name ? `Sucursal actual: ${name}. Cambiar sucursal` : "Elegir sucursal"
       }
       title={name ? "Cambiar sucursal" : "Elegir sucursal"}
-      className="group inline-flex max-w-full items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1.5 text-left transition-colors duration-200 hover:border-green-primary/30 hover:bg-green-primary/12 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2 disabled:opacity-70"
+      className="group inline-flex max-w-full items-center gap-2 rounded-full border border-green-secondary bg-green-secondary/20 px-3 py-1.5 text-left transition-colors duration-200 hover:bg-green-secondary/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2 disabled:opacity-70"
     >
       <MapPin
         aria-hidden="true"
@@ -72,7 +72,7 @@ const BranchSwitcher = ({
 
       <ChevronDown
         aria-hidden="true"
-        className="h-4 w-4 shrink-0 text-brand-ink transition-transform duration-200 group-hover:translate-y-0.5"
+        className="h-4 w-4 shrink-0 text-brand-ink"
       />
     </button>
   );

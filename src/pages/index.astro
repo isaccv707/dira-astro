@@ -1,12 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import QuickActions from "../sections/astro/QuickActions.astro";
-import About from "../sections/astro/about/About.astro";
-import Benefits from "../sections/astro/about/Benefits.astro";
 import HeroHome from "../sections/astro/hero/HeroHome.astro";
-import Review from "../sections/astro/review/Review.astro";
 import OurServices from "../sections/astro/service/OurServices.astro";
-import MetricsDyra from "../sections/react/common/MetricsDyra";
+import HowItWorks from "../sections/astro/home/HowItWorks.astro";
+import About from "../sections/astro/about/About.astro";
+import Review from "../sections/astro/review/Review.astro";
 import { getBranchesWithSchedules } from "../api/branchesApi/branchesApi";
 import { branchJsonLd } from "../utils/structuredData";
 
@@ -17,22 +15,12 @@ const jsonLd = branches.map(branchJsonLd);
 
 <Layout
   title="Laboratorio DYRA | Diagnóstico y Referencia Analítica"
-  description="Bienvenido a Laboratorio DYRA. Ofrecemos análisis clínicos con tecnología de punta y calidez humana en Guadalajara y Colima."
+  description="Laboratorio clínico en Jalisco y Colima. Consulta precio, preparación y tiempo de entrega de tus estudios, cotiza en línea y agenda por WhatsApp."
   jsonLd={jsonLd}
 >
   <HeroHome />
-
-  <QuickActions />
-
   <OurServices />
-
+  <HowItWorks />
   <About />
-
-  <Benefits />
-
-  <section aria-label="DYRA en cifras">
-    <MetricsDyra client:visible />
-  </section>
-
   <Review />
 </Layout>

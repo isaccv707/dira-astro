@@ -72,7 +72,7 @@ const StudyActionCard = ({ study, quoterService = null }: StudyActionCardProps) 
             onClick={isInQuote ? () => removeQuoterStudy(id) : add}
             aria-pressed={isInQuote}
             className={clsx(
-              Buttonstyles({ variant: isInQuote ? "outline" : "primary", size: "lg", width: "full" }),
+              Buttonstyles({ variant: isInQuote ? "outline" : "accent", size: "lg", width: "full" }),
             )}
           >
             {isInQuote ? (

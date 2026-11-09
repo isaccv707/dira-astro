@@ -1,119 +1,16 @@
 ---
-import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
-import Carousel from "../../../components/react/carousel/Carousel";
-import logo from "../../../assets/images/logos/logo.png";
-import { fetchGetAllPosts } from "../../../api/postsApi/postApi";
-import type { Post } from "../../../api/postsApi/post.interface";
-import {
-  getCloudinaryUrl,
-  getCloudinarySrcSet,
-} from "../../../utils/cloudinary";
+import Eyebrow from "../../../components/astro/ui/Eyebrow.astro";
 
-interface Slide {
-  image: string;
-  imageMobile?: string;
-  title: string;
-}
-
-let slides: Slide[] = [];
-try {
-  const { data } = await fetchGetAllPosts({ limit: 5 });
-  slides = data.reduce<Slide[]>((acc, post: Post) => {
-    const rawImage = post.image as unknown as string | ImageMetadata | undefined;
-    const image = typeof rawImage === "string" ? rawImage : rawImage?.src;
-    const rawMobileImage = post.imageMobile as unknown as
-      | string
-      | ImageMetadata
-      | undefined;
-    const imageMobile =
-      typeof rawMobileImage === "string" ? rawMobileImage : rawMobileImage?.src;
-    if (image) acc.push({ image, imageMobile, title: post.title });
-    return acc;
-  }, []);
-} catch (error) {
-  console.error("[BlogHero] Error fetching carousel posts:", error);
-}
+// The blog's first view is the article list itself: a short header is
+// enough, the posts' own images do the visual work.
 ---
 
-<section class="w-full">
-  <div class="grid items-center gap-10 lg:grid-cols-2">
-    <HeaderBySection
-      as="h1"
-      img={logo}
-      textHeader={"Blog"}
-      title={"Bienvenido a nuestro Blog — DYRA"}
-      paragraph={"Consejos, noticias y artículos sobre salud y diagnóstico clínico."}
-      textColor={"yellow-secondary"}
-      btn={true}
-      btnProperties={{ text: "Ver artículos", path: "#articulos" }}
-    />
-
-    <div
-      class="relative motion-safe:animate-fade-up"
-      style="animation-delay:120ms; animation-fill-mode:backwards;"
-    >
-      <div
-        class="relative overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5 bg-linear-to-b from-green-primary/10 to-yellow-primary/10"
-      >
-        {
-          slides.length > 0 ? (
-            <Carousel client:load slidesPreview={1}>
-              {slides.map(({ image, imageMobile, title }) => (
-                <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7 w-full">
-                  <picture>
-                    <source
-                      media="(min-width: 1024px)"
-                      srcset={getCloudinarySrcSet(
-                        image,
-                        [1024, 1280, 1600],
-                        { w: 16, h: 7 },
-                      )}
-                    />
-                    <source
-                      media="(min-width: 640px)"
-                      srcset={getCloudinarySrcSet(image, [640, 768, 1024], {
-                        w: 16,
-                        h: 9,
-                      })}
-                    />
-                    <img
-                      src={getCloudinaryUrl(imageMobile || image, {
-                        width: 640,
-                        height: 480,
-                      })}
-                      alt={title}
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      width={640}
-                      height={480}
-                    />
-                  </picture>
-                </div>
-              ))}
-            </Carousel>
-          ) : (
-            <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7 w-full flex items-center justify-center">
-              <img
-                src={logo.src}
-                alt="Blog DYRA"
-                class="h-24 w-24 object-contain opacity-40"
-              />
-            </div>
-          )
-        }
-      </div>
-
-      <!-- Floating badge — echoes the Hero/Service instrument-badge language -->
-      <div
-        class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md"
-      >
-        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
-        <span
-          class="text-2xs font-bold uppercase tracking-widest text-brand-ink"
-        >
-          Artículos destacados
-        </span>
-      </div>
-    </div>
-  </div>
-</section>
+<header class="max-w-3xl">
+  <Eyebrow>Blog</Eyebrow>
+  <h1 class="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+    Salud y diagnóstico clínico
+  </h1>
+  <p class="mt-3 text-base leading-relaxed text-ink-muted">
+    Consejos, noticias y artículos sobre salud y diagnóstico clínico.
+  </p>
+</header>

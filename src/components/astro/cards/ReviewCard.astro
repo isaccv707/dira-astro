@@ -9,24 +9,28 @@ const { review } = Astro.props;
 
 if (!review) return null;
 
-const totalStars = 5;
-const rating = Math.round(review.rating || 0);
+const TOTAL_STARS = 5;
+const rating = Math.min(TOTAL_STARS, Math.max(0, Math.round(review.rating || 0)));
 
-const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-  review.fullName,
-)}&background=86AB27&color=fff&bold=true`;
-
-const avatarUrl = review.avatarUrl || avatarFallback;
+// Local initials instead of a third-party avatar service: the reviewer's
+// name never leaves the site.
+const initials = (review.fullName ?? "")
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((part) => part[0]?.toUpperCase() ?? "")
+  .join("");
 ---
 
 <figure
-  class="flex flex-col h-full max-w-7xl shadow-xs p-8 rounded-clinical-lg border border-ui-border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
+  class="flex h-full flex-col rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs"
 >
-  <div class="flex items-center space-x-1 mb-4 shrink-0">
+  <div class="flex items-center gap-0.5" role="img" aria-label={`${rating} de ${TOTAL_STARS} estrellas`}>
     {
-      [...Array(totalStars)].map((_, index) => (
+      [...Array(TOTAL_STARS)].map((_, index) => (
         <svg
-          class={`w-5 h-5 ${index < rating ? "text-yellow-mark" : "text-ui-border"}`}
+          aria-hidden="true"
+          class={`h-4 w-4 ${index < rating ? "text-yellow-mark" : "text-ui-border"}`}
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -36,27 +40,33 @@ const avatarUrl = review.avatarUrl || avatarFallback;
     }
   </div>
 
-  <blockquote class="grow">
-    <p
-      class="text-xl font-semibold text-ink tracking-tight line-clamp-4 italic"
-    >
-      "{review.comment}"
-    </p>
+  <blockquote class="mt-4 grow">
+    <p class="line-clamp-5 text-base leading-relaxed text-ink">“{review.comment}”</p>
   </blockquote>
 
-  <figcaption
-    class="flex items-center mt-6 space-x-3 shrink-0 pt-4 border-t border-ui-border"
-  >
-    <img
-      class="w-10 h-10 rounded-full border border-ui-border object-cover"
-      src={avatarUrl}
-      alt={review.fullName}
-    />
-    <div class="flex items-center divide-x divide-ui-border">
-      <cite class="pe-3 font-medium text-yellow-mark not-italic">
-        {review.fullName}
-      </cite>
-      <cite class="ps-3 text-sm text-brand-ink not-italic"> Paciente </cite>
-    </div>
+  <figcaption class="mt-5 flex items-center gap-3 border-t border-ui-border pt-4">
+    {
+      review.avatarUrl ? (
+        <img
+          class="h-10 w-10 rounded-full border border-ui-border object-cover"
+          src={review.avatarUrl}
+          alt=""
+          loading="lazy"
+          width="40"
+          height="40"
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-green-primary/8 text-sm font-semibold text-brand-ink"
+        >
+          {initials || "?"}
+        </span>
+      )
+    }
+    <span class="min-w-0">
+      <cite class="block truncate text-sm font-semibold not-italic text-ink">{review.fullName}</cite>
+      <span class="block text-xs text-ink-subtle">Paciente</span>
+    </span>
   </figcaption>
 </figure>

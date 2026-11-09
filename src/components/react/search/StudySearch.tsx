@@ -20,6 +20,10 @@ interface StudySearchProps {
    * "toggle": icon button that opens a full-width search bar under the header.
    */
   variant?: "inline" | "toggle";
+  /** "lg" for the home hero, "md" in the header. */
+  size?: "md" | "lg";
+  /** Accessible name / placeholder override. */
+  placeholder?: string;
 }
 
 /**
@@ -27,7 +31,11 @@ interface StudySearchProps {
  * code and abbreviation). ARIA 1.2 combobox: arrows move, Enter opens the
  * study, Escape closes.
  */
-const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
+const StudySearch = ({
+  variant = "inline",
+  size = "md",
+  placeholder = "Buscar estudio o código",
+}: StudySearchProps) => {
   const id = useId();
   const listboxId = `${id}-listbox`;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -128,7 +136,10 @@ const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
     <div className="relative w-full">
       <Search
         aria-hidden="true"
-        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle"
+        className={clsx(
+          "pointer-events-none absolute top-1/2 -translate-y-1/2 text-ink-subtle",
+          size === "lg" ? "left-4 h-5 w-5" : "left-3 h-4 w-4",
+        )}
       />
       <input
         ref={inputRef}
@@ -141,7 +152,7 @@ const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
           activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined
         }
         aria-label="Buscar estudio por nombre o código"
-        placeholder="Buscar estudio o código"
+        placeholder={placeholder}
         autoComplete="off"
         enterKeyHint="search"
         value={query}
@@ -151,7 +162,10 @@ const StudySearch = ({ variant = "inline" }: StudySearchProps) => {
         }}
         onFocus={() => setIsListOpen(true)}
         onKeyDown={onKeyDown}
-        className="h-10 w-full rounded-clinical-sm border border-ui-border bg-ui-bg pl-9 pr-9 text-sm text-ink placeholder:text-ink-subtle transition-colors duration-200 hover:border-brand-ink/30 focus:border-brand-ink focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-primary/30 [&::-webkit-search-cancel-button]:hidden"
+        className={clsx(
+          "w-full rounded-clinical-sm border border-ui-border pl-9 pr-9 text-ink placeholder:text-ink-subtle transition-colors duration-200 hover:border-brand-ink/30 focus:border-brand-ink focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-primary/30 [&::-webkit-search-cancel-button]:hidden",
+          size === "lg" ? "h-14 bg-white pl-11 text-base shadow-xs" : "h-10 bg-ui-bg text-sm",
+        )}
       />
       {status === "loading" ? (
         <Loader2

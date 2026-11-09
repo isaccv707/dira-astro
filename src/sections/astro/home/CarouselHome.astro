@@ -9,22 +9,22 @@ try {
 } catch (error) {
   console.error("Error al obtener los banners:", error);
 }
-if (!banners || banners.length === 0) return null;
+const hasBanners = Array.isArray(banners) && banners.length > 0;
 ---
 
-<Carousel client:load slidesPreview={1}>
-  {
-    banners.map(({ imageUrl, mobileImageUrl }, index) => {
-      const isLCP = index === 0;
-
-      return (
+{
+  hasBanners ? (
+    <Carousel client:load slidesPreview={1}>
+      {banners.map(({ imageUrl, mobileImageUrl }, index) => (
         <ImgCarouselHome
           imageUrl={imageUrl}
           mobileImageUrl={mobileImageUrl}
-          isLCP={isLCP}
+          isLCP={index === 0}
           index={index}
         />
-      );
-    })
-  }
-</Carousel>
+      ))}
+    </Carousel>
+  ) : (
+    <slot name="fallback" />
+  )
+}

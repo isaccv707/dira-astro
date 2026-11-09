@@ -19,7 +19,7 @@ const RULES = [
     why: "brand tones as text fail WCAG AA: use text-ink / ink-muted / ink-subtle / brand-ink / yellow-ink",
     pattern:
       /(?<![\w-])text-(?:green-primary|green-secondary|green-light|grey-custom|yellow-primary|yellow-secondary)(?![\w-])/g,
-    max: 2,
+    max: 0,
   },
   {
     id: "raw-grays",
@@ -50,49 +50,49 @@ const RULES = [
     id: "gradient-text",
     why: "gradient text is a generic AI tell",
     pattern: /(?<![\w-])bg-clip-text(?![\w-])/g,
-    max: 3,
+    max: 0,
   },
   {
     id: "glassmorphism",
     why: "backdrop blur over content: use solid surfaces",
     pattern: /(?<![\w-])backdrop-blur/g,
-    max: 3,
+    max: 0,
   },
   {
     id: "decorative-gradient",
     why: "decorative gradients: solid tokens instead",
     pattern: /(?<![\w-])bg-(?:linear|gradient|radial|conic)-/g,
-    max: 10,
+    max: 0,
   },
   {
     id: "hover-scale",
     why: "scale on hover/press: give feedback with color, border or shadow",
     pattern: /(?<![\w-])(?:hover|group-hover|active|focus):scale-/g,
-    max: 12,
+    max: 0,
   },
   {
     id: "hover-translate",
     why: "lift-on-hover cards are a template tell",
     pattern: /(?<![\w-])(?:hover|group-hover):-?translate-y-/g,
-    max: 10,
+    max: 0,
   },
   {
     id: "transition-all",
     why: "animate specific properties (transition-colors, -shadow, -transform)",
     pattern: /(?<![\w-])transition-all(?![\w-])/g,
-    max: 15,
+    max: 0,
   },
   {
     id: "large-radius",
     why: "use rounded-clinical-sm|md|lg (rounded-full for pills/avatars)",
     pattern: /(?<![\w-])rounded-(?:[tblr]{1,2}-)?(?:xl|2xl|3xl|4xl|\[)/g,
-    max: 6,
+    max: 0,
   },
   {
     id: "heavy-shadow",
     why: "shadow-lg and above only on overlays (modal, drawer, floating buttons)",
     pattern: /(?<![\w-])shadow-(?:lg|xl|2xl)(?![\w-])/g,
-    max: 9,
+    max: 0,
   },
   {
     id: "bounce",
@@ -101,10 +101,16 @@ const RULES = [
     max: 0,
   },
   {
+    id: "dark-surface",
+    why: "no black backgrounds: use light surfaces (bg-white, bg-ui-bg, brand fills/tints); bg-black/40 scrims behind overlays are allowed",
+    pattern: /(?<![\w-])bg-black(?:-custom)?(?![\w-])(?!\/[1-4]\d(?!\d))/g,
+    max: 0,
+  },
+  {
     id: "emoji",
     why: "emojis as icons or decoration: use astro-icon / lucide",
     pattern: /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,
-    max: 6,
+    max: 0,
   },
 ];
 
@@ -125,7 +131,12 @@ const results = RULES.map((rule) => ({ ...rule, count: 0, hits: [] }));
 for (const file of files) {
   const lines = readFileSync(file, "utf8").split(/\r?\n/);
   lines.forEach((line, index) => {
+    // Escape hatch for "low-contrast-text" only, when the pair is AA in context
+    // (brand tone on black-custom, or 24px+ text). The marker must say why:
+    //   "text-yellow-primary", // ui-guard-ok: on black-custom 11.6:1
+    const allowsBrandText = /ui-guard-ok:\s*\S/.test(line);
     for (const result of results) {
+      if (allowsBrandText && result.id === "low-contrast-text") continue;
       const matches = line.match(result.pattern);
       if (!matches) continue;
       result.count += matches.length;

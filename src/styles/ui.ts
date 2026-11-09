@@ -6,14 +6,32 @@ import { cva, type VariantProps } from "class-variance-authority";
  * Tokens: see src/styles/global.css and "Design system" in CLAUDE.md.
  */
 
+/**
+ * Brand palette roles (see "Color" in CLAUDE.md). Solid brand fills carry
+ * black-custom text; every pair below is WCAG AA:
+ *   black-custom on yellow-primary 11.6 · green-secondary 7.9 ·
+ *   yellow-secondary 8.8 · green-light 6.7 · white on brand-ink 6.2.
+ * Use them to tell things apart (service, step, study vs profile), not as decoration.
+ */
+export const BRAND_FILLS = [
+  "bg-green-secondary text-black-custom",
+  "bg-yellow-primary text-black-custom",
+  "bg-green-light text-black-custom",
+  "bg-yellow-secondary text-black-custom",
+] as const;
+
+/** Picks a brand fill for the n-th item of a list (cycles). */
+export const brandFill = (index: number) => BRAND_FILLS[index % BRAND_FILLS.length];
+
 /** Eyebrow / badge label above a heading, or a small status chip. */
 export const eyebrowStyles = cva(
   "inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-2xs font-bold uppercase tracking-wide",
   {
     variants: {
       tone: {
-        brand: "border-green-primary/15 bg-green-primary/8 text-brand-ink",
-        warn: "border-yellow-secondary/25 bg-yellow-primary/10 text-yellow-ink",
+        brand: "border-green-secondary bg-green-secondary text-black-custom",
+        accent: "border-yellow-primary bg-yellow-primary text-black-custom",
+        warn: "border-yellow-secondary bg-yellow-secondary text-black-custom",
         neutral: "border-ui-border bg-ui-bg text-ink-muted",
       },
     },
@@ -24,8 +42,9 @@ export const eyebrowStyles = cva(
 export const eyebrowDotStyles = cva("h-1.5 w-1.5 shrink-0 rounded-full", {
   variants: {
     tone: {
-      brand: "bg-green-primary",
-      warn: "bg-yellow-mark",
+      brand: "bg-ink",
+      accent: "bg-green-primary",
+      warn: "bg-ink",
       neutral: "bg-ink-subtle",
     },
     // Pulse only for real "live" signals (hero, open now), never decoration.

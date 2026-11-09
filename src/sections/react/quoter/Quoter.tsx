@@ -82,7 +82,7 @@ const Quoter = () => {
                   className={clsx(
                     "flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold tabular-nums",
                     isCurrent || isDone
-                      ? "bg-brand-ink text-white"
+                      ? "bg-green-secondary text-black-custom"
                       : "border border-ui-border text-ink-subtle",
                   )}
                 >
@@ -137,7 +137,7 @@ const Quoter = () => {
             <button
               type="button"
               onClick={goToDetails}
-              className={Buttonstyles({ variant: "primary", size: "md" })}
+              className={Buttonstyles({ variant: "accent", size: "md" })}
             >
               Continuar
             </button>

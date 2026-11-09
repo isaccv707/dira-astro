@@ -13,7 +13,7 @@ interface NumberInputProps {
     value: string;
     min?: number;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    variant?: "normal" | "compact"; // 👈 nuevo
+    variant?: "normal" | "compact"; // nuevo
 }
 
 const NumberInput = ({

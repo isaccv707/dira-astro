@@ -1,88 +1,101 @@
 ---
-import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
-import logo from "../../../assets/images/logos/logo.png";
+import { Icon } from "astro-icon/components";
+import Eyebrow from "../../../components/astro/ui/Eyebrow.astro";
 import { getCloudinaryUrl } from "../../../utils/cloudinary";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
+import { CATALOG_ANCHOR } from "../../../utils/catalogQuery";
 
 interface Props {
   name: string;
   description: string;
   imageUrl: string;
   mobileImageUrl?: string;
+  /** Priced studies in this branch, shown as a fact under the title. */
+  studyCount?: number;
 }
 
-const { name, description, imageUrl, mobileImageUrl } = Astro.props;
+const { name, description, imageUrl, mobileImageUrl, studyCount = 0 } = Astro.props;
 
-// Marketing only supplies 2 assets: imageUrl (desktop) and mobileImageUrl (mobile).
-// The tablet breakpoint reuses imageUrl — Cloudinary just resizes it to a smaller 16:9 crop.
+// Marketing supplies 2 assets: imageUrl (desktop) and mobileImageUrl (mobile).
+// The tablet breakpoint reuses imageUrl at a smaller crop.
 const mobileDims = { width: 900, height: 675 };
 const tabletDims = { width: 1200, height: 675 };
 const desktopDims = { width: 1600, height: 700 };
 
 const mobileSrc = mobileImageUrl || imageUrl;
-const finalMobileUrl = getCloudinaryUrl(mobileSrc, mobileDims);
-const finalTabletUrl = getCloudinaryUrl(imageUrl, tabletDims);
-const finalDesktopUrl = getCloudinaryUrl(imageUrl, desktopDims);
+const hasImage = Boolean(imageUrl);
 ---
 
-<section class="w-full">
-  <div class="grid items-center gap-10 lg:grid-cols-2">
-    <HeaderBySection
-      as="h1"
-      img={logo}
-      textHeader={"Servicio"}
-      title={name}
-      paragraph={description}
-      textColor={"yellow-secondary"}
-      btn={true}
-      btnProperties={{ text: `Ver ${name}`, path: "#servicio-detalle" }}
-    />
+<header class="grid items-center gap-10 lg:grid-cols-12">
+  <div class:list={[hasImage ? "lg:col-span-6" : "lg:col-span-8"]}>
+    <nav aria-label="Breadcrumb" class="mb-6 text-xs text-ink-subtle">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="transition-colors hover:text-brand-ink">Inicio</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="font-semibold text-ink">{name}</li>
+      </ol>
+    </nav>
 
-    <div
-      class="relative motion-safe:animate-fade-up"
-      style="animation-delay:120ms; animation-fill-mode:backwards;"
-    >
-      <div
-        class="relative overflow-hidden rounded-clinical-lg shadow-xl ring-1 ring-black/5 bg-linear-to-b from-green-primary/10 to-yellow-primary/10"
-      >
-        <div class="aspect-4/3 sm:aspect-video lg:aspect-16/7">
+    <Eyebrow>Servicio</Eyebrow>
+    <h1 class="mt-4 text-3xl font-bold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
+      {name}
+    </h1>
+    {
+      description && (
+        <p class="mt-5 max-w-xl text-base leading-relaxed text-ink-muted sm:text-lg">
+          {description}
+        </p>
+      )
+    }
+    {
+      studyCount > 0 && (
+        <p class="mt-4 text-sm text-ink-subtle tabular-nums">
+          {studyCount} {studyCount === 1 ? "estudio" : "estudios"} con precio en tu sucursal
+        </p>
+      )
+    }
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href={`#${CATALOG_ANCHOR}`} class={Buttonstyles({ variant: "primary", size: "lg" })}>
+        Ver estudios y precios
+        <Icon name="lucide:arrow-down" aria-hidden="true" class="h-4 w-4" />
+      </a>
+      <a href="/quoter" class={Buttonstyles({ variant: "outline", size: "lg" })}>
+        Cotizar
+      </a>
+    </div>
+  </div>
+
+  {
+    hasImage && (
+      <div class="lg:col-span-6" data-hero-media>
+        <div class="overflow-hidden rounded-clinical-lg border border-ui-border bg-white shadow-xs">
           <picture>
             <source
               media="(min-width: 1024px)"
-              srcset={finalDesktopUrl}
+              srcset={getCloudinaryUrl(imageUrl, desktopDims)}
               width={desktopDims.width}
               height={desktopDims.height}
             />
             <source
               media="(min-width: 640px)"
-              srcset={finalTabletUrl}
+              srcset={getCloudinaryUrl(imageUrl, tabletDims)}
               width={tabletDims.width}
               height={tabletDims.height}
             />
             <img
-              src={finalMobileUrl}
-              alt={name}
-              class="h-full w-full object-cover"
+              src={getCloudinaryUrl(mobileSrc, mobileDims)}
+              alt=""
+              class="aspect-4/3 h-auto w-full object-cover sm:aspect-video lg:aspect-16/7"
               loading="eager"
               fetchpriority="high"
-              decoding="sync"
+              onerror="this.closest('[data-hero-media]')?.remove()"
               width={mobileDims.width}
               height={mobileDims.height}
             />
           </picture>
         </div>
       </div>
-
-      <!-- Floating badge — echoes the Hero/About instrument-badge language -->
-      <div
-        class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md"
-      >
-        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
-        <span
-          class="text-2xs font-bold uppercase tracking-widest text-brand-ink"
-        >
-          Atención especializada
-        </span>
-      </div>
-    </div>
-  </div>
-</section>
+    )
+  }
+</header>

@@ -5,6 +5,8 @@ interface PriceProps {
   // priceInfo.price is nullable in the API; callers render Price only when showPrice.
   value: number | string | null;
   size?: "sm" | "md" | "lg";
+  /** "onFill": all parts in black-custom, for use on yellow/green brand fills. */
+  tone?: "default" | "onFill";
   className?: string;
 }
 
@@ -15,21 +17,30 @@ const AMOUNT_SIZE = {
 } as const;
 
 /** "$ 1,250.00 MXN" with aligned digits. Renders statically from Astro too. */
-const Price = ({ value, size = "md", className }: PriceProps) => (
-  <span className={clsx("inline-flex items-baseline gap-1 text-ink", className)}>
-    <span className="text-sm font-semibold text-ink-muted">$</span>
+const Price = ({ value, size = "md", tone = "default", className }: PriceProps) => {
+  const onFill = tone === "onFill";
+  return (
     <span
       className={clsx(
-        "font-bold tracking-tight tabular-nums",
-        AMOUNT_SIZE[size],
+        "inline-flex items-baseline gap-1",
+        onFill ? "text-black-custom" : "text-ink",
+        className,
       )}
     >
-      {formatMXNAmount(value)}
+      <span className={clsx("text-sm font-semibold", !onFill && "text-ink-muted")}>$</span>
+      <span className={clsx("font-bold tracking-tight tabular-nums", AMOUNT_SIZE[size])}>
+        {formatMXNAmount(value)}
+      </span>
+      <span
+        className={clsx(
+          "ml-0.5 text-2xs font-semibold uppercase tracking-wide",
+          !onFill && "text-ink-subtle",
+        )}
+      >
+        MXN
+      </span>
     </span>
-    <span className="ml-0.5 text-2xs font-semibold uppercase tracking-wide text-ink-subtle">
-      MXN
-    </span>
-  </span>
-);
+  );
+};
 
 export default Price;

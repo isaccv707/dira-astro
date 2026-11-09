@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const Buttonstyles = cva(
   [
     "inline-flex items-center justify-center gap-2 font-semibold",
-    // Only the properties that actually change: never `transition-all`.
+    // Only the properties that actually change (never transition on "all").
     "transition-[color,background-color,border-color,box-shadow] duration-200 motion-reduce:transition-none",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2",
     "disabled:opacity-50 disabled:pointer-events-none",
@@ -21,8 +21,12 @@ export const Buttonstyles = cva(
         // White on brand-ink = 6.2:1 (AA). green-light/green-secondary fail with white text.
         primary:
           "rounded-clinical-sm bg-brand-ink text-white hover:bg-brand-ink-hover active:bg-brand-ink-hover",
+        // Page-level call to action (one per view): black on yellow-primary = 11.6:1.
+        accent:
+          "rounded-clinical-sm bg-yellow-primary text-black-custom hover:bg-yellow-secondary active:bg-yellow-secondary",
+        // Black on green-secondary = 7.9:1.
         secondary:
-          "rounded-clinical-sm bg-green-primary/10 text-brand-ink hover:bg-green-primary/15 active:bg-green-primary/20",
+          "rounded-clinical-sm bg-green-secondary text-black-custom hover:bg-green-light active:bg-green-light",
         danger:
           "rounded-clinical-sm bg-red-custom text-white hover:bg-red-custom/90 active:bg-red-custom/80",
         ghost:
@@ -39,7 +43,7 @@ export const Buttonstyles = cva(
         // (red to delete, grey to close, ...) via `className`.
         icon: "rounded-full bg-transparent p-0",
         // Floating overlay: shadow-md is allowed here.
-        fab: "rounded-full text-white shadow-md hover:shadow-lg",
+        fab: "rounded-full text-white shadow-md",
         // No padding on purpose, same reason as "icon": some consumers
         // keep the padding on an inner div.
         tile: "rounded-clinical-md border border-ui-border bg-white text-left shadow-xs hover:border-brand-ink/30 hover:shadow-sm",

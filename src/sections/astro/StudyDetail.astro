@@ -137,6 +137,7 @@ const labelRows = [
         abbreviation={abbreviation}
         rows={labelRows}
         label={`Ficha del estudio ${name}`}
+        isPanel={isPanel}
         class="motion-safe:animate-fade-up lg:col-span-5"
         style={reveal(180)}
       />
@@ -156,7 +157,7 @@ const labelRows = [
             fastingHours && (
               <span
                 slot="aside"
-                class="inline-flex items-center gap-2 rounded-clinical-sm border border-yellow-secondary/25 bg-yellow-primary/10 px-3 py-1.5 text-xs font-bold text-yellow-ink"
+                class="inline-flex items-center gap-2 rounded-clinical-sm bg-yellow-primary px-3 py-1.5 text-xs font-bold text-black-custom"
               >
                 <Icon name="lucide:timer" class="h-4 w-4" />
                 Ayuno de {fastingHours} h

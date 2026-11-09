@@ -1,17 +1,19 @@
 import type { Study } from "../../../interfaces/study.interface";
-import StudyRow from "./StudyRow";
+import StudyCard from "./StudyCard";
 
 interface StudyListProps {
   studies: Study[];
 }
 
-/** Static list of study rows (no search or paging), e.g. recommendations. */
+/** Static grid of study cards (no search or paging), e.g. recommendations. */
 const StudyList = ({ studies }: StudyListProps) => (
-  <ul className="divide-y divide-ui-border overflow-hidden rounded-clinical-md border border-ui-border bg-white">
-    {studies.map((study) => (
-      <StudyRow key={study.id} study={study} />
-    ))}
-  </ul>
+  <div className="@container">
+    <ul className="grid gap-4 @xl:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4">
+      {studies.map((study) => (
+        <StudyCard key={study.id} study={study} />
+      ))}
+    </ul>
+  </div>
 );
 
 export default StudyList;

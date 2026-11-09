@@ -1,43 +1,32 @@
 ---
 import { getAllService } from "../../../api/servicesApi/serviceApi";
-import ServiceCard from "../../../components/astro/cards/ServiceCard.astro";
-import ServiceCardSkeleton from "../../../components/astro/skeletons/ServiceCardSkeleton.astro";
-import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
+import ServiceLinkCard from "../../../components/astro/cards/ServiceLinkCard.astro";
+import SectionHeader from "../../../components/astro/ui/SectionHeader.astro";
 import type { Service } from "../../../interfaces/service.interface";
 
-let services: any = [];
-let isError = false;
-let isLoading = true;
-
+let services: Service[] = [];
 try {
   services = await getAllService();
-  isLoading = false;
 } catch (error) {
-  isError = true;
-  isLoading = false;
+  console.error("[OurServices] Error fetching services:", error);
 }
-const skeletonCount = services?.length || 3;
-
-if (isError) return null;
 ---
 
-<section>
-  <div class="flex justify-center text-center mb-10">
-    <HeaderBySection
-      textHeader={"Servicios"}
-      title={"Soluciones clínicas para cada necesidad"}
-      paragraph={`Conoce nuestros servicios y estudios disponibles. Te ayudamos con atención clara, procesos confiables y resultados listos cuando los necesites.`}
-    />
-  </div>
-  <div
-    class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
-  >
-    {
-      isLoading
-        ? Array.from({ length: skeletonCount }).map((_, index) => (
-            <ServiceCardSkeleton />
-          ))
-        : services?.map((service: Service) => <ServiceCard service={service} />)
-    }
-  </div>
-</section>
+{
+  services.length > 0 && (
+    <section aria-labelledby="services-title" class="space-y-8">
+      <SectionHeader
+        id="services-title"
+        title="Servicios"
+        lead="Cada servicio tiene su catálogo de estudios con precios de tu sucursal."
+      />
+      <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((service, index) => (
+          <li>
+            <ServiceLinkCard service={service} index={index} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

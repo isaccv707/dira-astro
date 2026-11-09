@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { RotateCw, Search, X } from "lucide-react";
 
-import StudyRow from "./StudyRow";
+import StudyCard from "./StudyCard";
 import CatalogPagination from "./CatalogPagination";
 import StudyTypeFilterControl from "../filter/StudyTypeFilterControl";
 import { getAllStudies } from "../../../api/studiesApi/studiesApi";
@@ -250,7 +250,7 @@ const StudyCatalog = ({
         )}
       </p>
 
-      <div className="mt-3" aria-busy={isLoading}>
+      <div className="@container mt-3" aria-busy={isLoading}>
         {status === "error" ? (
           <div className="rounded-clinical-md border border-ui-border bg-white px-6 py-10 text-center">
             <p className="font-semibold text-ink">No pudimos cargar los estudios.</p>
@@ -268,21 +268,27 @@ const StudyCatalog = ({
           </div>
         ) : studies.length > 0 ? (
           <ul
-            className={`divide-y divide-ui-border overflow-hidden rounded-clinical-md border border-ui-border bg-white transition-opacity duration-150 ${
+            className={`grid gap-4 @xl:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4 transition-opacity duration-150 ${
               isLoading ? "opacity-60" : ""
             }`}
           >
             {studies.map((study) => (
-              <StudyRow key={study.id} study={study} action={renderAction?.(study)} />
+              <StudyCard key={study.id} study={study} action={renderAction?.(study)} />
             ))}
           </ul>
         ) : isLoading ? (
-          <ul className="divide-y divide-ui-border rounded-clinical-md border border-ui-border bg-white">
+          <ul className="grid gap-4 @xl:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4">
             {[0, 1, 2].map((index) => (
-              <li key={index} className="space-y-3 px-6 py-5">
+              <li
+                key={index}
+                className="space-y-3 overflow-hidden rounded-clinical-md border border-ui-border bg-white p-5"
+              >
                 <div className="h-5 w-20 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
-                <div className="h-5 w-2/3 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
-                <div className="h-4 w-1/3 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
+                <div className="h-5 w-3/4 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
+                <div className="h-4 w-1/2 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
+                <div className="h-4 w-2/3 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
+                <div className="h-8 w-1/3 rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
+                <div className="h-9 w-full rounded-clinical-sm bg-ui-bg motion-safe:animate-pulse" />
               </li>
             ))}
           </ul>

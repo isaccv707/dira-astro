@@ -1,50 +1,27 @@
 ---
-import logo from "../../../assets/images/logos/logo.png";
-import imgAbout from "../../../assets/images/home/carousel/2A.jpg";
-import HeaderBySection from "../../../components/astro/ui/HeaderBySection.astro";
-
-export const prerender = true;
+import { Icon } from "astro-icon/components";
+import SectionHeader from "../../../components/astro/ui/SectionHeader.astro";
+import Metrics from "../../../components/astro/ui/Metrics.astro";
 ---
 
-<section>
-  <div class="grid items-center gap-10 md:grid-cols-2 md:gap-12">
-    <div class="w-full">
-      <div class="max-w-prose">
-        <HeaderBySection
-          textHeader="Diagnóstico y Referencia Analítica"
-          title="Acerca de nosotros"
-          paragraph="En DYRA brindamos servicios de diagnóstico clínico y referencia analítica con un enfoque en precisión, rapidez y atención humana. Contamos con procesos estandarizados y control de calidad para ofrecer resultados confiables que apoyen la toma de decisiones médicas."
-          img={logo}
-          textColor="yellow-secondary"
-          btn={true}
-        />
-      </div>
-    </div>
-
-    <div
-      class="relative flex justify-center motion-safe:animate-fade-up md:justify-start"
-      style="animation-delay:120ms; animation-fill-mode:backwards;"
-    >
-      <img
-        src={imgAbout.src}
-        alt="Imagen DYRA"
-        class="w-full max-w-md md:max-w-lg h-auto rounded-clinical-lg object-cover shadow-xl ring-1 ring-black/5"
-        loading="lazy"
-        decoding="async"
-        width={512}
-        height={400}
-      />
-
-      <div
-        class="pointer-events-none absolute -bottom-4 left-6 flex items-center gap-2 rounded-full border border-green-primary/15 bg-white px-4 py-2 shadow-md"
+<section aria-labelledby="about-title" class="space-y-8">
+  <div class="grid gap-6 lg:grid-cols-12 lg:items-end">
+    <SectionHeader
+      id="about-title"
+      class="lg:col-span-7"
+      title="Diagnóstico y Referencia Analítica"
+      lead="Brindamos diagnóstico clínico y referencia analítica con procesos estandarizados y control de calidad, para entregar resultados confiables que apoyen las decisiones médicas."
+    />
+    <div class="lg:col-span-5 lg:text-right">
+      <a
+        href="/about"
+        class="inline-flex items-center gap-1 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline"
       >
-        <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
-        <span
-          class="text-2xs font-bold uppercase tracking-widest text-brand-ink"
-        >
-          Laboratorio certificado
-        </span>
-      </div>
+        Conoce al laboratorio
+        <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+      </a>
     </div>
   </div>
+
+  <Metrics />
 </section>

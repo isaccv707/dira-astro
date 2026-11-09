@@ -7,10 +7,19 @@ interface Props {
   /** id for aria-labelledby on the parent <section>. */
   id?: string;
   as?: "h1" | "h2" | "h3";
+  /** Brand mark above the title; turn off when an Eyebrow already sits there. */
+  mark?: boolean;
   class?: string;
 }
 
-const { title, lead, id, as: Heading = "h2", class: className } = Astro.props;
+const {
+  title,
+  lead,
+  id,
+  as: Heading = "h2",
+  mark = true,
+  class: className,
+} = Astro.props;
 const hasAside = Astro.slots.has("aside");
 ---
 
@@ -21,6 +30,15 @@ const hasAside = Astro.slots.has("aside");
   ]}
 >
   <div>
+    {
+      mark && (
+        <span aria-hidden="true" class="mb-3 flex h-1.5 w-14 overflow-hidden rounded-full">
+          <span class="flex-[2] bg-green-primary" />
+          <span class="flex-1 bg-green-secondary" />
+          <span class="flex-1 bg-yellow-primary" />
+        </span>
+      )
+    }
     <Heading id={id} class={sectionTitleStyles}>{title}</Heading>
     {lead && <p class={sectionLeadStyles}>{lead}</p>}
   </div>

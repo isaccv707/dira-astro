@@ -70,17 +70,18 @@ const jsonLd = [
     description={description}
     imageUrl={imageUrl}
     mobileImageUrl={mobileImageUrl}
+    studyCount={catalogQuery.search || catalogQuery.studyType !== "all" ? 0 : (service.studies?.total ?? 0)}
   />
-
-  <ServiceBenefitsSection benefits={benefits} />
-
-  <ServiceDetailsSection details={details} />
 
   <ServicesSection
     service={service}
     catalogQuery={catalogQuery}
     pageSize={STUDIES_PAGE_SIZE}
   />
+
+  <ServiceBenefitsSection benefits={benefits} />
+
+  <ServiceDetailsSection details={details} />
 
   <ServiceRecommendedSection currentServiceId={id} />
 

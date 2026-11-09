@@ -1,29 +1,83 @@
 ---
-import { buildSocialNetworks } from "../../../constants/socialNetworks";
+import { Icon } from "astro-icon/components";
 import { getActiveBranchContact } from "../../../api/branchesApi/branchesApi";
-import NavigationButton from "../navigation/NavigationButton.astro";
+import { buildWhatsappUrl } from "../../../utils/whatsapp";
+import { urlWhatsapp } from "../../../constants/urlWhatsapp";
+import { brandFill } from "../../../styles/ui";
 
-const socialNetworks = buildSocialNetworks(await getActiveBranchContact());
+interface Props {
+  /** "section" = full-width block at the end of a page; "inline" = compact box. */
+  variant?: "section" | "inline";
+}
+
+const { variant = "section" } = Astro.props;
+const contact = await getActiveBranchContact();
+const whatsappUrl = contact?.phone ? buildWhatsappUrl(contact.phone) : urlWhatsapp;
+
+const channels = [
+  whatsappUrl && {
+    href: whatsappUrl,
+    icon: "tabler:brand-whatsapp",
+    label: "WhatsApp",
+    detail: "Agenda o resuelve dudas",
+    external: true,
+  },
+  contact?.phone && {
+    href: `tel:${contact.phone}`,
+    icon: "lucide:phone",
+    label: "Llamar",
+    detail: contact.phone,
+    external: false,
+  },
+  contact?.email && {
+    href: `mailto:${contact.email}`,
+    icon: "lucide:mail",
+    label: "Correo",
+    detail: contact.email,
+    external: false,
+  },
+].filter(Boolean) as {
+  href: string;
+  icon: string;
+  label: string;
+  detail: string;
+  external: boolean;
+}[];
 ---
 
-<div class="rounded-clinical-md border border-green-primary/15 bg-green-primary/5 p-4">
-  <p class="text-xs font-medium text-brand-ink sm:text-sm">
-    ¿Necesitas más información?
-  </p>
-  <p class="mt-1 text-xs text-ink-muted sm:text-sm mb-2">
-    Contáctanos por el medio de tu preferencia
-  </p>
-  <div class="flex gap-2 flex-row sm:items-center sm:gap-3">
-    {
-      socialNetworks.map(({ name, route, icon }) => (
-        <NavigationButton
-          href={route}
-          icon={icon}
-          target={name !== "Gmail" ? "_blank" : "_self"}
-          className="inline-flex items-center justify-center transition hover:scale-105 active:scale-95"
-          iconClassName="w-7 h-7"
-        />
-      ))
-    }
-  </div>
-</div>
+{
+  channels.length > 0 && (
+    <section
+      aria-labelledby="contact-cta-title"
+      class:list={[
+        "rounded-clinical-md border border-ui-border bg-white",
+        variant === "section" ? "p-6 sm:p-8" : "p-5",
+      ]}
+    >
+      <h2 id="contact-cta-title" class="text-lg font-bold text-ink">
+        ¿Tienes dudas sobre un estudio?
+      </h2>
+      <p class="mt-1 text-sm text-ink-muted">Escríbenos o llama a tu sucursal.</p>
+      <ul class:list={["mt-4 grid gap-3", variant === "section" && "sm:grid-cols-3"]}>
+        {channels.map((channel, index) => (
+          <li>
+            <a
+              href={channel.href}
+              target={channel.external ? "_blank" : undefined}
+              rel={channel.external ? "noopener noreferrer" : undefined}
+              class="flex items-center gap-3 rounded-clinical-sm border border-ui-border p-3 transition-colors duration-150 hover:border-brand-ink/30 hover:bg-ui-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary"
+            >
+              <span class:list={["flex h-9 w-9 shrink-0 items-center justify-center rounded-clinical-sm", brandFill(index)]}>
+                <Icon name={channel.icon} aria-hidden="true" class="h-5 w-5" />
+              </span>
+              <span class="min-w-0">
+                <span class="block text-sm font-semibold text-ink">{channel.label}</span>
+                <span class="block truncate text-xs text-ink-muted">{channel.detail}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

@@ -121,10 +121,10 @@ const QuoteSummary = ({ onContinue }: QuoteSummaryProps) => {
             <dt>IVA (16 %)</dt>
             <dd className="tabular-nums">{formatMXN(totals.tax)}</dd>
           </div>
-          <div className="flex items-baseline justify-between border-t border-ui-border pt-3">
-            <dt className="font-semibold text-ink">Total</dt>
+          <div className="!mt-3 flex items-baseline justify-between rounded-clinical-sm bg-yellow-primary px-3 py-2">
+            <dt className="font-semibold text-black-custom">Total</dt>
             <dd>
-              <Price value={totals.total} size="md" />
+              <Price value={totals.total} size="md" tone="onFill" />
             </dd>
           </div>
         </dl>
@@ -137,7 +137,7 @@ const QuoteSummary = ({ onContinue }: QuoteSummaryProps) => {
             type="button"
             onClick={onContinue}
             disabled={studies.length === 0}
-            className={`${Buttonstyles({ variant: "primary", size: "lg", width: "full" })} mt-4`}
+            className={`${Buttonstyles({ variant: "accent", size: "lg", width: "full" })} mt-4`}
           >
             Continuar con tus datos
           </button>

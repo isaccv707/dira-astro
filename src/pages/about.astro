@@ -1,47 +1,24 @@
 ---
-import AboutCardCarousel from "../components/astro/cards/AboutCardCarousel.astro";
 import Layout from "../layouts/Layout.astro";
-
-import { carouselHomeData } from "../data/carousel/carouselHome-data";
 import HeroAbout from "../sections/astro/hero/HeroAbout.astro";
 import CompanyValues from "../sections/astro/about/CompanyValues.astro";
-import MetricsDyra from "../sections/react/common/MetricsDyra";
+import SectionHeader from "../components/astro/ui/SectionHeader.astro";
+import Metrics from "../components/astro/ui/Metrics.astro";
 import Review from "../sections/astro/review/Review.astro";
 ---
 
 <Layout
-  title="Quiénes Somos | Laboratorio DYRA"
-  description="Conoce a Laboratorio DYRA: nuestra historia, valores y el equipo detrás de un diagnóstico clínico confiable, humano y tecnológico."
+  title="Quiénes somos | Laboratorio DYRA"
+  description="Conoce a Laboratorio DYRA: misión, visión, valores y el equipo detrás de un diagnóstico clínico confiable, humano y tecnológico."
 >
-  <div class="grid grid-cols-1 items-center lg:grid-cols-2 gap-10">
-    <HeroAbout />
-
-    <AboutCardCarousel
-      title={"Laboratorio DYRA"}
-      paragraph={"Diagnóstico y Referencia Analítica"}
-      images={carouselHomeData}
-      items={[
-        {
-          icon: "✔",
-          text: "Resultados con controles de calidad internos y externos",
-        },
-        {
-          icon: "⏱",
-          text: "Procesos automatizados para tiempos de respuesta óptimos",
-        },
-        {
-          icon: "🌐",
-          text: "Entrega digital y segura de resultados",
-        },
-      ]}
-    />
-  </div>
+  <HeroAbout />
 
   <CompanyValues />
 
-  <MetricsDyra client:visible />
+  <section aria-labelledby="figures-title" class="space-y-8">
+    <SectionHeader id="figures-title" title="DYRA en cifras" />
+    <Metrics />
+  </section>
 
-  <div class="mt-14">
-    <Review />
-  </div>
+  <Review />
 </Layout>

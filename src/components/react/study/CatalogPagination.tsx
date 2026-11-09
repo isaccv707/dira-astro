@@ -82,7 +82,7 @@ const CatalogPagination = ({
                 linkBase,
                 "tabular-nums",
                 page === currentPage
-                  ? "bg-brand-ink text-white"
+                  ? "bg-green-secondary text-black-custom"
                   : "text-ink hover:bg-green-primary/8 hover:text-brand-ink",
               )}
             >

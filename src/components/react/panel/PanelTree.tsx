@@ -5,8 +5,8 @@ interface PanelTreeProps {
   depth?: number;
 }
 
-// Children arrive ordered by `order` — render as-is. No prices here: the
-// panel is sold as a whole at the parent study's priceInfo.
+// Children arrive ordered by `order` — render as-is. Names only (no codes
+// or prices): the panel is sold as a whole at the parent study's priceInfo.
 const PanelTree = ({ nodes, depth = 0 }: PanelTreeProps) => (
   <ul
     className={
@@ -28,13 +28,8 @@ const PanelTree = ({ nodes, depth = 0 }: PanelTreeProps) => (
           )}
         </li>
       ) : (
-        <li key={node.id} className="flex flex-col">
-          <span className="text-xs leading-snug text-ink-muted">
-            {node.title ?? node.name}
-          </span>
-          <span className="text-2xs text-ink-subtle">
-            {[node.code, node.abbreviation].filter(Boolean).join(" · ")}
-          </span>
+        <li key={node.id} className="text-xs leading-snug text-ink-muted">
+          {node.title ?? node.name}
         </li>
       ),
     )}

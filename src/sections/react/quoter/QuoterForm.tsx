@@ -214,7 +214,7 @@ const QuoterForm = ({ onBack, onRestart }: QuoterFormProps) => {
             <button
               type="submit"
               disabled={isBusy || selectedStudies.length === 0}
-              className={Buttonstyles({ variant: "primary", size: "lg" })}
+              className={Buttonstyles({ variant: "accent", size: "lg" })}
             >
               <Download aria-hidden="true" className="h-4 w-4" />
               {isDownloading ? "Generando PDF…" : "Descargar cotización (PDF)"}
