@@ -5,6 +5,8 @@ export type GetAllStudiesParams = {
     limit?: number;
     search?: string;
     branchId?: string;
+    /** "true" = only panels (perfiles), "false" = only single studies. */
+    isPanel?: "true" | "false";
 }
 
 export interface GetAllStudiesResponse {

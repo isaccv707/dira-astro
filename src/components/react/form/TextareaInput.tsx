@@ -22,13 +22,13 @@ const TextareaInput = ({
   placeholder = "",
   value,
   onChange,
-  rows = 4,
+  rows = 5,
   error,
   isError = false,
 }: TextareaInputProps) => {
   const hasError = Boolean(error || isError);
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="flex w-full flex-col">
       <Label id={id} label={label} />
 
       <textarea
@@ -36,21 +36,19 @@ const TextareaInput = ({
         name={name}
         placeholder={placeholder}
         rows={rows}
-        value={value}
+        value={value ?? ""}
         onChange={onChange}
-        aria-invalid={isError ? "true" : "false"}
-        aria-describedby={isError ? `${id}-error` : undefined}
-        className={`
-          mt-1 block w-full rounded-clinical-sm border px-3 py-2 text-green-light
-          shadow-xs focus:outline-none focus:ring-2 focus:ring-green-primary focus:border-green-primary
-          transition-colors duration-200 ease-in-out
-          ${isError ? "border-red-custom" : "border-ui-border"}
-          resize-vertical
-        `}
+        aria-invalid={hasError ? "true" : "false"}
+        aria-describedby={hasError ? `${id}-error` : undefined}
+        className={`mt-1 block w-full resize-y rounded-clinical-sm border bg-white px-3 py-2 text-base text-ink transition-colors duration-150 placeholder:text-ink-subtle focus:outline-none focus:ring-2 sm:text-sm ${
+          hasError
+            ? "border-red-custom focus:ring-red-custom/30"
+            : "border-ui-border hover:border-brand-ink/30 focus:border-brand-ink focus:ring-green-primary/30"
+        }`}
       />
       {hasError && (
         <div className="mt-1">
-          <ErrorMessage error={error} />
+          <ErrorMessage id={`${id}-error`} error={error} />
         </div>
       )}
     </div>

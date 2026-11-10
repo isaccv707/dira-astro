@@ -1,0 +1,20 @@
+---
+import {
+  eyebrowDotStyles,
+  eyebrowStyles,
+  type EyebrowVariants,
+} from "../../../styles/ui";
+
+interface Props extends EyebrowVariants {
+  class?: string;
+  style?: string;
+  dot?: boolean;
+}
+
+const { tone, live, dot = true, class: className, style } = Astro.props;
+---
+
+<span class:list={[eyebrowStyles({ tone }), className]} style={style}>
+  {dot && <span aria-hidden="true" class={eyebrowDotStyles({ tone, live })} />}
+  <slot />
+</span>

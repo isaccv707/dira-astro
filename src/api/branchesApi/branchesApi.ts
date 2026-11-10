@@ -48,6 +48,10 @@ const getActiveBranch = async (branchId?: string): Promise<Branch | null> => {
   }
 };
 
+/** Active branch with address, state and schedules (GET /branches/:id). */
+export const getActiveBranchDetails = (branchId?: string) =>
+  getActiveBranch(branchId);
+
 export const getActiveBranchResultsUrl = async (
   branchId?: string,
 ): Promise<string | null> => {

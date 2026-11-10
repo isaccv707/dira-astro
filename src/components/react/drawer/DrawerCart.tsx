@@ -1,3 +1,4 @@
+import { formatMXN } from "../../../utils/currency";
 import { useEffect, useState } from "react";
 import type { Study } from "../../../interfaces/study.interface";
 import Drawer from "./Drawer";
@@ -26,14 +27,13 @@ const DrawerStudies = ({
   const [cartItems, setCartItems] = useState<Study[]>([]);
   const { scheduleAppointment } = useCartActions();
   const { isOpen, view } = useStore(drawerStore);
+  const isActive = isOpen && view === id;
 
-  if (!isOpen || view !== id) return null;
-
-  const updateCart = () => {
-    setCartItems(getCart());
-  };
-
+  // Hooks must run on every render: subscribe only while this drawer is
+  // open, and bail out of rendering after the hooks, never before them.
   useEffect(() => {
+    if (!isActive) return;
+    const updateCart = () => setCartItems(getCart());
     updateCart();
     window.addEventListener(CART_UPDATED_EVENT, updateCart);
     window.addEventListener("storage", updateCart);
@@ -41,7 +41,9 @@ const DrawerStudies = ({
       window.removeEventListener(CART_UPDATED_EVENT, updateCart);
       window.removeEventListener("storage", updateCart);
     };
-  }, []);
+  }, [isActive]);
+
+  if (!isActive) return null;
 
   const handleRemove = (studyId: string) => {
     removeFromCart(studyId);
@@ -75,11 +77,11 @@ const DrawerStudies = ({
 
         <div className="mt-auto border-t border-ui-border pt-4 space-y-4 bg-white">
           <div className="flex justify-between items-center px-2">
-            <span className="text-grey-custom font-semibold uppercase text-sm tracking-wider">
+            <span className="text-ink-muted font-semibold uppercase text-sm tracking-wider">
               Total
             </span>
-            <span className="text-xl font-black text-green-light">
-              ${total.toLocaleString("es-MX", { minimumFractionDigits: 2 })}
+            <span className="text-xl font-bold tabular-nums text-ink">
+              {formatMXN(total)}
             </span>
           </div>
 

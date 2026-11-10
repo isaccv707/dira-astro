@@ -1,25 +1,26 @@
 import { Icon } from "@iconify/react";
 import type { Branch } from "../../../interfaces/branch.interface";
 import NavLinkButton from "../navigation/NavLinkButton";
+import { getFullAddress } from "../../../utils/maps.utils";
 interface MapNotFoundProps {
   branch: Branch;
 }
 
 const MapNotFound = ({ branch }: MapNotFoundProps) => {
-  const fullAddress = `${branch.address.street}, ${branch.address.extNumber}${branch.address.intNumber ? ` Int. ${branch.address.intNumber}` : ""}, ${branch.address.neighborhood}, CP ${branch.address.zipCode}, ${branch.address.city}`;
+  const fullAddress = getFullAddress(branch);
 
   return (
     <div className="flex min-h-100 flex-col items-center justify-center p-8 text-center bg-ui-bg">
       <div className="rounded-full bg-white p-4 mb-4">
         <Icon
           icon={"tabler:map-cancel"}
-          className="w-10 h-auto text-red-custom"
+          className="h-10 w-auto text-ink-subtle" aria-hidden="true"
         />
       </div>
-      <p className="text-lg font-black tracking-tight text-green-light">
+      <p className="text-lg font-bold tracking-tight text-ink">
         Mapa no disponible
       </p>
-      <p className="mt-2 text-sm text-grey-custom max-w-60">
+      <p className="mt-2 text-sm text-ink-muted max-w-60">
         No pudimos cargar el mapa interactivo, pero puedes ver la ubicación
         directamente en Google Maps.
       </p>

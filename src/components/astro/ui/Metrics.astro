@@ -1,0 +1,39 @@
+---
+import { METRICSDYRA } from "../../../data/about/metricsDyra-data";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// Static figures, no count-up animation: the numbers are the content.
+const format = (value: string | number) =>
+  typeof value === "number" ? value.toLocaleString("es-MX") : value;
+
+// Each figure keeps its own brand color as a solid mark (fill, not text).
+const MARK_COLORS = ["bg-green-secondary", "bg-yellow-primary", "bg-green-light"];
+---
+
+<dl
+  class:list={[
+    "grid divide-y divide-ui-border overflow-hidden rounded-clinical-lg border border-ui-border bg-white shadow-xs sm:grid-cols-3 sm:divide-x sm:divide-y-0",
+    className,
+  ]}
+>
+  {
+    METRICSDYRA.map((item, index) => (
+      <div class="flex flex-col gap-2 p-6 sm:p-8">
+        <dd class="order-1 text-4xl font-bold tracking-tight text-ink tabular-nums">
+          <span
+            aria-hidden="true"
+            class:list={["mb-4 block h-1 w-10 rounded-full", MARK_COLORS[index % MARK_COLORS.length]]}
+          />
+          {`${format(item.value)}${item.suffix ?? ""}`}
+        </dd>
+        <dt class="order-2 text-sm font-semibold text-brand-ink">{item.label}</dt>
+        <dd class="order-3 text-sm leading-relaxed text-ink-muted">{item.description}</dd>
+      </div>
+    ))
+  }
+</dl>

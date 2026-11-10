@@ -60,6 +60,22 @@ export const selectQuoterService = (service: QuoterService) => {
   setQuoterService(service);
 };
 
+/**
+ * True when adding a study of `service` would drop the studies already in
+ * the quote (they belong to another service's price sheet). Callers must
+ * ask the visitor before calling addStudyToQuote in that case.
+ */
+export const wouldReplaceQuote = (service: Pick<QuoterService, "id">) => {
+  const current = getQuoterService();
+  return Boolean(current && current.id !== service.id && getQuoterStudies().length > 0);
+};
+
+/** Adds a study to the quote, pinning the quote to that study's service. */
+export const addStudyToQuote = (study: Study, service: QuoterService) => {
+  selectQuoterService(service);
+  addQuoterStudy(study);
+};
+
 export const clearStudies = () => {
   clientStore.set(null);
   clearQuoterStudies();

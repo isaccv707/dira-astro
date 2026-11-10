@@ -12,7 +12,6 @@ import type { Branch } from "../../../interfaces/branch.interface";
 
 const BranchSection = () => {
   const [branchData, setBranchData] = useState<Branch | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const savedBranchId = getStoredBranchId();
@@ -22,10 +21,7 @@ const BranchSection = () => {
         .then((data) => {
           setBranchData(data);
         })
-        .catch((err) => console.error("Error al traer la sucursal:", err))
-        .finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
+        .catch((err) => console.error("Error al traer la sucursal:", err));
     }
   }, []);
 
@@ -37,20 +33,13 @@ const BranchSection = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-400px items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-green-secondary"></div>
-      </div>
-    );
-  }
 
   return (
     <section className="space-y-8">
       {/* Switch-branch module */}
-      <div className="flex flex-col items-start gap-5 rounded-clinical-lg border border-ui-border bg-white p-6 shadow-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col items-start gap-5 rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-clinical-md bg-green-primary/8 text-green-primary">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-clinical-md bg-green-primary/8 text-brand-ink">
             {branchData ? (
               <Store className="h-6 w-6" strokeWidth={1.75} />
             ) : (
@@ -58,17 +47,17 @@ const BranchSection = () => {
             )}
           </div>
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-wide text-green-primary">
+            <p className="text-xs font-semibold text-brand-ink">
               {branchData
                 ? "Sucursal seleccionada"
                 : "Ninguna sucursal seleccionada"}
             </p>
-            <p className="mt-1 text-lg font-black tracking-tight text-green-light">
+            <p className="mt-1 text-lg font-bold tracking-tight text-ink">
               {branchData
                 ? branchData.name
                 : "Elige la sucursal más cercana a ti"}
             </p>
-            <p className="mt-1 text-sm text-grey-custom">
+            <p className="mt-1 text-sm text-ink-muted">
               {branchData
                 ? "Precios, estudios y resultados se ajustan a esta sucursal."
                 : "Así verás precios, estudios y resultados de tu zona."}

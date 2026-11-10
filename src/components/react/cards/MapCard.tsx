@@ -34,7 +34,7 @@ const MapCard = ({ branch }: MapCardProps) => {
         </div>
 
         {/* Current-selection confirmation */}
-        <div className="flex items-center gap-2 border-t border-ui-border px-5 py-4 text-sm text-green-primary">
+        <div className="flex items-center gap-2 border-t border-ui-border px-5 py-4 text-sm text-brand-ink">
           <CheckCircle2 className="h-4 w-4 shrink-0" strokeWidth={2} />
           <span>
             Actualmente esta es la sucursal que seleccionaste para realizar
@@ -45,28 +45,28 @@ const MapCard = ({ branch }: MapCardProps) => {
         {/* Facts: schedule, services */}
         <div className="grid grid-cols-1 gap-6 border-t border-ui-border px-5 py-5 sm:grid-cols-2">
           <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-primary/10 text-green-primary">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-primary/10 text-brand-ink">
               <Clock className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-grey-custom">
+              <p className="text-xs font-bold uppercase tracking-widest text-ink-muted">
                 Horarios
               </p>
-              <p className="mt-1 text-sm text-green-light">
+              <p className="mt-1 text-sm text-ink">
                 {scheduleText || "Consulta directamente en sucursal"}
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-primary/10 text-green-primary">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-primary/10 text-brand-ink">
               <ClipboardList className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-grey-custom">
+              <p className="text-xs font-bold uppercase tracking-widest text-ink-muted">
                 Servicios
               </p>
-              <p className="mt-1 flex flex-wrap gap-x-1 text-sm text-green-light">
+              <p className="mt-1 flex flex-wrap gap-x-1 text-sm text-ink">
                 {services.length > 0
                   ? services.map((service, index) => (
                       <span key={service.id}>
@@ -77,7 +77,7 @@ const MapCard = ({ branch }: MapCardProps) => {
                           {service.name}
                         </a>
                         {index < services.length - 1 && (
-                          <span className="text-grey-custom"> | </span>
+                          <span className="text-ink-muted"> | </span>
                         )}
                       </span>
                     ))
@@ -88,9 +88,9 @@ const MapCard = ({ branch }: MapCardProps) => {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2 px-2 text-grey-custom/70">
+      <div className="mt-4 flex items-center gap-2 px-2 text-ink-subtle">
         <Icon icon={"lucide:info"} />
-        <p className="text-[10px] font-medium leading-tight">
+        <p className="text-2xs font-medium leading-tight">
           La visualización del mapa depende de la disponibilidad de Google Maps.
           Si no carga, usa el botón "Abrir en Google Maps".
         </p>

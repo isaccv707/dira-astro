@@ -6,9 +6,10 @@ import { NavDrawer } from "./NavDrawer";
 
 interface DrawerManagerProps {
   services: Routes[];
+  resultsUrl: string;
 }
 
-const DrawerManager = ({ services }: DrawerManagerProps) => {
+const DrawerManager = ({ services, resultsUrl }: DrawerManagerProps) => {
   const { isOpen, view } = useStore(drawerStore);
   if (!isOpen) return null;
 
@@ -16,7 +17,7 @@ const DrawerManager = ({ services }: DrawerManagerProps) => {
     case "DRAWER_STUDIES":
       return <DrawerCart />;
     case "DRAWER_NAVBAR":
-      return <NavDrawer services={services} />;
+      return <NavDrawer services={services} resultsUrl={resultsUrl} />;
     default:
       return null;
   }

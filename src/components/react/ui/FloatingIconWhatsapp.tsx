@@ -1,67 +1,30 @@
-import { useState } from "react";
+import { Icon } from "@iconify/react";
 
 import { urlWhatsapp } from "../../../constants/urlWhatsapp";
 import { buildWhatsappUrl } from "../../../utils/whatsapp";
 import { useActiveBranchContact } from "../../../hooks/useActiveBranchContact";
-import Button from "../buttons/Button";
-import NavLinkButton from "../navigation/NavLinkButton";
 
+/**
+ * One tap to the active branch's WhatsApp. The previous greeting popover
+ * added a step between the visitor and the chat without adding information.
+ */
 const FloatingIconWhatsapp = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const contact = useActiveBranchContact();
   const whatsappUrl = contact?.phone ? buildWhatsappUrl(contact.phone) : urlWhatsapp;
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (whatsappUrl) {
-      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-    } else {
-      console.error("Error: La URL de WhatsApp no está definida en .env");
-    }
-  };
+  if (!whatsappUrl) return null;
 
   return (
-    <>
-      {!isOpen && (
-        <Button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          variant="fab"
-          size="fab"
-          className="bg-green-primary hover:bg-green-secondary"
-          ariaLabel="Abrir chat de Whatsapp"
-          icon="tabler:brand-whatsapp"
-          iconClassName="w-7 h-auto"
-        />
-      )}
-
-      {isOpen && (
-        <div className="bg-white p-4 rounded-clinical-md shadow-2xl w-64 motion-safe:animate-fade-up relative border border-ui-border">
-          <Button
-            type="button"
-            onClick={() => setIsOpen(false)}
-            variant="icon"
-            size="icon"
-            className="absolute top-2 right-2 text-grey-custom hover:text-red-custom"
-            icon="lucide:x"
-            iconClassName="w-7 h-auto"
-          />
-
-          <p className="text-green-light font-semibold">Hola 👋</p>
-          <p className="text-grey-custom text-sm mb-3">
-            ¿Necesitas ayuda? Escríbenos por WhatsApp y te responderemos rápido.
-          </p>
-
-          <NavLinkButton
-            path="#"
-            onClick={handleClick}
-            variant="primary"
-            width="full"
-            text="Chatear"
-          />
-        </div>
-      )}
-    </>
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escribir por WhatsApp (se abre en otra pestaña)"
+      title="Escríbenos por WhatsApp"
+      className="flex h-14 w-14 items-center justify-center rounded-full bg-green-primary text-white shadow-md transition-colors duration-200 hover:bg-brand-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+    >
+      <Icon icon="tabler:brand-whatsapp" aria-hidden="true" className="h-7 w-7" />
+    </a>
   );
 };
 

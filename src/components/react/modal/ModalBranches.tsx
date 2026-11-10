@@ -25,7 +25,7 @@ const ModalBranches = () => {
       open={isOpen}
     >
       <div className="p-5">
-        <p className="text-sm text-grey-custom">{paragraph}</p>
+        <p className="text-sm text-ink-muted">{paragraph}</p>
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {data.slice(0, 2).map((branch: Branch) => (

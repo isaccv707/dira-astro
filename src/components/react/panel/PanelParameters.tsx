@@ -29,12 +29,12 @@ const PanelParameters = ({ studyId }: PanelParametersProps) => {
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         aria-controls={contentId}
-        className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-bold text-green-light transition hover:text-green-primary"
+        className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-bold text-ink transition hover:text-brand-ink"
       >
         <span>
           Ver parámetros
           {leafCount !== null && (
-            <span className="ml-1 font-semibold text-grey-custom/70">
+            <span className="ml-1 font-semibold text-ink-subtle">
               ({leafCount})
             </span>
           )}
@@ -66,13 +66,13 @@ const PanelParameters = ({ studyId }: PanelParametersProps) => {
 
           {status === "error" && (
             <div className="flex flex-col items-start gap-2">
-              <p className="text-xs leading-relaxed text-grey-custom">
+              <p className="text-xs leading-relaxed text-ink-muted">
                 No pudimos cargar los parámetros.
               </p>
               <button
                 type="button"
                 onClick={retry}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-green-primary hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-ink hover:underline"
               >
                 <RotateCw className="h-3.5 w-3.5" />
                 Reintentar
@@ -83,13 +83,13 @@ const PanelParameters = ({ studyId }: PanelParametersProps) => {
           {status === "success" && tree && (
             tree.children.length > 0 ? (
               <>
-                <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-grey-custom/70">
+                <p className="mb-2 text-2xs font-bold uppercase tracking-wide text-ink-subtle">
                   {leafCount} {leafCount === 1 ? "parámetro" : "parámetros"}
                 </p>
                 <PanelTree nodes={tree.children} />
               </>
             ) : (
-              <p className="text-xs leading-relaxed text-grey-custom">
+              <p className="text-xs leading-relaxed text-ink-muted">
                 Este perfil no tiene parámetros registrados
               </p>
             )
