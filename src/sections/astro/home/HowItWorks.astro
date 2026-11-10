@@ -1,0 +1,62 @@
+---
+import SectionHeader from "../../../components/astro/ui/SectionHeader.astro";
+import { brandFill } from "../../../styles/ui";
+import { getActiveBranchResultsUrl } from "../../../api/branchesApi/branchesApi";
+
+const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
+
+// A real sequence, so the numbers carry meaning.
+const steps = [
+  {
+    title: "Busca tu estudio",
+    text: "Consulta el precio de tu sucursal, el tipo de muestra y en cuántos días entregamos resultados.",
+    link: { href: "/estudios", label: "Ver estudios" },
+  },
+  {
+    title: "Revisa la preparación",
+    text: "Cada estudio indica si requiere ayuno y cuántas horas. Síguelo para que tu muestra sea válida.",
+    link: null,
+  },
+  {
+    title: "Toma de muestra",
+    text: "Acude a tu sucursal o solicita la toma a domicilio para ti o tu empresa.",
+    link: { href: "/branches", label: "Ver sucursales" },
+  },
+  {
+    title: "Recibe tus resultados",
+    text: "Consúltalos en línea cuando estén listos y compártelos con tu médico.",
+    link: { href: resultsUrl, label: "Consultar resultados" },
+  },
+];
+---
+
+<section aria-labelledby="how-title" class="space-y-8">
+  <SectionHeader id="how-title" title="Cómo funciona" lead="De la búsqueda al resultado, en cuatro pasos." />
+
+  <ol class="grid gap-px overflow-hidden rounded-clinical-md border border-ui-border bg-ui-border sm:grid-cols-2 lg:grid-cols-4">
+    {
+      steps.map((step, index) => (
+        <li class="flex flex-col bg-white p-6">
+          <span
+            aria-hidden="true"
+            class:list={["flex h-10 w-10 items-center justify-center rounded-full font-mono text-sm font-semibold", brandFill(index)]}
+          >
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <h3 class="mt-4 text-base font-bold text-ink">{step.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-muted">{step.text}</p>
+          {step.link && (
+            <a
+              href={step.link.href}
+              target={step.link.href.startsWith("http") ? "_blank" : undefined}
+              rel={step.link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              class="mt-auto pt-4 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline"
+            >
+              {step.link.label}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</section>

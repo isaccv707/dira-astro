@@ -1,97 +1,139 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, Plus, ShieldCheck } from "lucide-react";
+import clsx from "clsx";
+
+import Price from "../ui/Price";
 import type { Study } from "../../../interfaces/study.interface";
 import {
-  addQuoterStudy,
-  removeQuoterStudy,
   getQuoterStudies,
+  getQuoterService,
+  removeQuoterStudy,
   QUOTER_UPDATED_EVENT,
+  type QuoterService,
 } from "../../../utils/quoterStudies";
-import Button from "../buttons/Button";
-import NavLinkButton from "../navigation/NavLinkButton";
+import { addStudyToQuote, wouldReplaceQuote } from "../../../stores/quoterStore";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
 
 interface StudyActionCardProps {
   study: Study;
+  /** Service whose price sheet quotes this study; null = not quotable online. */
+  quoterService?: QuoterService | null;
 }
 
-const StudyActionCard = ({ study }: StudyActionCardProps) => {
+/** Price + "add to quote" box on the study page. */
+const StudyActionCard = ({ study, quoterService = null }: StudyActionCardProps) => {
   const { id, priceInfo } = study;
   const [isInQuote, setIsInQuote] = useState(false);
+  const [confirmReplace, setConfirmReplace] = useState(false);
 
   useEffect(() => {
-    const checkQuoteStatus = () =>
-      setIsInQuote(getQuoterStudies().some((s) => s.id === id));
-
-    checkQuoteStatus();
-    window.addEventListener(QUOTER_UPDATED_EVENT, checkQuoteStatus);
-    window.addEventListener("storage", checkQuoteStatus);
+    const sync = () => setIsInQuote(getQuoterStudies().some((s) => s.id === id));
+    sync();
+    window.addEventListener(QUOTER_UPDATED_EVENT, sync);
+    window.addEventListener("storage", sync);
     return () => {
-      window.removeEventListener(QUOTER_UPDATED_EVENT, checkQuoteStatus);
-      window.removeEventListener("storage", checkQuoteStatus);
+      window.removeEventListener(QUOTER_UPDATED_EVENT, sync);
+      window.removeEventListener("storage", sync);
     };
   }, [id]);
 
-  const handleAction = () => {
-    if (isInQuote) {
-      removeQuoterStudy(id);
-    } else {
-      addQuoterStudy(study);
+  const canQuote = Boolean(quoterService && priceInfo?.showPrice);
+
+  const add = () => {
+    if (!quoterService) return;
+    if (wouldReplaceQuote(quoterService)) {
+      setConfirmReplace(true);
+      return;
     }
+    addStudyToQuote(study, quoterService);
+  };
+
+  const confirmAdd = () => {
+    if (quoterService) addStudyToQuote(study, quoterService);
+    setConfirmReplace(false);
   };
 
   return (
-    <div className="bg-white p-6 rounded-clinical-lg shadow-xs border border-ui-border">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-grey-custom">
-        Precio del estudio
-      </p>
+    <div className="rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs">
+      <p className="text-sm font-semibold text-ink-muted">Precio del estudio</p>
 
       {priceInfo?.showPrice ? (
-        <div className="mt-2 flex items-baseline gap-1">
-          <span className="text-sm font-black text-grey-custom">$</span>
-          <span className="text-4xl font-black text-green-light tracking-tighter">
-            {Number(priceInfo.price).toLocaleString("es-MX", {
-              minimumFractionDigits: 2,
-            })}
-          </span>
-          <span className="ml-1 text-[10px] font-black uppercase tracking-widest text-green-light/60">
-            MXN
-          </span>
-        </div>
+        <Price value={priceInfo.price} size="lg" className="mt-1" />
       ) : (
-        <div className="mt-2 w-fit rounded-clinical-md border border-ui-border bg-ui-bg px-4 py-2">
-          <span className="text-[10px] font-black uppercase tracking-widest text-green-light">
-            {priceInfo?.message ?? "Consulte en sucursal"}
-          </span>
+        <p className="mt-1 text-sm text-ink">
+          {priceInfo?.message ?? "Consulta el precio en sucursal"}
+        </p>
+      )}
+
+      {canQuote && (
+        <div className="mt-5 space-y-3">
+          <button
+            type="button"
+            onClick={isInQuote ? () => removeQuoterStudy(id) : add}
+            aria-pressed={isInQuote}
+            className={clsx(
+              Buttonstyles({ variant: isInQuote ? "outline" : "accent", size: "lg", width: "full" }),
+            )}
+          >
+            {isInQuote ? (
+              <>
+                <Check aria-hidden="true" className="h-4 w-4" />
+                En tu cotización · Quitar
+              </>
+            ) : (
+              <>
+                <Plus aria-hidden="true" className="h-4 w-4" />
+                Agregar a la cotización
+              </>
+            )}
+          </button>
+
+          {confirmReplace && (
+            <div
+              role="alertdialog"
+              aria-labelledby="replace-title"
+              className="rounded-clinical-sm border border-yellow-secondary/40 bg-yellow-primary/10 p-3 text-sm"
+            >
+              <p id="replace-title" className="flex items-start gap-2 text-ink">
+                <AlertTriangle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-yellow-ink" />
+                Tu cotización tiene estudios de {getQuoterService()?.name}. Una cotización
+                solo puede incluir un servicio; si continúas, se reemplazan.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={confirmAdd}
+                  className={Buttonstyles({ variant: "primary", size: "sm" })}
+                >
+                  Reemplazar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmReplace(false)}
+                  className={Buttonstyles({ variant: "outline", size: "sm" })}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isInQuote && (
+            <a
+              href="/quoter"
+              className={Buttonstyles({ variant: "ghost", size: "md", width: "full" })}
+            >
+              Ir al cotizador
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </a>
+          )}
         </div>
       )}
 
-      <div className="mt-6 space-y-3">
-        <Button
-          type="button"
-          onClick={handleAction}
-          variant={isInQuote ? "danger" : "primary"}
-          width="full"
-          size="lg"
-          text={isInQuote ? "Quitar del cotizador" : "Agregar al cotizador"}
-          icon={isInQuote ? "lucide:trash-2" : "lucide:shopping-cart"}
-        />
-
-        {isInQuote && (
-          <NavLinkButton
-            path="/quoter"
-            variant="ghost"
-            width="full"
-            size="md"
-            text="Ir al cotizador"
-            icon="lucide:arrow-right"
-          />
-        )}
-      </div>
-
-      <p className="mt-4 flex items-start gap-2 text-[11px] leading-relaxed text-grey-custom/70">
-        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-primary" />
-        Precio de referencia para tu sucursal seleccionada. Puedes ajustarla desde
-        el selector del sitio.
+      <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ink-subtle">
+        <ShieldCheck aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-ink" />
+        Precio de referencia de tu sucursal, con IVA incluido. Cambia de
+        sucursal desde el encabezado.
       </p>
     </div>
   );

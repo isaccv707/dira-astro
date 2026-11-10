@@ -1,43 +1,48 @@
 ---
-import NavLinkButton from "../components/react/navigation/NavLinkButton";
 import Layout from "../layouts/Layout.astro";
+import StudySearch from "../components/react/search/StudySearch";
 
 // Served directly (and via Astro.rewrite from dynamic routes) with a real 404
 // status, so missing pages are not indexed as soft 404s.
 Astro.response.status = 404;
+
+const links = [
+  { href: "/estudios", label: "Catálogo de estudios" },
+  { href: "/quoter", label: "Cotizador" },
+  { href: "/branches", label: "Sucursales" },
+  { href: "/", label: "Inicio" },
+];
 ---
 
 <Layout
   title="Página no encontrada | DYRA"
-  description="La página que buscas no existe o fue movida. Regresa al inicio de Laboratorio DYRA."
+  description="La página que buscas no existe o fue movida. Busca tu estudio o regresa al inicio de Laboratorio DYRA."
   noindex
 >
-  <section class="grid min-h-[60vh] place-items-center">
-    <div class="text-center max-w-lg">
-      <h1
-        class="text-7xl sm:text-8xl font-black text-green-secondary drop-shadow-md"
-      >
-        404
-      </h1>
+  <section class="mx-auto max-w-xl py-8 text-center">
+    <p class="font-mono text-sm font-medium text-brand-ink">Error 404</p>
+    <h1 class="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      No encontramos esta página
+    </h1>
+    <p class="mt-4 text-base leading-relaxed text-ink-muted">
+      Puede que el enlace esté mal escrito o que el estudio ya no esté
+      disponible en tu sucursal. Búscalo de nuevo:
+    </p>
 
-      <h2
-        class="mt-6 text-3xl sm:text-4xl font-black tracking-tight text-green-light"
-      >
-        Página no encontrada
-      </h2>
-
-      <p class="mt-4 text-lg sm:text-xl text-grey-custom">
-        Lo sentimos, no pudimos encontrar la página que estás buscando.
-      </p>
-
-      <div class="mt-10 flex justify-center">
-        <NavLinkButton
-          path="/"
-          text="Ir al inicio"
-          variant={"primary"}
-          size="md"
-        />
-      </div>
+    <div class="mt-8 text-left">
+      <StudySearch client:idle variant="inline" size="lg" />
     </div>
+
+    <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm font-semibold">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="text-brand-ink underline-offset-4 hover:underline">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 </Layout>

@@ -1,15 +1,30 @@
 import type { Branch } from "../interfaces/branch.interface";
 
+const present = (value?: string | null): value is string =>
+  Boolean(value && value.trim() && value.trim() !== "null");
+
 export const getFullAddress = (branch: Branch): string => {
   if (!branch.address) return "";
 
   const { street, extNumber, intNumber, neighborhood, zipCode, city } =
     branch.address;
-  const stateName = branch.state?.name || "";
 
-  const interior = intNumber ? ` Int. ${intNumber}` : "";
+  // Optional parts (interior, neighborhood, ...) may be null in the API:
+  // skip them instead of printing "null".
+  const streetLine = [street, extNumber].filter(present).join(" ");
+  const withInterior = present(intNumber)
+    ? `${streetLine} Int. ${intNumber}`
+    : streetLine;
 
-  return `${street} ${extNumber}${interior}, ${neighborhood}, CP ${zipCode}, ${city}, ${stateName}`;
+  return [
+    withInterior,
+    neighborhood,
+    present(zipCode) ? `CP ${zipCode}` : null,
+    city,
+    branch.state?.name,
+  ]
+    .filter(present)
+    .join(", ");
 };
 
 export const getBranchMapEmbedUrl = (branch: Branch): string => {

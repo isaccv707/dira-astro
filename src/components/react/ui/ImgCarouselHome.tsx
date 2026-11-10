@@ -46,8 +46,8 @@ const ImgCarouselHome = ({
         {/* Mobile: 4:5 ratio (800x1000px) */}
         <img
           src={finalMobileUrl}
-          alt={`Banner Informativo DYRA - ${index + 1}`}
-          className="w-full h-auto aspect-4/5 md:aspect-2/1 object-cover rounded-clinical-lg transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+          alt={`Aviso de DYRA ${index + 1}`}
+          className="w-full h-auto aspect-4/5 md:aspect-2/1 object-cover rounded-clinical-lg"
           loading={isLCP ? "eager" : "lazy"}
           fetchPriority={isLCP ? "high" : "auto"}
           decoding={isLCP ? "sync" : "async"}

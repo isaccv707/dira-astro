@@ -1,43 +1,91 @@
 ---
+import { Icon } from "astro-icon/components";
+import Eyebrow from "../components/astro/ui/Eyebrow.astro";
+import SectionHeader from "../components/astro/ui/SectionHeader.astro";
 import Layout from "../layouts/Layout.astro";
 import Branch from "../sections/react/branch/Branch";
 import { getBranchesWithSchedules } from "../api/branchesApi/branchesApi";
 import { branchJsonLd } from "../utils/structuredData";
+import { getFullAddress } from "../utils/maps.utils";
+import { formatSchedule } from "../utils/schedule.utils";
 
 const branches = await getBranchesWithSchedules();
 const jsonLd = branches.map(branchJsonLd);
+
+const mapsUrl = (address: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`DYRA Laboratorio ${address}`)}`;
 ---
 
 <Layout
-  title="Nuestras Sucursales | DYRA"
-  description="Encuentra tu sucursal de Laboratorio DYRA más cercana. Contamos con múltiples ubicaciones para tu comodidad."
+  title="Sucursales | Laboratorio DYRA"
+  description="Direcciones, teléfonos y horarios de las sucursales de Laboratorio DYRA en Jalisco y Colima."
   jsonLd={jsonLd}
 >
-  <header class="mb-14">
-    <p
-      class="inline-flex items-center gap-2 rounded-full border border-green-secondary/60 bg-green-secondary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-green-secondary"
-    >
-      Ubicaciones
-      <span class="h-1 w-1 rounded-full bg-green-secondary"></span>
-      DYRA Laboratorio
-    </p>
-
-    <h1
-      class="mt-4 text-3xl font-extrabold tracking-tight text-yellow-secondary sm:text-4xl lg:text-5xl"
-    >
-      Nuestras sucursales a
-      <span
-        class="block bg-linear-to-r from-green-primary via-green-secondary to-yellow-primary bg-clip-text text-transparent"
-      >
-        tu alcance en todo momento.
-      </span>
+  <header class="max-w-3xl">
+    <Eyebrow>Sucursales</Eyebrow>
+    <h1 class="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      Encuentra tu sucursal
     </h1>
-
-    <p class="mt-4 max-w-xl text-pretty text-sm text-grey-custom sm:text-base">
-      Contamos con múltiples puntos de atención para tu comodidad. Cada una de
-      nuestras sucursales cumple con los más altos estándares de calidad y
-      tecnología.
+    <p class="mt-3 text-base leading-relaxed text-ink-muted">
+      Elige la sucursal donde te vas a atender: los precios, estudios y
+      resultados del sitio se ajustan a ella.
     </p>
   </header>
+
   <Branch client:load />
+
+  {
+    branches.length > 0 && (
+      <section aria-labelledby="all-branches-title" class="space-y-6">
+        <SectionHeader id="all-branches-title" title="Todas las sucursales" />
+        <ul class="grid gap-4 md:grid-cols-2">
+          {branches.map((branch) => {
+            const address = getFullAddress(branch);
+            const hours = formatSchedule(branch.schedules).split(", ").filter(Boolean);
+            return (
+              <li class="rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs">
+                {branch.state?.name && (
+                  <p class="text-xs font-semibold text-brand-ink">{branch.state.name}</p>
+                )}
+                <h3 class="mt-1 text-lg font-bold text-ink">{branch.name}</h3>
+                <address class="mt-3 space-y-2 text-sm not-italic text-ink-muted">
+                  {address && (
+                    <p class="flex gap-2">
+                      <Icon name="lucide:map-pin" aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-brand-ink" />
+                      <a
+                        href={mapsUrl(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="underline-offset-4 hover:text-brand-ink hover:underline"
+                      >
+                        {address}
+                      </a>
+                    </p>
+                  )}
+                  {branch.phone && (
+                    <p class="flex items-center gap-2">
+                      <Icon name="lucide:phone" aria-hidden="true" class="h-4 w-4 shrink-0 text-brand-ink" />
+                      <a href={`tel:${branch.phone}`} class="font-mono hover:text-brand-ink">
+                        {branch.phone}
+                      </a>
+                    </p>
+                  )}
+                  {hours.length > 0 && (
+                    <div class="flex gap-2">
+                      <Icon name="lucide:clock" aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-brand-ink" />
+                      <ul>
+                        {hours.map((line) => (
+                          <li class="tabular-nums">{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </address>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )
+  }
 </Layout>

@@ -1,220 +1,147 @@
 ---
 import { Icon } from "astro-icon/components";
-import { Icon as ReactIcon } from "@iconify/react";
-import logo from "../../../assets/images/logos/logo.png";
-import NavLinkButton from "../../../components/react/navigation/NavLinkButton";
+import Eyebrow from "../../../components/astro/ui/Eyebrow.astro";
+import { brandFill } from "../../../styles/ui";
+
+const heroAccent = "text-green-primary"; // ui-guard-ok: 36px+ heading, 4.0:1 ≥ 3:1 large-text AA
+import StudySearch from "../../../components/react/search/StudySearch";
 import CarouselHome from "../home/CarouselHome.astro";
-import ServicesCarousel from "../../../components/react/carousel/Carousel";
-import { getAllService } from "../../../api/servicesApi/serviceApi";
-import type { Service } from "../../../interfaces/service.interface";
+import fallbackBanner from "../../../assets/images/home/carousel/2A.jpg";
+import {
+  getActiveBranchContact,
+  getActiveBranchResultsUrl,
+} from "../../../api/branchesApi/branchesApi";
+import { buildWhatsappUrl } from "../../../utils/whatsapp";
+import { urlWhatsapp } from "../../../constants/urlWhatsapp";
 
-const reveal = (delayMs: number) =>
-  `animation-delay:${delayMs}ms; animation-fill-mode:backwards;`;
+const contact = await getActiveBranchContact();
+const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
+const whatsappUrl = contact?.phone
+  ? buildWhatsappUrl(contact.phone)
+  : urlWhatsapp;
 
-let services: Service[] = [];
-try {
-  services = await getAllService();
-} catch (error) {
-  console.error("Error al obtener los servicios:", error);
-}
-
-const ASTRO_ICON_SETS = ["lucide:", "tabler:", "logos:", "simple-icons:"];
-const isAstroIcon = (icon?: string): icon is string =>
-  !!icon &&
-  !icon.startsWith("http") &&
-  ASTRO_ICON_SETS.some((set) => icon.startsWith(set));
-const isImgIcon = (icon?: string): icon is string =>
-  !!icon && icon.startsWith("http");
-
-const getServiceDesc = ({ _count, description }: Service) => {
-  if (_count?.studies) return `${_count.studies} estudios`;
-  return description ?? "";
-};
+// The three things patients come to do besides finding a study.
+const actions = [
+  {
+    href: "/quoter",
+    icon: "lucide:file-text",
+    label: "Cotizar estudios",
+    detail: "Total con IVA y PDF",
+    external: false,
+  },
+  {
+    href: whatsappUrl,
+    icon: "tabler:brand-whatsapp",
+    label: "Agendar por WhatsApp",
+    detail: "Escribe a tu sucursal",
+    external: true,
+  },
+  {
+    href: resultsUrl,
+    icon: "lucide:test-tube-diagonal",
+    label: "Consultar resultados",
+    detail: "En línea",
+    external: resultsUrl.startsWith("http"),
+  },
+].filter((action) => Boolean(action.href));
 ---
 
-<section class="relative overflow-hidden py-12">
-  <!-- Lab grid backdrop — precise, no blobs -->
-  <div aria-hidden="true" class="pointer-events-none absolute inset-0">
-    <div
-      class="absolute inset-0"
-      style="background-image: linear-gradient(rgba(34,143,4,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(34,143,4,0.045) 1px, transparent 1px); background-size: 48px 48px;"
-    >
-    </div>
+<section aria-labelledby="hero-title" class="relative">
+  <!-- Lab grid: hero-only motif, fades out so it never competes with content -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 -top-8 bottom-0 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+    style="background-image: linear-gradient(rgba(34,143,4,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,143,4,0.05) 1px, transparent 1px); background-size: 48px 48px;"
+  >
   </div>
 
-  <div class="relative">
-    <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
-      <div
-        class="flex flex-col items-center text-center lg:items-start lg:text-left"
+  <div class="relative grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+    <div class="lg:col-span-6">
+      <h1
+        id="hero-title"
+        class="mt-4 text-4xl font-bold leading-[1.08] tracking-tight text-ink sm:text-5xl"
       >
-        <div
-          class="mb-5 flex items-center justify-center gap-2 motion-safe:animate-fade-up lg:justify-start"
-          style={reveal(0)}
-        >
-          <div class="h-px w-8 bg-green-primary/50"></div>
-          <span
-            class="text-[10px] font-bold tracking-[0.2em] uppercase text-green-primary"
-          >
-            Laboratorio Clínico Certificado
-          </span>
-          <div class="h-px w-8 bg-green-primary/50"></div>
-        </div>
+        Tu salud, analizada con
+        <span class={heroAccent}>precisión.</span>
+      </h1>
 
-        <div
-          class="mb-6 flex items-center gap-3 motion-safe:animate-fade-up"
-          style={reveal(80)}
-        >
-          <img
-            src={logo.src}
-            alt="DYRA – Diagnóstico y Referencia Analítica"
-            class="h-12 w-12 rounded-xl object-contain shadow-sm ring-1 ring-green-primary/20"
-            loading="eager"
-            width={48}
-            height={48}
-          />
-          <div
-            class="inline-flex items-center gap-2 rounded-full border border-green-primary/20 bg-green-primary/8 px-3 py-1 text-[11px] font-semibold text-green-primary"
-          >
-            <span
-              class="h-1.5 w-1.5 animate-pulse rounded-full bg-green-primary"
-            ></span>
-            Resultados confiables · Atención rápida
-          </div>
-        </div>
+      <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-muted">
+        Busca entre los estudios de tu sucursal, revisa recomendaciones y cotiza
+        en línea. Resultados confiables para ti, tu médico y tu empresa.
+      </p>
 
-        <h1
-          class="mb-5 text-4xl font-black leading-[1.05] tracking-tight motion-safe:animate-fade-up sm:text-5xl lg:text-5xl xl:text-6xl"
-          style={reveal(140)}
-        >
-          <span class="text-green-light">Tu salud,</span><br />
-          <span class="text-green-primary">analizada</span><br />
-          <span class="text-yellow-secondary">con precisión.</span>
-        </h1>
-
-        <p
-          class="mb-8 max-w-md text-base leading-relaxed text-grey-custom motion-safe:animate-fade-up sm:text-lg"
-          style={reveal(220)}
-        >
-          Tecnología de vanguardia con atención humana. Resultados confiables
-          para ti y tu empresa en Jalisco y Colima.
+      <div class="mt-8 max-w-xl">
+        <p class="mb-2 text-sm font-semibold text-ink">
+          ¿Qué estudio necesitas?
         </p>
-
-        <div
-          class="mb-10 flex flex-wrap justify-center gap-3 motion-safe:animate-fade-up lg:justify-start"
-          style={reveal(300)}
-        >
-          <NavLinkButton
-            path="/service/analisis-clinicos"
-            variant="primary"
-            size="lg"
-            className="group"
-          >
-            Analisis Clinicos Disponibles
-            <ReactIcon
-              icon="tabler:arrow-right"
-              className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
-            />
-          </NavLinkButton>
-          <NavLinkButton
-            path="/quoter"
-            text="Cotizar estudios"
-            variant="ghost"
-            size="lg"
-            width="auto"
-          />
-        </div>
+        <StudySearch
+          client:idle
+          variant="inline"
+          size="lg"
+          placeholder="Nombre o código del estudio"
+        />
+        <p class="mt-2 text-sm text-ink-subtle">
+          O explora el <a
+            href="/estudios"
+            class="font-semibold text-brand-ink underline-offset-4 hover:underline"
+            >catálogo completo</a
+          >.
+        </p>
       </div>
 
-      <!-- ===== RIGHT: Carousel with lab targeting frame ===== -->
-      <div
-        class="flex flex-col gap-5 motion-safe:animate-fade-up"
-        style={reveal(160)}
-      >
-        <!-- Carousel — signature element: calibration bracket corners -->
-        <div class="relative">
-          <!-- Outer dashed measurement ring -->
-          <div
-            class="pointer-events-none absolute -inset-3 rounded-2xl border border-dashed border-green-primary/18"
-          >
-          </div>
-
-          <!-- Targeting brackets at carousel corners — the lab reticle signature -->
-          <div
-            class="pointer-events-none absolute -left-1 -top-1 h-5 w-5 rounded-tl-sm border-l-2 border-t-2 border-green-primary/60"
-          >
-          </div>
-          <div
-            class="pointer-events-none absolute -right-1 -top-1 h-5 w-5 rounded-tr-sm border-r-2 border-t-2 border-green-primary/60"
-          >
-          </div>
-          <div
-            class="pointer-events-none absolute -bottom-1 -left-1 h-5 w-5 rounded-bl-sm border-b-2 border-l-2 border-green-primary/60"
-          >
-          </div>
-          <div
-            class="pointer-events-none absolute -bottom-1 -right-1 h-5 w-5 rounded-br-sm border-b-2 border-r-2 border-green-primary/60"
-          >
-          </div>
-
-          <!-- Floating identification badge -->
-          <div
-            class="pointer-events-none absolute -top-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-green-primary/15 bg-white px-3 py-1 shadow-sm"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
-            <span
-              class="text-[9px] font-bold uppercase tracking-[0.12em] text-green-primary/70"
-              >DYRA Lab</span
-            >
-          </div>
-
-          <!-- Carousel -->
-          <div class="overflow-hidden rounded-xl shadow-xl ring-1 ring-black/5">
-            <CarouselHome />
-          </div>
-        </div>
-
+      <ul class="mt-8 grid gap-3 sm:grid-cols-3">
         {
-          services.length > 0 && (
-            <ServicesCarousel
-              client:load
-              slidesPreview={3}
-              swipperOptions={{ spaceBetween: 8 }}
-            >
-              {services.map((service) => (
-                <a
-                  href={`/service/${service.slug}`}
-                  class="group flex h-full flex-col items-center gap-2 rounded-xl border border-green-primary/10 bg-white p-3 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-green-primary/25 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary/40 focus-visible:ring-offset-2"
+          actions.map((action, index) => (
+            <li>
+              <a
+                href={action.href}
+                target={action.external ? "_blank" : undefined}
+                rel={action.external ? "noopener noreferrer" : undefined}
+                class="group flex h-full items-center gap-3 rounded-clinical-md border border-ui-border bg-white p-4 shadow-xs transition-[border-color,box-shadow] duration-200 hover:border-brand-ink/30 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2"
+              >
+                <span
+                  class:list={[
+                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-clinical-sm",
+                    brandFill(index),
+                  ]}
                 >
-                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-green-primary/10 transition-colors duration-200 group-hover:bg-green-primary/20">
-                    {isAstroIcon(service.icon) ? (
-                      <ReactIcon
-                        icon={service.icon}
-                        className="h-5 w-5 text-green-primary"
-                      />
-                    ) : isImgIcon(service.icon) ? (
-                      <img
-                        src={service.icon}
-                        alt=""
-                        class="h-5 w-5 object-contain"
-                      />
-                    ) : (
-                      <ReactIcon
-                        icon="tabler:flask"
-                        className="h-5 w-5 text-green-primary"
-                      />
+                  <Icon name={action.icon} aria-hidden="true" class="h-5 w-5" />
+                </span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-ink group-hover:text-brand-ink">
+                    {action.label}
+                  </span>
+                  <span class="block text-xs text-ink-muted">
+                    {action.detail}
+                    {action.external && (
+                      <span class="sr-only"> (se abre en otra pestaña)</span>
                     )}
-                  </div>
-                  <span class="text-[11px] font-bold leading-tight text-green-light">
-                    {service.name}
                   </span>
-                  <span class="line-clamp-1 text-[9px] leading-tight text-grey-custom">
-                    {getServiceDesc(service)}
-                  </span>
-                </a>
-              ))}
-            </ServicesCarousel>
-          )
+                </span>
+              </a>
+            </li>
+          ))
         }
+      </ul>
+    </div>
+
+    <div class="lg:col-span-6">
+      <!-- Brand-colored mat around the banner -->
+      <div class="rounded-clinical-lg bg-green-primary p-2 shadow-sm sm:p-3">
+        <div class="overflow-hidden rounded-clinical-md bg-white">
+          <CarouselHome>
+            <img
+              slot="fallback"
+              src={fallbackBanner.src}
+              alt="Tu salud en manos de expertos. Más de 500 análisis clínicos."
+              width={fallbackBanner.width}
+              height={fallbackBanner.height}
+              class="h-auto w-full"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </CarouselHome>
+        </div>
       </div>
     </div>
   </div>

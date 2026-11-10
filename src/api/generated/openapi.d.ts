@@ -136,6 +136,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/studies/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar estudios activos (admin)
+         * @description Como el listado general, pero limitado a las sucursales del usuario e incluye los datos de maquila (isInternal, providerName, providerCost) y hasConfiguredPrice. Acepta además el filtro isInternal.
+         */
+        get: operations["StudiesController_findAdminActive"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/studies/inactive": {
         parameters: {
             query?: never;
@@ -591,6 +611,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study-providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar maquiladores
+         * @description Listado paginado con alcance según las sucursales del usuario. Cada registro trae _count.studies (estudios y perfiles que lo usan). Usa isActive=true para llenar selects.
+         */
+        get: operations["StudyProvidersController_findAll"];
+        put?: never;
+        /**
+         * Crear maquilador
+         * @description Crea un laboratorio externo (maquilador) en una sucursal. El nombre es único por sucursal (sin distinguir mayúsculas).
+         */
+        post: operations["StudyProvidersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study-providers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener maquilador */
+        get: operations["StudyProvidersController_findOne"];
+        put?: never;
+        post?: never;
+        /**
+         * Eliminar maquilador
+         * @description Elimina el maquilador. Si algún estudio o perfil lo usa, se rechaza (409): desactívalo con isActive = false.
+         */
+        delete: operations["StudyProvidersController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Actualizar maquilador
+         * @description Actualiza nombre y/o isActive. La sucursal no se puede cambiar.
+         */
+        patch: operations["StudyProvidersController_update"];
+        trace?: never;
+    };
     "/api/banners/active/{placement}": {
         parameters: {
             query?: never;
@@ -782,7 +851,7 @@ export interface paths {
         put?: never;
         /**
          * Crear servicio
-         * @description Crea un nuevo servicio de laboratorio.
+         * @description Crea un nuevo servicio de laboratorio en una sucursal asignada al usuario.
          */
         post: operations["ServicesController_create"];
         delete?: never;
@@ -854,7 +923,7 @@ export interface paths {
         head?: never;
         /**
          * Actualizar servicio
-         * @description Actualiza los datos de un servicio existente.
+         * @description Actualiza los datos de un servicio de una sucursal asignada al usuario. Moverlo a otra sucursal (branchId) requiere acceso también a esa.
          */
         patch: operations["ServicesController_update"];
         trace?: never;
@@ -1031,6 +1100,90 @@ export interface paths {
         patch: operations["ReviewsController_approveReview"];
         trace?: never;
     };
+    "/api/contact-messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar mensajes de contacto
+         * @description Paginado, filtrable por sucursal, estatus y asunto; búsqueda por nombre, correo o teléfono. Limitado a las sucursales del usuario.
+         */
+        get: operations["ContactMessagesController_findAll"];
+        put?: never;
+        /**
+         * Enviar mensaje de contacto (sitio público)
+         * @description Guarda el mensaje del formulario /contact en la sucursal indicada con estatus NEW y avisa por correo a los usuarios con contact-messages:update de esa sucursal. Requiere aceptar el aviso de privacidad.
+         */
+        post: operations["ContactMessagesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/contact-messages/pending-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Contar mensajes nuevos
+         * @description Mensajes con estatus NEW en las sucursales del usuario (badge del menú).
+         */
+        get: operations["ContactMessagesController_countPending"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/contact-messages/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Detalle de mensaje de contacto
+         * @description Incluye el historial de estatus con quién y cuándo.
+         */
+        get: operations["ContactMessagesController_findOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/contact-messages/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Cambiar estatus / agregar seguimiento
+         * @description Cambia el estatus y/o registra una nota interna. Cada llamada queda en el historial.
+         */
+        patch: operations["ContactMessagesController_updateStatus"];
+        trace?: never;
+    };
     "/api/price-sheets": {
         parameters: {
             query?: never;
@@ -1091,8 +1244,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Descargar plantilla de importación de un tarifario
-         * @description Genera y descarga la plantilla Excel para cargar de forma masiva los estudios y precios de este tarifario específico.
+         * Descargar plantilla de importación de precios de un tarifario
+         * @description Genera y descarga una plantilla Excel vacía (con una fila de ejemplo) con las columnas code, name y price para cargar precios de estudios existentes en este tarifario. name es solo de referencia.
          */
         get: operations["PriceSheetsController_downloadImportTemplate"];
         put?: never;
@@ -1113,8 +1266,8 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Importar estudios y precios a un tarifario
-         * @description Procesa un archivo .xlsx/.xls para crear o actualizar los estudios de este tarifario junto con su precio, sin afectar los precios que esos estudios tengan en otros tarifarios.
+         * Importar precios a un tarifario
+         * @description Procesa un archivo .xlsx/.xls con las columnas code y price (name opcional, se ignora) y crea o actualiza el precio de cada estudio en este tarifario. Nunca crea ni modifica estudios: un code inexistente o inactivo en la sucursal del tarifario se reporta en invalid. Un price vacío deja la fila sin cambios (skipped). No modifica showPrice ni los precios de otros tarifarios.
          */
         post: operations["PriceSheetsController_importExcel"];
         delete?: never;
@@ -2436,13 +2589,13 @@ export interface paths {
         };
         /**
          * Listar tickets
-         * @description Devuelve los tickets paginados, filtrables por sucursal, estado, categoría, prioridad, usuario asignado (assigneeId) o solo los asignados al usuario autenticado (assignedToMe=true). Sin el permiso tickets:update, solo se devuelven los tickets reportados por el propio usuario (su histórico) más los que tiene asignados actualmente, sin importar la sucursal en la que se crearon ni las sucursales a las que el usuario esté asignado.
+         * @description Devuelve los tickets paginados, filtrables por sucursal, estado, categoría, prioridad, usuario asignado (assigneeId) o solo los asignados al usuario autenticado (assignedToMe=true). Sin el permiso tickets:update, solo se devuelven los tickets reportados por el propio usuario (su histórico) más los que tiene asignados actualmente; mine=true aplica esa misma regla a quien sí tiene tickets:update ("Mis tickets"). En ese modo, branchId acota los creados y asignados a esa sucursal, pero los asignados en sucursales a las que el usuario no tiene acceso siempre se incluyen.
          */
         get: operations["TicketsController_findAll"];
         put?: never;
         /**
          * Crear ticket
-         * @description Crea un ticket de soporte de TI en la sucursal del usuario autenticado y notifica a la sala de TI en tiempo real. Requiere el permiso tickets:create. El ticket queda enlazado a quien lo crea (createdById): esa persona podrá consultarlo siempre en su histórico, sin importar si más adelante deja de estar asignada a esa sucursal.
+         * @description Crea un ticket de soporte de TI en la sucursal del usuario autenticado y notifica a la sala de TI en tiempo real. La categoría define los datos: HARDWARE/OTHER piden title, priority y description; SOFTWARE además form (SoftwareRemoteFormDto); ACCESS solo form (AccessRequestFormDto); COGNITI exige subcategoryId y su formType define el form (StudyCreateFormDto, StudyUpdateFormDto, ClientCreateFormDto, ReferenceValuesUpdateFormDto). Con ACCESS y COGNITI el título se genera del formulario. El formulario no ejecuta nada hasta que TI lo aprueba (POST /tickets/:id/form/apply). Requiere el permiso tickets:create. El ticket queda enlazado a quien lo crea (createdById): esa persona podrá consultarlo siempre en su histórico, sin importar si más adelante deja de estar asignada a esa sucursal.
          */
         post: operations["TicketsController_create"];
         delete?: never;
@@ -2465,7 +2618,72 @@ export interface paths {
         get: operations["TicketsController_findMyNotifications"];
         put?: never;
         post?: never;
+        /**
+         * Borrar mis notificaciones
+         * @description Borra las notificaciones leídas del usuario autenticado, o todas con all=true. Las leídas de más de 90 días se borran solas.
+         */
+        delete: operations["TicketsController_purgeMyNotifications"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/notification-preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mis preferencias de correo de tickets
+         * @description Qué correos de tickets recibe el usuario autenticado. Los avisos in-app (campana) siempre llegan.
+         */
+        get: operations["TicketsController_getEmailPreferences"];
+        /**
+         * Actualizar mis preferencias de correo de tickets
+         * @description Reemplaza la lista de eventos cuyo correo no quiere recibir el usuario (mutedEvents).
+         */
+        put: operations["TicketsController_updateEmailPreferences"];
+        post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/form-options/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Roles para solicitudes de acceso
+         * @description Roles que se pueden pedir en el formulario de Accesos (id, name, description). Requiere el permiso tickets:create.
+         */
+        get: operations["TicketsController_findFormRoles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/notifications/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Borrar una notificación */
+        delete: operations["TicketsController_removeNotification"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2529,6 +2747,26 @@ export interface paths {
         patch: operations["TicketsController_update"];
         trace?: never;
     };
+    "/api/tickets/{id}/mentionable-users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Usuarios que se pueden mencionar
+         * @description Para el selector de @menciones del comentario: quien reportó, los asignados y TI de la sucursal (sin el usuario autenticado). Con internal=true (nota interna, requiere tickets:update) solo TI.
+         */
+        get: operations["TicketsController_findMentionableUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tickets/{id}/assignable-users": {
         parameters: {
             query?: never;
@@ -2583,6 +2821,126 @@ export interface paths {
          * @description Agrega un comentario al ticket. Marcar isInternal:true requiere el permiso tickets:update — el usuario que reportó el ticket y los asignados sin ese permiso no pueden crear notas internas ni verlas. Sin ese permiso, solo se puede comentar en tickets propios o asignados.
          */
         post: operations["TicketsController_addComment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/{id}/form": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Editar formulario del ticket
+         * @description Reemplaza los datos del formulario mientras no haya sido aprobado y el ticket no esté cerrado ni cancelado. El cuerpo tiene la misma forma que el campo form al crear el ticket y se valida igual. Solo quien reportó el ticket o un usuario con tickets:update (en su sucursal) pueden editarlo.
+         */
+        patch: operations["TicketsController_updateForm"];
+        trace?: never;
+    };
+    "/api/tickets/{id}/form/secret": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ver la contraseña del formulario del ticket
+         * @description Descifra el secreto del formulario (contraseña de TeamViewer). Es la única ruta que lo devuelve y solo con el ticket en progreso; se borra si el ticket pasa a en espera, resuelto, cerrado o cancelado. Requiere tickets:update en la sucursal del ticket o estar asignado.
+         */
+        get: operations["TicketsController_revealFormSecret"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/{id}/form/apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Aprobar formulario del ticket
+         * @description TI aprueba la solicitud y el sistema ejecuta la acción; todo se revierte si algo falla. STUDY_CREATE crea el estudio o perfil en la sucursal del ticket con el code (y opcionalmente title, abbreviation, slug) que captura TI (ApplyStudyCreateFormDto); newStudies trae el code de cada parámetro nuevo del perfil, en orden. STUDY_UPDATE aplica los cambios (más ajustes opcionales de TI, ApplyStudyUpdateFormDto) y guarda el antes/después en form.result. REFERENCE_VALUES_UPDATE reemplaza los valores de referencia de un parámetro (sin datos de TI). ACCESS_REQUEST crea el usuario (TI puede cambiar el rol con roleId) y le envía un correo para definir su contraseña. SOFTWARE_REMOTE y CLIENT_CREATE son informativos (400). El ticket pasa a Resuelto. Requiere tickets:update y el permiso de la acción: studies:create, studies:update o users:create.
+         */
+        post: operations["TicketsController_applyForm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/{id}/form/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Validar la aprobación sin aplicarla
+         * @description Recibe el mismo cuerpo que POST /tickets/:id/form/apply y hace exactamente lo mismo dentro de una transacción que se revierte: responde { valid, summary } si la aprobación funcionaría, o el mismo error que daría (400/403/409). No guarda nada. Requiere tickets:update y el permiso de la acción.
+         */
+        post: operations["TicketsController_validateForm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/{id}/form/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rechazar la solicitud
+         * @description TI rechaza el formulario con un motivo (queda en el historial y se notifica a quien lo reportó). El formulario ya no se puede editar ni aprobar y el ticket pasa a Cancelado. Requiere tickets:update.
+         */
+        post: operations["TicketsController_rejectForm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tickets/{id}/form/resend-access-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reenviar el correo de acceso
+         * @description Vuelve a enviar a un usuario creado por una solicitud de acceso aprobada el correo para definir su contraseña. Actualiza form.result.emailSent. Requiere tickets:update y users:create.
+         */
+        post: operations["TicketsController_resendAccessEmail"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2757,6 +3115,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ticket-reply-templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar plantillas de respuesta
+         * @description Respuestas predefinidas que TI inserta en los comentarios, por sucursal. Requiere tickets:update y acceso a la sucursal.
+         */
+        get: operations["TicketReplyTemplatesController_findAll"];
+        put?: never;
+        /** Crear plantilla de respuesta */
+        post: operations["TicketReplyTemplatesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ticket-reply-templates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Borrar plantilla de respuesta */
+        delete: operations["TicketReplyTemplatesController_remove"];
+        options?: never;
+        head?: never;
+        /** Editar plantilla de respuesta */
+        patch: operations["TicketReplyTemplatesController_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2843,6 +3240,10 @@ export interface components {
             isPanel?: boolean;
             units?: string;
             decimals?: number;
+            isInternal?: boolean;
+            /** Format: uuid */
+            providerId?: string;
+            providerCost?: number;
             eligiblePatients?: components["schemas"]["EligiblePatientsDto"];
             referenceValues?: components["schemas"]["CreateReferenceValueDto"][];
         };
@@ -2855,6 +3256,7 @@ export interface components {
             items: components["schemas"]["PanelItemDto"][];
         };
         UpdateStudyDto: {
+            providerCost?: number | null;
             sectionId?: number;
             sampleTypeId?: number;
             techniqueId?: number | null;
@@ -2873,6 +3275,13 @@ export interface components {
             isActive?: boolean;
         };
         UpdateStudyCatalogDto: Record<string, never>;
+        CreateStudyProviderDto: {
+            name: string;
+            /** Format: uuid */
+            branchId: string;
+            isActive?: boolean;
+        };
+        UpdateStudyProviderDto: Record<string, never>;
         CreateBannerDto: {
             placement: string;
             /** Format: uri */
@@ -3000,6 +3409,29 @@ export interface components {
         UpdateReviewDto: {
             isApproved?: boolean;
         };
+        CreateContactMessageDto: {
+            /** @description Honeypot anti-spam: debe ir vacío. */
+            website?: string;
+            /** Format: uuid */
+            branchId: string;
+            name: string;
+            /** Format: email */
+            email: string;
+            phone: string;
+            /** @enum {string} */
+            subject: "OTHER" | "CLINICAL_ANALYSIS" | "CORPORATE_HEALTH" | "HOME_SAMPLING";
+            message: string;
+            privacyAccepted: boolean;
+        };
+        ContactMessageReceivedDto: {
+            received: boolean;
+            folio?: number;
+        };
+        UpdateContactMessageStatusDto: {
+            /** @enum {string} */
+            status: "NEW" | "IN_PROGRESS" | "RESOLVED" | "DISCARDED";
+            note?: string;
+        };
         CreatePriceSheetDto: {
             name: string;
             description: string;
@@ -3069,6 +3501,7 @@ export interface components {
             /** Format: uuid */
             branchId: string;
             hasSignedResponsibility?: boolean;
+            hasSignedVehicleResponsibility?: boolean;
         };
         UpdateEmployeeDto: Record<string, never>;
         CreateDeviceCatalogDto: {
@@ -3244,13 +3677,138 @@ export interface components {
             branchId: string;
         };
         UpdateLocationDto: Record<string, never>;
-        CreateTicketDto: {
+        SoftwareRemoteFormDto: {
+            teamViewerId: string;
+            teamViewerPassword: string;
+        };
+        AccessRequestFormDto: {
+            fullName: string;
+            /** Format: email */
+            email: string;
+            /** Format: uuid */
+            roleId: string;
             /** Format: uuid */
             branchId: string;
-            title: string;
-            description: string;
+        };
+        StudyFormChildDto: {
+            name: string;
+            description?: string;
+            studyPrices?: components["schemas"]["StudyPriceDto"][];
+            sampleTypeId: number;
+            sectionId: number;
+            techniqueId?: number;
+            deliveryTime?: number;
+            preparation?: string;
+            /** Format: uuid */
+            serviceId: string;
+            units?: string;
+            decimals?: number;
+            isInternal?: boolean;
+            /** Format: uuid */
+            providerId?: string;
+            providerCost?: number;
+            eligiblePatients?: components["schemas"]["EligiblePatientsDto"];
+            referenceValues?: components["schemas"]["CreateReferenceValueDto"][];
+        };
+        StudyFormPanelItemDto: {
+            newStudy?: components["schemas"]["StudyFormChildDto"];
+            /** Format: uuid */
+            studyId?: string;
+        };
+        StudyCreateFormDto: {
+            name: string;
+            description?: string;
+            studyPrices?: components["schemas"]["StudyPriceDto"][];
+            sampleTypeId: number;
+            sectionId: number;
+            techniqueId?: number;
+            deliveryTime?: number;
+            preparation?: string;
+            /** Format: uuid */
+            serviceId: string;
+            isPanel?: boolean;
+            units?: string;
+            decimals?: number;
+            isInternal?: boolean;
+            /** Format: uuid */
+            providerId?: string;
+            providerCost?: number;
+            eligiblePatients?: components["schemas"]["EligiblePatientsDto"];
+            referenceValues?: components["schemas"]["CreateReferenceValueDto"][];
+            panelItems?: components["schemas"]["StudyFormPanelItemDto"][];
+        };
+        StudyUpdateFormDto: {
+            name?: string;
+            description?: string;
+            deliveryTime?: number;
+            preparation?: string;
+            /** Format: uuid */
+            serviceId?: string;
+            isPanel?: boolean;
+            units?: string;
+            decimals?: number;
+            isInternal?: boolean;
+            /** Format: uuid */
+            providerId?: string;
+            providerCost?: number;
+            eligiblePatients?: components["schemas"]["EligiblePatientsDto"];
+            referenceValues?: components["schemas"]["CreateReferenceValueDto"][];
+            techniqueId?: number | null;
+            studyPrices?: components["schemas"]["StudyPriceDto"][];
+            panelItems?: components["schemas"]["StudyFormPanelItemDto"][];
+            /** Format: uuid */
+            studyId: string;
+            sectionId?: number;
+            sampleTypeId?: number;
+        };
+        ClientCreateFormDto: {
+            name: string;
+            /** Format: email */
+            email: string;
+            receivable: boolean;
+            payInCash: boolean;
+            /** Format: uuid */
+            priceSheetId: string;
+        };
+        ReferenceValuesUpdateFormDto: {
+            /** Format: uuid */
+            studyId: string;
+            referenceValues: components["schemas"]["CreateReferenceValueDto"][];
+        };
+        ApplyAccessRequestFormDto: {
+            /** Format: uuid */
+            roleId?: string;
+        };
+        StudyIdentityDto: {
+            code: string;
+            title?: string;
+            abbreviation?: string;
+            slug?: string;
+        };
+        ApplyStudyCreateFormDto: {
+            newStudies?: components["schemas"]["StudyIdentityDto"][];
+            code: string;
+            title?: string;
+            abbreviation?: string;
+            slug?: string;
+        };
+        ApplyStudyUpdateFormDto: {
+            code?: string;
+            title?: string;
+            abbreviation?: string;
+            newStudies?: components["schemas"]["StudyIdentityDto"][];
+        };
+        ApplyReferenceValuesUpdateFormDto: Record<string, never>;
+        CreateTicketDto: {
+            form?: {
+                [key: string]: unknown;
+            } & (components["schemas"]["SoftwareRemoteFormDto"] | components["schemas"]["AccessRequestFormDto"] | components["schemas"]["StudyCreateFormDto"] | components["schemas"]["StudyUpdateFormDto"] | components["schemas"]["ClientCreateFormDto"] | components["schemas"]["ReferenceValuesUpdateFormDto"]);
+            /** Format: uuid */
+            branchId: string;
+            title?: string;
+            description?: string;
             /** @enum {string} */
-            category: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+            category: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
             /** Format: uuid */
             subcategoryId?: string;
             /**
@@ -3259,15 +3817,225 @@ export interface components {
              */
             priority: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
         };
+        /** @enum {string} */
+        TicketStatus: "OPEN" | "IN_PROGRESS" | "ON_HOLD" | "RESOLVED" | "CLOSED" | "CANCELLED";
+        /** @enum {string} */
+        TicketPriority: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+        /** @enum {string} */
+        TicketCategory: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
+        /** @enum {string} */
+        TicketFormType: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE";
+        TicketSubcategoryRefDto: {
+            category: components["schemas"]["TicketCategory"];
+            formType: components["schemas"]["TicketFormType"] | null;
+            id: string;
+            name: string;
+        };
+        TicketBranchRefDto: {
+            id: string;
+            name: string;
+        };
+        TicketPersonDto: {
+            email: string;
+            id: string;
+            name: string;
+        };
+        TicketUserRefDto: {
+            id: string;
+            name: string;
+        };
+        TicketAssigneeDto: {
+            /** Format: date-time */
+            assignedAt: string;
+            user: components["schemas"]["TicketPersonDto"];
+            assignedBy: components["schemas"]["TicketUserRefDto"] | null;
+        };
+        TicketFormDto: {
+            type: components["schemas"]["TicketFormType"];
+            data: {
+                [key: string]: unknown;
+            };
+            result: {
+                [key: string]: unknown;
+            } | null;
+            schemaVersion: number;
+            hasSecret: boolean;
+            /** Format: date-time */
+            secretPurgedAt: string | null;
+            /** Format: date-time */
+            appliedAt: string | null;
+            appliedBy: components["schemas"]["TicketUserRefDto"] | null;
+            /** Format: date-time */
+            rejectedAt: string | null;
+            rejectedBy: components["schemas"]["TicketUserRefDto"] | null;
+            rejectionReason: string | null;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        TicketResponseDto: {
+            status: components["schemas"]["TicketStatus"];
+            priority: components["schemas"]["TicketPriority"];
+            category: components["schemas"]["TicketCategory"];
+            id: string;
+            code: number;
+            title: string;
+            description: string | null;
+            subcategoryId: string | null;
+            subcategory: components["schemas"]["TicketSubcategoryRefDto"] | null;
+            branchId: string;
+            branch: components["schemas"]["TicketBranchRefDto"];
+            createdById: string;
+            createdBy: components["schemas"]["TicketPersonDto"];
+            assignees: components["schemas"]["TicketAssigneeDto"][];
+            form: components["schemas"]["TicketFormDto"] | null;
+            /** Format: date-time */
+            firstResponseAt: string | null;
+            /** Format: date-time */
+            resolvedAt: string | null;
+            /** Format: date-time */
+            closedAt: string | null;
+            reopenedCount: number;
+            /** Format: date-time */
+            dueAt: string | null;
+            /** Format: date-time */
+            overdueNotifiedAt: string | null;
+            /** Format: date-time */
+            slaWarnedAt: string | null;
+            /** Format: date-time */
+            escalatedAt: string | null;
+            /** Format: date-time */
+            onHoldSince: string | null;
+            slaPausedSeconds: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        PaginatedTicketsResponseDto: {
+            data: components["schemas"]["TicketResponseDto"][];
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+        };
+        /** @enum {string} */
+        TicketNotificationKind: "COMMENT" | "CHANGE" | "ASSIGNMENT" | "OVERDUE" | "FORM" | "NEW_TICKET" | "SLA_WARNING" | "ESCALATION";
+        TicketNotificationTicketDto: {
+            status: components["schemas"]["TicketStatus"];
+            category: components["schemas"]["TicketCategory"];
+            code: number;
+            title: string;
+            branch: components["schemas"]["TicketBranchRefDto"];
+        };
+        TicketNotificationResponseDto: {
+            kind: components["schemas"]["TicketNotificationKind"];
+            id: string;
+            message: string;
+            read: boolean;
+            ticketId: string;
+            userId: string;
+            actorId: string | null;
+            actor: components["schemas"]["TicketUserRefDto"] | null;
+            ticket: components["schemas"]["TicketNotificationTicketDto"];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PaginatedTicketNotificationsResponseDto: {
+            data: components["schemas"]["TicketNotificationResponseDto"][];
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+        };
+        TicketEmailPreferenceDto: {
+            /** @enum {string} */
+            event: "NEW_TICKET" | "ASSIGNMENT" | "MENTION" | "RESOLVED" | "AUTO_CLOSED" | "FORM_DECIDED" | "SLA_WARNING" | "OVERDUE" | "ESCALATION";
+            label: string;
+            enabled: boolean;
+        };
+        UpdateTicketEmailPreferencesDto: {
+            mutedEvents: ("NEW_TICKET" | "ASSIGNMENT" | "MENTION" | "RESOLVED" | "AUTO_CLOSED" | "FORM_DECIDED" | "SLA_WARNING" | "OVERDUE" | "ESCALATION")[];
+        };
+        TicketFormRoleDto: {
+            id: string;
+            name: string;
+            description: string | null;
+        };
+        DeletedCountDto: {
+            deleted: number;
+        };
+        UpdatedCountDto: {
+            updated: number;
+        };
+        TicketCommentResponseDto: {
+            id: string;
+            body: string;
+            isInternal: boolean;
+            isSystem: boolean;
+            ticketId: string;
+            authorId: string | null;
+            author: components["schemas"]["TicketPersonDto"] | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        TicketDetailResponseDto: {
+            status: components["schemas"]["TicketStatus"];
+            priority: components["schemas"]["TicketPriority"];
+            category: components["schemas"]["TicketCategory"];
+            id: string;
+            code: number;
+            title: string;
+            description: string | null;
+            subcategoryId: string | null;
+            subcategory: components["schemas"]["TicketSubcategoryRefDto"] | null;
+            branchId: string;
+            branch: components["schemas"]["TicketBranchRefDto"];
+            createdById: string;
+            createdBy: components["schemas"]["TicketPersonDto"];
+            assignees: components["schemas"]["TicketAssigneeDto"][];
+            form: components["schemas"]["TicketFormDto"] | null;
+            /** Format: date-time */
+            firstResponseAt: string | null;
+            /** Format: date-time */
+            resolvedAt: string | null;
+            /** Format: date-time */
+            closedAt: string | null;
+            reopenedCount: number;
+            /** Format: date-time */
+            dueAt: string | null;
+            /** Format: date-time */
+            overdueNotifiedAt: string | null;
+            /** Format: date-time */
+            slaWarnedAt: string | null;
+            /** Format: date-time */
+            escalatedAt: string | null;
+            /** Format: date-time */
+            onHoldSince: string | null;
+            slaPausedSeconds: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            comments: components["schemas"]["TicketCommentResponseDto"][];
+        };
         UpdateTicketDto: {
             /** @enum {string} */
             status?: "CANCELLED" | "OPEN" | "IN_PROGRESS" | "ON_HOLD" | "RESOLVED" | "CLOSED";
             /** @enum {string} */
             priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
             /** @enum {string} */
-            category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+            category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
             /** Format: uuid */
             subcategoryId?: string | null;
+        };
+        AssignableUserDto: {
+            id: string;
+            name: string;
+            email: string;
+            role: {
+                name: string;
+            };
+            isAssigned: boolean;
         };
         SetTicketAssigneesDto: {
             userIds: string[];
@@ -3275,14 +4043,47 @@ export interface components {
         CreateTicketCommentDto: {
             body: string;
             isInternal?: boolean;
+            mentionedUserIds?: string[];
+        };
+        TicketFormSecretDto: {
+            secret: string;
+        };
+        TicketFormValidationDto: {
+            valid: boolean;
+            summary: string;
+        };
+        RejectTicketFormDto: {
+            reason: string;
         };
         CreateTicketSubcategoryDto: {
             /** @enum {string} */
-            category: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+            category: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
             name: string;
+            /** @enum {string|null} */
+            formType?: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE" | null;
         };
         UpdateTicketSubcategoryDto: {
             isActive?: boolean;
+        };
+        TicketReplyTemplateDto: {
+            id: string;
+            branchId: string;
+            title: string;
+            body: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        CreateTicketReplyTemplateDto: {
+            /** Format: uuid */
+            branchId: string;
+            title: string;
+            body: string;
+        };
+        UpdateTicketReplyTemplateDto: {
+            title?: string;
+            body?: string;
         };
     };
     responses: never;
@@ -3475,6 +4276,8 @@ export interface operations {
                 /** @description Identificador de sucursal para filtrar estudios. */
                 branchId?: string;
                 isPanel?: boolean;
+                isInternal?: boolean;
+                providerId?: string;
                 sectionId?: number;
                 sampleTypeId?: number;
                 techniqueId?: number;
@@ -3547,6 +4350,8 @@ export interface operations {
                 /** @description Identificador de sucursal para filtrar estudios. */
                 branchId?: string;
                 isPanel?: boolean;
+                isInternal?: boolean;
+                providerId?: string;
                 sectionId?: number;
                 sampleTypeId?: number;
                 techniqueId?: number;
@@ -3582,12 +4387,50 @@ export interface operations {
             };
         };
     };
+    StudiesController_findAdminActive: {
+        parameters: {
+            query?: {
+                priceSheetId?: string;
+                branchId?: string;
+                isPanel?: boolean;
+                isInternal?: boolean;
+                providerId?: string;
+                sectionId?: number;
+                sampleTypeId?: number;
+                techniqueId?: number;
+                gender?: "M" | "F" | "A";
+                ageFormat?: "DIAS" | "AÑOS";
+                minAge?: number;
+                maxAge?: number;
+                page?: number;
+                limit?: number;
+                search?: string;
+                sort?: components["schemas"]["QuerySortDto"];
+                filters?: components["schemas"]["QueryFiltersDto"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Listado paginado de estudios activos. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     StudiesController_findInactive: {
         parameters: {
             query?: {
                 priceSheetId?: string;
                 branchId?: string;
                 isPanel?: boolean;
+                isInternal?: boolean;
+                providerId?: string;
                 sectionId?: number;
                 sampleTypeId?: number;
                 techniqueId?: number;
@@ -3652,6 +4495,8 @@ export interface operations {
                 /** @description Identificador de sucursal (debe estar asignada al usuario). */
                 branchId?: string;
                 isPanel?: boolean;
+                isInternal?: boolean;
+                providerId?: string;
                 sectionId?: number;
                 sampleTypeId?: number;
                 techniqueId?: number;
@@ -4605,6 +5450,163 @@ export interface operations {
             };
         };
     };
+    StudyProvidersController_findAll: {
+        parameters: {
+            query?: {
+                branchId?: string;
+                isActive?: boolean;
+                page?: number;
+                limit?: number;
+                search?: string;
+                sort?: components["schemas"]["QuerySortDto"];
+                filters?: components["schemas"]["QueryFiltersDto"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Listado paginado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StudyProvidersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateStudyProviderDto"];
+            };
+        };
+        responses: {
+            /** @description Maquilador creado. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El nombre ya existe. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StudyProvidersController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador (UUID). */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Maquilador encontrado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Maquilador no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StudyProvidersController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador (UUID). */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Maquilador eliminado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Maquilador no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El maquilador está en uso. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StudyProvidersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador (UUID). */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStudyProviderDto"];
+            };
+        };
+        responses: {
+            /** @description Maquilador actualizado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Maquilador no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El nombre ya existe. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     BannersController_findActiveBanners: {
         parameters: {
             query: {
@@ -5092,6 +6094,13 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description branchId no está asignada al usuario. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     ServicesController_findAdminAll: {
@@ -5226,6 +6235,13 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description El servicio es de una sucursal no asignada al usuario. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Servicio no encontrado. */
             404: {
                 headers: {
@@ -5260,6 +6276,13 @@ export interface operations {
         responses: {
             /** @description Servicio actualizado exitosamente. */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El servicio, o la sucursal destino (branchId), no está asignada al usuario. */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5665,6 +6688,155 @@ export interface operations {
             };
         };
     };
+    ContactMessagesController_findAll: {
+        parameters: {
+            query?: {
+                branchId?: string;
+                status?: "NEW" | "IN_PROGRESS" | "RESOLVED" | "DISCARDED";
+                subject?: "OTHER" | "CLINICAL_ANALYSIS" | "CORPORATE_HEALTH" | "HOME_SAMPLING";
+                page?: number;
+                limit?: number;
+                search?: string;
+                sort?: components["schemas"]["QuerySortDto"];
+                filters?: components["schemas"]["QueryFiltersDto"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContactMessagesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateContactMessageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContactMessageReceivedDto"];
+                };
+            };
+            /** @description Sucursal no encontrada o inactiva. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Demasiados envíos en poco tiempo. */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContactMessagesController_countPending: {
+        parameters: {
+            query?: {
+                branchId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContactMessagesController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description Mensaje no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContactMessagesController_updateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateContactMessageStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description Mismo estatus sin nota. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Mensaje no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PriceSheetsController_findAll: {
         parameters: {
             query?: {
@@ -5849,14 +7021,14 @@ export interface operations {
                 "multipart/form-data": {
                     /**
                      * Format: binary
-                     * @description Archivo Excel (.xlsx o .xls) con los estudios y precios de este tarifario.
+                     * @description Archivo Excel (.xlsx o .xls) con las columnas code y price.
                      */
                     file?: string;
                 };
             };
         };
         responses: {
-            /** @description Resultado de la importación con el detalle de éxitos y errores por fila. */
+            /** @description Resultado: { totalRows, created, updated, skipped, invalid }. created = precios nuevos en el tarifario, updated = precios existentes actualizados, invalid = filas rechazadas con sus errores. */
             201: {
                 headers: {
                     [name: string]: unknown;
@@ -8323,11 +9495,14 @@ export interface operations {
                 filters?: components["schemas"]["QueryFiltersDto"] | null;
                 branchId?: string;
                 status?: "CANCELLED" | "OPEN" | "IN_PROGRESS" | "ON_HOLD" | "RESOLVED" | "CLOSED";
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
                 assigneeId?: string;
                 assignedToMe?: boolean;
+                mine?: boolean;
                 subcategoryId?: string;
+                formType?: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE";
+                formStatus?: "PENDING" | "APPLIED" | "REJECTED";
             };
             header?: never;
             path?: never;
@@ -8340,7 +9515,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["PaginatedTicketsResponseDto"];
+                };
             };
         };
     };
@@ -8362,7 +9539,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
             };
             /** @description El usuario no tiene el permiso tickets:create, o no tiene acceso a esa sucursal. */
             403: {
@@ -8401,6 +9580,129 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["PaginatedTicketNotificationsResponseDto"];
+                };
+            };
+        };
+    };
+    TicketsController_purgeMyNotifications: {
+        parameters: {
+            query?: {
+                all?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cantidad borrada. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedCountDto"];
+                };
+            };
+        };
+    };
+    TicketsController_getEmailPreferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketEmailPreferenceDto"][];
+                };
+            };
+        };
+    };
+    TicketsController_updateEmailPreferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTicketEmailPreferencesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketEmailPreferenceDto"][];
+                };
+            };
+        };
+    };
+    TicketsController_findFormRoles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Listado de roles. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketFormRoleDto"][];
+                };
+            };
+        };
+    };
+    TicketsController_removeNotification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador de la notificación. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Notificación borrada. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedCountDto"];
+                };
+            };
+            /** @description La notificación pertenece a otro usuario. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Notificación no encontrada. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
                 content?: never;
             };
         };
@@ -8419,7 +9721,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["UpdatedCountDto"];
+                };
             };
         };
     };
@@ -8475,7 +9779,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TicketDetailResponseDto"];
+                };
             };
             /** @description El ticket es de otro usuario, quien consulta no está asignado y no tiene el permiso tickets:update, o quien tiene tickets:update no tiene acceso a la sucursal del ticket. */
             403: {
@@ -8514,7 +9820,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
             };
             /** @description El usuario no tiene el permiso tickets:update o acceso a esa sucursal. */
             403: {
@@ -8529,6 +9837,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    TicketsController_findMentionableUsers: {
+        parameters: {
+            query?: {
+                internal?: boolean;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketUserRefDto"][];
+                };
             };
         };
     };
@@ -8551,7 +9882,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["AssignableUserDto"][];
+                };
             };
             /** @description El usuario no tiene el permiso tickets:update o acceso a esa sucursal. */
             403: {
@@ -8590,7 +9923,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
             };
             /** @description Algún usuario está inactivo, no tiene acceso a la sucursal del ticket o es quien lo reportó. */
             400: {
@@ -8636,7 +9971,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["TicketCommentResponseDto"];
+                };
             };
             /** @description El ticket es de otro usuario y quien comenta no tiene el permiso tickets:update, intentó crear una nota interna sin ese permiso, o quien tiene tickets:update no tiene acceso a la sucursal del ticket. */
             403: {
@@ -8661,6 +9998,251 @@ export interface operations {
             };
         };
     };
+    TicketsController_updateForm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del ticket. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SoftwareRemoteFormDto"] | components["schemas"]["AccessRequestFormDto"] | components["schemas"]["StudyCreateFormDto"] | components["schemas"]["StudyUpdateFormDto"] | components["schemas"]["ClientCreateFormDto"] | components["schemas"]["ReferenceValuesUpdateFormDto"];
+            };
+        };
+        responses: {
+            /** @description Formulario actualizado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
+            };
+            /** @description Datos inválidos, el ticket no tiene formulario o está cerrado/cancelado. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El usuario no es quien reportó el ticket ni tiene tickets:update. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ticket no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El formulario ya fue aprobado. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TicketsController_revealFormSecret: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del ticket. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Secreto descifrado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketFormSecretDto"];
+                };
+            };
+            /** @description El usuario no está asignado ni tiene tickets:update en esa sucursal. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ticket no encontrado o sin contraseña guardada. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El ticket no está en progreso. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TicketsController_applyForm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del ticket. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ApplyAccessRequestFormDto"] | components["schemas"]["ApplyStudyCreateFormDto"] | components["schemas"]["ApplyStudyUpdateFormDto"] | components["schemas"]["ApplyReferenceValuesUpdateFormDto"];
+            };
+        };
+        responses: {
+            /** @description Solicitud aprobada y aplicada. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
+            };
+            /** @description Datos inválidos o ya no válidos (catálogos, tarifarios), formulario informativo, o ticket cerrado/cancelado. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Falta tickets:update o el permiso de la acción, o no hay acceso a la sucursal. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ticket no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El formulario ya fue aprobado, o ya existe un estudio con ese code o un usuario con ese correo. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TicketsController_validateForm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del ticket. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ApplyAccessRequestFormDto"] | components["schemas"]["ApplyStudyCreateFormDto"] | components["schemas"]["ApplyStudyUpdateFormDto"] | components["schemas"]["ApplyReferenceValuesUpdateFormDto"];
+            };
+        };
+        responses: {
+            /** @description La aprobación funcionaría. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketFormValidationDto"];
+                };
+            };
+        };
+    };
+    TicketsController_rejectForm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del ticket. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectTicketFormDto"];
+            };
+        };
+        responses: {
+            /** @description Solicitud rechazada. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
+            };
+            /** @description El formulario ya fue aprobado o rechazado. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TicketsController_resendAccessEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del ticket. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Correo enviado. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketResponseDto"];
+                };
+            };
+            /** @description El servidor de correo falló. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     TicketSubcategoriesController_findAll: {
         parameters: {
             query?: {
@@ -8669,7 +10251,7 @@ export interface operations {
                 search?: string;
                 sort?: components["schemas"]["QuerySortDto"];
                 filters?: components["schemas"]["QueryFiltersDto"] | null;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 isActive?: boolean;
             };
             header?: never;
@@ -8775,7 +10357,7 @@ export interface operations {
                 from?: string;
                 to?: string;
                 branchId?: string;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
             };
             header?: never;
@@ -8799,7 +10381,7 @@ export interface operations {
                 from?: string;
                 to?: string;
                 branchId?: string;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
             };
             header?: never;
@@ -8823,7 +10405,7 @@ export interface operations {
                 from?: string;
                 to?: string;
                 branchId?: string;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
             };
             header?: never;
@@ -8847,7 +10429,7 @@ export interface operations {
                 from?: string;
                 to?: string;
                 branchId?: string;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
             };
             header?: never;
@@ -8871,7 +10453,7 @@ export interface operations {
                 from?: string;
                 to?: string;
                 branchId?: string;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
                 interval?: "day" | "week" | "month";
             };
@@ -8896,7 +10478,7 @@ export interface operations {
                 from?: string;
                 to?: string;
                 branchId?: string;
-                category?: "HARDWARE" | "SOFTWARE" | "NETWORK" | "ACCESS" | "COGNITI" | "OTHER";
+                category?: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
                 priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
                 format?: "xlsx" | "pdf";
             };
@@ -8912,6 +10494,103 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    TicketReplyTemplatesController_findAll: {
+        parameters: {
+            query: {
+                branchId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketReplyTemplateDto"][];
+                };
+            };
+        };
+    };
+    TicketReplyTemplatesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTicketReplyTemplateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketReplyTemplateDto"];
+                };
+            };
+            /** @description Título repetido en la sucursal. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TicketReplyTemplatesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedCountDto"];
+                };
+            };
+        };
+    };
+    TicketReplyTemplatesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTicketReplyTemplateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketReplyTemplateDto"];
+                };
             };
         };
     };

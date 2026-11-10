@@ -21,25 +21,25 @@ const BranchCard = ({ branch }: BranchCardProps) => {
   const fullAddress = getFullAddress(branch);
 
   return (
-    <article className="branch-card group relative overflow-hidden rounded-clinical-lg border transition-all duration-300 p-6 shadow-xs border-ui-border bg-white hover:-translate-y-1 hover:shadow-sm">
+    <article className="rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs">
       <div className="relative">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             {state?.name && (
-              <span className="inline-flex items-center rounded-full bg-green-secondary/10 px-3 py-1 text-xs font-bold text-green-secondary ring-1 ring-green-secondary/20">
+              <span className="text-xs font-semibold text-brand-ink">
                 {state.name}
               </span>
             )}
-            <h3 className="mt-3 text-xl font-black tracking-tight text-green-light leading-tight">
+            <h2 className="mt-3 text-xl font-bold tracking-tight text-ink leading-tight">
               {name}
-            </h3>
-            <p className="mt-2 text-sm font-medium text-grey-custom leading-relaxed">
+            </h2>
+            <p className="mt-2 text-sm font-medium text-ink-muted leading-relaxed">
               {fullAddress}
             </p>
             {references && (
-              <div className="mt-2 flex items-start gap-1.5 text-xs text-grey-custom bg-green-secondary/10 p-2 rounded-clinical-sm border border-ui-border/50">
-                <span className="font-bold text-green-primary">Ref:</span>
-                <span className="font-bold text-green-secondary">
+              <div className="mt-2 flex items-start gap-1.5 text-sm text-ink-muted">
+                <span className="font-semibold text-ink">Referencias:</span>
+                <span>
                   {references}
                 </span>
               </div>
@@ -66,7 +66,7 @@ const BranchCard = ({ branch }: BranchCardProps) => {
           <NavLinkButton
             path={urlResults}
             target="_blank"
-            text="Consulta Resultados"
+            text="Consultar resultados"
             icon="lucide:test-tube-diagonal"
             width="full"
           />

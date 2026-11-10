@@ -6,20 +6,35 @@ import {
   type Study,
 } from "../../interfaces/study.interface";
 import StudyActionCard from "../../components/react/cards/StudyActionCard";
-import CardStudy from "../../components/react/cards/CardStudy";
+import StudyList from "../../components/react/study/StudyList";
 import StudyPanelTree from "../../components/astro/study/StudyPanelTree.astro";
+import SpecimenLabel from "../../components/astro/study/SpecimenLabel.astro";
+import Eyebrow from "../../components/astro/ui/Eyebrow.astro";
+import SectionHeader from "../../components/astro/ui/SectionHeader.astro";
 import { countPanelLeaves } from "../../hooks/usePanelTree";
-import { buildBarcode } from "../../utils/barcode";
 import { getFastingHours } from "../../utils/studyPreparation";
+import { formatDeliveryTime } from "../../utils/studyFacts";
 import { Buttonstyles } from "../../styles/buttonsStyles";
+import { cardStyles } from "../../styles/ui";
+import type { QuoterService } from "../../utils/quoterStudies";
 
 interface Props {
   study: Study | null;
   panelTree?: PanelTree | null;
   recommendedStudies?: Study[];
+  /** Service the study belongs to, for the breadcrumb. */
+  parentService?: { name: string; slug: string } | null;
+  /** Service + price sheet used to add this study to the quote. */
+  quoterService?: QuoterService | null;
 }
 
-const { study, panelTree = null, recommendedStudies = [] } = Astro.props;
+const {
+  study,
+  panelTree = null,
+  recommendedStudies = [],
+  parentService = null,
+  quoterService = null,
+} = Astro.props;
 
 if (!study) {
   return null; // The page already redirects when the study is missing
@@ -40,9 +55,6 @@ const isPanel = Boolean(study.isPanel);
 const reveal = (delayMs: number) =>
   `animation-delay:${delayMs}ms; animation-fill-mode:backwards;`;
 
-// Specimen-label signature: bars derived from the study code.
-const barcode = buildBarcode(`${code}${abbreviation ?? ""}`);
-
 // Split free-text preparation into sentences so each instruction reads as
 // its own step, and surface fasting hours when the text states them.
 const prepSteps = (preparation ?? "")
@@ -59,6 +71,10 @@ const labelRows = [
   { label: "Muestra", value: sampleType },
   { label: "Técnica", value: technique },
   {
+    label: "Entrega",
+    value: formatDeliveryTime(study.deliveryTime)?.replace("Resultados ", "") ?? null,
+  },
+  {
     label: "Incluye",
     value: isPanel && panelTree
       ? `${panelCount} ${panelCount === 1 ? "estudio" : "estudios"}`
@@ -72,31 +88,33 @@ const labelRows = [
   <header>
     <nav
       aria-label="Breadcrumb"
-      class="mb-8 flex items-center gap-1.5 text-xs text-grey-custom/70"
+      class="mb-8 flex items-center gap-1.5 text-xs text-ink-subtle"
     >
-      <a href="/" class="transition-colors hover:text-green-primary">Inicio</a>
+      <a href="/" class="transition-colors hover:text-brand-ink">Inicio</a>
       <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
-      <a href="/quoter" class="transition-colors hover:text-green-primary"
-        >Cotizador</a
-      >
+      {
+        parentService ? (
+          <a href={`/service/${parentService.slug}`} class="transition-colors hover:text-brand-ink">
+            {parentService.name}
+          </a>
+        ) : (
+          <a href="/estudios" class="transition-colors hover:text-brand-ink">Estudios</a>
+        )
+      }
       <Icon name="lucide:chevron-right" class="h-3.5 w-3.5" />
-      <span class="max-w-50 truncate font-semibold text-green-light sm:max-w-xs"
+      <span class="max-w-50 truncate font-semibold text-ink sm:max-w-xs"
         >{name}</span
       >
     </nav>
 
     <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
       <div class="lg:col-span-7">
-        <div
-          class="inline-flex items-center gap-2 rounded-full border border-green-primary/15 bg-green-primary/8 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-green-primary motion-safe:animate-fade-up"
-          style={reveal(0)}
-        >
-          <span class="h-1.5 w-1.5 rounded-full bg-green-primary"></span>
+        <Eyebrow class="motion-safe:animate-fade-up" style={reveal(0)}>
           {isPanel ? "Perfil" : "Estudio"}{section && ` · ${section}`}
-        </div>
+        </Eyebrow>
 
         <h1
-          class="mt-4 text-3xl font-black leading-[1.05] tracking-tight text-green-light motion-safe:animate-fade-up sm:text-4xl lg:text-5xl"
+          class="mt-4 text-3xl font-bold leading-[1.05] tracking-tight text-ink motion-safe:animate-fade-up sm:text-4xl lg:text-5xl"
           style={reveal(60)}
         >
           {name}
@@ -105,7 +123,7 @@ const labelRows = [
         {
           description && (
             <p
-              class="mt-5 max-w-2xl text-base leading-relaxed text-grey-custom motion-safe:animate-fade-up sm:text-lg"
+              class="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted motion-safe:animate-fade-up sm:text-lg"
               style={reveal(120)}
             >
               {description}
@@ -114,57 +132,15 @@ const labelRows = [
         }
       </div>
 
-      <!-- Signature: the study as its specimen label -->
-      <figure
-        class="relative overflow-hidden rounded-clinical-md border border-ui-border bg-white shadow-xs motion-safe:animate-fade-up lg:col-span-5"
+      <SpecimenLabel
+        code={code}
+        abbreviation={abbreviation}
+        rows={labelRows}
+        label={`Ficha del estudio ${name}`}
+        isPanel={isPanel}
+        class="motion-safe:animate-fade-up lg:col-span-5"
         style={reveal(180)}
-        aria-label={`Ficha del estudio ${name}`}
-      >
-        <div class="absolute inset-y-0 left-0 w-1.5 bg-green-primary"></div>
-
-        <div class="pl-7 pr-6 pt-5">
-          <div
-            class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-grey-custom/70"
-          >
-            <span>DYRA · Laboratorio</span>
-            {abbreviation && <span>{abbreviation}</span>}
-          </div>
-
-          <svg
-            aria-hidden="true"
-            class="mt-4 h-14 w-full text-green-light"
-            viewBox={`0 0 ${barcode.width} 40`}
-            preserveAspectRatio="none"
-          >
-            {
-              barcode.bars.map((bar) => (
-                <rect x={bar.x} y="0" width={bar.width} height="40" fill="currentColor" />
-              ))
-            }
-          </svg>
-
-          <p class="mt-2 font-mono text-xs tracking-[0.3em] text-green-light">
-            <span class="sr-only">Código </span>{code}
-          </p>
-        </div>
-
-        {
-          labelRows.length > 0 && (
-            <dl class="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-dashed border-ui-border pb-5 pl-7 pr-6 pt-5">
-              {labelRows.map((row) => (
-                <div class="min-w-0">
-                  <dt class="text-[10px] font-bold uppercase tracking-wider text-grey-custom/70">
-                    {row.label}
-                  </dt>
-                  <dd class="mt-0.5 text-sm font-bold leading-snug text-green-light">
-                    {row.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          )
-        }
-      </figure>
+      />
     </div>
   </header>
 
@@ -172,31 +148,25 @@ const labelRows = [
   <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
     <div class="space-y-10 lg:col-span-8">
       <section aria-labelledby="prep-title">
-        <div class="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2
-              id="prep-title"
-              class="text-2xl font-black tracking-tight text-green-light sm:text-3xl"
-            >
-              Antes de tu toma
-            </h2>
-            <p class="mt-2 text-sm text-grey-custom sm:text-base">
-              Sigue estas indicaciones para que tu muestra sea válida.
-            </p>
-          </div>
+        <SectionHeader
+          id="prep-title"
+          title="Antes de tu toma"
+          lead="Sigue estas indicaciones para que tu muestra sea válida."
+        >
           {
             fastingHours && (
-              <div class="inline-flex items-center gap-2 rounded-clinical-sm border border-yellow-secondary/25 bg-yellow-primary/10 px-3 py-1.5 text-xs font-black text-yellow-secondary">
+              <span
+                slot="aside"
+                class="inline-flex items-center gap-2 rounded-clinical-sm bg-yellow-primary px-3 py-1.5 text-xs font-bold text-black-custom"
+              >
                 <Icon name="lucide:timer" class="h-4 w-4" />
                 Ayuno de {fastingHours} h
-              </div>
+              </span>
             )
           }
-        </div>
+        </SectionHeader>
 
-        <div
-          class="mt-6 rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs"
-        >
+        <div class:list={[cardStyles(), "mt-6"]}>
           {
             prepSteps.length > 0 ? (
               <ul class="space-y-4">
@@ -204,19 +174,19 @@ const labelRows = [
                   <li class="flex gap-3">
                     <Icon
                       name="lucide:check"
-                      class="mt-0.5 h-4 w-4 shrink-0 text-green-primary"
+                      class="mt-0.5 h-4 w-4 shrink-0 text-brand-ink"
                     />
-                    <span class="text-sm leading-relaxed text-grey-custom sm:text-base">
+                    <span class="text-sm leading-relaxed text-ink-muted sm:text-base">
                       {step}
                     </span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p class="flex gap-3 text-sm leading-relaxed text-grey-custom sm:text-base">
+              <p class="flex gap-3 text-sm leading-relaxed text-ink-muted sm:text-base">
                 <Icon
                   name="lucide:check"
-                  class="mt-0.5 h-4 w-4 shrink-0 text-green-primary"
+                  class="mt-0.5 h-4 w-4 shrink-0 text-brand-ink"
                 />
                 Sin indicaciones registradas. Confirma en sucursal antes de tu
                 toma.
@@ -229,30 +199,23 @@ const labelRows = [
       {
         isPanel && panelTree && (
           <section aria-labelledby="panel-title">
-            <div class="flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <h2
-                  id="panel-title"
-                  class="text-2xl font-black tracking-tight text-green-light sm:text-3xl"
-                >
-                  Estudios incluidos
-                </h2>
-                <p class="mt-2 text-sm text-grey-custom sm:text-base">
-                  Este perfil se procesa y cobra como un solo estudio.
-                </p>
-              </div>
+            <SectionHeader
+              id="panel-title"
+              title="Estudios incluidos"
+              lead="Este perfil se procesa y cobra como un solo estudio."
+            >
               {panelCount > 0 && (
-                <span class="text-sm font-bold tabular-nums text-grey-custom/70">
+                <span slot="aside" class="text-sm font-bold tabular-nums text-ink-subtle">
                   {panelCount} {panelCount === 1 ? "estudio" : "estudios"}
                 </span>
               )}
-            </div>
+            </SectionHeader>
 
-            <div class="mt-6 rounded-clinical-md border border-ui-border bg-white px-6 py-2 shadow-xs">
+            <div class:list={[cardStyles({ padding: "none" }), "mt-6 px-6 py-2"]}>
               {panelChildren.length > 0 ? (
                 <StudyPanelTree nodes={panelChildren} />
               ) : (
-                <p class="py-4 text-sm leading-relaxed text-grey-custom">
+                <p class="py-4 text-sm leading-relaxed text-ink-muted">
                   Este perfil no tiene estudios registrados.
                 </p>
               )}
@@ -264,7 +227,7 @@ const labelRows = [
 
     <aside class="lg:col-span-4">
       <div class="sticky top-24 space-y-4">
-        <StudyActionCard study={study} client:load />
+        <StudyActionCard study={study} quoterService={quoterService} client:load />
 
         <button
           type="button"
@@ -284,24 +247,18 @@ const labelRows = [
   {
     recommendedStudies.length > 0 && (
       <section>
-        <div class="motion-safe:animate-fade-up">
-          <h2 class="text-2xl font-black tracking-tight text-green-light sm:text-3xl">
-            Otros estudios
-          </h2>
-          <p class="mt-2 text-sm text-grey-custom sm:text-base">
-            Disponibles en tu sucursal.
-          </p>
-        </div>
+        <SectionHeader
+          class="motion-safe:animate-fade-up"
+          title="Otros estudios"
+          lead="Del mismo servicio, con precio en tu sucursal."
+        />
 
-        <div class="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
-          {recommendedStudies.map((recommended, index) => (
-            <div
-              class="motion-safe:animate-fade-up"
-              style={`animation-delay:${(index % 4) * 100}ms`}
-            >
-              <CardStudy study={recommended} client:visible />
-            </div>
-          ))}
+        <div class="mt-6">
+          <StudyList studies={recommendedStudies} client:visible />
+          <a href="/estudios" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline">
+            Ver todos los estudios
+            <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+          </a>
         </div>
       </section>
     )

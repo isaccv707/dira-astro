@@ -102,7 +102,22 @@ export const breadcrumbJsonLd = (
   })),
 });
 
-export const blogPostingJsonLd = (post: Post, description: string): JsonLd => ({
+/** schema.org ItemList of study pages, e.g. one page of the catalog. */
+export const studyItemListJsonLd = (
+  studies: { name: string; slug: string }[],
+  offset = 0,
+): JsonLd => ({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: studies.map((study, index) => ({
+    "@type": "ListItem",
+    position: offset + index + 1,
+    name: study.name,
+    url: absoluteUrl(`/study/${study.slug}`),
+  })),
+});
+
+export const blogPostingJsonLd =(post: Post, description: string): JsonLd => ({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: post.title,

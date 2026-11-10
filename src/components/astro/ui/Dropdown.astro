@@ -1,33 +1,100 @@
 ---
-import Button from "../../react/buttons/Button";
+import { Icon } from "astro-icon/components";
+import { isActivePath } from "../../../routes/routes";
 
 interface Props {
   routes: { label: string; href: string }[];
   text: string;
+  /** Current pathname, to mark the active item with aria-current. */
+  currentPath?: string;
 }
 
-const { routes, text } = Astro.props;
+const { routes, text, currentPath = "" } = Astro.props;
+const menuId = `menu-${text.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+const hasActiveItem = routes.some((route) => isActivePath(currentPath, route.href));
 ---
 
-<div class="relative inline-block text-left group">
-  <Button client:load text={text} variant="primary" size="sm" />
-
-  <div
-    class="absolute left-0 mt-2 w-44 bg-white divide-y divide-ui-border rounded-clinical-sm shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+<!-- Disclosure menu: opens on click/Enter (touch and keyboard) and on hover
+     for pointer users; Escape and outside clicks close it. -->
+<div class="group relative" data-dropdown>
+  <button
+    type="button"
+    class:list={[
+      "inline-flex items-center gap-1 rounded-clinical-sm px-2 py-2 text-sm font-medium transition-colors duration-200 hover:text-brand-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2",
+      hasActiveItem ? "text-brand-ink" : "text-ink",
+    ]}
+    aria-expanded="false"
+    aria-controls={menuId}
+    data-dropdown-trigger
   >
-    <ul class="py-2 text-sm text-green-primary">
-      {
-        routes.map((opt, index) => (
+    {text}
+    <Icon
+      name="lucide:chevron-down"
+      aria-hidden="true"
+      class="h-4 w-4 transition-transform duration-200 group-data-[open]:rotate-180 motion-reduce:transition-none"
+    />
+  </button>
+
+  <ul
+    id={menuId}
+    class="invisible absolute left-0 top-full z-50 mt-1 w-56 rounded-clinical-md border border-ui-border bg-white py-1.5 opacity-0 shadow-md transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-data-[open]:visible group-data-[open]:opacity-100 motion-reduce:transition-none"
+  >
+    {
+      routes.map((route) => {
+        const isActive = isActivePath(currentPath, route.href);
+        return (
           <li>
             <a
-              href={opt.href}
-              class="block px-4 py-2 text-green-light hover:bg-green-primary hover:text-white"
+              href={route.href}
+              aria-current={isActive ? "page" : undefined}
+              class:list={[
+                "block px-4 py-2 text-sm transition-colors duration-150 hover:bg-green-secondary/25 hover:text-ink focus-visible:bg-green-secondary/25 focus-visible:outline-none",
+                isActive ? "font-semibold text-brand-ink" : "text-ink",
+              ]}
             >
-              {opt.label}
+              {route.label}
             </a>
           </li>
-        ))
-      }
-    </ul>
-  </div>
+        );
+      })
+    }
+  </ul>
 </div>
+
+<script>
+  const closeAll = (except?: Element) => {
+    document.querySelectorAll<HTMLElement>("[data-dropdown][data-open]").forEach((dropdown) => {
+      if (dropdown === except) return;
+      delete dropdown.dataset.open;
+      dropdown
+        .querySelector("[data-dropdown-trigger]")
+        ?.setAttribute("aria-expanded", "false");
+    });
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-dropdown]").forEach((dropdown) => {
+    const trigger = dropdown.querySelector<HTMLButtonElement>("[data-dropdown-trigger]");
+    trigger?.addEventListener("click", () => {
+      const willOpen = !("open" in dropdown.dataset);
+      closeAll(dropdown);
+      if (willOpen) dropdown.dataset.open = "";
+      else delete dropdown.dataset.open;
+      trigger.setAttribute("aria-expanded", String(willOpen));
+    });
+    // Leaving the menu with Tab closes it.
+    dropdown.addEventListener("focusout", (event) => {
+      if (!dropdown.contains(event.relatedTarget as Node | null)) closeAll();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!(event.target as Element).closest("[data-dropdown]")) closeAll();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    const open = document.querySelector<HTMLElement>("[data-dropdown][data-open]");
+    if (!open) return;
+    closeAll();
+    open.querySelector<HTMLButtonElement>("[data-dropdown-trigger]")?.focus();
+  });
+</script>

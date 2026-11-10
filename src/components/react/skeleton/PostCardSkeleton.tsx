@@ -1,9 +1,9 @@
 const PostCardSkeleton = () => {
   return (
-    <div className="w-full h-full bg-white border border-ui-border rounded-clinical-md shadow-xs overflow-hidden animate-pulse">
+    <div className="w-full h-full bg-white border border-ui-border rounded-clinical-md shadow-xs overflow-hidden motion-safe:animate-pulse">
       <div className="aspect-video bg-ui-bg" />
 
-      <div className="p-6 md:p-8">
+      <div className="p-6">
         <div className="flex gap-2">
           <div className="h-5 w-16 bg-ui-border rounded-clinical-sm" />
           <div className="h-5 w-20 bg-ui-border rounded-clinical-sm" />
