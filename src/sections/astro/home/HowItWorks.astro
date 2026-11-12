@@ -36,21 +36,21 @@ const steps = [
   <ol class="grid gap-px overflow-hidden rounded-clinical-md border border-ui-border bg-ui-border sm:grid-cols-2 lg:grid-cols-4">
     {
       steps.map((step, index) => (
-        <li class="flex flex-col bg-white p-6">
+        <li class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 bg-white p-5 sm:flex sm:flex-col sm:p-6">
           <span
             aria-hidden="true"
-            class:list={["flex h-10 w-10 items-center justify-center rounded-full font-mono text-sm font-semibold", brandFill(index)]}
+            class:list={["row-span-3 flex h-10 w-10 items-center justify-center rounded-full font-mono text-sm font-semibold", brandFill(index)]}
           >
             {String(index + 1).padStart(2, "0")}
           </span>
-          <h3 class="mt-4 text-base font-bold text-ink">{step.title}</h3>
+          <h3 class="self-center text-base font-bold text-ink sm:mt-4 sm:self-auto">{step.title}</h3>
           <p class="mt-2 text-sm leading-relaxed text-ink-muted">{step.text}</p>
           {step.link && (
             <a
               href={step.link.href}
               target={step.link.href.startsWith("http") ? "_blank" : undefined}
               rel={step.link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              class="mt-auto pt-4 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline"
+              class="col-start-2 mt-auto inline-flex min-h-11 items-center justify-self-start pt-1 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline sm:pt-4"
             >
               {step.link.label}
             </a>

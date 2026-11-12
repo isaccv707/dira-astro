@@ -21,7 +21,7 @@ const Carousel = ({
   if (slides.length === 0) return null;
 
   return (
-    <div className="w-full h-full block relative group">
+    <div className="relative block h-full w-full min-w-0 max-w-full">
       <Swiper
         modules={[Autoplay, Pagination, Navigation]}
         slidesPerView={slidesPreview}
