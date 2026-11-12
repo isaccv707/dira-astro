@@ -18,7 +18,7 @@ pnpm dev        # http://localhost:4321 (host: true → also on the local networ
 pnpm build      # → dist/ (client + server)
 pnpm preview
 pnpm start      # node ./dist/server/entry.mjs (after build)
-pnpm lint       # ESLint (eslint.config.js), --max-warnings 14 (existing debt; lower the cap when fixing, never raise it) + UI guard
+pnpm lint       # ESLint (eslint.config.js), --max-warnings 13 (existing debt; lower the cap when fixing, never raise it) + UI guard
 pnpm lint:ui    # UI guard only (scripts/check-ui.mjs)
 pnpm check      # astro check: typecheck of .astro/.ts/.tsx
 pnpm api:types  # regenerates src/api/generated/openapi.d.ts from ../backend-dyra/openapi.json

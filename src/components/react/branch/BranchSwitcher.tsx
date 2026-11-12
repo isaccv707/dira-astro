@@ -50,7 +50,7 @@ const BranchSwitcher = ({
         name ? `Sucursal actual: ${name}. Cambiar sucursal` : "Elegir sucursal"
       }
       title={name ? "Cambiar sucursal" : "Elegir sucursal"}
-      className="group inline-flex max-w-full items-center gap-2 rounded-full border border-green-secondary bg-green-secondary/20 px-3 py-1.5 text-left transition-colors duration-200 hover:bg-green-secondary/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2 disabled:opacity-70"
+      className="group inline-flex min-w-0 max-w-full items-center gap-2 rounded-full border border-green-secondary bg-green-secondary/20 px-3 py-1.5 text-left transition-colors duration-200 hover:bg-green-secondary/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2 disabled:opacity-70"
     >
       <MapPin
         aria-hidden="true"

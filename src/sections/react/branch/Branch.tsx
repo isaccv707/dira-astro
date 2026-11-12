@@ -77,12 +77,12 @@ const BranchSection = () => {
 
       {/* Selected branch detail */}
       {branchData && (
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="min-w-0 space-y-6">
             <BranchCard branch={branchData} />
           </div>
 
-          <div id="map-card-container" className="lg:sticky lg:top-24 h-fit">
+          <div id="map-card-container" className="h-fit min-w-0 lg:sticky lg:top-24">
             <MapCard branch={branchData} />
           </div>
         </div>
