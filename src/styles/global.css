@@ -103,3 +103,10 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Swiper (home banner, reviews): brand bullets instead of the library blue.
+   Set on .swiper: the bundle's own :root defaults load after this file. */
+.swiper {
+  --swiper-theme-color: var(--color-brand-ink);
+  --swiper-pagination-bullet-inactive-color: var(--color-ink-subtle);
+}
