@@ -21,6 +21,7 @@ import {
 import { organizationJsonLd, websiteJsonLd } from "../utils/structuredData";
 import { resolveBranchId } from "../stores/branchStore";
 import { getActiveBranchResultsUrl } from "../api/branchesApi/branchesApi";
+import { ADS_CONVERSIONS, GOOGLE_ADS_ID } from "../utils/gtag";
 
 interface Props {
   title: string;
@@ -63,7 +64,7 @@ const structuredData = [
   ...jsonLd,
 ];
 
-const GA_MEASUREMENT_ID = "AW-17974653170";
+const GA_MEASUREMENT_ID = GOOGLE_ADS_ID;
 
 const servicesRoutes = await getServicesNavRoutes();
 const renderedBranchId = resolveBranchId() ?? "";
@@ -94,13 +95,30 @@ const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
       src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
     ></script>
 
-    <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+    <script is:inline define:vars={{ GA_MEASUREMENT_ID, ADS_CONVERSIONS }}>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
+      window.gtag = gtag;
       gtag("js", new Date());
       gtag("config", GA_MEASUREMENT_ID);
+
+      // Google Ads conversions: one delegated listener covers every
+      // WhatsApp (wa.me / api.whatsapp.com) and tel: link on the page.
+      document.addEventListener(
+        "click",
+        function (event) {
+          const link = event.target.closest && event.target.closest("a[href]");
+          if (!link) return;
+          const href = link.getAttribute("href") || "";
+          let sendTo = null;
+          if (/^tel:/i.test(href)) sendTo = ADS_CONVERSIONS.call;
+          else if (/(wa\.me|whatsapp\.com)\//i.test(href)) sendTo = ADS_CONVERSIONS.whatsapp;
+          if (sendTo) gtag("event", "conversion", { send_to: sendTo });
+        },
+        true,
+      );
     </script>
 
     <!-- Favicons -->
