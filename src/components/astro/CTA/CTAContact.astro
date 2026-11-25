@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { getActiveBranchContact } from "../../../api/branchesApi/branchesApi";
-import { buildWhatsappUrl } from "../../../utils/whatsapp";
+import { buildTelUrl, buildWhatsappUrl } from "../../../utils/whatsapp";
 import { urlWhatsapp } from "../../../constants/urlWhatsapp";
 import { brandFill } from "../../../styles/ui";
 
@@ -23,7 +23,7 @@ const channels = [
     external: true,
   },
   contact?.phone && {
-    href: `tel:${contact.phone}`,
+    href: buildTelUrl(contact.phone),
     icon: "lucide:phone",
     label: "Llamar",
     detail: contact.phone,
