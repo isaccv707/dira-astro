@@ -5,6 +5,37 @@ export const ADS_CONVERSIONS = {
   call: `${GOOGLE_ADS_ID}/5TblCLLkx7gdEPLh_fpC`,
 } as const;
 
+/**
+ * Google's standard gtag.js bootstrap, emitted as a plain global script (no
+ * IIFE) so `dataLayer`/`gtag` are exactly what Tag Assistant expects.
+ */
+export const GTAG_BOOTSTRAP = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GOOGLE_ADS_ID}');
+`;
+
+/**
+ * Site-wide conversion listener: every WhatsApp (wa.me / api.whatsapp.com)
+ * and tel: link, including ones rendered later by React islands. Capture
+ * phase so a component calling stopPropagation() cannot swallow it.
+ * Clicks that open WhatsApp without a link (window.open) call
+ * trackConversion() themselves.
+ */
+export const GTAG_CLICK_CONVERSIONS = `
+document.addEventListener('click', function (e) {
+  var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+  if (!a || typeof gtag !== 'function') return;
+  var href = (a.getAttribute('href') || '').trim().toLowerCase();
+  if (href.indexOf('wa.me') > -1 || href.indexOf('api.whatsapp.com') > -1) {
+    gtag('event', 'conversion', {'send_to': '${ADS_CONVERSIONS.whatsapp}'});
+  } else if (href.indexOf('tel:') === 0) {
+    gtag('event', 'conversion', {'send_to': '${ADS_CONVERSIONS.call}'});
+  }
+}, true);
+`;
+
 type GtagWindow = Window & { gtag?: (...args: unknown[]) => void };
 
 export const trackConversion = (kind: keyof typeof ADS_CONVERSIONS): void => {
