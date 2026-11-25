@@ -1,4 +1,4 @@
-/** Mexico country code: wa.me rejects national 10-digit numbers. */
+/** Mexico country code: wa.me and tel: need the full international number. */
 const MX_COUNTRY_CODE = "52";
 
 /** Digits only, prefixed with 52 when the number is a bare 10-digit MX number. */
@@ -10,6 +10,18 @@ export const toWhatsappNumber = (phone: string): string => {
 export const buildWhatsappUrl = (phone: string, message?: string): string => {
   const base = `https://wa.me/${toWhatsappNumber(phone)}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+};
+
+/**
+ * `tel:` link in E.164 (`tel:+523337223456`): the backend stores branch phones
+ * as typed ("33 3722 3456"), and spaces or a missing country code break the
+ * dialer on some devices.
+ */
+export const buildTelUrl = (phone: string): string => {
+  const number = toWhatsappNumber(phone);
+  return number.startsWith(MX_COUNTRY_CODE) && number.length === 12
+    ? `tel:+${number}`
+    : `tel:${number}`;
 };
 
 /**

@@ -6,7 +6,7 @@ import { getServicesNavRoutes } from "../../../api/servicesApi/serviceApi";
 import { getActiveBranchDetails } from "../../../api/branchesApi/branchesApi";
 import { getFullAddress } from "../../../utils/maps.utils";
 import { formatSchedule } from "../../../utils/schedule.utils";
-import { buildWhatsappUrl } from "../../../utils/whatsapp";
+import { buildTelUrl, buildWhatsappUrl } from "../../../utils/whatsapp";
 import dyraLogo from "../../../assets/images/logos/logo.png";
 import BrandStripe from "../../../components/astro/ui/BrandStripe.astro";
 
@@ -73,7 +73,7 @@ const headingClass = "text-2xs font-semibold uppercase tracking-wide text-brand-
               {branch.phone && (
                 <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
                   <Icon name="lucide:phone" aria-hidden="true" class="h-4 w-4 shrink-0 text-brand-ink" />
-                  <a href={`tel:${branch.phone}`} class:list={[linkClass, "font-mono"]}>
+                  <a href={buildTelUrl(branch.phone)} class:list={[linkClass, "font-mono"]}>
                     {branch.phone}
                   </a>
                   <a

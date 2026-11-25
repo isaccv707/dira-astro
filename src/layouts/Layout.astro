@@ -21,7 +21,12 @@ import {
 import { organizationJsonLd, websiteJsonLd } from "../utils/structuredData";
 import { resolveBranchId } from "../stores/branchStore";
 import { getActiveBranchResultsUrl } from "../api/branchesApi/branchesApi";
-import { ADS_CONVERSIONS, GOOGLE_ADS_ID } from "../utils/gtag";
+import {
+  GOOGLE_ADS_ID,
+  GTAG_BOOTSTRAP,
+  GTAG_CLICK_CONVERSIONS,
+} from "../utils/gtag";
+import { getActiveBranchContact } from "../api/branchesApi/branchesApi";
 
 interface Props {
   title: string;
@@ -64,11 +69,12 @@ const structuredData = [
   ...jsonLd,
 ];
 
-const GA_MEASUREMENT_ID = GOOGLE_ADS_ID;
-
 const servicesRoutes = await getServicesNavRoutes();
 const renderedBranchId = resolveBranchId() ?? "";
 const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
+// Resolved on the server so the floating WhatsApp button links to the active
+// branch from the first paint, not the env fallback until hydration.
+const branchContact = await getActiveBranchContact();
 ---
 
 <!doctype html>
@@ -76,6 +82,14 @@ const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google tag (gtag.js) - DYRA Google Ads. Keep it first in <head>. -->
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+    ></script>
+    <script is:inline set:html={GTAG_BOOTSTRAP} />
 
     <!-- SEO Meta Tags -->
     <title>{title}</title>
@@ -87,39 +101,6 @@ const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
       content={noindex ? "noindex, follow" : "index, follow"}
     />
     <meta name="generator" content={Astro.generator} />
-
-    <!-- Google tag (gtag.js) -->
-    <script
-      is:inline
-      async
-      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-    ></script>
-
-    <script is:inline define:vars={{ GA_MEASUREMENT_ID, ADS_CONVERSIONS }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      window.gtag = gtag;
-      gtag("js", new Date());
-      gtag("config", GA_MEASUREMENT_ID);
-
-      // Google Ads conversions: one delegated listener covers every
-      // WhatsApp (wa.me / api.whatsapp.com) and tel: link on the page.
-      document.addEventListener(
-        "click",
-        function (event) {
-          const link = event.target.closest && event.target.closest("a[href]");
-          if (!link) return;
-          const href = link.getAttribute("href") || "";
-          let sendTo = null;
-          if (/^tel:/i.test(href)) sendTo = ADS_CONVERSIONS.call;
-          else if (/(wa\.me|whatsapp\.com)\//i.test(href)) sendTo = ADS_CONVERSIONS.whatsapp;
-          if (sendTo) gtag("event", "conversion", { send_to: sendTo });
-        },
-        true,
-      );
-    </script>
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" href={logo.src} />
@@ -203,12 +184,15 @@ const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
       <slot />
     </main>
     <ToastContainer client:only="react" />
-    <FloatingActions client:load />
+    <FloatingActions client:load contact={branchContact} />
 
     <ModalManager client:load />
     <DrawerManager client:load services={servicesRoutes} resultsUrl={resultsUrl} />
 
     <BranchSelectorManager client:load />
     <Footer />
+
+    <!-- Google Ads conversions: WhatsApp and phone link clicks. -->
+    <script is:inline set:html={GTAG_CLICK_CONVERSIONS} />
   </body>
 </html>

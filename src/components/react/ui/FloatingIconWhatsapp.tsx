@@ -3,13 +3,19 @@ import { Icon } from "@iconify/react";
 import { urlWhatsapp } from "../../../constants/urlWhatsapp";
 import { buildWhatsappUrl } from "../../../utils/whatsapp";
 import { useActiveBranchContact } from "../../../hooks/useActiveBranchContact";
+import type { ActiveBranchContact } from "../../../api/branchesApi/branchesApi";
+
+interface Props {
+  /** Active branch contact resolved on the server (Layout). */
+  contact?: ActiveBranchContact | null;
+}
 
 /**
  * One tap to the active branch's WhatsApp. The previous greeting popover
  * added a step between the visitor and the chat without adding information.
  */
-const FloatingIconWhatsapp = () => {
-  const contact = useActiveBranchContact();
+const FloatingIconWhatsapp = ({ contact: initialContact }: Props) => {
+  const contact = useActiveBranchContact(initialContact);
   const whatsappUrl = contact?.phone ? buildWhatsappUrl(contact.phone) : urlWhatsapp;
 
   if (!whatsappUrl) return null;
