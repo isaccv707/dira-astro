@@ -7,6 +7,7 @@ import {
   SITE_URL,
   absoluteUrl,
 } from "../constants/site";
+import { formatInternationalPhone } from "./whatsapp";
 
 // schema.org JSON-LD builders. Every object is rendered by Layout.astro in
 // <script type="application/ld+json">; keep values to data we actually have.
@@ -73,7 +74,7 @@ export const branchJsonLd = (branch: Branch): JsonLd => {
     name: branch.name,
     url: absoluteUrl("/branches"),
     parentOrganization: { "@id": ORGANIZATION_ID },
-    ...(branch.phone && { telephone: branch.phone }),
+    ...(branch.phone && { telephone: formatInternationalPhone(branch.phone) }),
     ...(branch.email && { email: branch.email }),
     address: {
       "@type": "PostalAddress",

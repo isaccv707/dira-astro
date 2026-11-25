@@ -25,6 +25,26 @@ export const buildTelUrl = (phone: string): string => {
 };
 
 /**
+ * Display format for MX phones ("33 3722 3456"); the backend stores them as
+ * typed, so branches showed mixed formats. Non-10-digit values are returned
+ * as typed.
+ */
+export const formatPhone = (phone: string): string => {
+  const digits = phone.replace(/\D/g, "");
+  const national =
+    digits.length === 12 && digits.startsWith(MX_COUNTRY_CODE) ? digits.slice(2) : digits;
+  return national.length === 10
+    ? `${national.slice(0, 2)} ${national.slice(2, 6)} ${national.slice(6)}`
+    : phone.trim();
+};
+
+/** International display format for structured data ("+52 33 3722 3456"). */
+export const formatInternationalPhone = (phone: string): string => {
+  const display = formatPhone(phone);
+  return /^\d{2} \d{4} \d{4}$/.test(display) ? `+${MX_COUNTRY_CODE} ${display}` : display;
+};
+
+/**
  * Rebuilds a configured WhatsApp link (wa.me/<n> or api.whatsapp.com/send?phone=<n>)
  * as wa.me with the country code. Unknown formats are returned unchanged.
  */
