@@ -24,16 +24,22 @@ gtag('config', '${GOOGLE_ADS_ID}');
  * trackConversion() themselves.
  */
 export const GTAG_CLICK_CONVERSIONS = `
-document.addEventListener('click', function (e) {
-  var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
-  if (!a || typeof gtag !== 'function') return;
-  var href = (a.getAttribute('href') || '').trim().toLowerCase();
-  if (href.indexOf('wa.me') > -1 || href.indexOf('api.whatsapp.com') > -1) {
-    gtag('event', 'conversion', {'send_to': '${ADS_CONVERSIONS.whatsapp}'});
-  } else if (href.indexOf('tel:') === 0) {
-    gtag('event', 'conversion', {'send_to': '${ADS_CONVERSIONS.call}'});
+(function () {
+  function trackLink(e) {
+    // auxclick: middle click ("open in new tab") still reaches WhatsApp.
+    if (e.type === 'auxclick' && e.button !== 1) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || typeof gtag !== 'function') return;
+    var href = (a.getAttribute('href') || '').trim().toLowerCase();
+    if (href.indexOf('wa.me') > -1 || href.indexOf('api.whatsapp.com') > -1) {
+      gtag('event', 'conversion', {'send_to': '${ADS_CONVERSIONS.whatsapp}'});
+    } else if (href.indexOf('tel:') === 0) {
+      gtag('event', 'conversion', {'send_to': '${ADS_CONVERSIONS.call}'});
+    }
   }
-}, true);
+  document.addEventListener('click', trackLink, true);
+  document.addEventListener('auxclick', trackLink, true);
+})();
 `;
 
 type GtagWindow = Window & { gtag?: (...args: unknown[]) => void };

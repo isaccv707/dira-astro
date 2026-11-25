@@ -1,5 +1,5 @@
 ---
-import { buildTelUrl } from "../utils/whatsapp";
+import { buildTelUrl, formatPhone } from "../utils/whatsapp";
 import { Icon } from "astro-icon/components";
 import Eyebrow from "../components/astro/ui/Eyebrow.astro";
 import SectionHeader from "../components/astro/ui/SectionHeader.astro";
@@ -66,8 +66,12 @@ const mapsUrl = (address: string) =>
                   {branch.phone && (
                     <p class="flex items-center gap-2">
                       <Icon name="lucide:phone" aria-hidden="true" class="h-4 w-4 shrink-0 text-brand-ink" />
-                      <a href={buildTelUrl(branch.phone)} class="font-mono hover:text-brand-ink">
-                        {branch.phone}
+                      <a
+                        href={buildTelUrl(branch.phone)}
+                        aria-label={`Llamar a ${branch.name} al ${formatPhone(branch.phone)}`}
+                        class="font-mono hover:text-brand-ink"
+                      >
+                        {formatPhone(branch.phone)}
                       </a>
                     </p>
                   )}

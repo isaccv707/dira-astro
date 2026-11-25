@@ -2,7 +2,7 @@ import type { Branch } from "../../../interfaces/branch.interface";
 import { getFullAddress } from "../../../utils/maps.utils";
 import NavLinkButton from "../navigation/NavLinkButton";
 import ContactItem from "../ui/ContactItem";
-import { buildTelUrl, buildWhatsappUrl } from "../../../utils/whatsapp";
+import { buildTelUrl, buildWhatsappUrl, formatPhone } from "../../../utils/whatsapp";
 
 interface BranchCardProps {
   branch: Branch;
@@ -51,13 +51,13 @@ const BranchCard = ({ branch }: BranchCardProps) => {
         <div className="mt-6 space-y-3 border-t border-ui-border pt-6 text-sm">
           <ContactItem
             icon="lucide:phone-call"
-            value={phone}
+            value={phone ? formatPhone(phone) : phone}
             label={"Tel"}
             href={phone ? buildTelUrl(phone) : undefined}
           />
           <ContactItem
             icon="tabler:brand-whatsapp"
-            value={phone}
+            value={phone ? formatPhone(phone) : phone}
             label={"WhatsApp"}
             href={phone ? buildWhatsappUrl(phone) : undefined}
           />
