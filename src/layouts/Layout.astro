@@ -167,11 +167,13 @@ const branchContact = await getActiveBranchContact();
          for a branch the user has since switched away from: refetch it. -->
     <script is:inline>
       window.addEventListener("pageshow", function (event) {
-        var stored = null;
+        let stored = null;
         try {
           stored = localStorage.getItem("dyra_branch_id");
-        } catch (e) {}
-        var rendered = document.documentElement.dataset.branchId;
+        } catch {
+          // Storage blocked (private mode, disabled cookies): skip the check.
+        }
+        const rendered = document.documentElement.dataset.branchId;
         if (event.persisted && stored && rendered && stored !== rendered) {
           window.location.reload();
         }
