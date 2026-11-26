@@ -1,5 +1,7 @@
 /** Google Ads account and conversion actions (public IDs, not secrets). */
 export const GOOGLE_ADS_ID = "AW-17974653170";
+/** Google Tag Manager container (public ID). Loaded next to gtag.js; both share dataLayer. */
+export const GTM_ID = "GTM-M4JDX6KF";
 export const ADS_CONVERSIONS = {
   whatsapp: `${GOOGLE_ADS_ID}/3PhiCK_kx7gdEPLh_fpC`,
   call: `${GOOGLE_ADS_ID}/5TblCLLkx7gdEPLh_fpC`,
