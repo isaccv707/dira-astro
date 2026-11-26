@@ -22,8 +22,8 @@ gtag('config', '${GOOGLE_ADS_ID}');
  * Site-wide conversion listener: every WhatsApp (wa.me / api.whatsapp.com)
  * and tel: link, including ones rendered later by React islands. Capture
  * phase so a component calling stopPropagation() cannot swallow it.
- * Clicks that open WhatsApp without a link (window.open) call
- * trackConversion() themselves.
+ * Only real links count: the cart's "schedule by WhatsApp" (window.open) is
+ * deliberately not tracked as an Ads conversion.
  */
 export const GTAG_CLICK_CONVERSIONS = `
 (function () {
@@ -43,12 +43,3 @@ export const GTAG_CLICK_CONVERSIONS = `
   document.addEventListener('auxclick', trackLink, true);
 })();
 `;
-
-type GtagWindow = Window & { gtag?: (...args: unknown[]) => void };
-
-export const trackConversion = (kind: keyof typeof ADS_CONVERSIONS): void => {
-  if (typeof window === "undefined") return;
-  (window as GtagWindow).gtag?.("event", "conversion", {
-    send_to: ADS_CONVERSIONS[kind],
-  });
-};
