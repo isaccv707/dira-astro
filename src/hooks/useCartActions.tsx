@@ -1,7 +1,6 @@
 import type { Study } from "../interfaces/study.interface";
 import { urlWhatsapp } from "../constants/urlWhatsapp";
 import { buildWhatsappUrl } from "../utils/whatsapp";
-import { trackConversion } from "../utils/gtag";
 import { useActiveBranchContact } from "./useActiveBranchContact";
 
 export const useCartActions = () => {
@@ -25,7 +24,6 @@ export const useCartActions = () => {
         const whatsappUrl = contact?.phone
             ? buildWhatsappUrl(contact.phone, message)
             : `${urlWhatsapp}?text=${encodeURIComponent(message)}`;
-        trackConversion("whatsapp");
         window.open(whatsappUrl, "_blank");
     };
     return {
