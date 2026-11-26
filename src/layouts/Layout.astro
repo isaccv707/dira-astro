@@ -23,6 +23,7 @@ import { resolveBranchId } from "../stores/branchStore";
 import { getActiveBranchResultsUrl } from "../api/branchesApi/branchesApi";
 import {
   GOOGLE_ADS_ID,
+  GTM_ID,
   GTAG_BOOTSTRAP,
   GTAG_CLICK_CONVERSIONS,
 } from "../utils/gtag";
@@ -83,7 +84,13 @@ const branchContact = await getActiveBranchContact();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google tag (gtag.js) - DYRA Google Ads. Keep it first in <head>. -->
+    <!-- Google tags: GTM container + gtag.js (Google Ads). Keep them first in
+         <head>; one shared dataLayer/gtag bootstrap for both. -->
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`}
+    ></script>
     <script
       is:inline
       async
