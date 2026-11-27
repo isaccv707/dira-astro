@@ -8,10 +8,18 @@ import QuoteSummary from "./QuoteSummary";
 import { Buttonstyles } from "../../../styles/buttonsStyles";
 import { formatMXN } from "../../../utils/currency";
 import {
+  addStudyToQuote,
   ensureQuoterStudiesSynced,
   selectedStudiesStore,
   totalsStore,
 } from "../../../stores/quoterStore";
+import { getStoredBranchId } from "../../../stores/branchStore";
+import {
+  QUOTER_STUDY_PARAM,
+  preloadStudyIntoQuote,
+  type QuoterPreloadResult,
+} from "../../../utils/quoterPreload";
+import QuoterPreloadNotice from "./QuoterPreloadNotice";
 
 type Step = "studies" | "details";
 
@@ -34,6 +42,42 @@ const Quoter = () => {
   const isFirstRender = useRef(true);
 
   useEffect(() => ensureQuoterStudiesSynced(), []);
+
+  // /quoter?estudio=<slug> (links from the home page, study pages and
+  // promotions): add that study before showing step 1, so the service
+  // picker opens on the study's own service.
+  // Starts null on both server and client (no hydration mismatch); the
+  // effect switches to "loading" before step 1 fetches anything.
+  const [preload, setPreload] = useState<QuoterPreloadResult | "loading" | null>(null);
+  const [selectorKey, setSelectorKey] = useState(0);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get(QUOTER_STUDY_PARAM)?.trim();
+    const branchId = getStoredBranchId();
+    if (!slug) return;
+    setPreload("loading");
+    // Drop the param so a reload or Back doesn't add the study again.
+    params.delete(QUOTER_STUDY_PARAM);
+    const query = params.toString();
+    window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+    if (!branchId) {
+      setPreload(null);
+      return;
+    }
+    preloadStudyIntoQuote(slug, branchId)
+      .then(setPreload)
+      .catch(() => setPreload({ status: "unavailable", slug }));
+  }, []);
+
+  const confirmPreloadReplace = () => {
+    if (preload && preload !== "loading" && preload.status === "conflict") {
+      addStudyToQuote(preload.study, preload.service);
+      setPreload({ status: "added", study: preload.study });
+      // Remount step 1 so its service picker opens on the new service.
+      setSelectorKey((key) => key + 1);
+    }
+  };
 
   // Move focus to the new step's heading so keyboard and screen-reader
   // users land where the content changed.
@@ -109,8 +153,22 @@ const Quoter = () => {
             : "Con estos datos generamos el PDF de tu cotización."}
         </p>
 
+        {preload && preload !== "loading" && (
+          <QuoterPreloadNotice
+            result={preload}
+            onConfirmReplace={confirmPreloadReplace}
+            onDismiss={() => setPreload(null)}
+          />
+        )}
+
         {step === "studies" ? (
-          <QuoterSelectStudies />
+          preload === "loading" ? (
+            <p role="status" className="py-10 text-center text-sm text-ink-muted">
+              Agregando el estudio a tu cotización…
+            </p>
+          ) : (
+            <QuoterSelectStudies key={selectorKey} />
+          )
         ) : (
           <QuoterForm onBack={() => setStep("studies")} onRestart={() => setStep("studies")} />
         )}

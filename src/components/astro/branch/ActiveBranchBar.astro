@@ -1,0 +1,102 @@
+---
+/**
+ * Which branch the visitor is looking at: name, city, open-now status and
+ * its own phone/WhatsApp, with a one-tap switch. Prices, studies and contact
+ * across the site belong to this branch, so it has to be impossible to miss.
+ */
+import { Icon } from "astro-icon/components";
+import Eyebrow from "../ui/Eyebrow.astro";
+import ChangeBranchButton from "../../react/branch/ChangeBranchButton";
+import { getActiveBranchDetails } from "../../../api/branchesApi/branchesApi";
+import { getOpenStatus } from "../../../utils/schedule.utils";
+import { buildTelUrl, buildWhatsappUrl, formatPhone } from "../../../utils/whatsapp";
+import { generalWhatsappMessage } from "../../../utils/whatsappMessages";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// Without the cookie the middleware falls back to a default branch; that is
+// not the visitor's choice, so ask instead of presenting it as theirs.
+const hasBranchCookie = Boolean(Astro.cookies.get("dyra_branch_id")?.value);
+const branch = hasBranchCookie ? await getActiveBranchDetails() : null;
+const openStatus = branch ? getOpenStatus(branch.schedules) : null;
+const place = branch
+  ? [branch.address?.city, branch.state?.name].filter(Boolean).join(", ")
+  : "";
+const linkClass =
+  "inline-flex min-h-11 items-center gap-1.5 rounded-clinical-sm text-sm font-semibold text-brand-ink underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary";
+---
+
+<section
+  aria-label="Sucursal activa"
+  class:list={[
+    "flex flex-col gap-4 rounded-clinical-md border border-green-primary/12 bg-white p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:p-5",
+    className,
+  ]}
+>
+  {
+    branch ? (
+      <div class="flex min-w-0 items-start gap-3">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-clinical-sm bg-green-secondary text-black-custom">
+          <Icon name="lucide:map-pin" aria-hidden="true" class="h-5 w-5" />
+        </span>
+        <div class="min-w-0 space-y-1.5">
+          <p class="text-sm text-ink-muted">
+            Estás viendo precios y estudios de
+            <strong class="block text-lg font-bold leading-snug text-ink sm:inline sm:text-base">
+              {branch.name}
+            </strong>
+            {place && (
+              <span class="block text-ink-subtle sm:inline">
+                <span aria-hidden="true" class="hidden sm:inline"> · </span>
+                {place}
+              </span>
+            )}
+          </p>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+            {openStatus && (
+              <Eyebrow tone={openStatus.isOpen ? "brand" : "neutral"} live={openStatus.isOpen}>
+                {openStatus.label}
+              </Eyebrow>
+            )}
+            {branch.phone && (
+              <>
+                <a href={buildTelUrl(branch.phone)} class={linkClass} aria-label={`Llamar a ${branch.name}: ${formatPhone(branch.phone)}`}>
+                  <Icon name="lucide:phone" aria-hidden="true" class="h-4 w-4" />
+                  <span class="tabular-nums">{formatPhone(branch.phone)}</span>
+                </a>
+                <a
+                  href={buildWhatsappUrl(branch.phone, generalWhatsappMessage(branch.name))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={linkClass}
+                >
+                  <Icon name="tabler:brand-whatsapp" aria-hidden="true" class="h-4 w-4" />
+                  WhatsApp
+                  <span class="sr-only"> de {branch.name} (se abre en otra pestaña)</span>
+                </a>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div class="flex min-w-0 items-start gap-3">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-clinical-sm bg-yellow-primary text-black-custom">
+          <Icon name="lucide:map-pin" aria-hidden="true" class="h-5 w-5" />
+        </span>
+        <div class="min-w-0">
+          <p class="font-bold text-ink">Elige tu sucursal</p>
+          <p class="mt-0.5 text-sm text-ink-muted">
+            Precios, horarios y WhatsApp cambian según la sucursal.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  <ChangeBranchButton client:visible hasBranch={Boolean(branch)} className="shrink-0" />
+</section>

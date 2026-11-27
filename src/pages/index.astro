@@ -3,6 +3,9 @@ import Layout from "../layouts/Layout.astro";
 import HeroHome from "../sections/astro/hero/HeroHome.astro";
 import OurServices from "../sections/astro/service/OurServices.astro";
 import HowItWorks from "../sections/astro/home/HowItWorks.astro";
+import PopularStudies from "../sections/astro/home/PopularStudies.astro";
+import MonthlyPromotions from "../sections/astro/home/MonthlyPromotions.astro";
+import ActiveBranchBar from "../components/astro/branch/ActiveBranchBar.astro";
 import About from "../sections/astro/about/About.astro";
 import Review from "../sections/astro/review/Review.astro";
 import { getBranchesWithSchedules } from "../api/branchesApi/branchesApi";
@@ -18,7 +21,12 @@ const jsonLd = branches.map(branchJsonLd);
   description="Laboratorio clínico en Jalisco y Colima. Consulta precio, preparación y tiempo de entrega de tus estudios, cotiza en línea y agenda por WhatsApp."
   jsonLd={jsonLd}
 >
-  <HeroHome />
+  <div class="space-y-6 sm:space-y-8">
+    <ActiveBranchBar />
+    <HeroHome />
+  </div>
+  <PopularStudies />
+  <MonthlyPromotions />
   <OurServices />
   <HowItWorks />
   <About />

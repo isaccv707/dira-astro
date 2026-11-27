@@ -1,8 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 import { getActiveBranchContact } from "../../../api/branchesApi/branchesApi";
-import { buildTelUrl, buildWhatsappUrl, formatPhone } from "../../../utils/whatsapp";
-import { urlWhatsapp } from "../../../constants/urlWhatsapp";
+import { buildTelUrl, formatPhone } from "../../../utils/whatsapp";
+import { branchWhatsappUrl } from "../../../constants/urlWhatsapp";
+import { generalWhatsappMessage } from "../../../utils/whatsappMessages";
 import { brandFill } from "../../../styles/ui";
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 
 const { variant = "section" } = Astro.props;
 const contact = await getActiveBranchContact();
-const whatsappUrl = contact?.phone ? buildWhatsappUrl(contact.phone) : urlWhatsapp;
+const whatsappUrl = branchWhatsappUrl(contact?.phone, generalWhatsappMessage(contact?.name));
 
 const channels = [
   whatsappUrl && {

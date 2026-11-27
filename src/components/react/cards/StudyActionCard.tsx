@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AlertTriangle, ArrowRight, Check, Plus, ShieldCheck } from "lucide-react";
 import clsx from "clsx";
+import { Icon } from "@iconify/react";
 
 import Price from "../ui/Price";
 import type { Study } from "../../../interfaces/study.interface";
@@ -13,15 +14,28 @@ import {
 } from "../../../utils/quoterStudies";
 import { addStudyToQuote, wouldReplaceQuote } from "../../../stores/quoterStore";
 import { Buttonstyles } from "../../../styles/buttonsStyles";
+import { branchWhatsappUrl } from "../../../constants/urlWhatsapp";
+import { studyWhatsappMessage } from "../../../utils/whatsappMessages";
+import type { ActiveBranchContact } from "../../../api/branchesApi/branchesApi";
 
 interface StudyActionCardProps {
   study: Study;
   /** Service whose price sheet quotes this study; null = not quotable online. */
   quoterService?: QuoterService | null;
+  /** Active branch (server-resolved): names the price and opens its WhatsApp. */
+  branchContact?: ActiveBranchContact | null;
 }
 
-/** Price + "add to quote" box on the study page. */
-const StudyActionCard = ({ study, quoterService = null }: StudyActionCardProps) => {
+/** Price + "add to quote" + WhatsApp box on the study page. */
+const StudyActionCard = ({
+  study,
+  quoterService = null,
+  branchContact = null,
+}: StudyActionCardProps) => {
+  const branchName = branchContact?.name ?? null;
+  const whatsappHref =
+    branchWhatsappUrl(branchContact?.phone, studyWhatsappMessage(study.name, branchName)) ||
+    null;
   const { id, priceInfo } = study;
   const [isInQuote, setIsInQuote] = useState(false);
   const [confirmReplace, setConfirmReplace] = useState(false);
@@ -55,7 +69,15 @@ const StudyActionCard = ({ study, quoterService = null }: StudyActionCardProps) 
 
   return (
     <div className="rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs">
-      <p className="text-sm font-semibold text-ink-muted">Precio del estudio</p>
+      <p className="text-sm font-semibold text-ink-muted">
+        {branchName ? (
+          <>
+            Precio en <span className="text-ink">{branchName}</span>
+          </>
+        ) : (
+          "Precio del estudio"
+        )}
+      </p>
 
       {priceInfo?.showPrice ? (
         <Price value={priceInfo.price} size="lg" className="mt-1" />
@@ -128,6 +150,24 @@ const StudyActionCard = ({ study, quoterService = null }: StudyActionCardProps) 
             </a>
           )}
         </div>
+      )}
+
+      {whatsappHref && (
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={clsx(
+            Buttonstyles({ variant: canQuote ? "primary" : "accent", size: "lg", width: "full" }),
+            "mt-3",
+          )}
+        >
+          <Icon icon="tabler:brand-whatsapp" aria-hidden="true" className="h-5 w-5" />
+          Agendar por WhatsApp
+          <span className="sr-only">
+            {branchName ? ` en ${branchName}` : ""} (se abre en otra pestaña)
+          </span>
+        </a>
       )}
 
       <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ink-subtle">

@@ -69,6 +69,8 @@ export const getActiveBranchName = async (
 export interface ActiveBranchContact {
   phone: string;
   email: string;
+  /** Branch name, so WhatsApp links say where the patient is writing to. */
+  name: string;
 }
 
 export const getActiveBranchContact = async (
@@ -76,7 +78,7 @@ export const getActiveBranchContact = async (
 ): Promise<ActiveBranchContact | null> => {
   const branch = await getActiveBranch(branchId);
   if (!branch) return null;
-  return { phone: branch.phone, email: branch.email };
+  return { phone: branch.phone, email: branch.email, name: branch.name };
 };
 
 const branchDetailsCache = createTtlCache<Branch[]>();

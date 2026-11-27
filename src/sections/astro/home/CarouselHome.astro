@@ -2,6 +2,7 @@
 import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
 import ImgCarouselHome from "../../../components/react/ui/ImgCarouselHome";
 import Carousel from "../../../components/react/carousel/Carousel";
+import { bannerAlt } from "../../../interfaces/banner.interface";
 
 let banners: Awaited<ReturnType<typeof fetchActiveBanners>> = [];
 try {
@@ -15,14 +16,30 @@ const hasBanners = Array.isArray(banners) && banners.length > 0;
 {
   hasBanners ? (
     <Carousel client:load slidesPreview={1}>
-      {banners.map(({ imageUrl, mobileImageUrl }, index) => (
-        <ImgCarouselHome
-          imageUrl={imageUrl}
-          mobileImageUrl={mobileImageUrl}
-          isLCP={index === 0}
-          index={index}
-        />
-      ))}
+      {banners.map((banner, index) => {
+        const image = (
+          <ImgCarouselHome
+            imageUrl={banner.imageUrl}
+            mobileImageUrl={banner.mobileImageUrl}
+            isLCP={index === 0}
+            index={index}
+            alt={bannerAlt(banner, `Aviso de DYRA ${index + 1}`)}
+          />
+        );
+        // A banner with a link set in the admin opens it (study, quoter, promo).
+        return banner.linkUrl ? (
+          <a
+            href={banner.linkUrl}
+            target={banner.linkUrl.startsWith("http") ? "_blank" : undefined}
+            rel={banner.linkUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+            class="block rounded-clinical-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary"
+          >
+            {image}
+          </a>
+        ) : (
+          image
+        );
+      })}
     </Carousel>
   ) : (
     <slot name="fallback" />

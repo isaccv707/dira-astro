@@ -660,6 +660,26 @@ export interface paths {
         patch: operations["StudyProvidersController_update"];
         trace?: never;
     };
+    "/api/banners/upload-signature": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Solicitar firma de subida de imagen a Cloudinary
+         * @description Genera los parámetros firmados para que el admin suba una imagen pública directo a POST https://api.cloudinary.com/v1_1/{cloudName}/image/upload (type upload, carpeta banners/, formatos jpg/jpeg/png/webp). El secure_url resultante se manda después en el payload de creación/edición.
+         */
+        post: operations["BannersController_createImageUploadSignature"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/banners/active/{placement}": {
         parameters: {
             query?: never;
@@ -836,6 +856,26 @@ export interface paths {
         patch: operations["PostsController_update"];
         trace?: never;
     };
+    "/api/services/upload-signature": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Solicitar firma de subida de imagen a Cloudinary
+         * @description Genera los parámetros firmados para que el admin suba una imagen pública directo a POST https://api.cloudinary.com/v1_1/{cloudName}/image/upload (type upload, carpeta services/, formatos jpg/jpeg/png/webp). El secure_url resultante se manda después en el payload de creación/edición.
+         */
+        post: operations["ServicesController_createImageUploadSignature"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/services": {
         parameters: {
             query?: never;
@@ -978,6 +1018,26 @@ export interface paths {
          * @description Actualiza los datos de una sucursal existente.
          */
         patch: operations["BranchesController_update"];
+        trace?: never;
+    };
+    "/api/branches/{id}/internet-provider": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener proveedor de internet de la sucursal
+         * @description Devuelve el proveedor de internet de la sucursal o `null` si no tiene. No se expone en las rutas públicas.
+         */
+        get: operations["BranchesController_findInternetProvider"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/states": {
@@ -1274,6 +1334,112 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/customers/import-template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Descargar plantilla de importación de clientes
+         * @description Excel con la hoja "Clientes" (columnas name, email, accountsReceivable, liquidate, priceSheet, contractAmount, patientAmount, startDate, endDate, isActive y una fila de ejemplo) y una segunda hoja con los tarifarios de la sucursal (nombre, id y estado) para llenar la columna priceSheet.
+         */
+        get: operations["CustomersController_downloadImportTemplate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Exportar clientes de una sucursal
+         * @description Excel con todos los clientes de la sucursal (activos e inactivos) en las mismas columnas que la plantilla, para editarlo y volver a importarlo, más la hoja de tarifarios de la sucursal.
+         */
+        get: operations["CustomersController_exportByBranch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Importar clientes (alta y actualización masiva)
+         * @description Procesa la hoja "Clientes" (o la primera) de un .xlsx/.xls, máximo 2000 filas. Cada fila se busca por name (sin distinguir mayúsculas) en la sucursal: si existe se actualiza, si no se crea. Mismas reglas que el alta: name y email obligatorios; accountsReceivable/liquidate excluyentes (Sí/No; si solo se llena uno, el otro se infiere; vacíos = se conserva la modalidad actual o, al crear, liquida); priceSheet = nombre o id de un tarifario activo de la sucursal; montos ≥ 0; fechas AAAA-MM-DD, DD/MM/AAAA o fecha de Excel. priceSheet, montos y fechas vacíos quedan sin valor; isActive vacío conserva el estado (al crear: activo). Las filas inválidas se reportan en invalid y las válidas se guardan juntas.
+         */
+        post: operations["CustomersController_importFromExcel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar clientes
+         * @description Listado paginado con alcance según las sucursales del usuario. search busca en nombre y correo.
+         */
+        get: operations["CustomersController_findAll"];
+        put?: never;
+        /**
+         * Crear cliente
+         * @description Crea un cliente en una sucursal. Nombre único por sucursal (sin distinguir mayúsculas). accountsReceivable (genera CxC) y liquidate (liquida al instante) son excluyentes; si solo se envía uno, el otro se infiere. La hoja de precios debe ser activa y de la misma sucursal.
+         */
+        post: operations["CustomersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener cliente */
+        get: operations["CustomersController_findOne"];
+        put?: never;
+        post?: never;
+        /** Eliminar cliente */
+        delete: operations["CustomersController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Actualizar cliente
+         * @description Actualización parcial. La sucursal no se puede cambiar. priceSheetId/fechas/montos aceptan null para limpiarlos.
+         */
+        patch: operations["CustomersController_update"];
         trace?: never;
     };
     "/api/auth/login": {
@@ -2595,7 +2761,7 @@ export interface paths {
         put?: never;
         /**
          * Crear ticket
-         * @description Crea un ticket de soporte de TI en la sucursal del usuario autenticado y notifica a la sala de TI en tiempo real. La categoría define los datos: HARDWARE/OTHER piden title, priority y description; SOFTWARE además form (SoftwareRemoteFormDto); ACCESS solo form (AccessRequestFormDto); COGNITI exige subcategoryId y su formType define el form (StudyCreateFormDto, StudyUpdateFormDto, ClientCreateFormDto, ReferenceValuesUpdateFormDto). Con ACCESS y COGNITI el título se genera del formulario. El formulario no ejecuta nada hasta que TI lo aprueba (POST /tickets/:id/form/apply). Requiere el permiso tickets:create. El ticket queda enlazado a quien lo crea (createdById): esa persona podrá consultarlo siempre en su histórico, sin importar si más adelante deja de estar asignada a esa sucursal.
+         * @description Crea un ticket de soporte de TI en la sucursal del usuario autenticado y notifica a la sala de TI en tiempo real. La categoría define los datos: HARDWARE/OTHER piden title, priority y description; SOFTWARE además form (SoftwareRemoteFormDto); ACCESS solo form (AccessRequestFormDto); COGNITI exige subcategoryId y su formType define el form (StudyCreateFormDto, StudyUpdateFormDto, ClientCreateFormDto, ClientUpdateFormDto, ReferenceValuesUpdateFormDto). Con ACCESS y COGNITI el título se genera del formulario. El formulario no ejecuta nada hasta que TI lo aprueba (POST /tickets/:id/form/apply). Requiere el permiso tickets:create. El ticket queda enlazado a quien lo crea (createdById): esa persona podrá consultarlo siempre en su histórico, sin importar si más adelante deja de estar asignada a esa sucursal.
          */
         post: operations["TicketsController_create"];
         delete?: never;
@@ -2878,7 +3044,7 @@ export interface paths {
         put?: never;
         /**
          * Aprobar formulario del ticket
-         * @description TI aprueba la solicitud y el sistema ejecuta la acción; todo se revierte si algo falla. STUDY_CREATE crea el estudio o perfil en la sucursal del ticket con el code (y opcionalmente title, abbreviation, slug) que captura TI (ApplyStudyCreateFormDto); newStudies trae el code de cada parámetro nuevo del perfil, en orden. STUDY_UPDATE aplica los cambios (más ajustes opcionales de TI, ApplyStudyUpdateFormDto) y guarda el antes/después en form.result. REFERENCE_VALUES_UPDATE reemplaza los valores de referencia de un parámetro (sin datos de TI). ACCESS_REQUEST crea el usuario (TI puede cambiar el rol con roleId) y le envía un correo para definir su contraseña. SOFTWARE_REMOTE y CLIENT_CREATE son informativos (400). El ticket pasa a Resuelto. Requiere tickets:update y el permiso de la acción: studies:create, studies:update o users:create.
+         * @description TI aprueba la solicitud y el sistema ejecuta la acción; todo se revierte si algo falla. STUDY_CREATE crea el estudio o perfil en la sucursal del ticket con el code (y opcionalmente title, abbreviation, slug) que captura TI (ApplyStudyCreateFormDto); newStudies trae el code de cada parámetro nuevo del perfil, en orden. STUDY_UPDATE aplica los cambios (más ajustes opcionales de TI, ApplyStudyUpdateFormDto) y guarda el antes/después en form.result. REFERENCE_VALUES_UPDATE reemplaza los valores de referencia de un parámetro (sin datos de TI). ACCESS_REQUEST crea el usuario (TI puede cambiar el rol con roleId) y le envía un correo para definir su contraseña. CLIENT_CREATE da de alta el cliente en la sucursal del ticket y CLIENT_UPDATE aplica los cambios al cliente (sin datos de TI). SOFTWARE_REMOTE es informativo (400). El ticket pasa a Resuelto. Requiere tickets:update y el permiso de la acción: studies:create, studies:update, users:create, customers:create o customers:update.
          */
         post: operations["TicketsController_applyForm"];
         delete?: never;
@@ -3260,6 +3426,7 @@ export interface components {
             sectionId?: number;
             sampleTypeId?: number;
             techniqueId?: number | null;
+            featuredOrder?: number | null;
         };
         AssignPriceSheetDto: {
             /** Format: uuid */
@@ -3283,16 +3450,22 @@ export interface components {
         };
         UpdateStudyProviderDto: Record<string, never>;
         CreateBannerDto: {
-            placement: string;
+            /** @enum {string} */
+            placement: "HOME" | "PROMO";
             /** Format: uri */
             imageUrl: string;
             mobileImageUrl: string;
             order?: number;
             isActive?: boolean;
-            /** Format: date-time */
-            startAt?: string;
-            /** Format: date-time */
-            endAt?: string;
+            startAt?: string | null;
+            endAt?: string | null;
+            title?: string | null;
+            description?: string | null;
+            altText?: string | null;
+            linkUrl?: string | null;
+            ctaLabel?: string | null;
+            promoPrice?: number | null;
+            regularPrice?: number | null;
             /** Format: uuid */
             branchId: string;
         };
@@ -3361,6 +3534,23 @@ export interface components {
             priceSheetId?: string;
         };
         UpdateServiceDto: Record<string, never>;
+        BranchInternetProviderDto: {
+            /**
+             * @description Nombre del proveedor.
+             * @example Telmex
+             */
+            nameProvider: string;
+            /**
+             * @description Número de cuenta.
+             * @example 1234567890
+             */
+            accountNumber: string;
+            /**
+             * @description Precio mensual (MXN).
+             * @example 599
+             */
+            monthlyPrice: number;
+        };
         CreateAddressDto: {
             zipCode: string;
             extNumber: string;
@@ -3378,6 +3568,8 @@ export interface components {
             isClosed?: boolean;
         };
         CreateBranchDto: {
+            /** @description Proveedor de internet (opcional). En actualización, `null` lo elimina. */
+            internetProvider?: components["schemas"]["BranchInternetProviderDto"] | null;
             name: string;
             phone?: string;
             /** Format: email */
@@ -3441,6 +3633,113 @@ export interface components {
             branchId: string;
         };
         UpdatePriceSheetDto: Record<string, never>;
+        CustomerImportRowErrorDto: {
+            row: number;
+            name?: string;
+            errors: string[];
+        };
+        CustomerImportResultDto: {
+            invalid: components["schemas"]["CustomerImportRowErrorDto"][];
+            totalRows: number;
+            created: number;
+            updated: number;
+        };
+        CreateCustomerDto: {
+            /**
+             * Format: email
+             * @description Correo opcional; vacío o null lo deja sin correo.
+             */
+            email?: string | null;
+            /** @description Genera cuenta por cobrar (CxC). Excluyente con liquidate: no pueden ser ambos true ni ambos false. Si solo se envía uno, el otro se infiere como su contrario. */
+            accountsReceivable?: boolean;
+            /** @description Liquida al instante (no genera CxC). Excluyente con accountsReceivable. */
+            liquidate?: boolean;
+            /**
+             * Format: uuid
+             * @description Hoja de precios activa de la misma sucursal; null la desasocia.
+             */
+            priceSheetId?: string | null;
+            contractAmount?: number | null;
+            patientAmount?: number | null;
+            /**
+             * @description Inicio de vigencia (YYYY-MM-DD).
+             * @example 2026-01-01
+             */
+            startDate?: string | null;
+            /**
+             * @description Fin de vigencia (YYYY-MM-DD), igual o posterior a startDate.
+             * @example 2026-12-31
+             */
+            endDate?: string | null;
+            name: string;
+            isActive?: boolean;
+            /** Format: uuid */
+            branchId: string;
+        };
+        CustomerPriceSheetDto: {
+            id: string;
+            name: string;
+            isActive: boolean;
+        };
+        CustomerResponseDto: {
+            email: string | null;
+            contractAmount: number | null;
+            patientAmount: number | null;
+            /** @example 2026-01-01 */
+            startDate: string | null;
+            /** @example 2026-12-31 */
+            endDate: string | null;
+            /** Format: uuid */
+            priceSheetId: string | null;
+            priceSheet: components["schemas"]["CustomerPriceSheetDto"] | null;
+            id: string;
+            name: string;
+            accountsReceivable: boolean;
+            liquidate: boolean;
+            isActive: boolean;
+            branchId: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        PaginatedCustomersResponseDto: {
+            data: components["schemas"]["CustomerResponseDto"][];
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+        };
+        UpdateCustomerDto: {
+            /**
+             * Format: email
+             * @description Correo opcional; vacío o null lo deja sin correo.
+             */
+            email?: string | null;
+            /** @description Genera cuenta por cobrar (CxC). Excluyente con liquidate: no pueden ser ambos true ni ambos false. Si solo se envía uno, el otro se infiere como su contrario. */
+            accountsReceivable?: boolean;
+            /** @description Liquida al instante (no genera CxC). Excluyente con accountsReceivable. */
+            liquidate?: boolean;
+            /**
+             * Format: uuid
+             * @description Hoja de precios activa de la misma sucursal; null la desasocia.
+             */
+            priceSheetId?: string | null;
+            contractAmount?: number | null;
+            patientAmount?: number | null;
+            /**
+             * @description Inicio de vigencia (YYYY-MM-DD).
+             * @example 2026-01-01
+             */
+            startDate?: string | null;
+            /**
+             * @description Fin de vigencia (YYYY-MM-DD), igual o posterior a startDate.
+             * @example 2026-12-31
+             */
+            endDate?: string | null;
+            name?: string;
+            isActive?: boolean;
+        };
         LoginDto: {
             /** Format: email */
             email: string;
@@ -3762,13 +4061,65 @@ export interface components {
             sampleTypeId?: number;
         };
         ClientCreateFormDto: {
+            /**
+             * Format: email
+             * @description Correo opcional; vacío o null lo deja sin correo.
+             */
+            email?: string | null;
+            /** @description Genera cuenta por cobrar (CxC). Excluyente con liquidate: no pueden ser ambos true ni ambos false. Si solo se envía uno, el otro se infiere como su contrario. */
+            accountsReceivable?: boolean;
+            /** @description Liquida al instante (no genera CxC). Excluyente con accountsReceivable. */
+            liquidate?: boolean;
+            /**
+             * Format: uuid
+             * @description Hoja de precios activa de la misma sucursal; null la desasocia.
+             */
+            priceSheetId?: string | null;
+            contractAmount?: number | null;
+            patientAmount?: number | null;
+            /**
+             * @description Inicio de vigencia (YYYY-MM-DD).
+             * @example 2026-01-01
+             */
+            startDate?: string | null;
+            /**
+             * @description Fin de vigencia (YYYY-MM-DD), igual o posterior a startDate.
+             * @example 2026-12-31
+             */
+            endDate?: string | null;
             name: string;
-            /** Format: email */
-            email: string;
-            receivable: boolean;
-            payInCash: boolean;
+        };
+        ClientUpdateFormDto: {
+            /**
+             * Format: email
+             * @description Correo opcional; vacío o null lo deja sin correo.
+             */
+            email?: string | null;
+            /** @description Genera cuenta por cobrar (CxC). Excluyente con liquidate: no pueden ser ambos true ni ambos false. Si solo se envía uno, el otro se infiere como su contrario. */
+            accountsReceivable?: boolean;
+            /** @description Liquida al instante (no genera CxC). Excluyente con accountsReceivable. */
+            liquidate?: boolean;
+            /**
+             * Format: uuid
+             * @description Hoja de precios activa de la misma sucursal; null la desasocia.
+             */
+            priceSheetId?: string | null;
+            contractAmount?: number | null;
+            patientAmount?: number | null;
+            /**
+             * @description Inicio de vigencia (YYYY-MM-DD).
+             * @example 2026-01-01
+             */
+            startDate?: string | null;
+            /**
+             * @description Fin de vigencia (YYYY-MM-DD), igual o posterior a startDate.
+             * @example 2026-12-31
+             */
+            endDate?: string | null;
+            name?: string;
+            isActive?: boolean;
             /** Format: uuid */
-            priceSheetId: string;
+            customerId: string;
         };
         ReferenceValuesUpdateFormDto: {
             /** Format: uuid */
@@ -3799,10 +4150,12 @@ export interface components {
             newStudies?: components["schemas"]["StudyIdentityDto"][];
         };
         ApplyReferenceValuesUpdateFormDto: Record<string, never>;
+        ApplyClientCreateFormDto: Record<string, never>;
+        ApplyClientUpdateFormDto: Record<string, never>;
         CreateTicketDto: {
             form?: {
                 [key: string]: unknown;
-            } & (components["schemas"]["SoftwareRemoteFormDto"] | components["schemas"]["AccessRequestFormDto"] | components["schemas"]["StudyCreateFormDto"] | components["schemas"]["StudyUpdateFormDto"] | components["schemas"]["ClientCreateFormDto"] | components["schemas"]["ReferenceValuesUpdateFormDto"]);
+            } & (components["schemas"]["SoftwareRemoteFormDto"] | components["schemas"]["AccessRequestFormDto"] | components["schemas"]["StudyCreateFormDto"] | components["schemas"]["StudyUpdateFormDto"] | components["schemas"]["ClientCreateFormDto"] | components["schemas"]["ClientUpdateFormDto"] | components["schemas"]["ReferenceValuesUpdateFormDto"]);
             /** Format: uuid */
             branchId: string;
             title?: string;
@@ -3824,7 +4177,7 @@ export interface components {
         /** @enum {string} */
         TicketCategory: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
         /** @enum {string} */
-        TicketFormType: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE";
+        TicketFormType: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE" | "CLIENT_UPDATE";
         TicketSubcategoryRefDto: {
             category: components["schemas"]["TicketCategory"];
             formType: components["schemas"]["TicketFormType"] | null;
@@ -4060,7 +4413,7 @@ export interface components {
             category: "HARDWARE" | "SOFTWARE" | "ACCESS" | "COGNITI" | "OTHER";
             name: string;
             /** @enum {string|null} */
-            formType?: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE" | null;
+            formType?: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE" | "CLIENT_UPDATE" | null;
         };
         UpdateTicketSubcategoryDto: {
             isActive?: boolean;
@@ -4276,6 +4629,7 @@ export interface operations {
                 /** @description Identificador de sucursal para filtrar estudios. */
                 branchId?: string;
                 isPanel?: boolean;
+                featured?: boolean;
                 isInternal?: boolean;
                 providerId?: string;
                 sectionId?: number;
@@ -4350,6 +4704,7 @@ export interface operations {
                 /** @description Identificador de sucursal para filtrar estudios. */
                 branchId?: string;
                 isPanel?: boolean;
+                featured?: boolean;
                 isInternal?: boolean;
                 providerId?: string;
                 sectionId?: number;
@@ -4393,6 +4748,7 @@ export interface operations {
                 priceSheetId?: string;
                 branchId?: string;
                 isPanel?: boolean;
+                featured?: boolean;
                 isInternal?: boolean;
                 providerId?: string;
                 sectionId?: number;
@@ -4429,6 +4785,7 @@ export interface operations {
                 priceSheetId?: string;
                 branchId?: string;
                 isPanel?: boolean;
+                featured?: boolean;
                 isInternal?: boolean;
                 providerId?: string;
                 sectionId?: number;
@@ -4495,6 +4852,7 @@ export interface operations {
                 /** @description Identificador de sucursal (debe estar asignada al usuario). */
                 branchId?: string;
                 isPanel?: boolean;
+                featured?: boolean;
                 isInternal?: boolean;
                 providerId?: string;
                 sectionId?: number;
@@ -5607,6 +5965,24 @@ export interface operations {
             };
         };
     };
+    BannersController_createImageUploadSignature: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Parámetros firmados generados. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     BannersController_findActiveBanners: {
         parameters: {
             query: {
@@ -5616,7 +5992,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Ubicación del banner dentro del sitio. */
-                placement: "HOME";
+                placement: "HOME" | "PROMO";
             };
             cookie?: never;
         };
@@ -6040,6 +6416,24 @@ export interface operations {
             };
         };
     };
+    ServicesController_createImageUploadSignature: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Parámetros firmados generados. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ServicesController_findAll: {
         parameters: {
             query?: {
@@ -6413,6 +6807,34 @@ export interface operations {
         };
         responses: {
             /** @description Sucursal actualizada exitosamente. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Sucursal no encontrada. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BranchesController_findInternetProvider: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador de la sucursal. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Proveedor de internet o null. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -7044,6 +7466,265 @@ export interface operations {
             };
             /** @description Tabulador no encontrado. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_downloadImportTemplate: {
+        parameters: {
+            query: {
+                /** @description Sucursal (UUID). */
+                branchId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Archivo Excel de plantilla. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Sucursal no encontrada. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_exportByBranch: {
+        parameters: {
+            query: {
+                /** @description Sucursal (UUID). */
+                branchId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Archivo Excel de clientes. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Sucursal no encontrada. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_importFromExcel: {
+        parameters: {
+            query: {
+                /** @description Sucursal (UUID). */
+                branchId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description Archivo Excel (.xlsx o .xls) con el formato de la plantilla.
+                     */
+                    file?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerImportResultDto"];
+                };
+            };
+            /** @description Archivo faltante, de tipo inválido, sin filas, con demasiadas filas o sin las columnas name/email. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_findAll: {
+        parameters: {
+            query?: {
+                branchId?: string;
+                isActive?: boolean;
+                accountsReceivable?: boolean;
+                priceSheetId?: string;
+                page?: number;
+                limit?: number;
+                search?: string;
+                sort?: components["schemas"]["QuerySortDto"];
+                filters?: components["schemas"]["QueryFiltersDto"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedCustomersResponseDto"];
+                };
+            };
+        };
+    };
+    CustomersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCustomerDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerResponseDto"];
+                };
+            };
+            /** @description Modalidad de pago, fechas u hoja de precios inválidas. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El nombre ya existe. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador (UUID). */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerResponseDto"];
+                };
+            };
+            /** @description Cliente no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador (UUID). */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerResponseDto"];
+                };
+            };
+            /** @description Cliente no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador (UUID). */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCustomerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerResponseDto"];
+                };
+            };
+            /** @description Cliente no encontrado. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El nombre ya existe. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9501,7 +10182,7 @@ export interface operations {
                 assignedToMe?: boolean;
                 mine?: boolean;
                 subcategoryId?: string;
-                formType?: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE";
+                formType?: "SOFTWARE_REMOTE" | "ACCESS_REQUEST" | "STUDY_CREATE" | "STUDY_UPDATE" | "CLIENT_CREATE" | "REFERENCE_VALUES_UPDATE" | "CLIENT_UPDATE";
                 formStatus?: "PENDING" | "APPLIED" | "REJECTED";
             };
             header?: never;
@@ -10010,7 +10691,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SoftwareRemoteFormDto"] | components["schemas"]["AccessRequestFormDto"] | components["schemas"]["StudyCreateFormDto"] | components["schemas"]["StudyUpdateFormDto"] | components["schemas"]["ClientCreateFormDto"] | components["schemas"]["ReferenceValuesUpdateFormDto"];
+                "application/json": components["schemas"]["SoftwareRemoteFormDto"] | components["schemas"]["AccessRequestFormDto"] | components["schemas"]["StudyCreateFormDto"] | components["schemas"]["StudyUpdateFormDto"] | components["schemas"]["ClientCreateFormDto"] | components["schemas"]["ClientUpdateFormDto"] | components["schemas"]["ReferenceValuesUpdateFormDto"];
             };
         };
         responses: {
@@ -10109,7 +10790,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["ApplyAccessRequestFormDto"] | components["schemas"]["ApplyStudyCreateFormDto"] | components["schemas"]["ApplyStudyUpdateFormDto"] | components["schemas"]["ApplyReferenceValuesUpdateFormDto"];
+                "application/json": components["schemas"]["ApplyAccessRequestFormDto"] | components["schemas"]["ApplyStudyCreateFormDto"] | components["schemas"]["ApplyStudyUpdateFormDto"] | components["schemas"]["ApplyReferenceValuesUpdateFormDto"] | components["schemas"]["ApplyClientCreateFormDto"] | components["schemas"]["ApplyClientUpdateFormDto"];
             };
         };
         responses: {
@@ -10164,7 +10845,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["ApplyAccessRequestFormDto"] | components["schemas"]["ApplyStudyCreateFormDto"] | components["schemas"]["ApplyStudyUpdateFormDto"] | components["schemas"]["ApplyReferenceValuesUpdateFormDto"];
+                "application/json": components["schemas"]["ApplyAccessRequestFormDto"] | components["schemas"]["ApplyStudyCreateFormDto"] | components["schemas"]["ApplyStudyUpdateFormDto"] | components["schemas"]["ApplyReferenceValuesUpdateFormDto"] | components["schemas"]["ApplyClientCreateFormDto"] | components["schemas"]["ApplyClientUpdateFormDto"];
             };
         };
         responses: {
