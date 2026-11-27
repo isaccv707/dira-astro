@@ -1,0 +1,114 @@
+---
+/**
+ * "Promociones del mes": PROMO banners of the active branch, shown with
+ * readable text and price next to the image (the image alone isn't read by
+ * search engines or screen readers). Publishes and expires on its own with
+ * the banner's startAt/endAt. Hidden when the branch has no active promo.
+ */
+import { Icon } from "astro-icon/components";
+import SectionHeader from "../../../components/astro/ui/SectionHeader.astro";
+import Eyebrow from "../../../components/astro/ui/Eyebrow.astro";
+import Price from "../../../components/react/ui/Price";
+import { fetchActiveBanners } from "../../../api/bannersApi/bannerApi";
+import { getActiveBranchContact } from "../../../api/branchesApi/branchesApi";
+import { bannerAlt, type Banner } from "../../../interfaces/banner.interface";
+import { getCloudinaryUrl } from "../../../utils/cloudinary";
+import { formatMXN } from "../../../utils/currency";
+import { branchWhatsappUrl } from "../../../constants/urlWhatsapp";
+import { promoWhatsappMessage } from "../../../utils/whatsappMessages";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
+
+let promos: Banner[] = [];
+try {
+  promos = await fetchActiveBanners("PROMO");
+} catch (error) {
+  console.error("Error al obtener las promociones:", error);
+}
+const contact = promos.length ? await getActiveBranchContact() : null;
+
+const validUntil = (endAt?: string | null) =>
+  endAt
+    ? new Intl.DateTimeFormat("es-MX", {
+        day: "numeric",
+        month: "long",
+        timeZone: "America/Mexico_City",
+      }).format(new Date(endAt))
+    : null;
+---
+
+{
+  promos.length > 0 && (
+    <section aria-labelledby="promos-title" class="space-y-6">
+      <SectionHeader
+        id="promos-title"
+        title="Promociones del mes"
+        lead={contact?.name ? `Válidas en ${contact.name}.` : "Válidas en tu sucursal."}
+      />
+
+      <ul class="grid gap-4 md:grid-cols-2">
+        {promos.map((promo, index) => {
+          const title = promo.title?.trim() || `Promoción ${index + 1}`;
+          const until = validUntil(promo.endAt);
+          const isExternal = promo.linkUrl?.startsWith("http") ?? false;
+          const whatsappHref =
+            branchWhatsappUrl(contact?.phone, promoWhatsappMessage(title, contact?.name)) || null;
+          return (
+            <li class="grid overflow-hidden rounded-clinical-md border border-ui-border bg-white shadow-xs sm:grid-cols-5">
+              <img
+                src={getCloudinaryUrl(promo.mobileImageUrl || promo.imageUrl, { width: 600, height: 750 })}
+                alt={bannerAlt(promo, title)}
+                width="600"
+                height="750"
+                loading="lazy"
+                decoding="async"
+                class="aspect-4/5 h-full w-full object-cover sm:col-span-2"
+              />
+              <div class="flex flex-col gap-3 p-5 sm:col-span-3">
+                {until && <Eyebrow tone="accent">Hasta el {until}</Eyebrow>}
+                <h3 class="text-lg font-bold leading-snug text-ink">{title}</h3>
+                {promo.description && (
+                  <p class="text-sm leading-relaxed text-ink-muted">{promo.description}</p>
+                )}
+                {promo.promoPrice && (
+                  <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <Price value={promo.promoPrice} size="md" />
+                    {promo.regularPrice && (
+                      <span class="text-sm text-ink-subtle">
+                        Antes <s class="tabular-nums">{formatMXN(promo.regularPrice)}</s>
+                      </span>
+                    )}
+                  </p>
+                )}
+                <div class="mt-auto flex flex-wrap gap-2 pt-1">
+                  {whatsappHref && (
+                    <a
+                      href={whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={Buttonstyles({ variant: "primary", size: "md" })}
+                    >
+                      <Icon name="tabler:brand-whatsapp" aria-hidden="true" class="h-4 w-4" />
+                      Lo quiero
+                      <span class="sr-only"> (WhatsApp, se abre en otra pestaña)</span>
+                    </a>
+                  )}
+                  {promo.linkUrl && (
+                    <a
+                      href={promo.linkUrl}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                      class={Buttonstyles({ variant: "outline", size: "md" })}
+                    >
+                      {promo.ctaLabel?.trim() || "Ver detalles"}
+                      <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}

@@ -1,0 +1,127 @@
+---
+/**
+ * "Estudios más solicitados": direct routes from the home page to the
+ * studies patients search for most, with the branch price and the two ways
+ * to close (WhatsApp with the study already written, or a PDF quote).
+ * Featured studies are chosen per branch in the admin (Study.featuredOrder).
+ */
+import { Icon } from "astro-icon/components";
+import SectionHeader from "../../../components/astro/ui/SectionHeader.astro";
+import Price from "../../../components/react/ui/Price";
+import { getFeaturedStudies } from "../../../api/studiesApi/studiesApi";
+import { getActiveBranchContact } from "../../../api/branchesApi/branchesApi";
+import { POPULAR_SEARCHES, popularSearchHref } from "../../../constants/popularSearches";
+import { formatDeliveryTime } from "../../../utils/studyFacts";
+import { branchWhatsappUrl } from "../../../constants/urlWhatsapp";
+import { studyWhatsappMessage } from "../../../utils/whatsappMessages";
+import { Buttonstyles } from "../../../styles/buttonsStyles";
+import { quoterHrefForStudy } from "../../../utils/quoterPreload";
+
+const [studies, contact] = await Promise.all([
+  getFeaturedStudies(),
+  getActiveBranchContact(),
+]);
+const branchName = contact?.name ?? null;
+
+const chipClass =
+  "inline-flex min-h-11 items-center gap-1.5 rounded-full border border-ui-border bg-white px-4 text-sm font-semibold text-ink transition-[border-color,box-shadow] duration-200 hover:border-brand-ink/30 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary focus-visible:ring-offset-2";
+---
+
+<section aria-labelledby="popular-title" class="space-y-6">
+  <SectionHeader
+    id="popular-title"
+    title="Estudios más solicitados"
+    lead={branchName
+      ? `Precios con IVA de ${branchName}. Agenda por WhatsApp o descarga tu cotización en PDF.`
+      : "Precios con IVA de tu sucursal. Agenda por WhatsApp o descarga tu cotización en PDF."}
+  />
+
+  <nav aria-label="Búsquedas frecuentes">
+    <ul class="flex flex-wrap gap-2">
+      {
+        POPULAR_SEARCHES.map((search) => (
+          <li>
+            <a href={popularSearchHref(search)} class={chipClass}>
+              <Icon name="lucide:search" aria-hidden="true" class="h-4 w-4 text-brand-ink" />
+              {search.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href="/estudios" class:list={[chipClass, "text-brand-ink"]}>
+          Ver todos los estudios
+          <Icon name="lucide:arrow-right" aria-hidden="true" class="h-4 w-4" />
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  {
+    studies.length > 0 && (
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {studies.map((study) => {
+          const delivery = formatDeliveryTime(study.deliveryTime);
+          const whatsappHref =
+            branchWhatsappUrl(contact?.phone, studyWhatsappMessage(study.name, branchName)) || null;
+          return (
+            <li class="flex flex-col overflow-hidden rounded-clinical-md border border-ui-border bg-white shadow-xs">
+              <span
+                aria-hidden="true"
+                class:list={["h-1.5", study.isPanel ? "bg-yellow-primary" : "bg-green-primary"]}
+              />
+              <div class="flex flex-1 flex-col gap-3 p-5">
+                <div class="space-y-1">
+                  <p class="text-2xs font-semibold uppercase tracking-wide text-ink-subtle">
+                    {study.isPanel ? "Perfil" : "Estudio"} · <span class="font-mono normal-case">{study.code}</span>
+                  </p>
+                  <h3 class="text-base font-bold leading-snug text-ink">
+                    <a
+                      href={`/study/${study.slug}`}
+                      class="rounded-sm underline-offset-4 hover:text-brand-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-primary"
+                    >
+                      {study.name}
+                    </a>
+                  </h3>
+                  {delivery && (
+                    <p class="flex items-center gap-1.5 text-sm text-ink-muted">
+                      <Icon name="lucide:clock" aria-hidden="true" class="h-4 w-4 text-brand-ink" />
+                      {delivery}
+                    </p>
+                  )}
+                </div>
+
+                <Price value={study.priceInfo.price} size="md" className="mt-auto" />
+
+                <div class="grid grid-cols-2 gap-2">
+                  {whatsappHref && (
+                    <a
+                      href={whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={Buttonstyles({ variant: "primary", size: "sm", width: "full" })}
+                    >
+                      <Icon name="tabler:brand-whatsapp" aria-hidden="true" class="h-4 w-4" />
+                      Agendar
+                      <span class="sr-only"> {study.name} por WhatsApp (se abre en otra pestaña)</span>
+                    </a>
+                  )}
+                  <a
+                    href={quoterHrefForStudy(study.slug)}
+                    class:list={[
+                      Buttonstyles({ variant: "outline", size: "sm", width: "full" }),
+                      !whatsappHref && "col-span-2",
+                    ]}
+                  >
+                    Cotizar
+                    <span class="sr-only"> {study.name}</span>
+                  </a>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    )
+  }
+</section>

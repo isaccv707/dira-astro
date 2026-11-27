@@ -17,6 +17,7 @@ import { formatDeliveryTime } from "../../utils/studyFacts";
 import { Buttonstyles } from "../../styles/buttonsStyles";
 import { cardStyles } from "../../styles/ui";
 import type { QuoterService } from "../../utils/quoterStudies";
+import { getActiveBranchContact } from "../../api/branchesApi/branchesApi";
 
 interface Props {
   study: Study | null;
@@ -39,6 +40,9 @@ const {
 if (!study) {
   return null; // The page already redirects when the study is missing
 }
+
+// Price and WhatsApp belong to the active branch: name it beside the price.
+const branchContact = await getActiveBranchContact();
 
 const { name, code, description, preparation } = study;
 // Abbreviation often repeats the code verbatim — show it only when distinct.
@@ -227,7 +231,12 @@ const labelRows = [
 
     <aside class="lg:col-span-4">
       <div class="sticky top-24 space-y-4">
-        <StudyActionCard study={study} quoterService={quoterService} client:load />
+        <StudyActionCard
+          study={study}
+          quoterService={quoterService}
+          branchContact={branchContact}
+          client:load
+        />
 
         <button
           type="button"

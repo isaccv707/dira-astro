@@ -1,5 +1,5 @@
-import { urlWhatsapp } from "./urlWhatsapp";
-import { buildWhatsappUrl } from "../utils/whatsapp";
+import { branchWhatsappUrl } from "./urlWhatsapp";
+import { generalWhatsappMessage } from "../utils/whatsappMessages";
 import type { ActiveBranchContact } from "../api/branchesApi/branchesApi";
 
 interface SocialNetworks {
@@ -24,7 +24,7 @@ export const buildSocialNetworks = (
 ): SocialNetworks[] => [
   FACEBOOK_NETWORK,
   {
-    route: contact?.phone ? buildWhatsappUrl(contact.phone) : urlWhatsapp,
+    route: branchWhatsappUrl(contact?.phone, generalWhatsappMessage(contact?.name)),
     icon: "logos:whatsapp-icon",
     name: "WhatsApp",
   },

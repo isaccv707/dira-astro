@@ -10,14 +10,15 @@ import {
   getActiveBranchContact,
   getActiveBranchResultsUrl,
 } from "../../../api/branchesApi/branchesApi";
-import { buildWhatsappUrl } from "../../../utils/whatsapp";
-import { urlWhatsapp } from "../../../constants/urlWhatsapp";
+import { branchWhatsappUrl } from "../../../constants/urlWhatsapp";
+import { generalWhatsappMessage } from "../../../utils/whatsappMessages";
 
 const contact = await getActiveBranchContact();
 const resultsUrl = (await getActiveBranchResultsUrl()) ?? "/branches";
-const whatsappUrl = contact?.phone
-  ? buildWhatsappUrl(contact.phone)
-  : urlWhatsapp;
+// Only name the branch when the visitor picked it (not the default fallback).
+const hasBranchCookie = Boolean(Astro.cookies.get("dyra_branch_id")?.value);
+const branchName = hasBranchCookie ? (contact?.name ?? null) : null;
+const whatsappUrl = branchWhatsappUrl(contact?.phone, generalWhatsappMessage(branchName));
 
 // The three things patients come to do besides finding a study.
 const actions = [
@@ -32,7 +33,7 @@ const actions = [
     href: whatsappUrl,
     icon: "tabler:brand-whatsapp",
     label: "Agendar por WhatsApp",
-    detail: "Escribe a tu sucursal",
+    detail: branchName ? `Escribe a ${branchName}` : "Escribe a tu sucursal",
     external: true,
   },
   {
