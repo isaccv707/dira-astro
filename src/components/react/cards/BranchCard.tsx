@@ -3,6 +3,10 @@ import { getFullAddress } from "../../../utils/maps.utils";
 import NavLinkButton from "../navigation/NavLinkButton";
 import ContactItem from "../ui/ContactItem";
 import { buildTelUrl, buildWhatsappUrl, formatPhone } from "../../../utils/whatsapp";
+import { generalWhatsappMessage } from "../../../utils/whatsappMessages";
+import { formatSchedule, getOpenStatus } from "../../../utils/schedule.utils";
+import { Clock } from "lucide-react";
+import Eyebrow from "../ui/Eyebrow";
 
 interface BranchCardProps {
   branch: Branch;
@@ -20,6 +24,9 @@ const BranchCard = ({ branch }: BranchCardProps) => {
   } = branch;
 
   const fullAddress = getFullAddress(branch);
+  // "Lunes a Viernes 07:00 a 19:00, Sábado ..." → one line per group.
+  const scheduleLines = formatSchedule(branch.schedules).split(", ").filter(Boolean);
+  const openStatus = getOpenStatus(branch.schedules);
 
   return (
     <article className="rounded-clinical-md border border-ui-border bg-white p-6 shadow-xs">
@@ -59,8 +66,26 @@ const BranchCard = ({ branch }: BranchCardProps) => {
             icon="tabler:brand-whatsapp"
             value={phone ? formatPhone(phone) : phone}
             label={"WhatsApp"}
-            href={phone ? buildWhatsappUrl(phone) : undefined}
+            href={phone ? buildWhatsappUrl(phone, generalWhatsappMessage(name)) : undefined}
           />
+          {scheduleLines.length > 0 && (
+            <div className="flex items-start gap-3">
+              <Clock aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-brand-ink" />
+              <div className="min-w-0 space-y-1.5">
+                <p className="font-semibold text-ink">Horario</p>
+                {openStatus && (
+                  <Eyebrow tone={openStatus.isOpen ? "brand" : "neutral"} live={openStatus.isOpen}>
+                    {openStatus.label}
+                  </Eyebrow>
+                )}
+                <ul className="text-ink-muted tabular-nums">
+                  {scheduleLines.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
           <ContactItem
             icon="lucide:mail"
             value={email}

@@ -30,6 +30,8 @@ export interface Study {
   preparation?: string | null;
   isActive?: boolean;
   isPanel?: boolean;
+  /** Position in the home "Más solicitados" section; null = not featured. */
+  featuredOrder?: number | null;
   abbreviation?: string | null;
   // Service endpoints send section/sampleType as plain names.
   section?: CatalogItem | string | null;

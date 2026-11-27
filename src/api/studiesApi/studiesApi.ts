@@ -5,7 +5,7 @@ import type {
 } from "./study.interface";
 import { resolveBranchId } from "../../stores/branchStore";
 import { createTtlCache } from "../../utils/ttlCache";
-import type { PanelTree } from "../../interfaces/study.interface";
+import type { PanelTree, Study } from "../../interfaces/study.interface";
 
 const studiesCache = createTtlCache<GetAllStudiesResponse>();
 
@@ -53,6 +53,39 @@ export const getAllStudies = async ({
       return stale;
     }
     throw error;
+  }
+};
+
+const featuredCache = createTtlCache<Study[]>();
+
+/**
+ * Studies the branch highlights in "Más solicitados" (set in the admin),
+ * already sorted. Only priced ones are returned, since the section sells
+ * by price. Failures degrade to [] (or stale) so the home page still renders.
+ */
+export const getFeaturedStudies = async (
+  branchId?: string,
+  limit = 8,
+): Promise<Study[]> => {
+  const resolvedBranchId = branchId ?? resolveBranchId();
+  if (!resolvedBranchId) return [];
+  const cacheKey = `${resolvedBranchId}:${limit}`;
+
+  const cached = featuredCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const data = await apiGet<GetAllStudiesResponse>("/studies", {
+      featured: "true",
+      limit,
+      branchId: resolvedBranchId,
+    });
+    const result = (data?.data ?? []).filter((study) => study.priceInfo?.showPrice);
+    featuredCache.set(cacheKey, result);
+    return result;
+  } catch (error) {
+    console.error("Error fetching featured studies:", error);
+    return featuredCache.getStale(cacheKey) ?? [];
   }
 };
 

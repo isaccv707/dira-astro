@@ -5,6 +5,8 @@ interface ImgCarouselHomeProps {
   mobileImageUrl?: string;
   isLCP: boolean;
   index: number;
+  /** What the banner says; falls back to a generic label. */
+  alt?: string;
 }
 
 // Marketing only supplies 2 assets per banner: imageUrl (desktop) and mobileImageUrl (mobile).
@@ -19,6 +21,7 @@ const ImgCarouselHome = ({
   mobileImageUrl,
   isLCP,
   index,
+  alt,
 }: ImgCarouselHomeProps) => {
   const mobileSrc = mobileImageUrl || imageUrl;
 
@@ -46,7 +49,7 @@ const ImgCarouselHome = ({
         {/* Mobile: 4:5 ratio (800x1000px) */}
         <img
           src={finalMobileUrl}
-          alt={`Aviso de DYRA ${index + 1}`}
+          alt={alt || `Aviso de DYRA ${index + 1}`}
           className="w-full h-auto aspect-4/5 md:aspect-2/1 object-cover rounded-clinical-lg"
           loading={isLCP ? "eager" : "lazy"}
           fetchPriority={isLCP ? "high" : "auto"}

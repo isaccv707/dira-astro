@@ -7,6 +7,7 @@ import { getActiveBranchDetails } from "../../../api/branchesApi/branchesApi";
 import { getFullAddress } from "../../../utils/maps.utils";
 import { formatSchedule } from "../../../utils/schedule.utils";
 import { buildTelUrl, buildWhatsappUrl, formatPhone } from "../../../utils/whatsapp";
+import { generalWhatsappMessage } from "../../../utils/whatsappMessages";
 import dyraLogo from "../../../assets/images/logos/logo.png";
 import BrandStripe from "../../../components/astro/ui/BrandStripe.astro";
 
@@ -14,7 +15,10 @@ const servicesRoutes = await getServicesNavRoutes();
 const branch = await getActiveBranchDetails();
 const resultsUrl = branch?.urlResults || "/branches";
 const resultsIsExternal = resultsUrl.startsWith("http");
-const contact = branch ? { phone: branch.phone, email: branch.email } : null;
+const contact = branch
+  ? { phone: branch.phone, email: branch.email, name: branch.name }
+  : null;
+const whatsappMessage = generalWhatsappMessage(branch?.name);
 const socialNetworks = buildSocialNetworks(contact);
 
 const address = branch ? getFullAddress(branch) : "";
@@ -81,7 +85,7 @@ const headingClass = "text-2xs font-semibold uppercase tracking-wide text-brand-
                     {formatPhone(branch.phone)}
                   </a>
                   <a
-                    href={buildWhatsappUrl(branch.phone)}
+                    href={buildWhatsappUrl(branch.phone, whatsappMessage)}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`WhatsApp ${formatPhone(branch.phone)} (se abre en otra pestaña)`}
